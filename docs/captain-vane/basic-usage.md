@@ -88,9 +88,9 @@ const newUser = await sails.helpers.vane('user')
 ```
 The vane helper takes in the model identity and with it, it will create a new record based on the model and the factory of the same name.
 
-<alert type="warning">
+::: warning
 Do note that both the factory and model name must be the same as this convention is expected by captain-vane.
-</alert>
+:::
 
 ## Overriding attributes
 captain-vane allows you to override attributes set with the model factory. You pass in an optional `data` object with properties corresponding to the attributes in the factory you want to override. So let's say we want to create an admin user, we can call the vane helper like so:

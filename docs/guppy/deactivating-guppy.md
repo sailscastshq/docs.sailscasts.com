@@ -19,4 +19,4 @@ As of `v1.1+``, to deactivate guppy, click on guppy in the menu bar and select D
 ## Deactivating on Windows/Linux
  On Windows/Linux, open the hamburger menu on the top left of the window, and go to Sizzy -> Deactivate Sizzy.
 
-On successful deactivation you will be presented with the activation screen as seen in [Activating guppy](/activating-guppy) section with a success message
+On successful deactivation you will be presented with the activation screen as seen in [Activating guppy](/guppy/activating-guppy) section with a success message
