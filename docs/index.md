@@ -2,13 +2,13 @@
 layout: home
 features:
 - icon: ⚡️
-  title: Products
-  details: Documentation of all products to make you a super developer
+  title: Software
+  details: Documentation of all software we've made to supercharge your Sails development.
 - icon: 🖖
   title: Open source
-  details: Documentation of all open source projects
+  details: Documentation of all our open source libraries and tools
 hero:
-  name: Docs
+  name: The Sailscasts Docs
   text: Documentation for the Sailscasts ecosystem
   tagline: We love great docs so we write one for you as well.
   actions:

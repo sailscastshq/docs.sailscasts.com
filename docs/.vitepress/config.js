@@ -32,7 +32,7 @@ export default {
 function nav() {
   return [
     {
-      text: 'Products',
+      text: 'Software',
       items: [
         { text: 'guppy', link: '/guppy/' },
       ]
@@ -44,7 +44,7 @@ function nav() {
         { text: 'inertia-sails', link: '/inertia-sails/' },
         { text: 'wish', link: '/wish/' },
         { text: 'captain-vane', link: '/captain-vane/' },
-        { text: 'sailboat', link: '/sailboat/' },
+        // { text: 'sailboat', link: '/sailboat/' },
       ]
     },
     { text: 'Courses', link: 'https://sailscasts.com/courses' },
@@ -83,8 +83,9 @@ function guppyGuide() {
       text: 'Getting started',
       collapsible: true,
       items: [
-        { text: 'Introduction', link: '/guppy/introduction' },
+        { text: 'Introduction', link: '/guppy/' },
         { text: 'What is guppy?', link: '/guppy/what-is-guppy' },
+        { text: 'Installation', link: '/guppy/installation' },
         { text: 'Activating guppy', link: '/guppy/activating-guppy' },
         { text: 'Deactivating guppy', link: '/guppy/deactivating-guppy' }
       ]
