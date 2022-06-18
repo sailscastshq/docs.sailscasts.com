@@ -1,20 +1,21 @@
 ---
-title: Introduction
+layout: home
+features:
+- title: Generate realistic fake data for your Waterline models
+  detail: One command to generate factories for your models
+- title: Database testing
+  details: Easily test your Waterline model with realistic fake data
+- title: Override attributes
+  details: You can override every factory attribute
+hero:
+  name: captain-vane
+  text: The missing Sails factory generator
+  tagline: Generate realistically test data in a Sails application.
+  actions:
+    - theme: brand
+      text: Get Started
+      link: /captain-vane/installation
+    - theme: alt
+      text: View on GitHub
+      link: https://github.com/sailscastshq/captain-vane
 ---
-
-# {{ $frontmatter.title }}
-
-captain-vane is a Sails hook that gives you the ability to generate realistically test data in a Sails application.
-
-<img src="/images/captain-vane/preview-dark.png" class="dark-img" width="1280" height="640" alt=""/>
-
-captain-vane is a Sails hook that gives you the ability to generate realistically test data in a Sails application.
-
-captain-vane provides model factories that make it painless to create and test database records using your application's Waterline models.
-
-## Features
-* Generate realistic fake data for your Waterline models
-* Database testing
-* Generate factories
-* Create models using factories
-* Override attributes

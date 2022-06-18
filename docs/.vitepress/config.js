@@ -6,7 +6,7 @@ export default {
   themeConfig: {
     nav: nav(),
     sidebar: {
-      '/captain-vane/': sidebarGuide(),
+      '/captain-vane/': captainVaneGuide(),
       '/guppy/': guppyGuide(),
       '/wish/': wishGuide(),
       '/create-sails/': createSailsGuide(),
@@ -56,7 +56,7 @@ function nav() {
   ]
 }
 
-function sidebarGuide() {
+function captainVaneGuide() {
   return [
     {
       text: 'Getting started',
@@ -91,11 +91,42 @@ function guppyGuide() {
 }
 
 function wishGuide() {
-  return []
+  return [
+    {
+      text: 'Getting started',
+      collapsible: true,
+      items: [
+        { text: 'Introduction', link: '/create-sails/' },
+        { text: 'Installation', link: '/create-sails/installation' },
+      ]
+    },
+    {
+      text: 'Basic usage',
+      collapsible: true,
+      items: [
+        { text: 'Basic usage', link: '/create-sails/basic-usage' }
+      ]
+    }
+  ]
 }
 
 function createSailsGuide() {
-  return []
+  return [
+    {
+    text: 'Getting started',
+    collapsible: true,
+    items: [
+      { text: 'Introduction', link: '/create-sails/' }
+    ]
+    },
+    {
+      text: 'Basic usage',
+      collapsible: true,
+      items: [
+        { text: 'Basic usage', link: '/create-sails/basic-usage' }
+      ]
+    }
+  ]
 }
 
 function inertiaSailsGuide() {
