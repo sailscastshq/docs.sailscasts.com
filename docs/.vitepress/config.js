@@ -40,11 +40,11 @@ function nav() {
     {
       text: 'Open Source',
       items: [
+        { text: 'create-sails', link: '/create-sails/' },
+        { text: 'inertia-sails', link: '/inertia-sails/' },
+        { text: 'wish', link: '/wish/' },
         { text: 'captain-vane', link: '/captain-vane/' },
         { text: 'sailboat', link: '/sailboat/' },
-        { text: 'wish', link: '/wish/' },
-        { text: 'inertia-sails', link: '/inertia-sails/' },
-        { text: 'create-sails', link: '/create-sails/' }
       ]
     },
     { text: 'Courses', link: 'https://sailscasts.com/courses' },
@@ -63,6 +63,7 @@ function captainVaneGuide() {
       collapsible: true,
       items: [
         { text: 'Introduction', link: '/captain-vane/' },
+        { text: 'What is captain-vane?', link: '/captain-vane/what-is-captain-vane' },
         { text: 'Installation', link: '/captain-vane/installation' },
       ]
     },
@@ -79,12 +80,32 @@ function captainVaneGuide() {
 function guppyGuide() {
   return [
     {
-      text: 'Config',
+      text: 'Getting started',
+      collapsible: true,
       items: [
-        { text: 'Introduction', link: '/config/introduction' },
-        { text: 'App Configs', link: '/config/app-configs' },
-        { text: 'Theme Configs', link: '/config/theme-configs' },
-        { text: 'Frontmatter Configs', link: '/config/frontmatter-configs' }
+        { text: 'Introduction', link: '/guppy/introduction' },
+        { text: 'What is guppy?', link: '/guppy/what-is-guppy' },
+        { text: 'Activating guppy', link: '/guppy/activating-guppy' },
+        { text: 'Deactivating guppy', link: '/guppy/deactivating-guppy' }
+      ]
+    },
+    {
+      text: 'Basic usage',
+      collapsible: true,
+      items: [
+        { text: 'Running code', link: '/guppy/running-code' },
+      ]
+    },
+    {
+      text: 'Changelogs',
+      collapsible: true,
+      items: [
+        { text: 'v1.1.2', link: 'https://glink.so/kelvin/guppy/changelogs/v1-1-2' },
+        { text: 'v1.1.1', link: 'https://glink.so/kelvin/guppy/changelogs/guppy-v1-1-1' },
+        { text: 'v1.1.0', link: 'https://glink.so/kelvin/guppy/changelogs/guppy-v1-1-0' },
+        { text: 'v1.0.1', link: 'https://glink.so/kelvin/guppy/changelogs/guppy-v1-0-1' },
+        { text: 'v1.0.0', link: 'https://glink.so/kelvin/guppy/changelogs/guppy-v1-0-0' },
+        { text: 'Changelogs', link: 'https://glink.so/kelvin/guppy/changelogs' },
       ]
     }
   ]
@@ -96,15 +117,16 @@ function wishGuide() {
       text: 'Getting started',
       collapsible: true,
       items: [
-        { text: 'Introduction', link: '/create-sails/' },
-        { text: 'Installation', link: '/create-sails/installation' },
+        { text: 'Introduction', link: '/wish/' },
+        { text: 'What is wish?', link: '/wish/what-is-wish' },
+        { text: 'Installation', link: '/wish/installation' },
       ]
     },
     {
       text: 'Basic usage',
       collapsible: true,
       items: [
-        { text: 'Basic usage', link: '/create-sails/basic-usage' }
+        { text: 'Basic usage', link: '/wish/basic-usage' }
       ]
     }
   ]
@@ -116,7 +138,8 @@ function createSailsGuide() {
     text: 'Getting started',
     collapsible: true,
     items: [
-      { text: 'Introduction', link: '/create-sails/' }
+      { text: 'Introduction', link: '/create-sails/' },
+      { text: 'What is create-sails?', link: '/create-sails/what-is-create-sails' }
     ]
     },
     {
@@ -130,5 +153,22 @@ function createSailsGuide() {
 }
 
 function inertiaSailsGuide() {
-return []
+  return [
+    {
+    text: 'Getting started',
+    collapsible: true,
+    items: [
+      { text: 'Introduction', link: '/inertia-sails/' },
+      { text: 'What is inertia-sails?', link: '/inertia-sails/what-is-inertia-sails' },
+      { text: 'Installation', link: '/inertia-sails/installation' }
+    ]
+    },
+    {
+      text: 'Basic usage',
+      collapsible: true,
+      items: [
+        { text: 'Basic usage', link: '/inertia-sails/basic-usage' }
+      ]
+    }
+  ]
 }
