@@ -126,7 +126,7 @@ function wishGuide() {
       text: 'Basic usage',
       collapsible: true,
       items: [
-        { text: 'Basic usage', link: '/wish/basic-usage' }
+        { text: 'GitHub OAuth', link: '/wish/github' }
       ]
     }
   ]
