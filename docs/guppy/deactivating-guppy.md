@@ -12,11 +12,11 @@ Do well to deactivate guppy before uninstalling it on your computer so as to  fr
 :::
 
 ## Deactivating on MacOS
-As of `v1.1+``, to deactivate guppy, click on guppy in the menu bar and select Deactivate guppy.
+As of `v1.1+`, to deactivate guppy, click on guppy in the menu bar and select Deactivate guppy.
 
 ![Deactivate guppy in Mac](/images/guppy/deactivate-guppy-osx.png)
 
 ## Deactivating on Windows/Linux
- On Windows/Linux, open the hamburger menu on the top left of the window, and go to Sizzy -> Deactivate Sizzy.
+ On Windows/Linux, open the hamburger menu on the top left of the window, and go to guppy -> Deactivate guppy.
 
 On successful deactivation you will be presented with the activation screen as seen in [Activating guppy](/guppy/activating-guppy) section with a success message
