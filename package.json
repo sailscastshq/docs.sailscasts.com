@@ -5,6 +5,7 @@
     "docs:serve": "vitepress serve docs"
   },
   "devDependencies": {
+    "prettier": "^2.7.1",
     "vitepress": "^1.0.0-alpha.2",
     "vue": "^3.2.37"
   }
