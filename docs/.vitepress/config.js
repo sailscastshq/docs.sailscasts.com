@@ -25,6 +25,11 @@ export default {
     footer: {
       message: 'All open source projects are released under the MIT License.',
       copyright: 'Copyright © 2022-present The Sailscasts Company'
+    },
+    algolia:  {
+      appId: 'MEUVZAVDGZ',
+      apiKey: '6c5e9ae85dc5c0672b6df0b2e305f6cb',
+      indexName: 'sailscasts'
     }
   }
 }
