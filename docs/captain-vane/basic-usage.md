@@ -1,11 +1,12 @@
 ---
 title: Basic Usage
+description: Use captain-vane to generate test data
 editLink: true
 ---
 
 # {{ $frontmatter.title }}
 
-Basic usage of captain-vane is to generate a factory file and use the vane helper provided by captain vane to create records using the generated factory and model definition
+Basic usage of captain-vane is to generate a factory file and use the `vane`` helper provided by `captain-vane`` to create records using the generated factory and model definition.
 
 Let's say you have a user model in your Sails application with the following definition:
 
@@ -28,7 +29,7 @@ module.exports = {
     lastName: {
       type: 'string',
       required: true
-    }
+    },
     isAdmin: {
       type: 'boolean',
       defaultsTo: false,
@@ -54,7 +55,7 @@ module.exports.default = () => {
 ```
 
 ::: tip
-captain-vane assumes every model has an `id` field in `config/models.js` so it prepoluates that field with a random Uuid. You can change this if you are using integers for that field.
+captain-vane assumes every model has an `id` field in `config/models.js` so it prepopulates that field with a random Uuid. You can change this if you are using integers for that field.
 :::
 
 ## Defining model factories
