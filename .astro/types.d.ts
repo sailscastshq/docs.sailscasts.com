@@ -199,6 +199,97 @@ declare module 'astro:content' {
 
 	type ContentEntryMap = {
 		"docs": {
+"captain-vane/basic-usage/basic-usage.md": {
+	id: "captain-vane/basic-usage/basic-usage.md";
+  slug: "captain-vane/basic-usage/basic-usage";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"captain-vane/getting-started/installation.md": {
+	id: "captain-vane/getting-started/installation.md";
+  slug: "captain-vane/getting-started/installation";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"captain-vane/getting-started/introduction.md": {
+	id: "captain-vane/getting-started/introduction.md";
+  slug: "captain-vane/getting-started/introduction";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"captain-vane/getting-started/what-is-captain-vane.md": {
+	id: "captain-vane/getting-started/what-is-captain-vane.md";
+  slug: "captain-vane/getting-started/what-is-captain-vane";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"create-sails/basic-usage/basic-usage.md": {
+	id: "create-sails/basic-usage/basic-usage.md";
+  slug: "create-sails/basic-usage/basic-usage";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"create-sails/getting-started/introduction.md": {
+	id: "create-sails/getting-started/introduction.md";
+  slug: "create-sails/getting-started/introduction";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"create-sails/getting-started/what-is-create-sails.md": {
+	id: "create-sails/getting-started/what-is-create-sails.md";
+  slug: "create-sails/getting-started/what-is-create-sails";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"guppy/basic-usage/running-code.md": {
+	id: "guppy/basic-usage/running-code.md";
+  slug: "guppy/basic-usage/running-code";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"guppy/getting-started/activating-guppy.md": {
+	id: "guppy/getting-started/activating-guppy.md";
+  slug: "guppy/getting-started/activating-guppy";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"guppy/getting-started/deactivating-guppy.md": {
+	id: "guppy/getting-started/deactivating-guppy.md";
+  slug: "guppy/getting-started/deactivating-guppy";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"guppy/getting-started/installation.md": {
+	id: "guppy/getting-started/installation.md";
+  slug: "guppy/getting-started/installation";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"guppy/getting-started/introduction.md": {
+	id: "guppy/getting-started/introduction.md";
+  slug: "guppy/getting-started/introduction";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"guppy/getting-started/what-is-guppy.md": {
+	id: "guppy/getting-started/what-is-guppy.md";
+  slug: "guppy/getting-started/what-is-guppy";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
 "index.mdx": {
 	id: "index.mdx";
   slug: "index";
@@ -206,12 +297,70 @@ declare module 'astro:content' {
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".mdx"] };
+"inertia-sails/basic-usage/basic-usage.md": {
+	id: "inertia-sails/basic-usage/basic-usage.md";
+  slug: "inertia-sails/basic-usage/basic-usage";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"inertia-sails/getting-started/installation.md": {
+	id: "inertia-sails/getting-started/installation.md";
+  slug: "inertia-sails/getting-started/installation";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"inertia-sails/getting-started/introduction.md": {
+	id: "inertia-sails/getting-started/introduction.md";
+  slug: "inertia-sails/getting-started/introduction";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"inertia-sails/getting-started/what-is-inertia-sails.md": {
+	id: "inertia-sails/getting-started/what-is-inertia-sails.md";
+  slug: "inertia-sails/getting-started/what-is-inertia-sails";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"wish/basic-usage/github.md": {
+	id: "wish/basic-usage/github.md";
+  slug: "wish/basic-usage/github";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"wish/getting-started/installation.md": {
+	id: "wish/getting-started/installation.md";
+  slug: "wish/getting-started/installation";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"wish/getting-started/introduction.md": {
+	id: "wish/getting-started/introduction.md";
+  slug: "wish/getting-started/introduction";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"wish/getting-started/what-is-wish.md": {
+	id: "wish/getting-started/what-is-wish.md";
+  slug: "wish/getting-started/what-is-wish";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
 };
 
 	};
 
 	type DataEntryMap = {
-		
+		"boring-stack": {
+};
+
 	};
 
 	type AnyEntryMap = ContentEntryMap & DataEntryMap;
