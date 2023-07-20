@@ -13,7 +13,7 @@ export default {
       '/inertia-sails/': inertiaSailsGuide()
     },
     editLink: {
-      pattern: 'https://github.com/sailscastshq/docs.sailscasts.com/edit/main/docs/:path',
+      pattern: 'https://github.com/sailscastshq/docs.sailscasts.com/edit/develop/docs/:path',
       text: 'Edit this page on GitHub'
     },
     socialLinks: [
