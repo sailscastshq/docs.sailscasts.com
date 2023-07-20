@@ -97,7 +97,7 @@ Before diving into the contribution process and setting up your environment, it 
   <br/>
     This helps us track and automatically close the relevant issue when your Pull Request is merged.
 
-## Contribution Tips
+## Contribution Etiquettes
 
 - When you pick an issue to fix, we recommended that you review the comment thread first to check if someone is already working on it. In case no one has claimed it yet, kindly leave a comment stating your intention to work on it. This way, others will be aware, and we can avoid accidental duplication of effort.
 
