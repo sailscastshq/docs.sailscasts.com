@@ -5,17 +5,7 @@ We appreciate your interest in contributing to this docs! Your contributions are
 Please take a moment to read the guidelines below before contributing to the project.
 
 ## Project Description
-
-This project contains the official documentation of all the products built for The Sailscasts Community.
-
-#### These products includes:
-- [boring-stack](https://github.com/sailscastshq/boring-stack)
-- [create-sails](https://github.com/sailscastshq/create-sails)
-- [inertia-sails](https://github.com/sailscastshq/inertia-sails)
-- [wish](https://github.com/sailscastshq/sails-hook-wish)
-- [captain-vane](https://github.com/sailscastshq/captain-vane)
-- [guppy](https://guppy.sailscasts.com/)
-
+This project contains the official documentations for all projects both open source and commercial by The Sailscasts Company.
 
 ## Contribution Workflow
 
@@ -32,9 +22,9 @@ Before diving into the contribution process and setting up your environment, it 
 1. Search through the list of [open issues](https://github.com/sailscastshq/docs.sailscasts.com/issues).
 2. Find the issue you want to work on.
    
-   ⚠️**Note:** If you notice a bug or you want to add a feature to the project, create an issue using this [guide](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue)
+   ⚠️**Note:** If you notice a bug or you want to add a feature to the project, create a new issue using this [guide](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue)
 
-3. Check to confirm if someone else has already worked on  and made a pull request on said issue. To properly confirm, look out for a "pull request icon" on the issue. If there is none, you are good to go! If someone else has worked on the issue, kindly find a new issue to fix.
+3. Check to confirm if someone else has already worked on and made a pull request on said issue. To properly confirm, look out for a "pull request icon" on the issue. If there is none, you are good to go! If someone else has worked on the issue, kindly find a new issue to fix.
 
 
 ## Getting Started
@@ -43,7 +33,7 @@ Before diving into the contribution process and setting up your environment, it 
  
 1. Open your preferred text editor.
    
-2. Fork and clone the repository into your own github         account.
+2. Fork and clone the repository into your own github account.
    [Here is a guide](https://docs.github.com/en/get-started/quickstart/fork-a-repo).
    
    ⚠️**Note:**  If you cloned the repository a while back, we recommend fetching the latest changes from the upstream repository.
@@ -104,4 +94,4 @@ Before diving into the contribution process and setting up your environment, it 
 - If someone has shown interest in fixing an issue but doesn't follow up for a specific period, let's say 2-3 weeks, it's permissible to pick up the same issue later. However, please ensure that you leave a comment to inform others of your intention before proceeding.
 
 
-   #### Thank you for reading the guide. We look forward to merging your contributions.
+#### Thank you for reading the guide. We look forward to merging your contributions.
