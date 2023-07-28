@@ -9,7 +9,6 @@ editLink: true
 Add captain-vane and captain-vane-generator development dependencies to your project.
 Add `captain-vane` and `captain-vane-generator` development dependencies to your project:
 
-
 ```bash
 npm i --save-dev captain-vane captain-vane-generator
 ```
