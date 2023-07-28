@@ -6,7 +6,7 @@ features:
   - title: Support for popular OAuth flows
     details: GitHub, Google, Twitter(coming soon)
 hero:
-  name: wish
+  name: Wish
   text: The OAuth hook you wish exists for Sails
   tagline: Easily setup OAuth flows in your Sails applications.
   actions:

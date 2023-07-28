@@ -145,7 +145,7 @@ function wishGuide() {
       collapsible: true,
       items: [
         { text: 'Introduction', link: '/wish/' },
-        { text: 'What is wish?', link: '/wish/what-is-wish' },
+        { text: 'What is Wish?', link: '/wish/what-is-wish' },
         { text: 'Installation', link: '/wish/installation' }
       ]
     },

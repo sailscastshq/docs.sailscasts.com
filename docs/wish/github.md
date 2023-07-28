@@ -5,7 +5,7 @@ editLink: true
 
 # {{ $frontmatter.title }}
 
-To setup up a GitHub OAuth for your app, `wish` expects the following key and property in either `config/local.js` or `config/custom.js`. For example you can have a development GitHub clientId and clientSecret in `config/local.js`
+To setup up a GitHub OAuth for your app, Wish expects the following key and property in either `config/local.js` or `config/custom.js`. For example you can have a development GitHub clientId and clientSecret in `config/local.js`
 
 ```js
 // config/local.js
@@ -71,7 +71,7 @@ Notice the redirect is a one-line of code and when this action is called, it wil
 
 ## The callback
 
-Note the callback URL we set above that `wish` will callback? Let's also implement that starting from the route in `routes.js`
+Note the callback URL we set above that Wish will callback? Let's also implement that starting from the route in `routes.js`
 
 ```js
 'GET /auth/callback': 'auth/callback',
@@ -152,6 +152,6 @@ module.exports = {
 }
 ```
 
-The above is an actual real world use case of wish in [https://sailscasts.com](https://sailscasts.com). You can perform any business logic you want.
+The above is an actual real world use case of Wish in [https://sailscasts.com](https://sailscasts.com). You can perform any business logic you want.
 
 There you have it, a GitHub OAuth flow with just two routes and one line of code each to both redirect to GitHub and get the OAuth user details.
