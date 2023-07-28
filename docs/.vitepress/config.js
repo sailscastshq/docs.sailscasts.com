@@ -152,7 +152,10 @@ function wishGuide() {
     {
       text: 'Basic usage',
       collapsible: true,
-      items: [{ text: 'GitHub OAuth', link: '/wish/github' }]
+      items: [
+        { text: 'GitHub OAuth', link: '/wish/github' },
+        { text: 'Google OAuth', link: '/wish/google' }
+      ]
     }
   ]
 }
