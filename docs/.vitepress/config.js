@@ -3,6 +3,8 @@ export default {
   title: 'Sailscasts Docs',
   description: 'Docs on everything we are working on at Sailscasts',
   lastUpdated: true,
+  cleanUrls: true,
+
   themeConfig: {
     nav: nav(),
     sidebar: {
