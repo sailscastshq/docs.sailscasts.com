@@ -3,7 +3,6 @@ title: Basic Usage
 editLink: true
 ---
 
-
 # {{ $frontmatter.title }}
 
 ## Responses
@@ -41,7 +40,7 @@ module.exports = function defineCustomHook(sails) {
           fn: async function (req, res, next) {
             if (req.session.userId) {
               const loggedInUser = await User.findOne({
-                id: req.session.userId,
+                id: req.session.userId
               })
               if (!loggedInUser) {
                 sails.log.warn(
@@ -56,15 +55,16 @@ module.exports = function defineCustomHook(sails) {
               return next()
             }
             return next()
-          },
-        },
-      },
-    },
+          }
+        }
+      }
+    }
   }
 }
 ```
 
 ## Configuration
+
 If you used the `create-sails` scaffolding tool, you will find the configuration file for Inertia.js in `config/inertia.js`. You will mostly use this file for asset-versioning in Inertia by setting either a number or string that you can update when your assets changes. Below is an example of how this file looks like:
 
 ```js

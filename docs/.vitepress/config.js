@@ -13,20 +13,27 @@ export default {
       '/inertia-sails/': inertiaSailsGuide()
     },
     editLink: {
-      pattern: 'https://github.com/sailscastshq/docs.sailscasts.com/edit/develop/docs/:path',
+      pattern:
+        'https://github.com/sailscastshq/docs.sailscasts.com/edit/develop/docs/:path',
       text: 'Edit this page on GitHub'
     },
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/sailscastshq/docs.sailscasts.com' },
+      {
+        icon: 'github',
+        link: 'https://github.com/sailscastshq/docs.sailscasts.com'
+      },
       { icon: 'twitter', link: 'https://twitter.com/sailscastshq' },
       { icon: 'discord', link: 'https://discord.com/invite/gbJZuNm' },
-      { icon: 'youtube', link: 'https://www.youtube.com/channel/UCje9Wo6cbh3IERItPbyq1QA' }
+      {
+        icon: 'youtube',
+        link: 'https://www.youtube.com/channel/UCje9Wo6cbh3IERItPbyq1QA'
+      }
     ],
     footer: {
       message: 'All open source projects are released under the MIT License.',
       copyright: 'Copyright © 2022-present The Sailscasts Company'
     },
-    algolia:  {
+    algolia: {
       appId: 'MEUVZAVDGZ',
       apiKey: '6c5e9ae85dc5c0672b6df0b2e305f6cb',
       indexName: 'sailscasts'
@@ -38,9 +45,7 @@ function nav() {
   return [
     {
       text: 'Software',
-      items: [
-        { text: 'guppy', link: '/guppy/' },
-      ]
+      items: [{ text: 'guppy', link: '/guppy/' }]
     },
     {
       text: 'Open Source',
@@ -48,7 +53,7 @@ function nav() {
         { text: 'create-sails', link: '/create-sails/' },
         { text: 'inertia-sails', link: '/inertia-sails/' },
         { text: 'wish', link: '/wish/' },
-        { text: 'captain-vane', link: '/captain-vane/' },
+        { text: 'captain-vane', link: '/captain-vane/' }
         // { text: 'sailboat', link: '/sailboat/' },
       ]
     },
@@ -68,16 +73,17 @@ function captainVaneGuide() {
       collapsible: true,
       items: [
         { text: 'Introduction', link: '/captain-vane/' },
-        { text: 'What is captain-vane?', link: '/captain-vane/what-is-captain-vane' },
-        { text: 'Installation', link: '/captain-vane/installation' },
+        {
+          text: 'What is captain-vane?',
+          link: '/captain-vane/what-is-captain-vane'
+        },
+        { text: 'Installation', link: '/captain-vane/installation' }
       ]
     },
     {
       text: 'Basic usage',
       collapsible: true,
-      items: [
-        { text: 'Basic usage', link: '/captain-vane/basic-usage' }
-      ]
+      items: [{ text: 'Basic usage', link: '/captain-vane/basic-usage' }]
     }
   ]
 }
@@ -98,20 +104,33 @@ function guppyGuide() {
     {
       text: 'Basic usage',
       collapsible: true,
-      items: [
-        { text: 'Running code', link: '/guppy/running-code' },
-      ]
+      items: [{ text: 'Running code', link: '/guppy/running-code' }]
     },
     {
       text: 'Changelogs',
       collapsible: true,
       items: [
-        { text: 'v1.1.2', link: 'https://glink.so/kelvin/guppy/changelogs/v1-1-2' },
-        { text: 'v1.1.1', link: 'https://glink.so/kelvin/guppy/changelogs/guppy-v1-1-1' },
-        { text: 'v1.1.0', link: 'https://glink.so/kelvin/guppy/changelogs/guppy-v1-1-0' },
-        { text: 'v1.0.1', link: 'https://glink.so/kelvin/guppy/changelogs/guppy-v1-0-1' },
-        { text: 'v1.0.0', link: 'https://glink.so/kelvin/guppy/changelogs/guppy-v1-0-0' },
-        { text: 'Changelogs', link: 'https://glink.so/kelvin/guppy/changelogs' },
+        {
+          text: 'v1.1.2',
+          link: 'https://glink.so/kelvin/guppy/changelogs/v1-1-2'
+        },
+        {
+          text: 'v1.1.1',
+          link: 'https://glink.so/kelvin/guppy/changelogs/guppy-v1-1-1'
+        },
+        {
+          text: 'v1.1.0',
+          link: 'https://glink.so/kelvin/guppy/changelogs/guppy-v1-1-0'
+        },
+        {
+          text: 'v1.0.1',
+          link: 'https://glink.so/kelvin/guppy/changelogs/guppy-v1-0-1'
+        },
+        {
+          text: 'v1.0.0',
+          link: 'https://glink.so/kelvin/guppy/changelogs/guppy-v1-0-0'
+        },
+        { text: 'Changelogs', link: 'https://glink.so/kelvin/guppy/changelogs' }
       ]
     }
   ]
@@ -125,15 +144,13 @@ function wishGuide() {
       items: [
         { text: 'Introduction', link: '/wish/' },
         { text: 'What is wish?', link: '/wish/what-is-wish' },
-        { text: 'Installation', link: '/wish/installation' },
+        { text: 'Installation', link: '/wish/installation' }
       ]
     },
     {
       text: 'Basic usage',
       collapsible: true,
-      items: [
-        { text: 'GitHub OAuth', link: '/wish/github' }
-      ]
+      items: [{ text: 'GitHub OAuth', link: '/wish/github' }]
     }
   ]
 }
@@ -141,19 +158,20 @@ function wishGuide() {
 function createSailsGuide() {
   return [
     {
-    text: 'Getting started',
-    collapsible: true,
-    items: [
-      { text: 'Introduction', link: '/create-sails/' },
-      { text: 'What is create-sails?', link: '/create-sails/what-is-create-sails' }
-    ]
+      text: 'Getting started',
+      collapsible: true,
+      items: [
+        { text: 'Introduction', link: '/create-sails/' },
+        {
+          text: 'What is create-sails?',
+          link: '/create-sails/what-is-create-sails'
+        }
+      ]
     },
     {
       text: 'Basic usage',
       collapsible: true,
-      items: [
-        { text: 'Basic usage', link: '/create-sails/basic-usage' }
-      ]
+      items: [{ text: 'Basic usage', link: '/create-sails/basic-usage' }]
     }
   ]
 }
@@ -161,20 +179,21 @@ function createSailsGuide() {
 function inertiaSailsGuide() {
   return [
     {
-    text: 'Getting started',
-    collapsible: true,
-    items: [
-      { text: 'Introduction', link: '/inertia-sails/' },
-      { text: 'What is inertia-sails?', link: '/inertia-sails/what-is-inertia-sails' },
-      { text: 'Installation', link: '/inertia-sails/installation' }
-    ]
+      text: 'Getting started',
+      collapsible: true,
+      items: [
+        { text: 'Introduction', link: '/inertia-sails/' },
+        {
+          text: 'What is inertia-sails?',
+          link: '/inertia-sails/what-is-inertia-sails'
+        },
+        { text: 'Installation', link: '/inertia-sails/installation' }
+      ]
     },
     {
       text: 'Basic usage',
       collapsible: true,
-      items: [
-        { text: 'Basic usage', link: '/inertia-sails/basic-usage' }
-      ]
+      items: [{ text: 'Basic usage', link: '/inertia-sails/basic-usage' }]
     }
   ]
 }

@@ -5,7 +5,6 @@ editLink: true
 
 # {{ $frontmatter.title }}
 
-
 In your Sails project run the below command to install wish and it's node-fetch peer-dependency:
 
 ```sh

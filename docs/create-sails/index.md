@@ -1,12 +1,12 @@
 ---
 layout: home
 features:
-- title: Inertia.js
-  details: powered by inertia-sails
-- title: Choose your frontend
-  details: Vue, React or Svelte
-- title: Webpack 5
-  details: Webpack 5 takes care of your frontend assets
+  - title: Inertia.js
+    details: powered by inertia-sails
+  - title: Choose your frontend
+    details: Vue, React or Svelte
+  - title: Webpack 5
+    details: Webpack 5 takes care of your frontend assets
 
 hero:
   name: create-sails

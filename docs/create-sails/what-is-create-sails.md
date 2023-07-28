@@ -2,6 +2,7 @@
 title: What is create-sails?
 editLink: true
 ---
+
 # {{ $frontmatter.title }}
 
 An easy way to start a modern full-stack Sails project.
