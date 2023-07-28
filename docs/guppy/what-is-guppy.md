@@ -7,7 +7,6 @@ editLink: true
 
 ![guppy](/images/guppy/preview.png)
 
-
 guppy is a JavaScript code runner for Windows, macOS and Linux that allows you to immediately run JavaScript code. You can use it as a scratchpad to quickly execute JavaScript code or connect to your existing [Sails](https://sailsjs.com) applications and run code in their context.
 
 Open any local Sails folder and guppy bootstraps your application and executes your Javascript code in your application.

@@ -34,6 +34,7 @@ Notice we are using environment variables as it's best practice not to commit yo
 :::
 
 ## The redirect
+
 A typical flow is to have a button on your website say like "Sign in with GitHub". A good example can be found [here](https://sailscasts.com/signin)
 
 Clicking that button should call a redirect route you've set in `routes.js`
@@ -41,6 +42,7 @@ Clicking that button should call a redirect route you've set in `routes.js`
 ```js
  'GET /auth/redirect': 'auth/redirect',
 ```
+
 Now let's author this `auth/redirect` action:
 
 ```js
@@ -53,13 +55,13 @@ module.exports = {
 
   exits: {
     success: {
-      responseType: 'redirect',
-    },
+      responseType: 'redirect'
+    }
   },
 
   fn: async function () {
     return sails.wish.provider('github').redirect()
-  },
+  }
 }
 ```
 
@@ -84,14 +86,14 @@ module.exports = {
   inputs: {
     code: {
       type: 'string',
-      required: true,
-    },
+      required: true
+    }
   },
 
   exits: {
     success: {
-      responseType: 'redirect',
-    },
+      responseType: 'redirect'
+    }
   },
 
   fn: async function ({ code }, exits) {
@@ -108,7 +110,7 @@ module.exports = {
         email: githubUser.email,
         name: githubUser.name,
         githubAvatarUrl: githubUser.avatar_url,
-        githubAccessToken: githubUser.accessToken,
+        githubAccessToken: githubUser.accessToken
       }
     ).exec(async (error, user, wasCreated) => {
       if (error) throw error
@@ -117,7 +119,7 @@ module.exports = {
       // And then update the email change candidate which will be used be used to prompt the user to update their email
       if (!wasCreated && user.email !== githubUser.email) {
         await User.updateOne({ id: user.id }).set({
-          emailChangeCandidate: githubUser.email,
+          emailChangeCandidate: githubUser.email
         })
       }
 
@@ -125,19 +127,19 @@ module.exports = {
       // And then update the name if changed
       if (!wasCreated && user.name !== githubUser.name) {
         await User.updateOne({ id: user.id }).set({
-          name: githubUser.name,
+          name: githubUser.name
         })
       }
 
       if (!wasCreated && user.githubAvatarUrl !== githubUser.avatar_url) {
         await User.updateOne({ id: user.id }).set({
-          githubAvatarUrl: githubUser.avatar_url,
+          githubAvatarUrl: githubUser.avatar_url
         })
       }
 
       if (!wasCreated && user.githubAccessToken !== githubUser.accessToken) {
         await User.updateOne({ id: user.id }).set({
-          githubAccessToken: githubUser.accessToken,
+          githubAccessToken: githubUser.accessToken
         })
       }
 
@@ -146,7 +148,7 @@ module.exports = {
       req.session.userId = user.id
       return exits.success('/')
     })
-  },
+  }
 }
 ```
 

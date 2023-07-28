@@ -1,16 +1,26 @@
 {
   "name": "sailscasts-docs",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": true,
   "description": "The official docs hub for Sailscasts",
   "scripts": {
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:serve": "vitepress serve docs --port 8080"
+    "docs:serve": "vitepress serve docs --port 8080",
+    "lint": "prettier --check .",
+    "lint:fix": "prettier --write .",
+    "prepare": "husky install"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.6.7",
+    "@commitlint/config-conventional": "^17.6.7",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.3",
     "prettier": "^2.7.1",
-    "vitepress": "^1.0.0-alpha.2",
+    "vitepress": "^1.0.0-beta.6",
     "vue": "^3.2.37"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   }
 }

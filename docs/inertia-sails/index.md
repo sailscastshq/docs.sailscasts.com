@@ -1,12 +1,12 @@
 ---
 layout: home
 features:
-- title: Inertia.js
-  details: Build single-page apps, without building an API.
-- title: All JavaScript
-  details: JavaScript apps the monolith way
-- title: Not a framework
-  details: Inertia isn't a framework, nor is it a replacement to your existing server-side or client-side frameworks. Rather, it's designed to work with them.
+  - title: Inertia.js
+    details: Build single-page apps, without building an API.
+  - title: All JavaScript
+    details: JavaScript apps the monolith way
+  - title: Not a framework
+    details: Inertia isn't a framework, nor is it a replacement to your existing server-side or client-side frameworks. Rather, it's designed to work with them.
 
 hero:
   name: inertia-sails
