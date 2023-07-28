@@ -6,11 +6,11 @@ editLink: true
 # {{ $frontmatter.title }}
 
 
+## Google
+
 To setup up a Google OAuth for your app, `wish` expects the following key and property in either `config/local.js` or `config/custom.js`. For example you can have a development Google `clientId` and `clientSecret` in `config/local.js`
 
 > Do make sure to get the needed `clientId` and `clientSecret` credentials from the Google Console. You can see [here](https://developers.google.com/identity/protocols/oauth2) for instructions on how to get those credentials
-
-
 
 ```js
 google: {
@@ -24,9 +24,9 @@ You can override this value for production in either `custom.js` or in an enviro
 
 ```js
 // custom.js
-github: {
-    clientId: process.env.GITHUB_CLIENT_ID,
-    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+google: {
+    clientId: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     redirect: 'https://example.com/auth/callback',
   },
 ```
@@ -35,7 +35,7 @@ github: {
 
 ### The redirect
 
-A typical flow is to have a button on your website say like "Sign in with GitHub". A good example can be found [here](https://sailscasts.com/signin)
+A typical flow is to have a button on your website say like "Sign in with Google". A good example is implemented in [The Boring JavaScript Stack](https://sailscasts.com/boring) mellow template
 
 Clicking that button should call a redirect route you've set in `routes.js`
 
@@ -60,7 +60,7 @@ module.exports = {
   },
 
   fn: async function () {
-    return sails.wish.provider('github').redirect()
+    return sails.wish.provider('google').redirect()
   },
 }
 ```
@@ -97,47 +97,52 @@ module.exports = {
   fn: async function ({ code }, exits) {
     const req = this.req
 
-    // Get the GitHub user info
-    const githubUser = await sails.wish.provider('github').user(code)
+    // Get the Google user info
+    const googleUser = await sails.wish.provider('google').user(code)
 
     User.findOrCreate(
-      { githubId: githubUser.id },
+      { googleId: googleUser.id },
       {
         id: sails.helpers.getUuid(),
-        githubId: githubUser.id,
-        email: githubUser.email,
-        name: githubUser.name,
-        githubAvatarUrl: githubUser.avatar_url,
-        githubAccessToken: githubUser.accessToken,
+        googleId: googleUser.id,
+        email: googleUser.email,
+        name: googleUser.name,
+        googleAvatarUrl: googleUser.picture,
+        googleAccessToken: googleUser.accessToken,
+        googleIdToken: googleUser.idToken,
       }
     ).exec(async (error, user, wasCreated) => {
       if (error) throw error
 
       // Checks if the user email has changed since last log in
       // And then update the email change candidate which will be used be used to prompt the user to update their email
-      if (!wasCreated && user.email !== githubUser.email) {
+      if (!wasCreated && user.email !== googleUser.email) {
         await User.updateOne({ id: user.id }).set({
-          emailChangeCandidate: githubUser.email,
+          emailChangeCandidate: googleUser.email,
         })
       }
 
-      // Checks if the user name has changed since last log in
-      // And then update the name if changed
-      if (!wasCreated && user.name !== githubUser.name) {
+      if (!wasCreated && user.name !== googleUser.name) {
         await User.updateOne({ id: user.id }).set({
-          name: githubUser.name,
+          name: googleUser.name,
         })
       }
 
-      if (!wasCreated && user.githubAvatarUrl !== githubUser.avatar_url) {
+      if (!wasCreated && user.googleAvatarUrl !== googleUser.picture) {
         await User.updateOne({ id: user.id }).set({
-          githubAvatarUrl: githubUser.avatar_url,
+          googleAvatarUrl: googleUser.picture,
         })
       }
 
-      if (!wasCreated && user.githubAccessToken !== githubUser.accessToken) {
+      if (!wasCreated && user.googleAccessToken !== googleUser.accessToken) {
         await User.updateOne({ id: user.id }).set({
-          githubAccessToken: githubUser.accessToken,
+          googleAccessToken: googleUser.accessToken,
+        })
+      }
+
+      if (!wasCreated && user.googleIdToken !== googleUser.idToken) {
+        await User.updateOne({ id: user.id }).set({
+          googleIdToken: googleUser.idToken,
         })
       }
 
@@ -150,6 +155,4 @@ module.exports = {
 }
 ```
 
-The above is an actual real world use case of wish in [https://sailscasts.com](https://sailscasts.com). You can perform any business logic you want.
-
-There you have it, a GitHub OAuth flow with just two routes and one line of code each to both redirect to GitHub and get the OAuth user details.
+There you have it, a Google OAuth flow with just two routes and one line of code each to both redirect to Google and get the OAuth user details.
