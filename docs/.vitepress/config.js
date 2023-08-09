@@ -19,6 +19,17 @@ export default {
         'https://github.com/sailscastshq/docs.sailscasts.com/edit/develop/docs/:path',
       text: 'Edit this page on GitHub'
     },
+    head: [
+      [
+        'script',
+        {
+          src: 'https://cdn.usefathom.com/script.js',
+          'data-site': 'OTDOQLCI',
+          'data-spa': 'auto',
+          defer: ''
+        }
+      ]
+    ],
     socialLinks: [
       {
         icon: 'github',
