@@ -12,7 +12,11 @@ export default {
       '/guppy/': guppyGuide(),
       '/wish/': wishGuide(),
       '/create-sails/': createSailsGuide(),
-      '/inertia-sails/': inertiaSailsGuide()
+      '/inertia-sails/': inertiaSailsGuide(),
+      '/mail/': mailGuide()
+    },
+    sitemap: {
+      hostname: 'https://docs.sailscasts.com'
     },
     editLink: {
       pattern:
@@ -20,6 +24,10 @@ export default {
       text: 'Edit this page on GitHub'
     },
     head: [
+      ['meta', { name: 'theme-color', content: '#07162d' }],
+      ['meta', { name: 'og:type', content: 'website' }],
+      ['meta', { name: 'og:locale', content: 'en' }],
+      ['meta', { name: 'og:site_name', content: 'Sailscasts Docs' }],
       [
         'script',
         {
@@ -36,10 +44,10 @@ export default {
         link: 'https://github.com/sailscastshq/docs.sailscasts.com'
       },
       { icon: 'twitter', link: 'https://twitter.com/sailscastshq' },
-      { icon: 'discord', link: 'https://discord.com/invite/gbJZuNm' },
+      { icon: 'discord', link: 'https://sailscasts.com/chat' },
       {
         icon: 'youtube',
-        link: 'https://www.youtube.com/channel/UCje9Wo6cbh3IERItPbyq1QA'
+        link: 'https://youtube.com/@sailscasts'
       }
     ],
     footer: {
@@ -57,8 +65,11 @@ export default {
 function nav() {
   return [
     {
-      text: 'Software',
-      items: [{ text: 'guppy', link: '/guppy/' }]
+      text: 'Commercial projects',
+      items: [
+        { text: 'Guppy', link: '/guppy/' },
+        { text: 'Hagfish', link: '/hagfish/' }
+      ]
     },
     {
       text: 'Open Source',
@@ -210,6 +221,28 @@ function inertiaSailsGuide() {
       text: 'Basic usage',
       collapsible: true,
       items: [{ text: 'Basic usage', link: '/inertia-sails/basic-usage' }]
+    }
+  ]
+}
+
+function mailGuide() {
+  return [
+    {
+      text: 'Introduction',
+      collapsed: false,
+      items: [
+        { text: 'Getting Started', link: 'mail/getting-started' },
+        { text: 'Configuration', link: 'mail/configuration' }
+      ]
+    },
+    {
+      text: 'Transports',
+      collapsed: false,
+      items: [
+        { text: 'SMTP', link: 'mail/smtp-transport' },
+        { text: 'Resend', link: 'mail/resend-transport' },
+        { text: 'Local Development', link: 'mail/local-development' }
+      ]
     }
   ]
 }
