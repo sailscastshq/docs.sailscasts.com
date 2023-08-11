@@ -76,8 +76,9 @@ function nav() {
       items: [
         { text: 'create-sails', link: '/create-sails/' },
         { text: 'inertia-sails', link: '/inertia-sails/' },
-        { text: 'wish', link: '/wish/' },
-        { text: 'captain-vane', link: '/captain-vane/' }
+        { text: 'Wish', link: '/wish/' },
+        { text: 'captain-vane', link: '/captain-vane/' },
+        { text: 'Mail', link: '/mail/', activeMatch: '/mail/' }
         // { text: 'sailboat', link: '/sailboat/' },
       ]
     },
@@ -251,6 +252,11 @@ function mailGuide() {
         { text: 'Template', link: 'mail/email-template' },
         { text: 'Layout', link: 'mail/email-layout' }
       ]
+    },
+    {
+      text: 'Sending Emails',
+      collapsed: false,
+      items: [{ text: 'Send Helper', link: 'mail/send-helper' }]
     }
   ]
 }
