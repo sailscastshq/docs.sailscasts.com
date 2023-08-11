@@ -48,4 +48,4 @@ await sails.helpers.mail.send.with({
 
 You can already see a couple of the arguments you can pass to the send helper provided by Mail.
 
-Next, You can check out all the various supported [transports](/mail/transports) Mail provide for you to send your emails and how to configure them
+Next, You can check out all the various supported transports Mail provide for you to send your emails and how to configure them
