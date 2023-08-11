@@ -5,10 +5,9 @@ editLink: true
 
 # {{ $frontmatter.title }}
 
+To setup up a Google OAuth for your app, Wish expects the following key and property in either `config/local.js` or `config/custom.js`.
 
-## Google
-
-To setup up a Google OAuth for your app, `wish` expects the following key and property in either `config/local.js` or `config/custom.js`. For example you can have a development Google `clientId` and `clientSecret` in `config/local.js`
+For example you can have a development Google `clientId` and `clientSecret` in `config/local.js`
 
 > Do make sure to get the needed `clientId` and `clientSecret` credentials from the Google Console. You can see [here](https://developers.google.com/identity/protocols/oauth2) for instructions on how to get those credentials
 
@@ -33,7 +32,7 @@ google: {
 
 > Notice I am using environment variables as it's best practice not to commit your secret credentials. In the case of `local.js` that's okay because that file is never committed to version control.
 
-### The redirect
+## The redirect
 
 A typical flow is to have a button on your website say like "Sign in with Google". A good example is implemented in [The Boring JavaScript Stack](https://sailscasts.com/boring) mellow template
 
@@ -55,13 +54,13 @@ module.exports = {
 
   exits: {
     success: {
-      responseType: 'redirect',
-    },
+      responseType: 'redirect'
+    }
   },
 
   fn: async function () {
     return sails.wish.provider('google').redirect()
-  },
+  }
 }
 ```
 
@@ -69,7 +68,7 @@ Notice the redirect is a one-line of code and when this action is called, it wil
 
 ## The callback
 
-Note the callback URL we set above that `wish` will callback? Let's also implement that starting from the route in `routes.js`
+Note the callback URL we set above that Wish will callback? Let's also implement that starting from the route in `routes.js`
 
 ```js
 'GET /auth/callback': 'auth/callback',
@@ -84,14 +83,14 @@ module.exports = {
   inputs: {
     code: {
       type: 'string',
-      required: true,
-    },
+      required: true
+    }
   },
 
   exits: {
     success: {
-      responseType: 'redirect',
-    },
+      responseType: 'redirect'
+    }
   },
 
   fn: async function ({ code }, exits) {
@@ -109,7 +108,7 @@ module.exports = {
         name: googleUser.name,
         googleAvatarUrl: googleUser.picture,
         googleAccessToken: googleUser.accessToken,
-        googleIdToken: googleUser.idToken,
+        googleIdToken: googleUser.idToken
       }
     ).exec(async (error, user, wasCreated) => {
       if (error) throw error
@@ -118,31 +117,31 @@ module.exports = {
       // And then update the email change candidate which will be used be used to prompt the user to update their email
       if (!wasCreated && user.email !== googleUser.email) {
         await User.updateOne({ id: user.id }).set({
-          emailChangeCandidate: googleUser.email,
+          emailChangeCandidate: googleUser.email
         })
       }
 
       if (!wasCreated && user.name !== googleUser.name) {
         await User.updateOne({ id: user.id }).set({
-          name: googleUser.name,
+          name: googleUser.name
         })
       }
 
       if (!wasCreated && user.googleAvatarUrl !== googleUser.picture) {
         await User.updateOne({ id: user.id }).set({
-          googleAvatarUrl: googleUser.picture,
+          googleAvatarUrl: googleUser.picture
         })
       }
 
       if (!wasCreated && user.googleAccessToken !== googleUser.accessToken) {
         await User.updateOne({ id: user.id }).set({
-          googleAccessToken: googleUser.accessToken,
+          googleAccessToken: googleUser.accessToken
         })
       }
 
       if (!wasCreated && user.googleIdToken !== googleUser.idToken) {
         await User.updateOne({ id: user.id }).set({
-          googleIdToken: googleUser.idToken,
+          googleIdToken: googleUser.idToken
         })
       }
 
@@ -151,7 +150,7 @@ module.exports = {
       req.session.userId = user.id
       return exits.success('/')
     })
-  },
+  }
 }
 ```
 

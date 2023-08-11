@@ -1,12 +1,23 @@
 ---
-title: What is wish?
+title: What is Wish?
 editLink: true
 ---
 
 # {{ $frontmatter.title }}
 
-wish is the OAuth Sails hook you wish(pun intended) exists for Sails. wish provides a simple, convenient way to authenticate with OAuth providers. wish currently supports authentication via GitHub
+Wish is the [OAuth](https://en.wikipedia.org/wiki/OAuth) Sails hook you wish(pun intended) exists for Sails.
+
+Wish provides a simple, convenient way to authenticate with OAuth providers.
+
+Wish supports [OAuth 2.0](https://oauth.net/2/) authentication and authorization via:
+
+- [GitHub](/wish/github)
+- [Google](/wish/google)
 
 ## Motivation
 
-When building [sailscasts](https://sailscasts.com), I needed an OAuth flow for GitHub. This hook is a byproduct of how OAuth is used in Sailscasts and it's targetted to not letting you reinvent the wheel and just use this hooks when you want to support OAuth in your Sails applications.
+When building [Sailscasts](https://sailscasts.com), I needed an OAuth flow for to allow Sailscasts users to log in via GitHub.
+
+So I wrote Wish as a Sails hook. This hook is an outcome of observing OAuth implementation in Sailscasts, aiming to spare you from writing the entire OAuth logic yourself.
+
+Its primary purpose is to simplify supporting OAuth 2.0 authentication and authorization in Sails applications.
