@@ -27,6 +27,6 @@ mailers: {
 
 ## Mailtrap / NodemailerApp
 
-Another option is to utilize services like [Mailtrap](https://mailtrap.io/email-sandbox/) or [NodemailerApp](https://nodemailer.com/app/) along with the `SMTP` transport to route your email messages to a simulated mailbox.
+Another option is to utilize services like [Mailtrap](https://mailtrap.io/email-sandbox/) or [NodemailerApp](https://nodemailer.com/app/) along with the [SMTP transport](/mail/smtp-transport) to route your email messages to a simulated mailbox.
 
-This enables you to examine the emails within an email client, such as Mailtrap's or NodemailerApp message viewer.
+This enables you to examine the emails within an email client, such as Mailtrap's or NodemailerApp's message viewer.
