@@ -11,7 +11,7 @@ next:
 
 # {{ $frontmatter.title }}
 
-You can create a layout for the emails in your Sails application. This layout file like templates is expected to be an EJS template.
+You can create layouts for the emails in your Sails application. This layout file, like [templates](/mail/email-template) is expected to be an EJS template.
 
 ## Default layout
 
