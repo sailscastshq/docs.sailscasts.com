@@ -243,6 +243,14 @@ function mailGuide() {
         { text: 'Resend', link: 'mail/resend-transport' },
         { text: 'Local Development', link: 'mail/local-development' }
       ]
+    },
+    {
+      text: 'Writing Emails',
+      collapsed: false,
+      items: [
+        { text: 'Template', link: 'mail/email-template' },
+        { text: 'Layout', link: 'mail/email-layout' }
+      ]
     }
   ]
 }
