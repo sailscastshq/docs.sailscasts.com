@@ -12,23 +12,42 @@ export default {
       '/guppy/': guppyGuide(),
       '/wish/': wishGuide(),
       '/create-sails/': createSailsGuide(),
-      '/inertia-sails/': inertiaSailsGuide()
+      '/inertia-sails/': inertiaSailsGuide(),
+      '/mail/': mailGuide()
+    },
+    sitemap: {
+      hostname: 'https://docs.sailscasts.com'
     },
     editLink: {
       pattern:
         'https://github.com/sailscastshq/docs.sailscasts.com/edit/develop/docs/:path',
       text: 'Edit this page on GitHub'
     },
+    head: [
+      ['meta', { name: 'theme-color', content: '#07162d' }],
+      ['meta', { name: 'og:type', content: 'website' }],
+      ['meta', { name: 'og:locale', content: 'en' }],
+      ['meta', { name: 'og:site_name', content: 'Sailscasts Docs' }],
+      [
+        'script',
+        {
+          src: 'https://cdn.usefathom.com/script.js',
+          'data-site': 'OTDOQLCI',
+          'data-spa': 'auto',
+          defer: ''
+        }
+      ]
+    ],
     socialLinks: [
       {
         icon: 'github',
         link: 'https://github.com/sailscastshq/docs.sailscasts.com'
       },
       { icon: 'twitter', link: 'https://twitter.com/sailscastshq' },
-      { icon: 'discord', link: 'https://discord.com/invite/gbJZuNm' },
+      { icon: 'discord', link: 'https://sailscasts.com/chat' },
       {
         icon: 'youtube',
-        link: 'https://www.youtube.com/channel/UCje9Wo6cbh3IERItPbyq1QA'
+        link: 'https://youtube.com/@sailscasts'
       }
     ],
     footer: {
@@ -46,16 +65,20 @@ export default {
 function nav() {
   return [
     {
-      text: 'Software',
-      items: [{ text: 'guppy', link: '/guppy/' }]
+      text: 'Commercial projects',
+      items: [
+        { text: 'Guppy', link: '/guppy/' },
+        { text: 'Hagfish', link: '/hagfish/' }
+      ]
     },
     {
       text: 'Open Source',
       items: [
         { text: 'create-sails', link: '/create-sails/' },
         { text: 'inertia-sails', link: '/inertia-sails/' },
-        { text: 'wish', link: '/wish/' },
-        { text: 'captain-vane', link: '/captain-vane/' }
+        { text: 'Wish', link: '/wish/' },
+        { text: 'captain-vane', link: '/captain-vane/' },
+        { text: 'Mail', link: '/mail/', activeMatch: '/mail/' }
         // { text: 'sailboat', link: '/sailboat/' },
       ]
     },
@@ -199,6 +222,41 @@ function inertiaSailsGuide() {
       text: 'Basic usage',
       collapsible: true,
       items: [{ text: 'Basic usage', link: '/inertia-sails/basic-usage' }]
+    }
+  ]
+}
+
+function mailGuide() {
+  return [
+    {
+      text: 'Introduction',
+      collapsed: false,
+      items: [
+        { text: 'Getting Started', link: 'mail/getting-started' },
+        { text: 'Configuration', link: 'mail/configuration' }
+      ]
+    },
+    {
+      text: 'Transports',
+      collapsed: false,
+      items: [
+        { text: 'SMTP', link: 'mail/smtp-transport' },
+        { text: 'Resend', link: 'mail/resend-transport' },
+        { text: 'Local Development', link: 'mail/local-development' }
+      ]
+    },
+    {
+      text: 'Writing Emails',
+      collapsed: false,
+      items: [
+        { text: 'Template', link: 'mail/email-template' },
+        { text: 'Layout', link: 'mail/email-layout' }
+      ]
+    },
+    {
+      text: 'Sending Emails',
+      collapsed: false,
+      items: [{ text: 'Send Helper', link: 'mail/send-helper' }]
     }
   ]
 }
