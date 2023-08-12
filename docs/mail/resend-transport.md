@@ -41,9 +41,9 @@ To set the Resend credentials, you have a couple of options:
 
 ## Environment variables
 
-Set the following environment variables
+Set the following environment variable:
 
-```env
+```
 RESEND_API_KEY=re_skskagnagnak
 ```
 

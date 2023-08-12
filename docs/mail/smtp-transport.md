@@ -2,8 +2,8 @@
 title: SMTP Transport
 editLink: true
 prev:
-  text: 'Transports'
-  link: '/mail/transports'
+  text: 'Configuration'
+  link: '/mail/configuration'
 next:
   text: 'Resend Transport'
   link: '/mail/resend-transport'
@@ -41,9 +41,9 @@ To set the SMTP credentials, you have a couple of options:
 
 ## Environment variables
 
-Set the following environment variables
+Set the following environment variables:
 
-```env
+```
 MAIL_HOST=sandbox.smtp.mailtrap.io
 MAIL_PORT=2525
 MAIL_USERNAME=username
