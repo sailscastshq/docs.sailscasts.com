@@ -5,6 +5,7 @@
   "description": "The official docs hub for Sailscasts",
   "scripts": {
     "docs:dev": "vitepress dev docs",
+    "dev": "npm run docs:dev",
     "docs:build": "vitepress build docs",
     "docs:serve": "vitepress serve docs --port 8080",
     "lint": "prettier --check .",
