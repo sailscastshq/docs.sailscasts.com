@@ -1,6 +1,6 @@
 {
   "name": "sailscasts-docs",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "private": true,
   "description": "The official docs hub for Sailscasts",
   "scripts": {
@@ -23,5 +23,8 @@
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
+  },
+  "engines": {
+    "node": ">=18.0"
   }
 }
