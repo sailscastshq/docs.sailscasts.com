@@ -18,8 +18,8 @@
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
     "prettier": "^2.7.1",
-    "vitepress": "^1.0.0-beta.6",
-    "vue": "^3.2.37"
+    "vitepress": "^1.0.0-rc.34",
+    "vue": "^3.4.3"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
