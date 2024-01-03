@@ -14,7 +14,7 @@ hero:
       text: View on GitHub
       link: https://github.com/sailscastshq/boring-stack
   image:
-    src: /images/boring-stack/logo.png
+    src: /boring-stack-logo.png
     alt: The Boring JavaScript Stack
 features:
   - icon: 🎯
