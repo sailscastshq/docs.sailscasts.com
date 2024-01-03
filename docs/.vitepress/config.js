@@ -74,12 +74,16 @@ function nav() {
     {
       text: 'Open Source',
       items: [
+        {
+          text: 'Boring Stack',
+          link: '/boring-stack/',
+          activeMatch: '/boring-stack/'
+        },
         { text: 'create-sails', link: '/create-sails/' },
         { text: 'inertia-sails', link: '/inertia-sails/' },
         { text: 'Wish', link: '/wish/' },
         { text: 'captain-vane', link: '/captain-vane/' },
         { text: 'Mail', link: '/mail/', activeMatch: '/mail/' }
-        // { text: 'sailboat', link: '/sailboat/' },
       ]
     },
     { text: 'Courses', link: 'https://sailscasts.com/courses' },
