@@ -45,10 +45,14 @@ Boring technologies are...
 
 I'm pretty sure when you solve problems via web software in your business that you are not in the business of burning through tools to build your solution with.
 
+## Boring is good for teams
+
+Because your tech stack is boring, onboarding new team mates become easy because they can quickly get started because the technologies in the stack are stable and they can hit the ground running.
+
 ## Solve exciting problems
 
 Want excitements? Who doesn't 😁! Don't look to your tools for that excitement, look to the problems you are solving.
 
-For example, [Lemon Squeezy](https://lemonsqueezy.com) using a flavor of The Boring JavaScript Stack(they use Laravel as the web framework not Sails), are busy solving the exciting problem of enabling creators receive payments on the internet.
+For example, [Lemon Squeezy](https://lemonsqueezy.com) using a flavor of The Boring JavaScript Stack - Laravel is the web framework fo choice not Sails - are busy solving the exciting problem of enabling creators receive payments on the internet. I am also building [Hagfish](https://hagfish.io) and [Sailscasts](https://sailscasts.com) on The Boring JavaScript Stack!
 
 In fact, the more boring your stack is the quicker you can let the tools fade in the background while you zoom in into the problems you are solving. Your tools are supposed to enable you to be awesome, not them being awesome in your eyes.
