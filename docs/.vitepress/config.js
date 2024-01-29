@@ -13,7 +13,8 @@ export default {
       '/wish/': wishGuide(),
       '/create-sails/': createSailsGuide(),
       '/inertia-sails/': inertiaSailsGuide(),
-      '/mail/': mailGuide()
+      '/mail/': mailGuide(),
+      '/boring-stack/': boringStackGuide()
     },
     sitemap: {
       hostname: 'https://docs.sailscasts.com'
@@ -261,6 +262,19 @@ function mailGuide() {
       text: 'Sending Emails',
       collapsed: false,
       items: [{ text: 'Send Helper', link: 'mail/send-helper' }]
+    }
+  ]
+}
+
+function boringStackGuide() {
+  return [
+    {
+      text: 'Introduction',
+      collapsed: false,
+      items: [
+        { text: 'Why the name?', link: 'boring-stack/why-the-name' },
+        { text: 'Getting started', link: 'boring-stack/getting-started' }
+      ]
     }
   ]
 }
