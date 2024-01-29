@@ -64,6 +64,10 @@ Moreover, a standardized and well-established tech stack fosters collaboration a
 
 This uniformity also facilitates the creation of best practices, enabling the team to optimize their workflows and maintain a cohesive and efficient development environment. In the long run, a "boring" tech stack can contribute to a more sustainable and productive team dynamic.
 
+## Boring is good for teams
+
+Because your tech stack is boring, onboarding new team mates become easy because they can quickly get started because the technologies in the stack are stable and they can hit the ground running.
+
 ## Solve exciting problems
 
 Want excitements? Who doesn't 😁! Don't look to your tools for that excitement, look to the problems you are solving.
