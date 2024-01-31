@@ -2,6 +2,9 @@
 title: Why the name?
 titleTemplate: The Boring JavaScript Stack 🥱
 description: There is a school of thought that calls tried, tested and stable technologies, boring tech and The Boring JavaScript Stack is a tribute to that school of thought and a contrarian movement against the trend in the JS ecosystem of chasing the shiny.
+next:
+  text: Who is it for
+  link: '/boring-stack/who-is-it-for'
 editLink: true
 ---
 
