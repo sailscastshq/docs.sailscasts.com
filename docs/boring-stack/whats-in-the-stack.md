@@ -1,5 +1,5 @@
 ---
-title: Who is it for?
+title: What's in the stack?
 titleTemplate: The Boring JavaScript Stack 🥱
 description: The Boring JavaScript comes with Sails, Inertia, Tailwind CSS, and Vue, React, or Svelte. It's about proven technologies prioritizing stability and efficiency, letting you focus on solving real web development problems without the noise of constant updates.
 prev:
