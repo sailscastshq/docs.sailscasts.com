@@ -272,8 +272,56 @@ function boringStackGuide() {
       text: 'Introduction',
       collapsed: false,
       items: [
-        { text: 'Why the name?', link: 'boring-stack/why-the-name' },
+        { text: 'Why the name', link: 'boring-stack/why-the-name' },
+        { text: 'Who is it for', link: 'boring-stack/who-is-it-for' },
+        {
+          text: "What's in the stack",
+          link: 'boring-stack/whats-in-the-stack'
+        },
         { text: 'Getting started', link: 'boring-stack/getting-started' }
+      ]
+    },
+    {
+      text: 'The Basics',
+      collapsed: false,
+      items: [
+        { text: 'Routing', link: 'boring-stack/routing' },
+        { text: 'Navigation', link: 'boring-stack/navigation' },
+        { text: 'Redirects', link: 'boring-stack/redirects' },
+        { text: 'Error handling', link: 'boring-stack/error-handling' },
+        { text: 'Sharing data', link: 'boring-stack/sharing-data' }
+      ]
+    },
+
+    {
+      text: 'Guides',
+      collapsed: false,
+      items: [
+        { text: 'Authentication', link: 'boring-stack/authentication' },
+        { text: 'Authorization', link: 'boring-stack/authorization' },
+        { text: 'Database', link: 'boring-stack/database' },
+        { text: 'Email', link: 'boring-stack/email' },
+        { text: 'Session', link: 'boring-stack/session' }
+      ]
+    },
+    {
+      text: 'Deploy',
+      collapsed: false,
+      items: [
+        {
+          text: 'Render',
+          link: 'boring-stack/render'
+        }
+      ]
+    },
+    {
+      text: 'Configuration',
+      collapsed: true,
+      items: [
+        {
+          text: 'Type checking JS files',
+          link: 'boring-stack/type-checking-js-files'
+        }
       ]
     }
   ]
