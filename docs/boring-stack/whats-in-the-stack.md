@@ -1,5 +1,5 @@
 ---
-title: What's in the stack?
+title: Who is it for?
 titleTemplate: The Boring JavaScript Stack 🥱
 description: The Boring JavaScript comes with Sails, Inertia, Tailwind CSS, and Vue, React, or Svelte. It's about proven technologies prioritizing stability and efficiency, letting you focus on solving real web development problems without the noise of constant updates.
 prev:
@@ -40,7 +40,7 @@ Because we’re using Sails as the web framework, we can leverage a lot of its f
 - [Authentication](https://sailsjs.com/documentation/concepts/sessions#how-sessions-work-in-sails-advanced-): Sails has a robust support for session-based authentication.
 - [Sails Wish](https://docs.sailscasts.com/wish/): Easily setup OAuth flows with providers like [GitHub](https://docs.sailscasts.com/wish/github) or [Google](https://docs.sailscasts.com/wish/google) in your Sails applications.
 - [Authorization](https://sailsjs.com/documentation/concepts/policies): Sails has policies which are versatile tools for authorization and access control: they let you execute some logic before an action is run in order to determine whether or not to continue processing the request.
-- [Waterline ORM](https://sailsjs.com/documentation/concepts/models-and-orm): Sails comes installed with a powerful [ORM/ODM](http://stackoverflow.com/questions/12261866/what-is-the-difference-between-an-orm-and-an-odm) called Waterline, a datastore-agnostic tool that dramatically simplifies interaction with one or more databases.
+- [Waterline ORM](https://sailsjs.com/documentation/concepts/models-and-orm): Sails comes installed with a powerful ORM/ODM called Waterline, a datastore-agnostic tool that dramatically simplifies interaction with one or more databases.
 - [WebSocket support](https://sailsjs.com/documentation/concepts/realtime): Sails apps are capable of full-duplex, realtime communication between the client and server.
 - [File uploads](https://sailsjs.com/documentation/concepts/file-uploads): [Skipper](https://github.com/sailshq/skipper) makes it easy to implement streaming file uploads to disk, S3, or any supported file upload adapters.
 - [Shell scripts](https://sailsjs.com/documentation/concepts/shell-scripts): Sails lets you run JavaScript functions as shell scripts. This can be useful for running scheduled jobs (cron, Heroku scheduler), worker processes, and any other custom, one-off scripts that need access to your Sails app's models, configuration, and helpers.
