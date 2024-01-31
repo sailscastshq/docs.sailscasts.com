@@ -1,11 +1,11 @@
 ---
-title: Type checking in JS files
+title: Type checking JS files
 titleTemplate: The Boring JavaScript 🥱
 description: Configuration on type checking in JS files
 editLink: true
 ---
 
-# Type checking in JS files
+# Type checking JS files
 
 The Boring JavaScript Stack templates ships with a `jsconfig.json` file with configs that allows TypeScript's compiler in editors like VS Code to type check your JS files.
 
