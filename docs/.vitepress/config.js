@@ -25,7 +25,7 @@ export default {
       text: 'Edit this page on GitHub'
     },
     head: [
-      ['meta', { name: 'theme-color', content: '#07162d' }],
+      ['meta', { name: 'theme-color', content: '#fecb05' }],
       ['meta', { name: 'og:type', content: 'website' }],
       ['meta', { name: 'og:locale', content: 'en' }],
       ['meta', { name: 'og:site_name', content: 'Sailscasts Docs' }],
