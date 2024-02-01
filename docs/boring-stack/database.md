@@ -13,14 +13,6 @@ editLink: true
 
 # Database
 
-A database is a structured collection of data organized for efficient retrieval and management. In web development, databases store and manage information essential for applications, such as user data, content, and settings.
-
-### Example use cases
-
-- **User data storage:** Storing and retrieving user profiles, preferences, and account information.
-- **Content management:** Managing articles, posts, or any content within an application.
-- **Configuration settings:** Storing and managing application settings and configurations.
-
 ## Sails Disk
 
 During development, The Boring JavaScript Stack utilizes the [Sails Disk](https://sailsjs.com/documentation/concepts/extending-sails/adapters/available-adapters#sails-disk) adapter for Waterline, allowing you to kickstart your app without worrying about setting up a database.
@@ -90,8 +82,8 @@ module.exports.datastores = {
 
 :::
 
-## SQLite <Badge type="warning" text="coming soon" />
+## SQLite
 
-::: info
+::: info Coming soon
 The SQLite adapter is under development. You can keep an eye on the [repo](https://github.com/sailscastshq/sails-sqlite).
 :::
