@@ -19,14 +19,14 @@ A common scenario involves permitting a user to access your dashboard exclusivel
 
 ::: code-group
 
-```js[api/policies/is-authenticated.js]
+```js [api/policies/is-authenticated.js]
 module.exports = async function (req, res, proceed) {
   if (req.session.userId) return proceed()
-  return res.redirect('/signin')
+  return res.redirect('/login')
 }
 ```
 
-```js[config/policies.js]
+```js [config/policies.js]
 module.exports.policies = {
   'dashboard/*': 'is-authenticated'
 }
