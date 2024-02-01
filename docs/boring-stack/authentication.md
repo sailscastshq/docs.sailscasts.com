@@ -30,4 +30,4 @@ The password is stored using the bcrypt algorithm and handled by the password he
 
 ## Provider authentication
 
-Using [Sails Wish](/wish), The Boring Stack supports third-party authentication allowing you to easily add SSO(Single Sign On) to your application. Out of the box The Boring Stack supports [OAuth with Google](/wish/google). You can easily setup [OAuth with GitHub](/wish/github) as well.
+Using [Sails Wish](/wish/), The Boring Stack supports third-party authentication allowing you to easily add SSO(Single Sign On) to your application. Out of the box The Boring Stack supports [OAuth with Google](/wish/google). You can easily setup [OAuth with GitHub](/wish/github) as well.

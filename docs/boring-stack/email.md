@@ -21,10 +21,10 @@ Sending transactional emails plays a crucial role in keeping users informed abou
 - **Password Reset Requests:** Notifying users and providing a secure link to reset their passwords.
 - **Order Confirmations:** Informing users about successful purchases with order details.
 
-Sending emails in The Boring JavaScript is powered by the [Sails Mail](/mail) hook.
+Sending emails in The Boring JavaScript is powered by the [Sails Mail](/mail/) hook.
 
 ::: info
-Learn all about [Sails Mail](/mail) in the Mail docs.
+Learn all about [Sails Mail](/mail/) in the Mail docs.
 :::
 
 ## Sending emails
