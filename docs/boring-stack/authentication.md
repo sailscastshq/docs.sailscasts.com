@@ -3,8 +3,8 @@ title: Authentication
 titleTemplate: The Boring JavaScript Stack 🥱
 description: Authentication in The Boring JavaScript Stack
 prev:
-  text: Sharing data
-  link: '/boring-stack/sharing-data'
+  text: Error handling
+  link: '/boring-stack/error-handling'
 next:
   text: Authorization
   link: '/boring-stack/authorization'
@@ -12,8 +12,6 @@ editLink: true
 ---
 
 # {{ $frontmatter.title }} {#authentication}
-
-Authentication is the process of verifying the identity of a user, typically through credentials like a username and password. For example, logging into a GitHub account requires authentication.
 
 The Boring JavaScript Stack manages its own authentication.
 
