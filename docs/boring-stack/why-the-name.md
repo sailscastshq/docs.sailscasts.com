@@ -1,4 +1,8 @@
 ---
+head:
+  - - meta
+    - property: 'og:image'
+      content: https://docs.sailscasts.com/boring-stack-social.png
 title: Why the name?
 titleTemplate: The Boring JavaScript Stack 🥱
 description: Discover the philosophy behind The Boring JavaScript Stack. It's a nod to stability, a rebellion against chasing trends. Embrace reliability for efficient web development without constant distractions.
@@ -51,18 +55,6 @@ I'm pretty sure that when you solve problems via web software in your business, 
 Rapidly evolving technologies can be more of a hindrance than a help. Instead of propelling your business forward, they can become stumbling blocks, impeding progress and diverting attention from what truly matters – delivering the services that your users depend on you for.
 
 In the realm of business, the reliability and steadiness of a "boring" tech stack can be a secret weapon, allowing you to stay focused on your core objectives and ensuring the sustained success of your venture.
-
-## Boring is good for teams
-
-Because your tech stack is boring, onboarding new teammates becomes easy because they can quickly get started. The technologies in the stack are stable, allowing them to hit the ground running.
-
-In addition to the ease of onboarding, a "boring" tech stack often translates to reduced maintenance overhead. Stability and predictability in technology choices mean fewer surprises and less time spent troubleshooting unexpected issues.
-
-This allows the team to focus on delivering value to users rather than constantly grappling with the latest trendy tools or dealing with the complexities of bleeding-edge technologies.
-
-Moreover, a standardized and well-established tech stack fosters collaboration and knowledge sharing within the team. Team members can easily support each other, as they share a common understanding of the tools and processes in place.
-
-This uniformity also facilitates the creation of best practices, enabling the team to optimize their workflows and maintain a cohesive and efficient development environment. In the long run, a "boring" tech stack can contribute to a more sustainable and productive team dynamic.
 
 ## Boring is good for teams
 

@@ -1,4 +1,8 @@
 ---
+head:
+  - - meta
+    - property: 'og:image'
+      content: https://docs.sailscasts.com/boring-stack-social.png
 title: Database
 titleTemplate: The Boring JavaScript Stack 🥱
 description: Database in The Boring JavaScript Stack

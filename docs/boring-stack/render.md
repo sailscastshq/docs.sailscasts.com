@@ -1,11 +1,17 @@
 ---
+head:
+  - - meta
+    - property: 'og:image'
+      content: https://docs.sailscasts.com/boring-stack-social.png
 title: Deploy on Render
 titleTemplate: The Boring JavaScript Stack 🥱
 description: Deploy your app on Render
 prev:
   text: 'Session'
   link: '/boring-stack/session'
-next: false
+next:
+  text: Type checking JS files
+  link: '/boring-stack/type-checking-js-files'
 editLink: true
 ---
 

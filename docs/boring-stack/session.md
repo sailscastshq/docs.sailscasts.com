@@ -1,4 +1,8 @@
 ---
+head:
+  - - meta
+    - property: 'og:image'
+      content: https://docs.sailscasts.com/boring-stack-social.png
 title: Session
 titleTemplate: The Boring JavaScript Stack 🥱
 description: The Boring JavaScript Stack ships with Session based authentication
