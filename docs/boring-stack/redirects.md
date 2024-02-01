@@ -2,10 +2,16 @@
 title: Redirects
 titleTemplate: The Boring JavaScript Stack 🥱
 description: Redirecting in The Boring JavaScript Stack
+prev:
+  text: Navigation
+  link: '/boring-stack/navigation'
+next:
+  text: Error handling
+  link: '/boring-stack/error-handling'
 editLink: true
 ---
 
-# Redirects
+# {{ $frontmatter.title }} {#redirects}
 
 ## Route target redirect
 
