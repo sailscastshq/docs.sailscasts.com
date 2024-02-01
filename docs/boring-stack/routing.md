@@ -5,6 +5,9 @@ description: In The Boring JavaScript Stack, all of your application's routes ar
 prev:
   text: 'Getting Started'
   link: '/boring-stack/getting-started'
+next:
+  text: Navigation
+  link: '/boring-stack/navigation'
 editLink: true
 ---
 
