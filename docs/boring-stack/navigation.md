@@ -15,7 +15,7 @@ editLink: true
 
 ## Standard navigation
 
-To navigate in pages/views that are not controlled by Inertia, use the standard `<a>`. Not surprisingly it works really well :wink:.
+To navigate in pages/views that are not controlled by Inertia, use the standard `<a>`. Not surprisingly, it works really well. :wink:
 
 ## Inertia navigation
 
