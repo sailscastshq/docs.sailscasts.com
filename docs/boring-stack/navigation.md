@@ -31,24 +31,28 @@ To create an Inertia link, use the Inertia `<Link>` component. Any attributes yo
 
 ::: code-group
 
-```js [Vue]
+```vue [Vue]
+<script setup>
 import { Link } from '@inertiajs/vue3'
+</script>
 
-;<Link href="/">Home</Link> // [!code focus]
+<template><Link href="/">Home</Link> // [!code focus]</template>
 ```
 
-```js [React]
+```jsx [React]
 import { Link } from '@inertiajs/react'
 
-;<Link href="/">Home</Link> // [!code focus]
+function Nav() {
+  return <Link href="/">Home</Link> // [!code focus]
+}
 ```
 
-```js [Svelte]
+```svelte [Svelte]
 import { inertia, Link } from '@inertiajs/svelte'
 
-<a href="/" use:inertia>Home</a> // [!code focus]
+<a href="/" use:inertia>Home</a>
 
-<Link href="/">Home</Link> // [!code focus]
+<Link href="/">Home</Link>
 ```
 
 :::
