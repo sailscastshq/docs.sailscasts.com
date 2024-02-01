@@ -32,9 +32,7 @@ export default {
       [
         'script',
         {
-          src: 'https://cdn.usefathom.com/script.js',
-          'data-site': 'OTDOQLCI',
-          'data-spa': 'auto',
+          src: 'https://tinylytics.app/embed/vL3m1tsfEzLruHrKLMHB.js',
           defer: ''
         }
       ]
