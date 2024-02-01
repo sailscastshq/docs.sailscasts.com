@@ -1,4 +1,8 @@
 ---
+head:
+  - - meta
+    - property: 'og:image'
+      content: https://docs.sailscasts.com/boring-stack-social.png
 title: Navigation
 titleTemplate: The Boring JavaScript Stack 🥱
 description: To navigate in your SPA use the provided Links component for your UI framework.

@@ -1,4 +1,8 @@
 ---
+head:
+  - - meta
+    - property: 'og:image'
+      content: https://docs.sailscasts.com/boring-stack-social.png
 title: Sharing data
 titleTemplate: The Boring JavaScript Stack 🥱
 description: Sharing data in The Boring JavaScript Stack

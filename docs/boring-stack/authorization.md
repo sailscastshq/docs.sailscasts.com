@@ -1,4 +1,8 @@
 ---
+head:
+  - - meta
+    - property: 'og:image'
+      content: https://docs.sailscasts.com/boring-stack-social.png
 title: Authorization
 titleTemplate: The Boring JavaScript Stack 🥱
 description: Authorization in The Boring JavaScript Stack

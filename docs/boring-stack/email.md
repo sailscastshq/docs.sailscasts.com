@@ -1,4 +1,8 @@
 ---
+head:
+  - - meta
+    - property: 'og:image'
+      content: https://docs.sailscasts.com/boring-stack-social.png
 title: Email
 titleTemplate: The Boring JavaScript Stack 🥱
 description: Sending emails in The Boring JavaScript Stack

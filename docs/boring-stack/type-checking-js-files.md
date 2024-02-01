@@ -1,7 +1,15 @@
 ---
+head:
+  - - meta
+    - property: 'og:image'
+      content: https://docs.sailscasts.com/boring-stack-social.png
 title: Type checking JS files
 titleTemplate: The Boring JavaScript 🥱
 description: Configuration on type checking in JS files
+prev:
+  text: Deploy on Render
+  link: '/boring-stack/render'
+next: false
 editLink: true
 ---
 

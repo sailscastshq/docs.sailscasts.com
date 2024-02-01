@@ -1,4 +1,8 @@
 ---
+head:
+  - - meta
+    - property: 'og:image'
+      content: https://docs.sailscasts.com/boring-stack-social.png
 title: Who is it for?
 titleTemplate: The Boring JavaScript Stack 🥱
 description: Wondering who vibes with The Boring JavaScript Stack? If you're all about practicality over trends, a business owner aiming for consistent services, or a team lead striving for efficiency – this stack is your jam. It's for startups with a long-term vision and devs craving problem-solving excitement.

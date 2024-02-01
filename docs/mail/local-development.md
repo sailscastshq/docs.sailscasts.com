@@ -1,4 +1,8 @@
 ---
+head:
+  - - meta
+    - property: 'og:image'
+      content: https://docs.sailscasts.com/sails-mail-social.png
 title: Local development
 editLink: true
 prev:

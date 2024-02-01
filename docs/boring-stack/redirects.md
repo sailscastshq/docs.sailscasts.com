@@ -1,4 +1,8 @@
 ---
+head:
+  - - meta
+    - property: 'og:image'
+      content: https://docs.sailscasts.com/boring-stack-social.png
 title: Redirects
 titleTemplate: The Boring JavaScript Stack 🥱
 description: Redirecting in The Boring JavaScript Stack

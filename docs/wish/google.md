@@ -1,4 +1,8 @@
 ---
+head:
+  - - meta
+    - property: 'og:image'
+      content: https://docs.sailscasts.com/sails-wish-social.png
 title: Google OAuth
 editLink: true
 ---

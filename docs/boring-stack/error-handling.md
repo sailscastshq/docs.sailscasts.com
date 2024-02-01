@@ -1,4 +1,8 @@
 ---
+head:
+  - - meta
+    - property: 'og:image'
+      content: https://docs.sailscasts.com/boring-stack-social.png
 title: Error handling
 titleTemplate: The Boring JavaScript Stack 🥱
 description: Error handling in The Boring JavaScript Stack
