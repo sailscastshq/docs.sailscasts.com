@@ -13,6 +13,8 @@ editLink: true
 
 # {{ $frontmatter.title }} {#authentication}
 
+Authentication is the process of verifying the identity of a user, typically through credentials like a username and password. For example, logging into a GitHub account requires authentication.
+
 The Boring JavaScript Stack manages its own authentication.
 
 By default, the Boring JavaScript Stack offers you two mechanisms for authentication:
