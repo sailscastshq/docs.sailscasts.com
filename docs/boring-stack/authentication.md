@@ -3,8 +3,8 @@ title: Authentication
 titleTemplate: The Boring JavaScript Stack 🥱
 description: Authentication in The Boring JavaScript Stack
 prev:
-  text: Error handling
-  link: '/boring-stack/error-handling'
+  text: Sharing data
+  link: '/boring-stack/sharing-data'
 next:
   text: Authorization
   link: '/boring-stack/authorization'
