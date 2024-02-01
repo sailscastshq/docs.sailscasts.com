@@ -1,4 +1,8 @@
 ---
+head:
+  - - meta
+    - property: 'og:image'
+      content: https://docs.sailscasts.com/sails-wish-social.png
 layout: home
 features:
   - title: OAuth with one-liners

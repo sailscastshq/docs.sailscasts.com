@@ -4,7 +4,33 @@ export default {
   description: 'Docs on everything we are working on at Sailscasts',
   lastUpdated: true,
   cleanUrls: true,
-
+  head: [
+    ['meta', { name: 'theme-color', content: '#fecb05' }],
+    ['meta', { name: 'og:type', content: 'website' }],
+    ['meta', { name: 'og:locale', content: 'en' }],
+    ['meta', { name: 'og:site_name', content: 'Sailscasts Docs' }],
+    ['meta', { name: 'og:url', content: 'https://docs.sailscasts.com' }],
+    [
+      'meta',
+      { property: 'twitter:url', content: 'https://docs.sailscasts.com' }
+    ],
+    ['meta', { property: 'twitter:creator', content: '@Dominus_Kelvin' }],
+    ['meta', { property: 'twitter:card', content: 'summary_large_image' }],
+    [
+      'meta',
+      {
+        property: 'og:image',
+        content: 'https://docs.sailscasts.com/social.png'
+      }
+    ],
+    [
+      'script',
+      {
+        src: 'https://tinylytics.app/embed/vL3m1tsfEzLruHrKLMHB.js',
+        defer: ''
+      }
+    ]
+  ],
   themeConfig: {
     nav: nav(),
     sidebar: {
@@ -24,19 +50,6 @@ export default {
         'https://github.com/sailscastshq/docs.sailscasts.com/edit/develop/docs/:path',
       text: 'Edit this page on GitHub'
     },
-    head: [
-      ['meta', { name: 'theme-color', content: '#fecb05' }],
-      ['meta', { name: 'og:type', content: 'website' }],
-      ['meta', { name: 'og:locale', content: 'en' }],
-      ['meta', { name: 'og:site_name', content: 'Sailscasts Docs' }],
-      [
-        'script',
-        {
-          src: 'https://tinylytics.app/embed/vL3m1tsfEzLruHrKLMHB.js',
-          defer: ''
-        }
-      ]
-    ],
     socialLinks: [
       {
         icon: 'github',

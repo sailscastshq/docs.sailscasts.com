@@ -1,4 +1,8 @@
 ---
+head:
+  - - meta
+    - property: 'og:image'
+      content: https://docs.sailscasts.com/boring-stack-social.png
 title: Getting started
 titleTemplate: The Boring JavaScript Stack 🥱
 description: The Boring JavaScript Stack let's you build full-stack JavaScript apps with Vue, React, or Svelte.

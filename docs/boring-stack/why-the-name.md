@@ -1,4 +1,8 @@
 ---
+head:
+  - - meta
+    - property: 'og:image'
+      content: https://docs.sailscasts.com/boring-stack-social.png
 title: Why the name?
 titleTemplate: The Boring JavaScript Stack 🥱
 description: Discover the philosophy behind The Boring JavaScript Stack. It's a nod to stability, a rebellion against chasing trends. Embrace reliability for efficient web development without constant distractions.

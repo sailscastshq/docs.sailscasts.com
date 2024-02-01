@@ -1,4 +1,8 @@
 ---
+head:
+  - - meta
+    - property: 'og:image'
+      content: https://docs.sailscasts.com/boring-stack-social.png
 title: Routing
 titleTemplate: The Boring JavaScript Stack 🥱
 description: In The Boring JavaScript Stack, all of your application's routes are defined server-side. This means that you don't need Vue Router or React Router.
