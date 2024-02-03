@@ -91,11 +91,11 @@ function nav() {
           link: '/boring-stack/',
           activeMatch: '/boring-stack/'
         },
-        { text: 'create-sails', link: '/create-sails/' },
-        { text: 'inertia-sails', link: '/inertia-sails/' },
-        { text: 'Wish', link: '/wish/' },
-        { text: 'captain-vane', link: '/captain-vane/' },
-        { text: 'Mail', link: '/mail/', activeMatch: '/mail/' }
+        { text: 'Create Sails', link: '/create-sails/' },
+        { text: 'Inertia Sails', link: '/inertia-sails/' },
+        { text: 'Sails Wish', link: '/wish/' },
+        { text: 'Captain Vane', link: '/captain-vane/' },
+        { text: 'Sails Mail', link: '/mail/', activeMatch: '/mail/' }
       ]
     },
     { text: 'Courses', link: 'https://sailscasts.com/courses' },
