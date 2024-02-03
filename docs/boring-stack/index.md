@@ -8,7 +8,7 @@ title: The Boring JavaScript Stack
 titleTemplate:
 hero:
   name: The Boring JavaScript Stack
-  text: The Reliable Full-Stack JavaScript Stack
+  text: The reliable full-stack JavaScript stack
   tagline: Ship products with battle-tested technologies. Say no to chasing JavaScript trends.
   actions:
     - theme: brand
