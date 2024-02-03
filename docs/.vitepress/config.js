@@ -77,10 +77,11 @@ export default {
 function nav() {
   return [
     {
-      text: 'Commercial projects',
+      text: 'Commercial products',
       items: [
-        { text: 'Guppy', link: '/guppy/' },
-        { text: 'Hagfish', link: '/hagfish/' }
+        { text: 'Sailscasts', link: 'https://sailscasts.com' },
+        { text: 'Guppy', link: 'https://sailscasts.com/guppy' },
+        { text: 'Hagfish', link: 'https://hagfish.io' }
       ]
     },
     {
