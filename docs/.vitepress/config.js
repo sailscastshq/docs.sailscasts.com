@@ -93,10 +93,22 @@ function nav() {
           link: '/boring-stack/',
           activeMatch: '/boring-stack/'
         },
-        { text: 'Create Sails', link: '/create-sails/' },
-        { text: 'Inertia Sails', link: '/inertia-sails/' },
-        { text: 'Sails Wish', link: '/wish/' },
-        { text: 'Captain Vane', link: '/captain-vane/' },
+        {
+          text: 'Create Sails',
+          link: '/create-sails/',
+          activeMatch: '/create-sails/'
+        },
+        {
+          text: 'Inertia Sails',
+          link: '/inertia-sails/',
+          activeMatch: '/inertia-sails/'
+        },
+        { text: 'Sails Wish', link: '/wish/', activeMatch: '/wish/' },
+        {
+          text: 'Captain Vane',
+          link: '/captain-vane/',
+          activeMatch: '/captain-vane/'
+        },
         { text: 'Sails Mail', link: '/mail/', activeMatch: '/mail/' },
         { text: 'Sails Content', link: '/content/', activeMatch: '/content/' }
       ]
