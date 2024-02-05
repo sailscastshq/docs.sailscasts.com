@@ -40,7 +40,8 @@ export default {
       '/create-sails/': createSailsGuide(),
       '/inertia-sails/': inertiaSailsGuide(),
       '/mail/': mailGuide(),
-      '/boring-stack/': boringStackGuide()
+      '/boring-stack/': boringStackGuide(),
+      '/content/': SailsContentGuide()
     },
     sitemap: {
       hostname: 'https://docs.sailscasts.com'
@@ -96,7 +97,8 @@ function nav() {
         { text: 'Inertia Sails', link: '/inertia-sails/' },
         { text: 'Sails Wish', link: '/wish/' },
         { text: 'Captain Vane', link: '/captain-vane/' },
-        { text: 'Sails Mail', link: '/mail/', activeMatch: '/mail/' }
+        { text: 'Sails Mail', link: '/mail/', activeMatch: '/mail/' },
+        { text: 'Sails Content', link: '/content/', activeMatch: '/content/' }
       ]
     },
     { text: 'Courses', link: 'https://sailscasts.com/courses' },
@@ -334,6 +336,28 @@ function boringStackGuide() {
           text: 'Type checking JS files',
           link: 'boring-stack/type-checking-js-files'
         }
+      ]
+    }
+  ]
+}
+
+function SailsContentGuide() {
+  return [
+    {
+      text: 'Introduction',
+      collapsed: false,
+      items: [
+        { text: 'Motivation', link: 'content/motivation' },
+        { text: 'Getting started', link: 'content/getting-started' }
+      ]
+    },
+    {
+      text: 'The Basics',
+      collapsed: false,
+      items: [
+        { text: 'Content collections', link: 'content/collections' },
+        { text: 'Querying collections', link: 'content/querying-collections' },
+        { text: 'Configuration', link: 'content/configuration' }
       ]
     }
   ]

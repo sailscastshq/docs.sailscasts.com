@@ -34,25 +34,3 @@ features:
     title: Ship Fast
     details: With The Boring Stack you can iterate quickly and move easily from MVP to scale.
 ---
-
-<style>
-:root {
-  --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #fecb05 30%, #02b7ed);
-
-  --vp-home-hero-image-background-image: linear-gradient(-45deg,  #00d882 50%, #fecb05 50%);
-  --vp-home-hero-image-filter: blur(44px);
-}
-
-@media (min-width: 640px) {
-  :root {
-    --vp-home-hero-image-filter: blur(56px);
-  }
-}
-
-@media (min-width: 960px) {
-  :root {
-    --vp-home-hero-image-filter: blur(68px);
-  }
-}
-</style>
