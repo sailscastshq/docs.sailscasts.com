@@ -20,7 +20,7 @@ However, I find that when I needed a simple blog for [Hagfish](https://hagfish.i
 
 That means I'll have to maintain two separate codebases just to have a blog in Markdown with the developer experience (DX) of Astro.
 
-Also, I have been thinking of bringing that developer experience (DX) to Sails developers ever since [Mike's keynote at Sailsconf 2022](https://youtu.be/OME5lQUJ4q4?si=umQ654LtAXGWSELT). I've also seen Sails being used to build static sites from Markdown at Fleet (https://fleetdm.com/), but I didn't quite like the DX.
+Also, I have been thinking of bringing that developer experience (DX) to Sails developers ever since [Mike's keynote at Sailsconf 2022](https://youtu.be/OME5lQUJ4q4?si=umQ654LtAXGWSELT). I've also seen Sails being used to build static sites from Markdown at [Fleet](https://fleetdm.com/), but I didn't quite like the DX.
 
 ## Leveraging Shipwright
 
