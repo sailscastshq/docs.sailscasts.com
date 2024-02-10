@@ -41,7 +41,8 @@ export default {
       '/inertia-sails/': inertiaSailsGuide(),
       '/mail/': mailGuide(),
       '/boring-stack/': boringStackGuide(),
-      '/content/': SailsContentGuide()
+      '/content/': SailsContentGuide(),
+      '/sails-stash/': SailsStashGuide()
     },
     sitemap: {
       hostname: 'https://docs.sailscasts.com'
@@ -110,7 +111,12 @@ function nav() {
           activeMatch: '/captain-vane/'
         },
         { text: 'Sails Mail', link: '/mail/', activeMatch: '/mail/' },
-        { text: 'Sails Content', link: '/content/', activeMatch: '/content/' }
+        { text: 'Sails Content', link: '/content/', activeMatch: '/content/' },
+        {
+          text: 'Sails Stash',
+          link: '/sails-stash/',
+          activeMatch: '/sails-stash/'
+        }
       ]
     },
     { text: 'Courses', link: 'https://sailscasts.com/courses' },
@@ -370,6 +376,32 @@ function SailsContentGuide() {
         { text: 'Content collections', link: 'content/collections' },
         { text: 'Querying collections', link: 'content/querying-collections' },
         { text: 'Configuration', link: 'content/configuration' }
+      ]
+    }
+  ]
+}
+
+function SailsStashGuide() {
+  return [
+    {
+      text: 'Introduction',
+      collapsed: false,
+      items: [{ text: 'Getting started', link: 'sails-stash/getting-started' }]
+    },
+    {
+      text: 'Stores',
+      collapsed: false,
+      items: [
+        { text: 'Redis', link: 'sails-stash/redis' },
+        { text: 'Memcached', link: 'sails-stash/memcached' }
+      ]
+    },
+    {
+      text: 'The Basics',
+      collapsed: false,
+      items: [
+        { text: 'Cache usage', link: 'sails-stash/cache-usage' },
+        { text: 'Configuration', link: 'sails-stash/configuration' }
       ]
     }
   ]
