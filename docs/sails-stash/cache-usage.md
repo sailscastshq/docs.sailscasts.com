@@ -32,7 +32,7 @@ module.exports = {
 
 ## Accessing multiple cache stores
 
-Using the `sails.cache` object, you may access various cache stores via the `store` method. The key passed to the store method should correspond to one of the stores listed in [`sails.config.cachestores`](/sails-stash/configuration/cachestores) in your `config/cachestores.js` configuration file.
+Using the `sails.cache` object, you may access various cache stores via the `store` method. The key passed to the store method should correspond to one of the stores listed in [`sails.config.cachestores`](/sails-stash/configuration#cachestores) in your `config/cachestores.js` configuration file.
 
 ```js
 const value = sails.cache.store('memcached').get('foo')
