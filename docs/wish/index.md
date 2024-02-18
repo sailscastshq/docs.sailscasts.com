@@ -18,6 +18,6 @@ hero:
       text: Get Started
       link: /wish/installation
     - theme: alt
-      text: View on GitHub
+      text: Star on GitHub ⭐️
       link: https://github.com/sailscastshq/sails-hook-wish
 ---

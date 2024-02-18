@@ -9,7 +9,7 @@ hero:
       text: Get Started
       link: /content/getting-started
     - theme: alt
-      text: View on GitHub
+      text: Star on GitHub ⭐️
       link: https://github.com/sailscastshq/sails-content
 features:
   - icon: 📄
