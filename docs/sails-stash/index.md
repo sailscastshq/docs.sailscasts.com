@@ -9,7 +9,7 @@ hero:
       text: Get Started
       link: /sails-stash/getting-started
     - theme: alt
-      text: View on GitHub
+      text: Star on GitHub ⭐️
       link: https://github.com/sailscastshq/sails-stash
 features:
   - icon: 🚀

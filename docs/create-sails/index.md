@@ -17,6 +17,6 @@ hero:
       text: Get Started
       link: /create-sails/basic-usage
     - theme: alt
-      text: View on GitHub
-      link: https://github.com/sailscastshq/create-sails
+      text: Star on GitHub ⭐️
+      link: https://github.com/sailscastshq/boring-stack
 ---
