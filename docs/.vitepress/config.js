@@ -42,7 +42,8 @@ export default {
       '/mail/': mailGuide(),
       '/boring-stack/': boringStackGuide(),
       '/content/': SailsContentGuide(),
-      '/sails-stash/': SailsStashGuide()
+      '/sails-stash/': SailsStashGuide(),
+      '/sails-pay': SailsPayGuide()
     },
     sitemap: {
       hostname: 'https://docs.sailscasts.com'
@@ -116,6 +117,11 @@ function nav() {
           text: 'Sails Stash',
           link: '/sails-stash/',
           activeMatch: '/sails-stash/'
+        },
+        {
+          text: 'Sails Pay',
+          link: '/sails-pay/',
+          activeMatch: '/sails-pay/'
         }
       ]
     },
@@ -403,6 +409,21 @@ function SailsStashGuide() {
         { text: 'Cache usage', link: 'sails-stash/cache-usage' },
         { text: 'Configuration', link: 'sails-stash/configuration' }
       ]
+    }
+  ]
+}
+
+function SailsPayGuide() {
+  return [
+    {
+      text: 'Introduction',
+      collapsed: false,
+      items: [{ text: 'Getting started', link: 'sails-pay/getting-started' }]
+    },
+    {
+      text: 'Payment Providers',
+      collapsed: false,
+      items: [{ text: 'Lemon Squeezy', link: 'sails-pay/lemonsqueezy' }]
     }
   ]
 }
