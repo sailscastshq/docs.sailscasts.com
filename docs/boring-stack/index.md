@@ -15,7 +15,7 @@ hero:
       text: Get Started
       link: /boring-stack/getting-started
     - theme: alt
-      text: View on GitHub
+      text: Star on GitHub ⭐️
       link: https://github.com/sailscastshq/boring-stack
   image:
     src: /boring-stack-logo.png

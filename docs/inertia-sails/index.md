@@ -17,6 +17,6 @@ hero:
       text: Get Started
       link: /inertia-sails/installation
     - theme: alt
-      text: View on GitHub
-      link: https://github.com/sailscastshq/inertia-sails
+      text: Star on GitHub ⭐️
+      link: https://github.com/sailscastshq/boring-stack
 ---

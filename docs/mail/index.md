@@ -12,7 +12,7 @@ hero:
       text: Get Started
       link: /mail/getting-started
     - theme: alt
-      text: View on GitHub
+      text: Star on GitHub ⭐️
       link: https://github.com/sailscastshq/sails-hook-mail
 features:
   - icon: 👨🏾‍💻
