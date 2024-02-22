@@ -52,6 +52,6 @@ Next, follow the instructions below to setup your preferred payment provider.
 
 ## Star the repo :star:
 
-::: tip Star the Sails Content repo on GitHub :star:
+::: tip Star the Sails Pay repo on GitHub :star:
 If you like Sails Pay, show it some love with [a star on GitHub](https://github.com/sailscastshq/sails-pay).
 :::
