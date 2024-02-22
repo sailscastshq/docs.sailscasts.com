@@ -43,7 +43,8 @@ export default {
       '/boring-stack/': boringStackGuide(),
       '/content/': SailsContentGuide(),
       '/sails-stash/': SailsStashGuide(),
-      '/sails-pay': SailsPayGuide()
+      '/sails-pay/': SailsPayGuide(),
+      '/sails-flash/': SailsFlashGuide()
     },
     sitemap: {
       hostname: 'https://docs.sailscasts.com'
@@ -122,6 +123,11 @@ function nav() {
           text: 'Sails Pay',
           link: '/sails-pay/',
           activeMatch: '/sails-pay/'
+        },
+        {
+          text: 'Sails Flash',
+          link: '/sails-flash/',
+          activeMatch: '/sails-flash/'
         }
       ]
     },
@@ -424,6 +430,16 @@ function SailsPayGuide() {
       text: 'Payment Providers',
       collapsed: false,
       items: [{ text: 'Lemon Squeezy', link: 'sails-pay/lemonsqueezy' }]
+    }
+  ]
+}
+
+function SailsFlashGuide() {
+  return [
+    {
+      text: 'Introduction',
+      collapsed: false,
+      items: [{ text: 'Getting started', link: 'sails-flash/getting-started' }]
     }
   ]
 }
