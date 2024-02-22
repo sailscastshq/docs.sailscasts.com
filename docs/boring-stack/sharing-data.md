@@ -17,7 +17,7 @@ editLink: true
 
 # Sharing data
 
-If you have data that you want to be provided as prop to your SPA (a common use-case is informationa about the authenticated user) you can use the `sails.inertia.share` method.
+If you have data that you want to be provided as prop to your SPA (a common use-case is information about the authenticated user) you can use the `sails.inertia.share` method.
 
 You can do this in `api/hooks/custom/index.js`.
 
