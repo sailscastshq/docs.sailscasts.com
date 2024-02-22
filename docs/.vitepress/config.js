@@ -332,7 +332,8 @@ function boringStackGuide() {
         { text: 'Routing', link: 'boring-stack/routing' },
         { text: 'Navigation', link: 'boring-stack/navigation' },
         { text: 'Redirects', link: 'boring-stack/redirects' },
-        { text: 'Error handling', link: 'boring-stack/error-handling' },
+        { text: 'Validation', link: 'boring-stack/validation' },
+        { text: 'Flash messages', link: 'boring-stack/flash-messages' },
         { text: 'Sharing data', link: 'boring-stack/sharing-data' }
       ]
     },
