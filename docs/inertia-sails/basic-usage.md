@@ -7,9 +7,7 @@ editLink: true
 
 ## Responses
 
-Sending back an Inertia responses is pretty simple, just use the `sails.inertia.render` method in your Sails actions(You can look at the example actions if you used create-sails). The `render` method accepts two arguments, the first is the name of the component you want to render from within your `pages` directory in `assets/js` (without the file extension).
-
-The second argument is the props object where you can provide props to your components.
+Sending back an Inertia responses is pretty simple, just use the return an Inertia custom response in your Sails actions(You can look at the example actions if you used create-sails). The returned response should be an object with the `page` and optionally a `props` property.
 
 ## Shared Data
 
