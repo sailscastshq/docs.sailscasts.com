@@ -23,8 +23,8 @@ You can set up one route to redirect to another route within your app or even to
 
 ```js
 module.exports.routes = {
-  '/chat': '/community', // [!code focus]
-  'GET /docs': 'https://docs.sailscasts.com' // [!code focus]
+  '/chat': '/community',
+  'GET /docs': 'https://docs.sailscasts.com'
 }
 ```
 
@@ -39,14 +39,12 @@ You can also set an exit to signal a redirect in your action.
 ```js
 module.exports = {
   exits: {
-    // [!code focus]
     success: {
-      // [!code focus]
-      responseType: 'redirect' // [!code focus]
-    } // [!code focus]
-  }, // [!code focus]
+      responseType: 'redirect'
+    }
+  },
   fn: async function (inputs) {
-    return '/' // [!code focus]
+    return '/'
   }
 }
 ```
@@ -61,10 +59,19 @@ Learn more about [Actions and Controllers](https://sailsjs.com/documentation/con
 
 When redirecting after a `PUT`, `PATCH`, or `DELETE` request from your SPA, you must use a `303` response code, otherwise the subsequent request will not be treated as a `GET` request. A `303` redirect is very similar to a `302` redirect; however, the follow-up request is explicitly changed to a `GET` request.
 
-The Boring Stack provides you with a helper method to do that in your controller actions:
+The Boring Stack provides you with the `inertiaRedirect` custom response to do that in your controller actions:
 
 ```js
-return sails.inertia.location(url)
+module.exports = {
+  exits: {
+    success: {
+      responseType: 'inertiaRedirect'
+    }
+  },
+  fn: async function (inputs) {
+    return '/users'
+  }
+}
 ```
 
 ::: info
@@ -73,10 +80,19 @@ Learn more about [303 response code](https://inertiajs.com/redirects#303-respons
 
 ## External redirects
 
-Sometimes it's necessary to redirect to an external website, or even another page in your app that's not an SPA. This can be accomplished using a server-side initiated `window.location` visit via the `sails.inertia.location()` method.
+Sometimes it's necessary to redirect to an external website, or even another page in your app that's not an SPA. This can be accomplished using a server-side initiated `window.location` visit via the `inertiaRedirect` custom response.
 
 ```js
-return sails.inertia.location(url)
+module.exports = {
+  exits: {
+    success: {
+      responseType: 'inertiaRedirect'
+    }
+  },
+  fn: async function (inputs) {
+    return 'https://sailsjs.com'
+  }
+}
 ```
 
-The `sails.inertia.location(url)` method will generate a `409` Conflict response if the redirect request is coming from a `POST` or `GET` method and include the destination URL in the `X-Inertia-Location` header. When this response is received client-side, Inertia will automatically perform a `window.location = url` visit.
+The `inertiaRedirect` custom response will generate a `409` Conflict response if the redirect request is coming from a `POST` or `GET` method and include the destination URL in the `X-Inertia-Location` header. When this response is received client-side, Inertia will automatically perform a `window.location = url` visit.
