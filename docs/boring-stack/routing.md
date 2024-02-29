@@ -27,7 +27,7 @@ For example let's say we want to create a `/users` route, we can define the rout
 
 ```js
 module.exports.routes = {
-  'GET /users': 'user/view-users' // [!code focus]
+  'GET /users': 'user/view-users'
 }
 ```
 
@@ -41,11 +41,17 @@ Run `npx sails generate action user/view-users` to scaffold the action.
 module.exports = {
   inputs: {},
   exits: {
-    success: {}
+    success: {
+      responseType: 'inertia'
+    }
   },
   fn: async function (inputs) {
     const users = await User.find()
-    return sails.inertia.render('users/index', { users }) // [!code focus]
+    return { page: 'users/index', props: { users } }
   }
 }
 ```
+
+::: info
+Note the `responseType: 'inertia'` in the success exit.
+:::
