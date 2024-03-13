@@ -41,7 +41,7 @@ npm i @sails-pay/lemonsqueezy
 :::
 
 ::: tip
-If you can't find your payment provider, consider [sponsoring Kelvin's time](https://github.com/sponsors/DominusKelvin). He can work on an adapter for you. Visit .
+If you can't find your payment provider, consider [sponsoring Kelvin's time](https://github.com/sponsors/DominusKelvin). He can work on an adapter for you.
 :::
 
 Next, follow the instructions below to setup your preferred payment provider.
