@@ -56,15 +56,19 @@ MAIL_PASSWORD=password
 
 ## local.js
 
-Set an object in `config/local.js` matching the mailer you've set in `config/mails.js`:
+In development, you can specify a mailer of the same name in local.js so as to override the credentials like `username`, `port` etc specified in config/mail.js
 
 ```js
 // config/local.js
-smtp: {
-  host: 'sandbox.smtp.mailtrap.io',
-  username: 'username',
-  password: 'password',
-  port: 2525
+mail: {
+  mailers: {
+    smtp: {
+      host: 'sandbox.smtp.mailtrap.io',
+      username: 'username',
+      password: 'password',
+      port: 2525
+    }
+  }
 }
 ```
 
