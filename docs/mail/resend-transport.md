@@ -53,12 +53,16 @@ RESEND_API_KEY=re_skskagnagnak
 
 ## local.js
 
-Set an object in `config/local.js` matching the mailer you've set in `config/mails.js`:
+In development, you can specify a mailer of the same name in `local.js` so as to override the credentials like `apiKey` specified in `config/mail.js`
 
 ```js
 // config/local.js
-resend: {
-  apiKey: 're_skskagnagnak',
+mail: {
+  mailers: {
+    resend: {
+      apiKey: 're_skskagnagnak',
+      }
+  }
 }
 ```
 

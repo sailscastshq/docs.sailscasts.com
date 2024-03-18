@@ -20,7 +20,7 @@ Mail provides a `send` helper that is used to send your emails within your Sails
 The mailer to use for sending the email. This is optional because by default Mail will look for the mailer to use by checking for it in the following places:
 
 - an environment variable called `MAIL_MAILER`,
-- a config in `config/local.js` called `mailer`,
+- a `default` property in a `mail` object in `config/local.js`,
 - and finally the `default` mailer set in `config/mail.js`
 
 ```js
