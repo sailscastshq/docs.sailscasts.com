@@ -31,11 +31,13 @@ You can also set the `default` mailer with the `MAIL_MAILER` environment variabl
 
 This is handy for specifying different default mailers in different environments your application will be running in.
 
-Also in `config/local.js` you specify a `mailer` which will be used as the default mailer in development.
+Also in `config/local.js` you specify a `mail` object with the `default` property which will be used as the default mailer in development.
 
 ```js
 //config/local.js
-mailer: 'nodemailer'
+mail: {
+  default:  'nodemailer'
+}
 ```
 
 ## mailers
@@ -58,7 +60,7 @@ The `mailers` configuration object contains
 
 :::info What's a mailer?
 
-In Mail, a mailer is a configuration object that is registered in the `mailers` object in `config/mails.js` that specifies at the very least a transport that Mail will use in sending your emails.
+In Mail, a mailer is a configuration object that is registered in the `mailers` object in `config/mails.js` or in a `mail` object in `local.js` that specifies at the very least a transport that Mail will use in sending your emails.
 :::
 
 ## from
