@@ -61,7 +61,15 @@ sails.helpers.mail.send.with({ toName: 'Jack Sparrow' })
 
 ## cc
 
-The list of names to send a carbon copy of the mail to.
+The email addresses to send a carbon copy of the mail to.
+
+```js
+sails.helpers.mail.send.with({ cc: ['jack@blackpearl.com'] })
+```
+
+## bcc
+
+The email addresses to send a blind carbon copy of the mail to.
 
 ```js
 sails.helpers.mail.send.with({ cc: ['jack@blackpearl.com'] })
