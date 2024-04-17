@@ -7,7 +7,7 @@ title: Google OAuth
 editLink: true
 ---
 
-# {{ $frontmatter.title }}
+# Google OAuth
 
 To setup up a Google OAuth for your app, Wish expects the following key and property in either `config/local.js` or `config/custom.js`.
 

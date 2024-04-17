@@ -3,7 +3,7 @@ title: What is guppy?
 editLink: true
 ---
 
-# {{ $frontmatter.title }}
+# What is guppy?
 
 ![guppy](/images/guppy/preview.png)
 

@@ -13,7 +13,7 @@ next:
   link: '/mail/local-development'
 ---
 
-# {{ $frontmatter.title }}
+# Resend Transport
 
 To use the [Resend](https://resend.com) transport, install `resend` via NPM:
 

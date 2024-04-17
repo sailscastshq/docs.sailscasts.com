@@ -13,7 +13,7 @@ next:
   link: '/mail/smtp-transport'
 ---
 
-# {{ $frontmatter.title }}
+# Configuration
 
 To configure mail, create a `config/mail.js` configuration file. Let's look at all the possible configurations you can have in `config/mail.js`
 

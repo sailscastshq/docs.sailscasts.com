@@ -3,7 +3,7 @@ title: Running code
 editLink: true
 ---
 
-# {{ $frontmatter.title }}
+# Running code
 
 guppy can evaluate your Javascript code in one of two ways:
 

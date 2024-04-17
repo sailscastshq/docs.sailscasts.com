@@ -7,7 +7,7 @@ title: GitHub OAuth
 editLink: true
 ---
 
-# {{ $frontmatter.title }}
+# GitHub OAuth
 
 To setup up a GitHub OAuth for your app, Wish expects the following key and property in either `config/local.js` or `config/custom.js`. For example you can have a development GitHub clientId and clientSecret in `config/local.js`
 

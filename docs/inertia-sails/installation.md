@@ -3,7 +3,7 @@ title: Installation
 editLink: true
 ---
 
-# {{ $frontmatter.title }}
+# Installation
 
 ## Backend
 

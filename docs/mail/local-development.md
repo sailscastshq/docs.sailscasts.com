@@ -10,7 +10,7 @@ prev:
   link: '/mail/resend-transport'
 ---
 
-# {{ $frontmatter.title }}
+# Local development
 
 When creating an application that involves sending emails, you likely wouldn't want to send actual emails to active email addresses during local development.
 

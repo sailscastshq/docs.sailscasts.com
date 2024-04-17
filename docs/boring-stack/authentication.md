@@ -15,7 +15,7 @@ next:
 editLink: true
 ---
 
-# {{ $frontmatter.title }} {#authentication}
+# Authentication {#authentication}
 
 Authentication is the process of verifying the identity of a user, typically through credentials like a username and password. For example, logging into a GitHub account requires authentication.
 

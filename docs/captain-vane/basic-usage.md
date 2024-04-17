@@ -4,7 +4,7 @@ description: Use captain-vane to generate test data
 editLink: true
 ---
 
-# {{ $frontmatter.title }}
+# Basic Usage
 
 Basic usage of captain-vane is to generate a factory file and use the ` vane`` helper provided by  `captain-vane`` to create records using the generated factory and model definition.
 

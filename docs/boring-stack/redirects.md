@@ -15,7 +15,7 @@ next:
 editLink: true
 ---
 
-# {{ $frontmatter.title }} {#redirects}
+# Redirects {#redirects}
 
 ## Route target redirect
 

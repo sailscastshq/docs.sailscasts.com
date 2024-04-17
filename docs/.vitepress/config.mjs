@@ -1,3 +1,5 @@
+import { OramaPlugin } from '@orama/plugin-vitepress'
+
 export default {
   lang: 'en-US',
   title: 'Sailscasts Docs',
@@ -75,6 +77,9 @@ export default {
       apiKey: '6c5e9ae85dc5c0672b6df0b2e305f6cb',
       indexName: 'sailscasts'
     }
+  },
+  vite: {
+    plugins: [OramaPlugin()]
   }
 }
 
