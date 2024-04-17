@@ -13,7 +13,7 @@ next:
   link: '/mail/resend-transport'
 ---
 
-# {{ $frontmatter.title }}
+# SMTP Transport
 
 To use the SMTP transport, which is a protocol several email services supports, install `nodemailer` via NPM:
 

@@ -3,7 +3,7 @@ title: What is inertia-sails?
 editLink: true
 ---
 
-# {{ $frontmatter.title }}
+# What is inertia-sails?
 
 inertia-sails is the Sails adapter for Inertia.
 

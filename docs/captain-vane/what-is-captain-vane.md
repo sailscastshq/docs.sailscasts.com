@@ -3,7 +3,7 @@ title: What is captain-vane?
 editLink: true
 ---
 
-# {{ $frontmatter.title }}
+# What is captain-vane?
 
 captain-vane is a Sails hook that allows you generate realistically test data for a Sails application.
 

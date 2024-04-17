@@ -3,7 +3,7 @@ title: Activating guppy
 editLink: true
 ---
 
-# {{ $frontmatter.title }}
+# Activating guppy
 
 After you've [purchased](https://guppy.sailscasts.com/#buy) a guppy license, downloaded and install guppy on your machine, on the first run of guppy you will be presented with the below screen 👇🏾
 

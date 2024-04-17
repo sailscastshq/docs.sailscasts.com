@@ -4,7 +4,7 @@ description: To install and setup captain-vane run npm i --save-dev captain-vane
 editLink: true
 ---
 
-# {{ $frontmatter.title }}
+# Installation
 
 Add captain-vane and captain-vane-generator development dependencies to your project.
 Add `captain-vane` and `captain-vane-generator` development dependencies to your project:

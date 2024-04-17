@@ -3,7 +3,7 @@ title: Installation
 editLink: true
 ---
 
-# {{ $frontmatter.title }}
+# Installation
 
 Once you [purchase](https://guppy.sailscasts.com/#buy) a guppy license, you will receive an email containing the following:
 

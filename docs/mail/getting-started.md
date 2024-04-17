@@ -10,7 +10,7 @@ next:
   link: '/mail/configuration'
 ---
 
-# {{ $frontmatter.title }}
+# Getting started
 
 ## Introduction
 

@@ -3,7 +3,7 @@ title: Basic Usage
 editLink: true
 ---
 
-# {{ $frontmatter.title }}
+# Basic Usage
 
 ```sh
 npx create-sails <project-name>

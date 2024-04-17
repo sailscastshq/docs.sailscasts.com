@@ -13,7 +13,7 @@ next:
   link: '/mail/email-layout'
 ---
 
-# {{ $frontmatter.title }}
+# Email Template
 
 Mail expects your email templates to be written in EJS template files or whatever template engine you've setup in your Sails project. These files are expected to be in the `views/emails` directory.
 

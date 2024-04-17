@@ -1,6 +1,6 @@
 {
   "name": "sailscasts-docs",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "private": true,
   "description": "The official docs hub for Sailscasts",
   "scripts": {
@@ -25,5 +25,8 @@
   },
   "engines": {
     "node": ">=18.0"
+  },
+  "dependencies": {
+    "@orama/plugin-vitepress": "^2.0.16"
   }
 }

@@ -3,7 +3,7 @@ title: Deactivating guppy
 editLink: true
 ---
 
-# {{ $frontmatter.title }}
+# Deactivating guppy
 
 If you have a valid guppy license and you have activated guppy on 2 computers already and you want to use the app on another computer, you first have to deactivate guppy on one of those computers it is currently running on.
 

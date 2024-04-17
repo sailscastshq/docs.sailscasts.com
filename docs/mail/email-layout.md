@@ -13,7 +13,7 @@ next:
   link: '/mail/send-helper'
 ---
 
-# {{ $frontmatter.title }}
+# Email Layout
 
 You can create layouts for the emails in your Sails application. This layout file, like [templates](/mail/email-template) is expected to be an EJS template.
 

@@ -11,7 +11,7 @@ prev:
 next: false
 ---
 
-# {{ $frontmatter.title }}
+# Send Helper
 
 Mail provides a `send` helper that is used to send your emails within your Sails applications. The `send` helper takes in several optional and required arguments like `mailer`, `template`, `templateData` etc.
 

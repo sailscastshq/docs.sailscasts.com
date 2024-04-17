@@ -7,7 +7,7 @@ title: What is Wish?
 editLink: true
 ---
 
-# {{ $frontmatter.title }}
+# What is Wish?
 
 Wish is the [OAuth](https://en.wikipedia.org/wiki/OAuth) Sails hook you wish(pun intended) exists for Sails.
 
