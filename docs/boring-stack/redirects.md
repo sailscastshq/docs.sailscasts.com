@@ -15,7 +15,7 @@ next:
 editLink: true
 ---
 
-# Redirects {#redirects}
+# Redirects
 
 ## Route target redirect
 
