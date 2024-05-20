@@ -10,12 +10,12 @@ prev:
   text: Navigation
   link: '/boring-stack/navigation'
 next:
-  text: Error handling
-  link: '/boring-stack/error-handling'
+  text: Validation
+  link: '/boring-stack/validation'
 editLink: true
 ---
 
-# Redirects {#redirects}
+# Redirects
 
 ## Route target redirect
 
