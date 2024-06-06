@@ -17,7 +17,7 @@ editLink: true
 
 # Getting started
 
-Simply run the below command in your terminal to get started:
+To get started with The Boring JavaScript Stack, use `create-sails` — a CLI tool that scaffolds a new Sails project, configured as a full-stack JavaScript application with The Boring Stack conventions:
 
 ::: code-group
 
