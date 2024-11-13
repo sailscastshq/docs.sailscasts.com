@@ -10,8 +10,8 @@ prev:
   text: 'Email'
   link: '/boring-stack/email'
 next:
-  text: 'Deploy on Render'
-  link: '/boring-stack/render'
+  text: 'File uploads'
+  link: '/boring-stack/file-uploads'
 editLink: true
 ---
 
