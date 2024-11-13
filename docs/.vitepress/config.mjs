@@ -351,7 +351,8 @@ function boringStackGuide() {
         { text: 'Authorization', link: 'boring-stack/authorization' },
         { text: 'Database', link: 'boring-stack/database' },
         { text: 'Email', link: 'boring-stack/email' },
-        { text: 'Session', link: 'boring-stack/session' }
+        { text: 'Session', link: 'boring-stack/session' },
+        { text: 'File uploads', link: 'boring-stack/file-uploads' }
       ]
     },
     {
