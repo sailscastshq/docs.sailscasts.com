@@ -295,6 +295,7 @@ function mailGuide() {
       collapsed: false,
       items: [
         { text: 'SMTP', link: 'mail/smtp-transport' },
+        { text: 'Mailtrap', link: 'mail/mailtrap-transport' },
         { text: 'Resend', link: 'mail/resend-transport' },
         { text: 'Local Development', link: 'mail/local-development' }
       ]

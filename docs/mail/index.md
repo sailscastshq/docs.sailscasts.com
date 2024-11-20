@@ -20,7 +20,7 @@ features:
     details: Sails Mail provides an amazing and elegant API for sending emails.
   - icon: 🚚
     title: Multiple transports
-    details: Supports SMTP, Resend, log, and more transports, to allow you use your favorite email service without any stress.
+    details: Supports SMTP, Mailtrap, log, and more transports, to allow you use your favorite email service without any stress.
   - icon: 🛠️
     title: Flexible configuration
     details: Need multiple email transports or mailers in the same Sails project? Mail make that a breeze to do.
