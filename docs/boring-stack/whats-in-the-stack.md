@@ -27,7 +27,7 @@ So if you enjoy writing React's JSX, you'd love The Boring JavaScript Stack as t
 
 ## Tailwind CSS
 
-[Tailwind CSS](https://tailwindcss.com/), the utility-first CSS framework makes styling feels like cheating. It that the styling backbone of this stack.
+[Tailwind CSS](https://tailwindcss.com/), the utility-first CSS framework makes styling feels like cheating. It serves as the styling backbone of this stack.
 
 Since The Boring JavaScript Stack is about being pragmatic, what's better than Tailwind CSS in practicality, efficiency, and ensuring your styles are predictable and easy to manage?
 
