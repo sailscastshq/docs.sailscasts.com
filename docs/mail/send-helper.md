@@ -125,6 +125,43 @@ Specify email plain text.
 await sails.helpers.mail.send.with({ text: 'Verify your email' })
 ```
 
+## `attachments`
+
+An optional array of attachment objects. Each attachment object should have the following properties:
+
+- `filename`: The name of the file.
+- `path`: The path to the file.
+- `contentType`: The MIME type of the file (optional).
+- `content`: String, Buffer or a Stream contents for the attachment (optional).
+
+```js
+await sails.helpers.mail.send.with({
+  to: 'jack@blackpearl.com',
+  toName: 'Jack Sparrow',
+  template: 'email-verify-account',
+  templateData: { token: '3828bsbababvbas', fullName: 'Jack Sparrow' },
+  attachments: [
+    {
+      filename: 'adventure-log.txt',
+      content: 'The journey begins...'
+    },
+    {
+      filename: 'treasure-map.txt',
+      content: new Buffer('X marks the spot!', 'utf-8')
+    },
+    {
+      filename: 'crew-list.txt',
+      path: '/path/to/crew-list.txt'
+    },
+    {
+      filename: 'ship-photo.jpg',
+      path: '/path/to/ship-photo.jpg',
+      contentType: 'image/jpeg'
+    }
+  ]
+})
+```
+
 ## Examples
 
 ### Send email with template
