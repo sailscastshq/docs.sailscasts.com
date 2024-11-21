@@ -231,6 +231,49 @@ await sails.helpers.mail.send.with({
 })
 ```
 
+## `react` <Badge>Resend</Badge>
+
+If you are using [React Email](https://react.email/), you can pass the the React component you used in writing the message to `react`.
+
+:::code-group
+
+```jsx[important-message.jsx]
+import * as React from 'react'
+import { Html, Button, Container, Heading, Text } from '@react-email/components'
+
+export default function Email(props) {
+  const { url, recipientName } = props
+
+  return (
+    <Html lang="en">
+      <Container>
+        <Heading>Ahoy, {recipientName}!</Heading>
+        <Text>We have an important message for you. Click the button below to read it:</Text>
+        <Button href={url}>Read Message</Button>
+        <Text>Fair winds and following seas,</Text>
+        <Text>The Black Pearl Crew</Text>
+      </Container>
+    </Html>
+  )
+}
+```
+
+```js [signup.js]
+const Email = require('../../assets/emails/important-message')
+
+await sails.helpers.mail.send.with({
+  react: <Email url="https://example.com" recipientName="Jack Sparrow" />,
+  to: 'jack@blackpearl.com',
+  toName: 'Jack Sparrow'
+})
+```
+
+:::
+
+:::tip
+Make sure you have `@react-email/components` installed to use React components as email
+:::
+
 ## Examples
 
 ### Send email with template
