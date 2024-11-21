@@ -65,7 +65,7 @@ In Mail, a mailer is a configuration object that is registered in the `mailers` 
 
 ## `from`
 
-This config let you set a global from address for all your emails. It's really useful if your application sends emails from the same from address.
+This config lets you set a global from address for all your emails. It's really useful if your application sends emails from the same from address.
 
 By default Mail will use this address if no address is passed when you send an email with `sails.helpers.mail.send`
 
@@ -77,3 +77,15 @@ from: {
 ```
 
 You can also set this config by specifying these two environment variables: `MAIL_FROM_NAME` and `MAIL_FROM_ADDRESS`.
+
+## `replyTo`
+
+This config lets you set a global reply-to address for all your emails. It's useful if you want replies to go to a specific address.
+
+Mail will use this address by default if no `replyTo` address is provided when sending an email with `sails.helpers.mail.send`.
+
+```js
+replyTo: 'reply@sailscasts.com'
+```
+
+You can also set this config by specifying the environment variable `MAIL_REPLY_TO`.
