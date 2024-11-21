@@ -274,6 +274,20 @@ await sails.helpers.mail.send.with({
 Make sure you have `@react-email/components` installed to use React components as email
 :::
 
+## `scheduledAt` <Badge>Resend</Badge>
+
+Schedule email to be sent later. The date should be in natural language (e.g.: in 1 min) or ISO 8601 format (e.g: 2024-08-05T11:52:01.858Z).
+
+```js
+await sails.helpers.mail.send.with({
+  to: 'jack@blackpearl.com',
+  toName: 'Jack Sparrow',
+  template: 'email-verify-account',
+  templateData: { token: '3828bsbababvbas', fullName: 'Jack Sparrow' },
+  scheduledAt: '2024-08-05T11:52:01.858Z'
+})
+```
+
 ## Examples
 
 ### Send email with template
