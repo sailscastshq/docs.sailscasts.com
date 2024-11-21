@@ -162,6 +162,14 @@ await sails.helpers.mail.send.with({
 })
 ```
 
+## `replyTo`
+
+An email address that will appear on the Reply-To: field. This isn't required because you can specify a [global replyTo](/mail/configuration#replyTo).
+
+```js
+sails.helpers.mail.send.with({ replyTo: 'support@sailscasts.com' })
+```
+
 ## Examples
 
 ### Send email with template
