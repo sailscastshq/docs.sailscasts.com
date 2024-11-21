@@ -193,6 +193,16 @@ await sails.helpers.mail.send.with({
 })
 ```
 
+## `templateUuid` <Badge>Mailtrap</Badge>
+
+The UUID of the template to use.
+
+```js
+await sails.helpers.mail.send.with({
+  templateUuid: '123e4567-e89b-12d3-a456-426614174000'
+})
+```
+
 ## Examples
 
 ### Send email with template
