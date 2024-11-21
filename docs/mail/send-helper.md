@@ -27,7 +27,7 @@ The mailer to use for sending the email. This is optional because by default Mai
 sails.helpers.mail.send.with({ mailer: 'resend' })
 ```
 
-## `template` <Badge type="danger">required</Badge>
+## `template`
 
 This is a string matching an [email template](/mail/email-template) in `views/emails` without the file extension.
 
