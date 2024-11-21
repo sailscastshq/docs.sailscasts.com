@@ -170,7 +170,7 @@ An email address that will appear on the Reply-To: field. This isn't required be
 sails.helpers.mail.send.with({ replyTo: 'support@sailscasts.com' })
 ```
 
-## category <Badge>Mailtrap</Badge>
+## `category` <Badge>Mailtrap</Badge>
 
 The category of the email.
 
