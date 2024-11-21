@@ -59,7 +59,7 @@ The name of the primary recipient
 sails.helpers.mail.send.with({ toName: 'Jack Sparrow' })
 ```
 
-## `cc`
+## `cc` <Badge>SMTP</Badge> <Badge>Resend</Badge>
 
 The email addresses to send a carbon copy of the mail to.
 
@@ -67,7 +67,7 @@ The email addresses to send a carbon copy of the mail to.
 sails.helpers.mail.send.with({ cc: ['jack@blackpearl.com'] })
 ```
 
-## `bcc`
+## `bcc` <Badge>SMTP</Badge> <Badge>Resend</Badge>
 
 The email addresses to send a blind carbon copy of the mail to.
 
