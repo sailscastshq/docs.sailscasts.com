@@ -217,6 +217,20 @@ await sails.helpers.mail.send.with({
 })
 ```
 
+## `testInboxId` <Badge>Mailtrap</Badge>
+
+The ID of the test inbox to use.
+
+```js
+await sails.helpers.mail.send.with({
+  to: 'jack@blackpearl.com',
+  toName: 'Jack Sparrow',
+  template: 'email-verify-account',
+  templateData: { token: '3828bsbababvbas', fullName: 'Jack Sparrow' },
+  testInboxId: 5353939
+})
+```
+
 ## Examples
 
 ### Send email with template
