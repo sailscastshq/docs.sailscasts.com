@@ -64,8 +64,8 @@ For next steps, you have two options:
 1. Open your project in your code editor and explore.
 2. Begin by learning the basics, such as [routing](/boring-stack/routing) and [navigation](/boring-stack/navigation).
 
-::: info Sailboat VS Code extension
-Install the [Sailboat extension](https://marketplace.visualstudio.com/items?itemName=dominuskelvin.sailboat) which provides tooling for Sails.
+::: info Official Sails VS Code extension
+Install the official [Sails extension](https://marketplace.visualstudio.com/items?itemName=Sails.sails-vscode) which provides editor tooling support for Sails and The Boring JavaScript Stack.
 :::
 
 ## Star the repo :star:
