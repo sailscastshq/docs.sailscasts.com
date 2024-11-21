@@ -15,7 +15,7 @@ next: false
 
 Mail provides a `send` helper that is used to send your emails within your Sails applications. The `send` helper takes in several optional and required arguments like `mailer`, `template`, `templateData` etc.
 
-## mailer
+## `mailer`
 
 The mailer to use for sending the email. This is optional because by default Mail will look for the mailer to use by checking for it in the following places:
 
@@ -27,7 +27,7 @@ The mailer to use for sending the email. This is optional because by default Mai
 sails.helpers.mail.send.with({ mailer: 'resend' })
 ```
 
-## template <Badge type="danger">required</Badge>
+## `template` <Badge type="danger">required</Badge>
 
 This is a string matching an [email template](/mail/email-template) in `views/emails` without the file extension.
 
@@ -35,7 +35,7 @@ This is a string matching an [email template](/mail/email-template) in `views/em
 sails.helpers.mail.send.with({ template: 'email-verify-account' })
 ```
 
-## templateData
+## `templateData`
 
 A dictionary of data which will be accessible in your email template.
 
@@ -43,7 +43,7 @@ A dictionary of data which will be accessible in your email template.
 sails.helpers.mail.send.with({ templateData: { fullName: 'Jack Sparrow' } })
 ```
 
-## to <Badge type="danger">required</Badge>
+## `to` <Badge type="danger">required</Badge>
 
 The email address of the primary recipient.
 
@@ -51,7 +51,7 @@ The email address of the primary recipient.
 sails.helpers.mail.send.with({ to: 'jack@blackpearl.com' })
 ```
 
-## toName
+## `toName`
 
 The name of the primary recipient
 
@@ -59,7 +59,7 @@ The name of the primary recipient
 sails.helpers.mail.send.with({ toName: 'Jack Sparrow' })
 ```
 
-## cc
+## `cc`
 
 The email addresses to send a carbon copy of the mail to.
 
@@ -67,7 +67,7 @@ The email addresses to send a carbon copy of the mail to.
 sails.helpers.mail.send.with({ cc: ['jack@blackpearl.com'] })
 ```
 
-## bcc
+## `bcc`
 
 The email addresses to send a blind carbon copy of the mail to.
 
@@ -75,7 +75,7 @@ The email addresses to send a blind carbon copy of the mail to.
 sails.helpers.mail.send.with({ cc: ['jack@blackpearl.com'] })
 ```
 
-## subject
+## `subject`
 
 The subject of the email.
 
@@ -83,7 +83,7 @@ The subject of the email.
 sails.helpers.mail.send.with({ subject: 'Verify email' })
 ```
 
-## from
+## `from`
 
 The from email to use to send the email. This isn't required because you can specify a [global from](/mail/configuration#from)
 
@@ -91,7 +91,7 @@ The from email to use to send the email. This isn't required because you can spe
 sails.helpers.mail.send.with({ from: 'boring@sailscasts.com' })
 ```
 
-## fromName
+## `fromName`
 
 The from name to use to send the email. This isn't required because you can specify a [global from](/mail/configuration#from)
 
@@ -99,7 +99,7 @@ The from name to use to send the email. This isn't required because you can spec
 sails.helpers.mail.send.with({ fromName: 'The Boring JavaScript Stack' })
 ```
 
-## layout
+## `layout`
 
 The email layout to use for this email. This isn't required because by default Mail will look for a layout called `layout-email`.
 
@@ -117,7 +117,7 @@ await sails.helpers.mail.send.with({ layout: 'layout-accout' })
 await sails.helpers.mail.send.with({ layout: false })
 ```
 
-## text
+## `text`
 
 Specify email plain text.
 
