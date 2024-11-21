@@ -108,7 +108,7 @@ However with `layout` you can pass an override and chose another layout to use o
 ### Specify a layout
 
 ```js
-await sails.helpers.mail.send.with({ layout: 'layout-accout' })
+await sails.helpers.mail.send.with({ layout: 'layout-account' })
 ```
 
 ### Disable layout
