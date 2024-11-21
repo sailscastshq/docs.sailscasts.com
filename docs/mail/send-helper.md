@@ -162,7 +162,7 @@ await sails.helpers.mail.send.with({
 })
 ```
 
-## `replyTo`
+## `replyTo` <Badge>SMTP</Badge> <Badge>Resend</Badge>
 
 An email address that will appear on the Reply-To: field. This isn't required because you can specify a [global replyTo](/mail/configuration#replyTo).
 
@@ -170,7 +170,7 @@ An email address that will appear on the Reply-To: field. This isn't required be
 sails.helpers.mail.send.with({ replyTo: 'support@sailscasts.com' })
 ```
 
-## category <Badge>mailtrap</Badge>
+## category <Badge>Mailtrap</Badge>
 
 The category of the email.
 
