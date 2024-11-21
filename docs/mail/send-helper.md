@@ -203,6 +203,20 @@ await sails.helpers.mail.send.with({
 })
 ```
 
+## `templateVariables` <Badge>Mailtrap</Badge>
+
+An object with the variables to use in the template.
+
+```js
+await sails.helpers.mail.send.with({
+  templateUuid: '123e4567-e89b-12d3-a456-426614174000',
+  templateVariables: {
+    shipName: 'Black Pearl',
+    captain: 'Jack Sparrow'
+  }
+})
+```
+
 ## Examples
 
 ### Send email with template
