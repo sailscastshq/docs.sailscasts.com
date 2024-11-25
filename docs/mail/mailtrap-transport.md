@@ -3,7 +3,7 @@ head:
   - - meta
     - property: 'og:image'
       content: https://docs.sailscasts.com/sails-mail-social.png
-title: Resend Transport
+title: Mailtrap Transport
 editLink: true
 prev:
   text: 'SMTP Transport'
