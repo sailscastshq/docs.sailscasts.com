@@ -7,11 +7,11 @@ title: Sharing data
 titleTemplate: The Boring JavaScript Stack 🥱
 description: Sharing data in The Boring JavaScript Stack
 prev:
-  text: Error handling
-  link: '/boring-stack/error-handling'
+  text: Flash messages
+  link: '/boring-stack/flash-messages'
 next:
-  text: Authentication
-  link: '/boring-stack/authentication'
+  text: Deferred props
+  link: '/boring-stack/deferred-props'
 editLink: true
 ---
 
