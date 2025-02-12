@@ -339,11 +339,18 @@ function boringStackGuide() {
         { text: 'Navigation', link: 'boring-stack/navigation' },
         { text: 'Redirects', link: 'boring-stack/redirects' },
         { text: 'Validation', link: 'boring-stack/validation' },
-        { text: 'Flash messages', link: 'boring-stack/flash-messages' },
-        { text: 'Sharing data', link: 'boring-stack/sharing-data' }
+        { text: 'Flash messages', link: 'boring-stack/flash-messages' }
       ]
     },
-
+    {
+      text: 'Data & Props',
+      collapsed: false,
+      items: [
+        { text: 'Sharing data', link: 'boring-stack/sharing-data' },
+        { text: 'Deferred props', link: 'boring-stack/deferred-props' },
+        { text: 'Merging props', link: 'boring-stack/merging-props' }
+      ]
+    },
     {
       text: 'Guides',
       collapsed: false,
