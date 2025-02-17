@@ -46,7 +46,8 @@ export default {
       '/content/': SailsContentGuide(),
       '/sails-stash/': SailsStashGuide(),
       '/sails-pay/': SailsPayGuide(),
-      '/sails-flash/': SailsFlashGuide()
+      '/sails-flash/': SailsFlashGuide(),
+      '/clearance/': SailsClearanceGuide()
     },
     sitemap: {
       hostname: 'https://docs.sailscasts.com'
@@ -133,6 +134,11 @@ function nav() {
           text: 'Sails Flash',
           link: '/sails-flash/',
           activeMatch: '/sails-flash/'
+        },
+        {
+          text: 'Sails Clearance',
+          link: '/clearance/',
+          activeMatch: '/clearance/'
         }
       ]
     },
@@ -455,6 +461,19 @@ function SailsFlashGuide() {
       text: 'Introduction',
       collapsed: false,
       items: [{ text: 'Getting started', link: 'sails-flash/getting-started' }]
+    }
+  ]
+}
+
+function SailsClearanceGuide() {
+  return [
+    {
+      text: 'Introduction',
+      collapsed: false,
+      items: [
+        { text: 'Getting started', link: 'clearance/getting-started' },
+        { text: 'Usage', link: 'clearance/usage' }
+      ]
     }
   ]
 }
