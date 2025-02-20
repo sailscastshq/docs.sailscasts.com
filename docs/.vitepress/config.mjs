@@ -31,7 +31,8 @@ export default {
         src: 'https://tinylytics.app/embed/vL3m1tsfEzLruHrKLMHB.js',
         defer: ''
       }
-    ]
+    ],
+    ['link', { rel: 'icon', href: '/favicon.png', type: 'image/png' }]
   ],
   themeConfig: {
     nav: nav(),
