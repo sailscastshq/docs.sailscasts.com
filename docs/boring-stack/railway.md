@@ -25,16 +25,16 @@ Push your app to a repo on GitHub.
 
 ## Create database
 
-Create the database you want to use for production on Render and take note of the connection url.
+Create the database you want to use for production on Railway and take note of the connection url.
 ::: info Database creation guides
-See guides for [MySQL](https://docs.railway.com/guides/mysql), [PostgreSQL](https://docs.railway.com/guides/postgresql), and, [MongoDB](https://docs.railway.com/guides/mongodb) on the Render docs.
+See guides for [MySQL](https://docs.railway.com/guides/mysql), [PostgreSQL](https://docs.railway.com/guides/postgresql), and, [MongoDB](https://docs.railway.com/guides/mongodb) on the Railway docs.
 :::
 
 ## Create Redis instance
 
 Create the production Redis instance and take note of the connection url.
 ::: info Redis instance guide
-See the [guide to create a Redis instance](https://docs.render.com/redis#creating-a-redis-instance) on the Render docs.
+See the [guide to create a Redis instance](https://docs.render.com/redis#creating-a-redis-instance) on the Railway docs.
 :::
 
 ## Set up database
@@ -84,7 +84,7 @@ Don't forget to install the adapter if you haven't already. See the [database](/
 ## Set up Redis
 
 ::: info
-[Create a new Redis instance](https://docs.render.com/redis) on Render by following the Render docs.
+[Create a new Redis instance](https://docs.render.com/redis) on Railway by following the Railway docs.
 :::
 Set up the Redis adapter in `config/environment/production.js`
 
@@ -100,7 +100,7 @@ module.exports = {
 
 ## Create a web service
 
-Create a new Node.js [Web Service](https://docs.render.com/web-services) on Render, and give Render permission to access the repo of your app.
+Create a new Node.js [Web Service](https://docs.render.com/web-services) on Railway, and give Railway permission to access the repo of your app.
 
 Use the following values during creation:
 
@@ -116,10 +116,10 @@ Add the following evironment variables to your web service:
 - `REDIS_URL`: This should point to the connection string to the Redis instance you created.
 - `SESSION_SECRET`: A unique production session secret to override the one in `config/session.js`.
 
-That’s it! Your app will be live on your Render URL as soon as the build finishes :tada:
+That’s it! Your app will be live on your Railway URL as soon as the build finishes :tada:
 
 ## Celebrate with a :star:
 
 ::: tip Star The Boring JavaScript Stack repo on GitHub :star:
-Let's celebrate deploying your app on Render by giving **The Boring JavaScript Stack** [a star on GitHub](https://github.com/sailscastshq/boring-stack).
+Let's celebrate deploying your app on Railway by giving **The Boring JavaScript Stack** [a star on GitHub](https://github.com/sailscastshq/boring-stack).
 :::
