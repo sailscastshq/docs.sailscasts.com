@@ -34,7 +34,7 @@ See guides for [MySQL](https://docs.railway.com/guides/mysql), [PostgreSQL](http
 
 Create the production Redis instance and take note of the connection url.
 ::: info Redis instance guide
-See the [guide to create a Redis instance](https://docs.render.com/redis#creating-a-redis-instance) on the Railway docs.
+See the [guide to create a Redis instance](https://docs.railway.com/guides/redis) on the Railway docs.
 :::
 
 ## Set up database
@@ -84,7 +84,7 @@ Don't forget to install the adapter if you haven't already. See the [database](/
 ## Set up Redis
 
 ::: info
-[Create a new Redis instance](https://docs.render.com/redis) on Railway by following the Railway docs.
+[Create a new Redis instance](https://docs.railway.com/guides/redis) on Railway by following the Railway docs.
 :::
 Set up the Redis adapter in `config/environment/production.js`
 
@@ -100,13 +100,15 @@ module.exports = {
 
 ## Create a web service
 
-Create a new Node.js [Web Service](https://docs.render.com/web-services) on Railway, and give Railway permission to access the repo of your app.
+Create a new [Web Service](https://docs.railway.com/quick-start) on Railway, and give Railway permission to access the repo of your app.
 
-Use the following values during creation:
+If necessary, use the following values during creation:
 
 - **Runtime**: `Node`
 - **Build command**: `npm i`
 - **Start command**: `npm start`
+
+However, Railway is capable of configuring things automatically for you.
 
 ## Set environment variables
 
