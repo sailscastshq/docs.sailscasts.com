@@ -3,21 +3,21 @@ head:
   - - meta
     - property: 'og:image'
       content: https://docs.sailscasts.com/boring-stack-social.png
-title: Deploy on Render
+title: Deploy on Railway
 titleTemplate: The Boring JavaScript Stack 🥱
-description: Deploy your app on Render
+description: Deploy your app on Railway
 prev:
   text: 'Session'
-  link: '/boring-stack/railway'
+  link: '/boring-stack/file-uploads'
 next:
   text: Type checking JS files
-  link: '/boring-stack/type-checking-js-files'
+  link: '/boring-stack/render'
 editLink: true
 ---
 
-# Deploy on Render
+# Deploy on Railway
 
-Let's deploy your app on [Render](https://render.com) :rocket:
+Let's deploy your app on [Railway](https://railway.com) :rocket:
 
 ## GitHub Repo
 
@@ -27,7 +27,7 @@ Push your app to a repo on GitHub.
 
 Create the database you want to use for production on Render and take note of the connection url.
 ::: info Database creation guides
-See guides for [MySQL](https://docs.render.com/deploy-mysql), [PostgreSQL](https://docs.render.com/databases), and, [MongoDB](https://docs.render.com/deploy-mongodb) on the Render docs.
+See guides for [MySQL](https://docs.railway.com/guides/mysql), [PostgreSQL](https://docs.railway.com/guides/postgresql), and, [MongoDB](https://docs.railway.com/guides/mongodb) on the Render docs.
 :::
 
 ## Create Redis instance
