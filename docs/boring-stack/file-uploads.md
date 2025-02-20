@@ -11,7 +11,7 @@ prev:
   link: '/boring-stack/session'
 next:
   text: 'Deploy on Render'
-  link: '/boring-stack/render'
+  link: '/boring-stack/railway'
 editLink: true
 ---
 
