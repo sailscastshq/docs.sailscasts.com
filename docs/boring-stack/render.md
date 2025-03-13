@@ -7,11 +7,11 @@ title: Deploy on Render
 titleTemplate: The Boring JavaScript Stack 🥱
 description: Deploy your app on Render
 prev:
-  text: 'Session'
-  link: '/boring-stack/session'
+  text: 'File uploads'
+  link: '/boring-stack/file-uploads'
 next:
-  text: Type checking JS files
-  link: '/boring-stack/type-checking-js-files'
+  text: Railway
+  link: '/boring-stack/railway'
 editLink: true
 ---
 

@@ -377,6 +377,10 @@ function boringStackGuide() {
         {
           text: 'Render',
           link: 'boring-stack/render'
+        },
+        {
+          text: 'Railway',
+          link: 'boring-stack/railway'
         }
       ]
     },
