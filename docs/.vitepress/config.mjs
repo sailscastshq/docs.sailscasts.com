@@ -375,12 +375,12 @@ function boringStackGuide() {
       collapsed: false,
       items: [
         {
-          text: 'Railway',
-          link: 'boring-stack/railway'
-        },
-        {
           text: 'Render',
           link: 'boring-stack/render'
+        },
+        {
+          text: 'Railway',
+          link: 'boring-stack/railway'
         }
       ]
     },
