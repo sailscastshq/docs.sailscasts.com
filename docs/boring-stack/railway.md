@@ -7,8 +7,8 @@ title: Deploy on Railway
 titleTemplate: The Boring JavaScript Stack 🥱
 description: Deploy your app on Railway
 prev:
-  text: 'Session'
-  link: '/boring-stack/file-uploads'
+  text: 'Render'
+  link: '/boring-stack/render'
 next:
   text: Type checking JS files
   link: '/boring-stack/render'
