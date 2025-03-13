@@ -28,7 +28,7 @@ You have two options to deploy your app on Railway...
 
 Simply click the button, and Railway will set up everything you need to get your new app live using the `mellow-vue` Railway template.
 
-[![Deploy Mellow Vue on Railway](https://railway.com/button.svg)](https://railway.com/template/mellow-vue?referralCode=orSqKL)
+[![Deploy Mellow Vue on Railway](https://railway.com/button.svg)](https://railway.com/template/zB55Xl?referralCode=orSqKL)
 
 This template includes:
 
