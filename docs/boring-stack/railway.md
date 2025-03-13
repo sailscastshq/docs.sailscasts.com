@@ -19,6 +19,47 @@ editLink: true
 
 Let's deploy your app on [Railway](https://railway.com) :rocket:
 
+You have two options to deploy your app on Railway...
+
+- Use the **[One-click deploy](#one-click-deploy-with-railway-templates)** if you're just starting out.
+- Or follow the **[GitHub Repo](#github-repo)** steps if you’ve already started building your app.
+
+## One-click deploy mellow-vue
+
+Simply click the button, and Railway will set up everything you need to get your new app live using the `mellow-vue` Railway template.
+
+[![Deploy Mellow Vue on Railway](https://railway.com/button.svg)](https://railway.com/template/mellow-vue?referralCode=orSqKL)
+
+This template includes:
+
+- **Mellow Vue**: The Boring Stack Mellow template with Vue.js.
+- **PostgreSQL**: A pre-configured PostgreSQL database.
+- **Redis**: A pre-configured Redis instance.
+
+## One-click deploy mellow-react
+
+Simply click the button, and Railway will set up everything you need to get your new app live using the `mellow-react` Railway template.
+
+[![Deploy Mellow React on Railway](https://railway.com/button.svg)](https://railway.com/template/Yqisvu?referralCode=orSqKL)
+
+This template includes:
+
+- **Mellow React**: The Boring Stack Mellow template with React.js.
+- **PostgreSQL**: A pre-configured PostgreSQL database.
+- **Redis**: A pre-configured Redis instance.
+
+## One-click deploy mellow-svelte
+
+Simply click the button, and Railway will set up everything you need to get your new app live using the `mellow-svelte` Railway template.
+
+[![Deploy Mellow Svelte on Railway](https://railway.com/button.svg)](https://railway.com/template/K-dheh?referralCode=orSqKL)
+
+This template includes:
+
+- **Mellow Svelte**: The Boring Stack Mellow template with Svelte.js.
+- **PostgreSQL**: A pre-configured PostgreSQL database.
+- **Redis**: A pre-configured Redis instance.
+
 ## GitHub Repo
 
 Push your app to a repo on GitHub.
