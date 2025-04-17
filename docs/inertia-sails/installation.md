@@ -7,7 +7,7 @@ editLink: true
 
 ## Backend
 
-The quickest way to get setup an Inertia powered Sails app is to use the [create-sails](https://github.com/sailscastshq/create-sails) scaffolding tool. Just run
+The quickest way to get setup an Inertia powered Sails app is to use the [create-sails](https://docs.sailscasts.com/boring-stack/getting-started) scaffolding tool. Just run
 
 ```sh
   npx create-sails <project-name>

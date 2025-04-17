@@ -91,7 +91,7 @@ Set up the Redis adapter in `config/environment/production.js`
 ```js
 module.exports = {
   session: {
-    secret: process.env.REDIS_SECRET
+    secret: process.env.SESSION_SECRET
     adapter: '@sailshq/connect-redis',
     url: process.env.REDIS_URL
   }
