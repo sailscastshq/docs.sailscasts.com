@@ -1,0 +1,42 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="#003B57" stroke="#0074D9" stroke-width="2"/>
+  
+  <!-- Database cylinder base -->
+  <ellipse cx="100" cy="140" rx="55" ry="12" fill="#0074D9"/>
+  
+  <!-- Database cylinder top -->
+  <ellipse cx="100" cy="90" rx="55" ry="12" fill="#4A90E2"/>
+  
+  <!-- Database cylinder side -->
+  <rect x="45" y="90" width="110" height="50" fill="#0074D9"/>
+  
+  <!-- Database cylinder rings -->
+  <ellipse cx="100" cy="105" rx="55" ry="12" fill="none" stroke="#003B57" stroke-width="1.5" opacity="0.3"/>
+  <ellipse cx="100" cy="120" rx="55" ry="12" fill="none" stroke="#003B57" stroke-width="1.5" opacity="0.3"/>
+  
+  <!-- SQLite text styled as data -->
+  <rect x="55" y="95" width="90" height="3" fill="#FFFFFF" opacity="0.8"/>
+  <rect x="60" y="105" width="80" height="3" fill="#FFFFFF" opacity="0.6"/>
+  <rect x="65" y="115" width="70" height="3" fill="#FFFFFF" opacity="0.4"/>
+  <rect x="70" y="125" width="60" height="3" fill="#FFFFFF" opacity="0.3"/>
+  
+  <!-- Sails anchor overlay -->
+  <g transform="translate(100, 60) scale(0.8)">
+    <path d="M0,-25 L-10,-10 L-8,-8 L0,-20 L8,-8 L10,-10 Z" fill="#FECB05" stroke="#E6B800" stroke-width="1"/>
+    <circle cx="0" cy="-12" r="3" fill="#FFFFFF"/>
+    <path d="M0,-8 L0,15" stroke="#FECB05" stroke-width="3" stroke-linecap="round"/>
+    <path d="M-15,10 Q0,20 15,10" stroke="#FECB05" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Performance indicators -->
+  <g opacity="0.3">
+    <path d="M25,50 L35,40 M30,55 L40,45 M35,60 L45,50" stroke="#FECB05" stroke-width="2" stroke-linecap="round"/>
+    <path d="M165,50 L175,40 M170,55 L180,45 M175,60 L185,50" stroke="#FECB05" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Bottom text -->
+  <text x="100" y="185" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#FFFFFF">
+    Sails SQLite
+  </text>
+</svg>
