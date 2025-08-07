@@ -48,7 +48,8 @@ export default {
       '/sails-stash/': SailsStashGuide(),
       '/sails-pay/': SailsPayGuide(),
       '/sails-flash/': SailsFlashGuide(),
-      '/clearance/': SailsClearanceGuide()
+      '/clearance/': SailsClearanceGuide(),
+      '/sails-sqlite/': SailsSQLiteGuide()
     },
     sitemap: {
       hostname: 'https://docs.sailscasts.com'
@@ -140,6 +141,11 @@ function nav() {
           text: 'Sails Clearance',
           link: '/clearance/',
           activeMatch: '/clearance/'
+        },
+        {
+          text: 'Sails SQLite',
+          link: '/sails-sqlite/',
+          activeMatch: '/sails-sqlite/'
         }
       ]
     },
@@ -478,6 +484,39 @@ function SailsClearanceGuide() {
       items: [
         { text: 'Getting started', link: 'clearance/getting-started' },
         { text: 'Usage', link: 'clearance/usage' }
+      ]
+    }
+  ]
+}
+
+function SailsSQLiteGuide() {
+  return [
+    {
+      text: 'Introduction',
+      collapsed: false,
+      items: [
+        { text: 'Getting started', link: 'sails-sqlite/getting-started' },
+        { text: 'Configuration', link: 'sails-sqlite/configuration' }
+      ]
+    },
+    {
+      text: 'Usage',
+      collapsed: false,
+      items: [
+        { text: 'Model definitions', link: 'sails-sqlite/model-definitions' },
+        { text: 'Advanced features', link: 'sails-sqlite/advanced-features' },
+        {
+          text: 'Performance optimization',
+          link: 'sails-sqlite/performance-optimization'
+        }
+      ]
+    },
+    {
+      text: 'Production',
+      collapsed: false,
+      items: [
+        { text: 'Deployment', link: 'sails-sqlite/deployment' },
+        { text: 'Monitoring', link: 'sails-sqlite/monitoring' }
       ]
     }
   ]
