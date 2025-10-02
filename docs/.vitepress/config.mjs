@@ -1,5 +1,3 @@
-import { OramaPlugin } from '@orama/plugin-vitepress'
-
 export default {
   lang: 'en-US',
   title: 'Sailscasts Docs',
@@ -27,14 +25,12 @@ export default {
     ],
     [
       'script',
-      {
-        src: 'https://tinylytics.app/embed/vL3m1tsfEzLruHrKLMHB.js',
-        defer: ''
-      }
+      { src: 'https://tinylytics.app/embed/vL3m1tsfEzLruHrKLMHB.js', defer: '' }
     ],
     ['link', { rel: 'icon', href: '/favicon.png', type: 'image/png' }]
   ],
   themeConfig: {
+    search: { provider: 'local' },
     nav: nav(),
     sidebar: {
       '/captain-vane/': captainVaneGuide(),
@@ -51,9 +47,7 @@ export default {
       '/clearance/': SailsClearanceGuide(),
       '/sails-sqlite/': SailsSQLiteGuide()
     },
-    sitemap: {
-      hostname: 'https://docs.sailscasts.com'
-    },
+    sitemap: { hostname: 'https://docs.sailscasts.com' },
     editLink: {
       pattern:
         'https://github.com/sailscastshq/docs.sailscasts.com/edit/develop/docs/:path',
@@ -66,23 +60,12 @@ export default {
       },
       { icon: 'twitter', link: 'https://twitter.com/sailscastshq' },
       { icon: 'discord', link: 'https://sailscasts.com/chat' },
-      {
-        icon: 'youtube',
-        link: 'https://youtube.com/@sailscasts'
-      }
+      { icon: 'youtube', link: 'https://youtube.com/@sailscasts' }
     ],
     footer: {
       message: 'All open source projects are released under the MIT License.',
       copyright: 'Copyright © 2022-present The Sailscasts Company'
-    },
-    algolia: {
-      appId: 'MEUVZAVDGZ',
-      apiKey: '6c5e9ae85dc5c0672b6df0b2e305f6cb',
-      indexName: 'sailscasts'
     }
-  },
-  vite: {
-    plugins: [OramaPlugin()]
   }
 }
 
@@ -127,11 +110,7 @@ function nav() {
           link: '/sails-stash/',
           activeMatch: '/sails-stash/'
         },
-        {
-          text: 'Sails Pay',
-          link: '/sails-pay/',
-          activeMatch: '/sails-pay/'
-        },
+        { text: 'Sails Pay', link: '/sails-pay/', activeMatch: '/sails-pay/' },
         {
           text: 'Sails Flash',
           link: '/sails-flash/',
@@ -151,10 +130,7 @@ function nav() {
     },
     { text: 'Courses', link: 'https://sailscasts.com/courses' },
     { text: 'Screencasts', link: 'https://sailscasts.com/screencasts' },
-    {
-      text: 'Blog',
-      link: 'https://blog.sailscasts.com'
-    }
+    { text: 'Blog', link: 'https://blog.sailscasts.com' }
   ]
 }
 
@@ -380,14 +356,8 @@ function boringStackGuide() {
       text: 'Deploy',
       collapsed: false,
       items: [
-        {
-          text: 'Render',
-          link: 'boring-stack/render'
-        },
-        {
-          text: 'Railway',
-          link: 'boring-stack/railway'
-        }
+        { text: 'Render', link: 'boring-stack/render' },
+        { text: 'Railway', link: 'boring-stack/railway' }
       ]
     },
     {

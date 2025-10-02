@@ -25,8 +25,5 @@
   },
   "engines": {
     "node": ">=18.0"
-  },
-  "dependencies": {
-    "@orama/plugin-vitepress": "^3.1.14"
   }
 }
