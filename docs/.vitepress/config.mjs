@@ -353,6 +353,14 @@ function boringStackGuide() {
       ]
     },
     {
+      text: 'Templates',
+      collapsed: false,
+      items: [
+        { text: 'Mellow', link: 'boring-stack/mellow' },
+        { text: 'Ascent', link: 'boring-stack/ascent' }
+      ]
+    },
+    {
       text: 'Deploy',
       collapsed: false,
       items: [
