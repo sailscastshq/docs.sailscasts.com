@@ -39,6 +39,18 @@ npx create-sails project-name --svelte
 Make sure to replace `project-name` with the name of your project.
 :::
 
+## Scaffolding Ascent (Production SaaS Template)
+
+For a production-ready SaaS application with advanced features like authentication, team management, and billing, use the Ascent template:
+
+```sh [React + Ascent]
+npx create-sails project-name --react --ascent
+```
+
+::: warning Ascent Availability
+Ascent is currently only available for React. Vue and Svelte variants are planned for future releases.
+:::
+
 Then `cd` into your project and run `npm i`:
 
 ```sh
