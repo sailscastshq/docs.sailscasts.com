@@ -417,6 +417,7 @@ function SailsStashGuide() {
       text: 'Stores',
       collapsed: false,
       items: [
+        { text: 'Memory', link: 'sails-stash/memory' },
         { text: 'Redis', link: 'sails-stash/redis' },
         { text: 'Memcached', link: 'sails-stash/memcached' }
       ]
