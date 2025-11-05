@@ -15,9 +15,12 @@ features:
   - icon: 🚀
     title: Efficient Caching
     details: Boost your application's performance by caching frequently accessed data, reducing database load and improving response times.
+  - icon: ⚡
+    title: Zero Configuration
+    details: Works out of the box with an in-memory store. No Redis required to get started!
   - icon: 🔄
     title: Versatile Store Support
-    details: Choose between Redis or Memcached as your caching store, allowing flexibility to fit your application's needs.
+    details: Choose between memory (default), Redis, or Memcached as your caching store for any environment, allowing flexibility to fit your application's needs.
   - icon: 🛠️
     title: Simple Integration
     details: Seamlessly integrate Sails Stash into your project with easy setup and straightforward usage, ensuring quick implementation.
