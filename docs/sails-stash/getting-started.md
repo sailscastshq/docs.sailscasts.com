@@ -26,12 +26,33 @@ To get started with Sails Stash, simply run the following command in your Sails 
 npm i sails-stash
 ```
 
+## Zero Configuration
+
+As of version **0.0.2**, Sails Stash works out of the box with **no configuration required**. It uses an in-memory store by default, making it perfect for getting started quickly without needing to set up Redis or any other cache backend.
+
+```js
+await sails.cache.fetch(
+  'posts',
+  async function () {
+    return await Post.find()
+  },
+  6000
+)
+```
+
+::: info
+You can optionally configure Redis or other cache stores for any environment. The memory store is just the default to help you get started quickly.
+:::
+
 ## Supported stores
 
-Follow the instructions below to setup your preferred cache backend with Sails Stash and start harnessing the performance benefits of caching in your Sails apps:
+Sails Stash supports the following cache backends:
 
-- [Redis](/sails-stash/redis)
+- **Memory** (default) - Zero-config in-memory caching
+- [Redis](/sails-stash/redis) - Persistent, distributed caching
 - Memcached <Badge type="warning" text="coming soon" />
+
+You can configure any of these stores for development or production. Follow the instructions to setup [Redis](/sails-stash/redis) for persistent caching in your Sails apps.
 
 ## Star the repo :star:
 
