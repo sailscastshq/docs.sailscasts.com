@@ -7,8 +7,8 @@ title: Redis
 titleTemplate: Sails Stash
 description: Learn how to set up and configure Redis as your cache store with Sails Stash. Follow step-by-step instructions to optimize your Sails application's performance with lightning-fast data retrieval using Redis.
 prev:
-  text: Getting started
-  link: '/sails-stash/getting-started'
+  text: Memory
+  link: '/sails-stash/memory'
 next:
   text: Memcached
   link: '/sails-stash/memcached'
