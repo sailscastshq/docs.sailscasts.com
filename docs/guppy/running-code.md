@@ -32,7 +32,7 @@ Both ways of activating automatic evaluating code in guppy will also toggle the 
 
 ## Evaluate selection
 
-As of guppy `v1.1+``, you can evaluate specifically particular line(s) of code that is currently on your editor. This come in handy when you don't want to clear your editor completely but just want the evaluation of one or more line. To do this
+As of guppy `v1.1+`, you can evaluate specifically particular line(s) of code that is currently on your editor. This come in handy when you don't want to clear your editor completely but just want the evaluation of one or more line. To do this
 
 - Highlight the line(s) you want to evaluate
 - Hit the run button or use the Cmd/Ctrl + R shortcut to execute the highlighted code
