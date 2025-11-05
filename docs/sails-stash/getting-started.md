@@ -7,8 +7,8 @@ title: Getting started
 titleTemplate: Sails Stash
 description: Getting started with Sails Content in a Sails application
 next:
-  text: Redis
-  link: '/sails-stash/redis'
+  text: Memory
+  link: '/sails-stash/memory'
 editLink: true
 ---
 

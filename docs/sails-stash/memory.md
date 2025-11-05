@@ -1,3 +1,20 @@
+---
+head:
+  - - meta
+    - property: 'og:image'
+      content: https://docs.sailscasts.com/sails-stash-social.png
+title: Memory
+titleTemplate: Sails Stash
+description: Learn about the Memory store in Sails Stash - a zero-configuration, in-memory caching solution perfect for development and simple applications
+prev:
+  text: Getting started
+  link: '/sails-stash/getting-started'
+next:
+  text: Redis
+  link: '/sails-stash/redis'
+editLink: true
+---
+
 # Memory
 
 The Memory store is the default cache backend for Sails Stash. It provides a simple, zero-configuration solution for caching data in memory, making it perfect for development and getting started quickly.
