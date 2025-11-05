@@ -28,7 +28,7 @@ npm i sails-stash
 
 ## Zero Configuration
 
-As of version **0.0.2**, Sails Stash works out of the box with **no configuration required**. It uses an in-memory store by default, making it perfect for getting started quickly without needing to set up Redis or any other cache backend.
+As of **v0.1.0**, Sails Stash works out of the box with **no configuration required**. It uses an in-memory store by default, making it perfect for getting started quickly without needing to set up Redis or any other cache backend.
 
 ```js
 await sails.cache.fetch(
