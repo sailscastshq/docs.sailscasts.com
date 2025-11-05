@@ -326,6 +326,8 @@ function boringStackGuide() {
       items: [
         { text: 'Routing', link: 'boring-stack/routing' },
         { text: 'Navigation', link: 'boring-stack/navigation' },
+        { text: 'Pages', link: 'boring-stack/pages' },
+        { text: 'Layouts', link: 'boring-stack/layouts' },
         { text: 'Redirects', link: 'boring-stack/redirects' },
         { text: 'Validation', link: 'boring-stack/validation' },
         { text: 'Flash messages', link: 'boring-stack/flash-messages' }
@@ -365,7 +367,8 @@ function boringStackGuide() {
       collapsed: false,
       items: [
         { text: 'Render', link: 'boring-stack/render' },
-        { text: 'Railway', link: 'boring-stack/railway' }
+        { text: 'Railway', link: 'boring-stack/railway' },
+        { text: 'Coolify', link: 'boring-stack/coolify' }
       ]
     },
     {
