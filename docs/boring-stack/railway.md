@@ -72,6 +72,18 @@ This template includes:
 - **PostgreSQL**: A pre-configured PostgreSQL database.
 - **Redis**: A pre-configured Redis instance.
 
+## One-click deploy ascent-vue
+
+Simply click the button, and Railway will set up everything you need to get your new production-ready SaaS app live using the `ascent-vue` Railway template.
+
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/3Hjrjs?referralCode=orSqKL&utm_medium=integration&utm_source=template&utm_campaign=generic)
+
+This template includes:
+
+- **Ascent Vue**: The Boring Stack production-ready SaaS template with Vue, authentication, teams, and billing.
+- **PostgreSQL**: A pre-configured PostgreSQL database.
+- **Redis**: A pre-configured Redis instance.
+
 ## GitHub Repo
 
 Push your app to a repo on GitHub.
