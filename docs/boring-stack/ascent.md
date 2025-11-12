@@ -5,7 +5,7 @@ head:
       content: https://docs.sailscasts.com/boring-stack-social.png
 title: Ascent
 titleTemplate: The Boring JavaScript Stack
-description: Ascent is a production-ready React SaaS template built on The Boring JavaScript Stack. Ship products with battle-tested technologies and focus on actual real users instead of wrestling with complex build tools.
+description: Ascent is a production-ready SaaS template built on The Boring JavaScript Stack. Available with React or Vue frontends. Ship products with battle-tested technologies and focus on actual real users instead of wrestling with complex build tools.
 prev:
   text: Mellow
   link: '/boring-stack/mellow'
@@ -19,7 +19,7 @@ editLink: true
 
 **Ship products with battle-tested technologies. Say no to chasing JavaScript trends.**
 
-Ascent is a production-ready React SaaS template built on The Boring JavaScript Stack. Focus on shipping to actual real users instead of wrestling with complex build tools and trendy frameworks.
+Ascent is a production-ready SaaS template built on The Boring JavaScript Stack. Available with **React** or **Vue** frontends. Focus on shipping to actual real users instead of wrestling with complex build tools and trendy frameworks.
 
 ## The Boring Stack Philosophy
 
@@ -40,10 +40,22 @@ Ascent is a production-ready React SaaS template built on The Boring JavaScript 
 
 ### Frontend
 
+Choose between React or Vue for your frontend:
+
+#### React Frontend
+
 - **[React 19](https://react.dev)** - Latest React with modern features and concurrent rendering
 - **[Inertia.js](https://inertiajs.com)** - Modern monolith approach eliminating API complexity
 - **[PrimeReact](https://primereact.org)** - 80+ production-ready UI components
 - **[Tailwind CSS](https://tailwindcss.com)** - Utility-first CSS framework for styling PrimeReact components
+- **[Rsbuild](https://rsbuild.dev)** - Fast build tool powered by Rspack (via Sails Shipwright)
+
+#### Vue Frontend
+
+- **[Vue 3](https://vuejs.org)** - Progressive JavaScript framework with Composition API
+- **[Inertia.js](https://inertiajs.com)** - Modern monolith approach eliminating API complexity
+- **[PrimeVue Volt](https://volt.primevue.org)** - 50+ fully customizable, accessible UI components powered by Unstyled PrimeVue and Tailwind CSS v4
+- **[Tailwind CSS v4](https://tailwindcss.com)** - Next-generation utility-first CSS framework
 - **[Rsbuild](https://rsbuild.dev)** - Fast build tool powered by Rspack (via Sails Shipwright)
 
 ### Development & Build Tools
@@ -63,8 +75,11 @@ Ascent is a production-ready React SaaS template built on The Boring JavaScript 
 ### Installation
 
 ```bash
-# Create new project with Ascent template
+# Create new project with Ascent template (React)
 npx create-sails@latest my-saas-app --react --ascent
+
+# Or with Vue
+npx create-sails@latest my-saas-app --vue --ascent
 ```
 
 ### Quick Start
@@ -137,11 +152,11 @@ Visit `http://localhost:1337` to see your application running!
 ### UI/UX Features
 
 - **Responsive Design** - Mobile-first responsive layouts
-- **PrimeReact + Tailwind** - Rich components styled with utility classes
-- **Toast Notifications** - User feedback with PrimeReact Toast
+- **Prime UI + Tailwind** - Rich components (PrimeReact or PrimeVue Volt) styled with utility classes
+- **Toast Notifications** - User feedback with Prime UI Toast components
 - **Loading States** - Comprehensive loading and error states
 - **Form Validation** - Client and server-side validation
-- **Accessibility** - WCAG-compliant components
+- **Accessibility** - WCAG AA compliant components
 
 ## Development Commands
 
@@ -167,11 +182,13 @@ npx sails generate model Product
 npx sails generate helper format-date
 ```
 
-## PrimeReact + Tailwind Usage
+## Frontend Examples
 
-Ascent combines PrimeReact's rich components with Tailwind's utility classes:
+Ascent combines Prime UI components with Tailwind's utility classes:
 
 ### Authentication Form Example
+
+#### React Frontend
 
 ```jsx path=null start=null
 import { useForm } from '@inertiajs/react'
@@ -238,7 +255,73 @@ export default function LoginForm() {
 }
 ```
 
+#### Vue Frontend
+
+```vue path=null start=null
+<script setup>
+import { useForm } from '@inertiajs/vue3'
+import Button from '@/components/button/Button.vue'
+import InputText from '@/components/inputtext/InputText.vue'
+import Password from '@/components/password/Password.vue'
+import Card from '@/components/card/Card.vue'
+
+const form = useForm({
+  emailAddress: '',
+  password: ''
+})
+
+function handleSubmit() {
+  form.post('/login')
+}
+</script>
+
+<template>
+  <Card class="mx-auto mt-8 w-full max-w-md">
+    <template #content>
+      <form @submit.prevent="handleSubmit" class="space-y-6 p-6">
+        <h2 class="text-center text-2xl font-bold text-gray-900">
+          Welcome Back
+        </h2>
+
+        <div class="space-y-4">
+          <div>
+            <InputText
+              v-model="form.emailAddress"
+              placeholder="Email address"
+              :class="['w-full', { 'p-invalid': form.errors.emailAddress }]"
+            />
+            <small v-if="form.errors.emailAddress" class="p-error block mt-1">
+              {{ form.errors.emailAddress }}
+            </small>
+          </div>
+
+          <div>
+            <Password
+              v-model="form.password"
+              placeholder="Password"
+              :feedback="false"
+              toggleMask
+              class="w-full"
+            />
+          </div>
+        </div>
+
+        <Button
+          type="submit"
+          label="Sign In"
+          class="w-full"
+          :loading="form.processing"
+          severity="info"
+        />
+      </form>
+    </template>
+  </Card>
+</template>
+```
+
 ### Team Management Table
+
+#### React Frontend
 
 ```jsx path=null start=null
 import { DataTable } from 'primereact/datatable'
@@ -283,6 +366,60 @@ export default function TeamMembers({ members }) {
 }
 ```
 
+#### Vue Frontend
+
+```vue path=null start=null
+<script setup>
+import { router } from '@inertiajs/vue3'
+import DataTable from '@/components/datatable/DataTable.vue'
+import Column from '@/components/column/Column.vue'
+import Button from '@/components/button/Button.vue'
+import Tag from '@/components/tag/Tag.vue'
+
+defineProps({
+  members: Array
+})
+
+function removeMember(memberId) {
+  router.delete(`/team/members/${memberId}`)
+}
+</script>
+
+<template>
+  <div class="bg-white rounded-lg border">
+    <DataTable
+      :value="members"
+      class="text-sm"
+      stripedRows
+      responsiveLayout="scroll"
+    >
+      <Column field="user.fullName" header="Name" />
+      <Column field="user.emailAddress" header="Email" />
+      <Column header="Role">
+        <template #body="{ data }">
+          <Tag
+            :value="data.role"
+            :severity="data.role === 'owner' ? 'success' : 'info'"
+            class="text-xs"
+          />
+        </template>
+      </Column>
+      <Column header="Actions">
+        <template #body="{ data }">
+          <Button
+            icon="pi pi-trash"
+            severity="danger"
+            text
+            size="small"
+            @click="removeMember(data.id)"
+          />
+        </template>
+      </Column>
+    </DataTable>
+  </div>
+</template>
+```
+
 ## Project Structure
 
 ```
@@ -292,11 +429,11 @@ my-saas-app/
 │   ├── models/             # Database models (User, Team, etc.)
 │   ├── helpers/            # Reusable business logic
 │   └── policies/           # Authorization middleware
-├── assets/js/              # React frontend
+├── assets/js/              # Frontend (React or Vue)
 │   ├── components/         # Reusable UI components
 │   ├── pages/              # Inertia.js pages
 │   ├── layouts/            # App layouts
-│   └── hooks/              # Custom React hooks
+│   └── hooks/              # Custom hooks (React) or composables (Vue)
 ├── config/                 # Sails.js configuration
 ├── views/                  # Email templates
 ├── content/                # Blog and static content
@@ -368,7 +505,7 @@ Ascent includes a comprehensive `WARP.md` file that provides [Warp](https://warp
 
 ### What's in WARP.md
 
-- **Project Architecture** - Complete overview of Sails.js + React + PrimeReact structure
+- **Project Architecture** - Complete overview of Sails.js + React/Vue + Prime UI structure
 - **Development Patterns** - Established conventions for controllers, models, and components
 - **Configuration Guidelines** - Environment setup and deployment patterns
 - **Code Examples** - Working patterns for authentication, teams, billing, and more
@@ -383,13 +520,13 @@ With the included WARP.md file, you can ask Warp AI to:
 - **Build team management features** that integrate seamlessly
 - **Add billing integrations** using your existing Lemon Squeezy setup
 - **Debug issues** with understanding of your specific architecture
-- **Refactor components** while maintaining PrimeReact + Tailwind patterns
+- **Refactor components** while maintaining Prime UI + Tailwind patterns
 
 ### Getting Started with Warp
 
 1. **Open your project in [Warp](https://warp.dev)**
 2. **Reference the WARP.md file** when asking questions or requesting code generation
-3. **Ask context-specific questions** about your Sails.js + React architecture
+3. **Ask context-specific questions** about your Sails.js + React/Vue architecture
 4. **Request customizations** that follow your established patterns
 
 Example prompts:
@@ -407,5 +544,7 @@ This approach ensures that AI-generated code integrates seamlessly with your exi
 - **[Authentication Guide](/boring-stack/authentication)** - Authentication patterns
 - **[Sails.js Documentation](https://sailsjs.com/documentation)** - Backend framework guide
 - **[Inertia.js Guide](https://inertiajs.com)** - Modern monolith approach
-- **[PrimeReact Components](https://primereact.org)** - UI component library
+- **[PrimeReact Components](https://primereact.org)** - React UI component library
+- **[PrimeVue Volt Components](https://volt.primevue.org)** - Vue UI component library with Tailwind v4
 - **[React 19 Documentation](https://react.dev)** - Latest React features
+- **[Vue 3 Documentation](https://vuejs.org)** - Progressive JavaScript framework
