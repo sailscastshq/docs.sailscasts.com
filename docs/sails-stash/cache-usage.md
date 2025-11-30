@@ -73,9 +73,9 @@ At times, you might need to fetch an item from the cache while also setting a de
 For instance, you may want to fetch users from the cache, or if absent, retrieve them from the database and cache them. This can be accomplished using the `fetch` method.
 
 ```js
-const users = sails.cache.fetch('users', ttlInSeconds, async function () {
+const users = sails.cache.fetch('users', async function () {
   return await User.find()
-})
+}, ttlInSeconds)
 ```
 
 If the item is not found in the cache, the callback provided to the `fetch` method will be invoked, and its result will be stored in the cache.
