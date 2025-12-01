@@ -64,7 +64,7 @@ This template includes:
 
 Simply click the button, and Railway will set up everything you need to get your new production-ready SaaS app live using the `ascent-react` Railway template.
 
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/K62uLo?referralCode=orSqKL&utm_medium=integration&utm_source=template&utm_campaign=generic)
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/ascent-react?referralCode=orSqKL&utm_medium=integration&utm_source=template&utm_campaign=generic)
 
 This template includes:
 
@@ -76,7 +76,7 @@ This template includes:
 
 Simply click the button, and Railway will set up everything you need to get your new production-ready SaaS app live using the `ascent-vue` Railway template.
 
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/3Hjrjs?referralCode=orSqKL&utm_medium=integration&utm_source=template&utm_campaign=generic)
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/ascent-vue?referralCode=orSqKL&utm_medium=integration&utm_source=template&utm_campaign=generic)
 
 This template includes:
 
