@@ -45,7 +45,8 @@ export default {
       '/sails-pay/': SailsPayGuide(),
       '/sails-flash/': SailsFlashGuide(),
       '/clearance/': SailsClearanceGuide(),
-      '/sails-sqlite/': SailsSQLiteGuide()
+      '/sails-sqlite/': SailsSQLiteGuide(),
+      '/sails-quest/': SailsQuestGuide()
     },
     sitemap: { hostname: 'https://docs.sailscasts.com' },
     editLink: {
@@ -125,6 +126,11 @@ function nav() {
           text: 'Sails SQLite',
           link: '/sails-sqlite/',
           activeMatch: '/sails-sqlite/'
+        },
+        {
+          text: 'Sails Quest',
+          link: '/sails-quest/',
+          activeMatch: '/sails-quest/'
         }
       ]
     },
@@ -499,6 +505,39 @@ function SailsSQLiteGuide() {
       items: [
         { text: 'Deployment', link: 'sails-sqlite/deployment' },
         { text: 'Monitoring', link: 'sails-sqlite/monitoring' }
+      ]
+    }
+  ]
+}
+
+function SailsQuestGuide() {
+  return [
+    {
+      text: 'Introduction',
+      collapsed: false,
+      items: [
+        { text: 'What is job scheduling?', link: 'sails-quest/introduction' },
+        { text: 'How Quest works', link: 'sails-quest/how-it-works' },
+        { text: 'Getting started', link: 'sails-quest/getting-started' },
+        { text: 'Configuration', link: 'sails-quest/configuration' }
+      ]
+    },
+    {
+      text: 'Writing Jobs',
+      collapsed: false,
+      items: [
+        { text: 'Creating jobs', link: 'sails-quest/creating-jobs' },
+        { text: 'Scheduling', link: 'sails-quest/scheduling' },
+        { text: 'Job inputs', link: 'sails-quest/job-inputs' }
+      ]
+    },
+    {
+      text: 'Managing Jobs',
+      collapsed: false,
+      items: [
+        { text: 'Job management', link: 'sails-quest/job-management' },
+        { text: 'Events', link: 'sails-quest/events' },
+        { text: 'Examples', link: 'sails-quest/examples' }
       ]
     }
   ]
