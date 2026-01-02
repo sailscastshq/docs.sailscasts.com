@@ -75,6 +75,27 @@ quest: {
 | `0 0 * * 0`    | Weekly on Sunday             |
 | `0 0 1,15 * *` | 1st and 15th of each month   |
 
+### Cron Options
+
+You can pass additional options to the cron parser:
+
+```javascript
+quest: {
+  cron: '0 9 * * *',
+  cronOptions: {
+    startDate: new Date('2024-01-01'),  // Don't schedule before this date
+    endDate: new Date('2024-12-31'),    // Don't schedule after this date
+    currentDate: new Date()              // Reference date for calculations
+  }
+}
+```
+
+| Option        | Type | Description                     |
+| ------------- | ---- | ------------------------------- |
+| `startDate`   | Date | Don't return dates before this  |
+| `endDate`     | Date | Don't return dates after this   |
+| `currentDate` | Date | Reference date for calculations |
+
 ## One-Time Execution
 
 ### Timeout
@@ -99,6 +120,10 @@ quest: {
   date: new Date(Date.now() + 86400000) // 24 hours from now
 }
 ```
+
+::: warning
+You cannot combine `date` and `timeout`. Use one or the other for one-time execution.
+:::
 
 ## Combining Schedules
 
