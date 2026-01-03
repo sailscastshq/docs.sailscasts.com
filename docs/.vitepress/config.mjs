@@ -77,7 +77,7 @@ function nav() {
       items: [
         { text: 'Sailscasts', link: 'https://sailscasts.com' },
         { text: 'Guppy', link: 'https://sailscasts.com/guppy' },
-        { text: 'Hagfish', link: 'https://hagfish.io' }
+        { text: 'Hagfish', link: 'https://hagfish.app' }
       ]
     },
     {
