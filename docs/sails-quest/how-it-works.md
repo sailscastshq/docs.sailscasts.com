@@ -15,7 +15,7 @@ This page explains the technical architecture of Quest, our design decisions, an
 
 ## The Core Challenge
 
-When building a job scheduler for Sails.js, we faced a fundamental challenge: How do you run scheduled code with full access to Sails models, helpers, and services?
+When building a job scheduler for Sails.js, we faced a fundamental challenge: How do you run scheduled code with full access to Sails models, helpers, and configurations?
 
 Most JavaScript job schedulers (like Bree) use worker threads for isolation and stability. However, worker threads run in a completely separate context - they can't access your Sails app's models or helpers. You'd need complex message passing between threads, which creates a terrible developer experience.
 
@@ -32,7 +32,7 @@ spawn('./node_modules/.bin/sails', ['run', 'cleanup-sessions'], {
 
 This gives us:
 
-- **Full Sails context** - Models, helpers, and services work normally
+- **Full Sails context** - Models, helpers, and configurations work normally
 - **Process isolation** - Jobs can't crash your main app
 - **Memory safety** - Each job gets fresh memory, no leaks accumulate
 - **Familiar patterns** - It's just `sails run` under the hood
@@ -59,7 +59,7 @@ This minimal Sails lift:
 - Starts up faster (important for frequent jobs)
 - Uses less memory
 - Avoids port conflicts (no HTTP server)
-- Loads only what jobs need (models and services)
+- Loads only what jobs need (models, helpers, and configurations)
 
 ## Scheduling Engine
 
@@ -195,13 +195,13 @@ module.exports = {
   },
 
   fn: async function () {
+    let processed = 0
+
     // Database tells us what needs processing
-    const orders = await Order.find({
+    await Order.stream({
       status: 'pending',
       processedAt: null // Database state prevents reprocessing
-    }).limit(10)
-
-    for (const order of orders) {
+    }).eachRecord(async (order) => {
       await processOrder(order)
 
       // Update database state
@@ -209,9 +209,11 @@ module.exports = {
         status: 'processed',
         processedAt: new Date()
       })
-    }
 
-    return { processed: orders.length }
+      processed++
+    })
+
+    return { processed }
   }
 }
 ```
@@ -248,7 +250,7 @@ Running jobs in the main thread (like node-cron) seems simpler:
 // This works but is dangerous:
 setInterval(async () => {
   await heavyJob() // Could block your server!
-}, 60000)
+}, 60_000)
 ```
 
 Problems:
@@ -283,9 +285,11 @@ inputs: {
     defaultsTo: 100
   }
 }
+```
 
-// Quest executes the exact command you'd run manually:
-sails run send-emails --template="alternative" --limit=50
+```shell
+# Quest executes the exact command you'd run manually:
+sails run send-emails --template="standard" --limit=100
 ```
 
 This means:
@@ -297,10 +301,21 @@ This means:
 ```bash
 # Test manually first
 sails run cleanup-sessions --daysOld=7 --dryRun=true
+```
 
-# Then schedule with confidence
-quest: { interval: '1 day' }
-inputs: { daysOld: 7, dryRun: false }
+```js
+// Then schedule with confidence
+quest: { interval: '1 day' },
+inputs: {
+  daysOld: {
+    type: 'number',
+    defaultsTo: 7
+  },
+  limit: {
+    type: 'boolean',
+    defaultsTo: true
+  }
+}
 ```
 
 Benefits:
@@ -346,7 +361,7 @@ Each job process uses:
 
 - **Base Node.js**: ~30MB
 - **Minimal Sails**: ~50-80MB total
-- **With your models/services**: ~80-150MB
+- **With your models/helpers**: ~80-150MB
 
 Memory is released completely when the job finishes.
 
@@ -390,26 +405,18 @@ This event-driven architecture allows integration with any monitoring stack with
 | External dependencies | ❌ None | ❌ None    | ❌ None   | ✅ Redis   |
 | Memory safety         | ✅ Yes  | ✅ Yes     | ❌ No     | ✅ Yes     |
 
-## Future Considerations
-
-While Quest is production-ready, we're considering these enhancements:
-
-1. **Job History**: Persist execution history to database
-2. **Distributed Execution**: Ensure only one instance runs jobs in multi-server deployments
-3. **Job Chaining**: Define job dependencies and workflows
-4. **Retries**: Automatic retry with exponential backoff
-5. **Metrics Collection**: Built-in performance metrics
-
 ## Contributing
 
 Understanding Quest's architecture helps you contribute effectively:
 
-- **Scheduler logic**: `lib/index.js` - job scheduling and lifecycle
-- **Process spawning**: `executeJob()` function - how jobs run
-- **Schedule parsing**: `calculateNextRun()` - handles cron/interval/human formats
+- **Hook entry**: `lib/index.js` - main hook initialization and API exposure
+- **Job control**: `lib/core/job-control.js` - job scheduling and lifecycle
+- **Process spawning**: `lib/core/executor.js` - `executeJob()` function
+- **Schedule parsing**: `lib/core/scheduler.js` - `getNextRunTime()` handles cron/interval/human formats
+- **Job loading**: `lib/core/loader.js` - loads jobs from scripts directory and config
 - **Event emission**: Throughout execution for extensibility
 
-The codebase is intentionally simple - one main file that orchestrates scheduling and execution, leveraging Sails' existing script infrastructure.
+The codebase is modular - a main hook file that coordinates separate modules for scheduling, execution, and job control, leveraging Sails' existing script infrastructure.
 
 ## Summary
 
@@ -417,7 +424,7 @@ Quest is built on a simple insight: Sails already knows how to run scripts with 
 
 The architecture prioritizes:
 
-1. **Developer experience** - Jobs are just Sails scripts
+1. **Developer experience** - Jobs are just [Sails scripts](https://sailsjs.com/documentation/concepts/shell-scripts)
 2. **Reliability** - Process isolation prevents cascading failures
 3. **Flexibility** - Multiple scheduling formats for different needs
 4. **Simplicity** - No external dependencies or complex setup
