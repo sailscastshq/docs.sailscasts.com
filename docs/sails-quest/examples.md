@@ -67,14 +67,13 @@ module.exports = {
     const sixMonthsAgo = new Date()
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6)
 
-    // Find old orders
-    const oldOrders = await Order.find({
+    let archivedCount = 0
+
+    // Stream and archive old orders
+    await Order.stream({
       status: 'completed',
       completedAt: { '<': sixMonthsAgo }
-    })
-
-    // Archive them
-    for (const order of oldOrders) {
+    }).eachRecord(async (order) => {
       await Archive.create({
         type: 'order',
         data: order,
@@ -82,9 +81,10 @@ module.exports = {
       })
 
       await Order.destroyOne({ id: order.id })
-    }
+      archivedCount++
+    })
 
-    return { archivedCount: oldOrders.length }
+    return { archivedCount }
   }
 }
 ```
@@ -105,12 +105,6 @@ module.exports = {
   },
 
   fn: async function () {
-    // Get subscribers
-    const subscribers = await User.find({
-      subscribed: true,
-      emailVerified: true
-    })
-
     // Get this week's content
     const articles = await Article.find({
       publishedAt: {
@@ -124,8 +118,11 @@ module.exports = {
     let sent = 0
     const errors = []
 
-    // Send to each subscriber
-    for (const user of subscribers) {
+    // Stream subscribers and send to each
+    await User.stream({
+      subscribed: true,
+      emailVerified: true
+    }).eachRecord(async (user) => {
       try {
         await sails.helpers.sendEmail.with({
           to: user.email,
@@ -141,7 +138,7 @@ module.exports = {
       } catch (err) {
         errors.push({ user: user.email, error: err.message })
       }
-    }
+    })
 
     return {
       sent,
@@ -165,39 +162,43 @@ module.exports = {
     // Overlapping prevented by default
   },
 
-  fn: async function() {
-    const yesterday = new Date(Date.now() - 24*60*60*1000)
-    const twoDaysAgo = new Date(Date.now() - 48*60*60*1000)
+  fn: async function () {
+    const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000)
+    const twoDaysAgo = new Date(Date.now() - 48 * 60 * 60 * 1000)
 
-    // Find abandoned carts (24-48 hours old, not yet reminded)
-    const abandonedCarts = await Cart.find({
+    let remindersSent = 0
+
+    // Stream abandoned carts (24-48 hours old, not yet reminded)
+    await Cart.stream({
       updatedAt: {
         '>': twoDaysAgo,
         '<': yesterday
       },
       reminderSent: false,
       items: { '!': [] }
-    }).populate('user').populate('items')
+    })
+      .populate('user')
+      .populate('items')
+      .eachRecord(async (cart) => {
+        if (!cart.user?.email) return
 
-    for (const cart of abandonedCarts) {
-      if (!cart.user?.email) continue
+        await sails.helpers.sendEmail.with({
+          to: cart.user.email,
+          subject: 'You left something in your cart!',
+          template: 'abandoned-cart',
+          templateData: {
+            userName: cart.user.fullName,
+            items: cart.items,
+            cartUrl: `${sails.config.custom.baseUrl}/cart`
+          }
+        })
 
-      await sails.helpers.sendEmail.with({
-        to: cart.user.email,
-        subject: 'You left something in your cart!',
-        template: 'abandoned-cart',
-        templateData: {
-          userName: cart.user.fullName,
-          items: cart.items,
-          cartUrl: `${sails.config.custom.baseUrl}/cart`
-        }
+        await Cart.updateOne({ id: cart.id }).set({ reminderSent: true })
+
+        remindersSent++
       })
 
-      await Cart.updateOne({ id: cart.id })
-        .set({ reminderSent: true })
-    }
-
-    return { remindersS sent: abandonedCarts.length }
+    return { remindersSent }
   }
 }
 ```
@@ -218,49 +219,48 @@ module.exports = {
   },
 
   fn: async function () {
-    // Get pending uploads
-    const pending = await Upload.find({
-      status: 'pending'
-    })
-      .limit(10)
-      .sort('createdAt ASC')
-
     const results = {
       processed: 0,
       failed: 0,
       errors: []
     }
 
-    for (const upload of pending) {
-      try {
-        // Process based on type
-        if (upload.type === 'image') {
-          await sails.helpers.processImage(upload)
-        } else if (upload.type === 'document') {
-          await sails.helpers.processDocument(upload)
-        } else if (upload.type === 'video') {
-          await sails.helpers.processVideo(upload)
+    // Stream pending uploads
+    await Upload.stream({
+      status: 'pending'
+    })
+      .limit(10)
+      .sort('createdAt ASC')
+      .eachRecord(async (upload) => {
+        try {
+          // Process based on type
+          if (upload.type === 'image') {
+            await sails.helpers.processImage(upload)
+          } else if (upload.type === 'document') {
+            await sails.helpers.processDocument(upload)
+          } else if (upload.type === 'video') {
+            await sails.helpers.processVideo(upload)
+          }
+
+          await Upload.updateOne({ id: upload.id }).set({
+            status: 'processed',
+            processedAt: new Date()
+          })
+
+          results.processed++
+        } catch (err) {
+          await Upload.updateOne({ id: upload.id }).set({
+            status: 'failed',
+            error: err.message
+          })
+
+          results.failed++
+          results.errors.push({
+            uploadId: upload.id,
+            error: err.message
+          })
         }
-
-        await Upload.updateOne({ id: upload.id }).set({
-          status: 'processed',
-          processedAt: new Date()
-        })
-
-        results.processed++
-      } catch (err) {
-        await Upload.updateOne({ id: upload.id }).set({
-          status: 'failed',
-          error: err.message
-        })
-
-        results.failed++
-        results.errors.push({
-          uploadId: upload.id,
-          error: err.message
-        })
-      }
-    }
+      })
 
     return results
   }

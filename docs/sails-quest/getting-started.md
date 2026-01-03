@@ -105,7 +105,7 @@ module.exports = {
     views: false,
     sockets: false,
     pubsub: false,
-    grunt: false
+    shipwright: false
   }
 }
 ```
