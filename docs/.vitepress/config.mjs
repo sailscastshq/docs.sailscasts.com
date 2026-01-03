@@ -76,7 +76,6 @@ function nav() {
       text: 'Commercial products',
       items: [
         { text: 'Sailscasts', link: 'https://sailscasts.com' },
-        { text: 'Guppy', link: 'https://sailscasts.com/guppy' },
         { text: 'Hagfish', link: 'https://hagfish.app' },
         { text: 'The African Engineer', link: 'https://africanengineer.com' }
       ]
