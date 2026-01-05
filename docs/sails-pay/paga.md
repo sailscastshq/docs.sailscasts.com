@@ -7,13 +7,43 @@ title: Paga
 titleTemplate: Sails Pay
 description: Learn how to use the Paga adapter for Sails Pay
 prev:
-  text: Getting started
-  link: /sails-pay/getting-started
-next: false
+  text: Flutterwave
+  link: /sails-pay/flutterwave
+next:
+  text: Paystack
+  link: /sails-pay/paystack
 editLink: true
 ---
 
 # Paga
+
+[Paga](https://www.mypaga.com) is Nigeria's pioneering mobile payment platform, founded in 2009 by Tayo Oviosu. What started as an agency banking platform has evolved into a comprehensive financial ecosystem serving over 29 million users. Paga is licensed by the Central Bank of Nigeria (CBN) and insured by the Nigeria Deposit Insurance Corporation (NDIC).
+
+## Why Paga?
+
+Paga offers unique advantages for businesses targeting the Nigerian market:
+
+- **Massive User Base**: 29+ million registered users across Nigeria
+- **Proven Track Record**: Processed ₦8.7 trillion ($5.6 billion) in transactions in 2024
+- **Extensive Agent Network**: 27,000+ financial service access points nationwide
+- **Mobile-First**: Designed for Nigeria's mobile-centric market with USSD, bank transfers, and mobile wallet support
+- **Regulatory Compliance**: Fully licensed by the Central Bank of Nigeria
+- **Remittance Leader**: Partners with 18+ international remittance companies
+
+## Getting Started with Paga
+
+Before integrating Paga with Sails Pay, you'll need a Paga Business account:
+
+1. **Create a business account**: Sign up at [mypaga.com/paga-business](https://www.mypaga.com/paga-business/)
+2. **Complete verification**: Submit required business documents for approval
+3. **Get API credentials**: Access your test and live API keys from the developer settings
+4. **Test your integration**: Use test keys during development before going live
+
+::: tip
+Paga provides test credentials for development. Always test thoroughly in the sandbox environment before processing live transactions.
+:::
+
+## Installation
 
 ### Specifying the adapter
 
@@ -47,7 +77,8 @@ module.exports = {
     providers: {
       default: {
         publicKey: 'test_xxxxxxxxxxxxxxxxxxxxxx',
-        secretKey: 'test_xxxxxxxxxxxxxxxxxxxxxx'
+        secretKey: 'test_xxxxxxxxxxxxxxxxxxxxxx',
+        callbackUrl: 'http://localhost:1337/webhooks/paga'
       }
     }
   }
@@ -64,7 +95,8 @@ module.exports.pay = {
     default: {
       adapter: '@sails-pay/paga',
       publicKey: process.env.PAGA_PUBLIC_KEY,
-      secretKey: process.env.PAGA_SECRET_KEY
+      secretKey: process.env.PAGA_SECRET_KEY,
+      callbackUrl: process.env.PAGA_CALLBACK_URL
     }
   }
 }
@@ -91,113 +123,37 @@ To get your Paga API keys:
 Keep your secret key secure! Never commit it to source control or expose it in client-side code.
 :::
 
-## Usage
+### **`callbackUrl`**
 
-### Creating a checkout
+The callback URL is a webhook endpoint in your application that Paga will send payment notifications to. This URL will receive POST requests when a payment is completed, failed, or cancelled.
 
-The `sails.pay.checkout()` method creates a payment checkout URL that you can redirect your users to for completing their payment.
+Set this to your webhook handler endpoint, e.g., `https://yourdomain.com/webhooks/paga`.
 
-#### Basic usage
+## Default environment variables
 
-```js
-const checkoutUrl = await sails.pay.checkout({
-  amount: 50000,
-  email: 'customer@example.com',
-  reference: 'ORDER-12345'
-})
+If you don't provide configuration values, the adapter will automatically look for these environment variables as fallbacks:
 
-return res.redirect(checkoutUrl)
-```
+| Config Value  | Environment Variable |
+| ------------- | -------------------- |
+| `publicKey`   | `PAGA_PUBLIC_KEY`    |
+| `secretKey`   | `PAGA_SECRET_KEY`    |
+| `callbackUrl` | `PAGA_CALLBACK_URL`  |
 
-#### With all options
+This means you can simply set the environment variables and use a minimal configuration:
 
 ```js
-const checkoutUrl = await sails.pay.checkout({
-  amount: 50000,
-  email: 'customer@example.com',
-  reference: 'ORDER-12345',
-  currency: 'NGN',
-  callbackUrl: 'https://yourdomain.com/payment/callback',
-  customerName: 'John Doe',
-  customerPhone: '+2348012345678',
-  metadata: JSON.stringify({
-    orderId: '12345',
-    customerId: 'CUST-789'
-  })
-})
-
-return res.redirect(checkoutUrl)
-```
-
-### Parameters
-
-All parameters for `sails.pay.checkout()`:
-
-| Parameter       | Type   | Required | Description                                                                |
-| --------------- | ------ | -------- | -------------------------------------------------------------------------- |
-| `amount`        | Number | Yes      | Amount in the smallest currency unit (kobo for NGN). E.g., 50000 = ₦500.00 |
-| `email`         | String | Yes      | Customer's email address                                                   |
-| `reference`     | String | Yes      | Unique transaction reference for your records                              |
-| `currency`      | String | No       | Transaction currency. Defaults to "NGN". Supports "NGN" and "USD"          |
-| `callbackUrl`   | String | No       | URL to redirect to after payment completion                                |
-| `customerName`  | String | No       | Customer's full name                                                       |
-| `customerPhone` | String | No       | Customer's phone number in international format                            |
-| `metadata`      | String | No       | Stringified JSON object of custom data for your records                    |
-
-### Example in an action
-
-```js
-module.exports = {
-  friendlyName: 'Checkout',
-  description: 'Create a payment checkout',
-
-  inputs: {
-    amount: {
-      type: 'number',
-      required: true
-    },
-    email: {
-      type: 'string',
-      required: true
-    },
-    customerName: {
-      type: 'string',
-      required: true
+module.exports.pay = {
+  providers: {
+    default: {
+      adapter: '@sails-pay/paga'
     }
-  },
-
-  exits: {
-    success: {
-      responseType: 'redirect'
-    }
-  },
-
-  fn: async function ({ amount, email, customerName }) {
-    const reference = `ORD-${Date.now()}`
-
-    const checkoutUrl = await sails.pay.checkout({
-      amount: amount * 100,
-      email,
-      customerName,
-      reference,
-      currency: 'NGN',
-      callbackUrl: `${sails.config.custom.baseUrl}/payment/verify`
-    })
-
-    return checkoutUrl
   }
 }
 ```
 
-## About Paga
+## Next steps
 
-Paga is Nigeria's leading mobile payment platform trusted by over 30 million users. It offers:
-
-- **Mobile-first approach**: Perfect for Nigeria's mobile-centric market
-- **Multiple payment channels**: Bank transfers, mobile wallets, cards, and USSD
-- **Competitive rates**: 1.5% on local transactions with same-day settlement
-- **Wide reach**: 17m+ users and 27,000+ financial service access points
-- **Regulatory compliance**: Licensed by the Central Bank of Nigeria (CBN)
+- [Creating checkouts](/sails-pay/checkout) - Redirect users to complete payment
 
 ## Additional resources
 

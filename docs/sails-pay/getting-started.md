@@ -7,8 +7,8 @@ title: Getting started
 titleTemplate: Sails Pay
 description: Getting started with Sails Pay in a Sails application
 next:
-  text: Lemon Squeezy
-  link: '/sails-pay/lemonsqueezy'
+  text: Providers
+  link: /sails-pay/providers
 editLink: true
 ---
 
@@ -38,6 +38,18 @@ Sails Pay offers adapters for various payment providers. Simply install the adap
 npm i @sails-pay/lemonsqueezy
 ```
 
+```sh [Flutterwave]
+npm i @sails-pay/flutterwave
+```
+
+```sh [Paystack]
+npm i @sails-pay/paystack
+```
+
+```sh [Paga]
+npm i @sails-pay/paga
+```
+
 :::
 
 ::: tip
@@ -46,9 +58,10 @@ If you can't find your payment provider, consider [sponsoring Kelvin's time](htt
 
 Next, follow the instructions below to setup your preferred payment provider.
 
-- [Lemon Squeezy 🍋](/sails-pay/lemonsqueezy)
-- PayPal <Badge type="warning" text="coming soon" />
-- Stripe <Badge type="warning" text="coming soon" />
+- [Lemon Squeezy](/sails-pay/lemonsqueezy)
+- [Flutterwave](/sails-pay/flutterwave)
+- [Paystack](/sails-pay/paystack)
+- [Paga](/sails-pay/paga)
 
 ## Star the repo :star:
 

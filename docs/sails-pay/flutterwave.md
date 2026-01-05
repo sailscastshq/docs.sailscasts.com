@@ -7,13 +7,47 @@ title: Flutterwave
 titleTemplate: Sails Pay
 description: Learn how to use the Flutterwave adapter for Sails Pay
 prev:
-  text: Getting started
-  link: /sails-pay/getting-started
-next: false
+  text: Lemon Squeezy
+  link: /sails-pay/lemonsqueezy
+next:
+  text: Paga
+  link: /sails-pay/paga
 editLink: true
 ---
 
 # Flutterwave
+
+[Flutterwave](https://flutterwave.com) is Africa's leading payment technology company, founded in 2016 and headquartered in San Francisco. The company provides payment infrastructure that enables businesses to accept payments from customers across Africa and globally.
+
+## Why Flutterwave?
+
+Flutterwave has established itself as a powerhouse in African fintech with impressive reach and capabilities:
+
+- **Extensive Coverage**: Operates in 34+ African countries with regulatory licenses in the US, UK, EU, Canada, and India
+- **Multi-Currency Support**: Accept payments in 30+ currencies
+- **Multiple Payment Methods**: Cards, bank transfers, mobile money, USSD, and more
+- **Proven Scale**: Processed $1 billion for East Asian merchants in H1 2025 alone
+- **Enterprise Ready**: Used by global brands including Microsoft, Uber, and Booking.com
+
+## Getting Started with Flutterwave
+
+Before integrating Flutterwave with Sails Pay, you'll need a Flutterwave account:
+
+1. **Create a sandbox account**: Sign up at [Flutterwave Sandbox](https://onboarding.flutterwave.com/signup/steps/670fd6ca31db5a18fd7d03a7) to get started with their v4 API
+2. **Get API credentials**: Access your test API keys from the sandbox dashboard
+3. **Test your integration**: Use the sandbox to explore APIs and test webhooks
+4. **Go live**: Once ready, complete KYC verification for production access
+
+### What you get with a Sandbox account
+
+- **Test API Keys**: Explore and test Flutterwave APIs, and generate secret keys to securely grant your applications access to sensitive data and functions
+- **Test Webhooks**: Securely test how your applications handle real-time data updates, ensuring everything works smoothly before going live
+
+::: tip
+Start with a [Sandbox account](https://onboarding.flutterwave.com/signup/steps/670fd6ca31db5a18fd7d03a7) to develop and test your integration. Test credentials start with `FLWPUBK_TEST-` and `FLWSECK_TEST-`.
+:::
+
+## Installation
 
 ### Specifying the adapter
 
@@ -46,8 +80,9 @@ module.exports = {
   pay: {
     providers: {
       default: {
-        publicKey: 'FLWPUBK_TEST-xxxxxxxxxxxxxxxxxxxxxx',
-        secretKey: 'FLWSECK_TEST-xxxxxxxxxxxxxxxxxxxxxx'
+        clientId: 'FLWPUBK_TEST-xxxxxxxxxxxxxxxxxxxxxx',
+        clientSecret: 'FLWSECK_TEST-xxxxxxxxxxxxxxxxxxxxxx',
+        encryptionKey: 'FLWSECK_TESTxxxxxxxxxxxxxxxx'
       }
     }
   }
@@ -63,8 +98,9 @@ module.exports.pay = {
   providers: {
     default: {
       adapter: '@sails-pay/flutterwave',
-      publicKey: process.env.FLUTTERWAVE_PUBLIC_KEY,
-      secretKey: process.env.FLUTTERWAVE_SECRET_KEY
+      clientId: process.env.FLUTTERWAVE_CLIENT_ID,
+      clientSecret: process.env.FLUTTERWAVE_SECRET,
+      encryptionKey: process.env.FLUTTERWAVE_ENCRYPTION_KEY
     }
   }
 }
@@ -78,142 +114,46 @@ Note we are using environment variables in production as you don't want to commi
 
 If you're unsure how to obtain the configuration values shown above, please refer to the links and instructions provided below:
 
-### **`publicKey`** and **`secretKey`**
+### **`clientId`**, **`clientSecret`**, and **`encryptionKey`**
 
-To get your Flutterwave API keys:
+To get your Flutterwave API credentials:
 
 1. Log in to your [Flutterwave Dashboard](https://dashboard.flutterwave.com)
 2. Click on **Settings** from the left sidebar
 3. Select **API Keys** under the Developers tab
-4. Copy your **Public Key** and **Secret Key**
+4. Copy your **Public Key** (use as `clientId`), **Secret Key** (use as `clientSecret`), and **Encryption Key**
 5. Use test mode keys for development (starting with `FLWPUBK_TEST-` and `FLWSECK_TEST-`)
 6. Switch to live mode for production keys
 
 ::: warning
-Keep your secret key secure! Never commit it to source control or expose it in client-side code.
+Keep your secret key and encryption key secure! Never commit them to source control or expose them in client-side code.
 :::
 
-## Usage
+## Default environment variables
 
-### Creating a checkout
+If you don't provide configuration values, the adapter will automatically look for these environment variables as fallbacks:
 
-The `sails.pay.checkout()` method creates a payment checkout URL that you can redirect your users to for completing their payment.
+| Config Value    | Environment Variable         |
+| --------------- | ---------------------------- |
+| `clientId`      | `FLUTTERWAVE_CLIENT_ID`      |
+| `clientSecret`  | `FLUTTERWAVE_SECRET`         |
+| `encryptionKey` | `FLUTTERWAVE_ENCRYPTION_KEY` |
 
-#### Basic usage
-
-```js
-const checkoutUrl = await sails.pay.checkout({
-  amount: 5000,
-  email: 'customer@example.com',
-  txRef: 'ORDER-12345'
-})
-
-return res.redirect(checkoutUrl)
-```
-
-#### With all options
+This means you can simply set the environment variables and use a minimal configuration:
 
 ```js
-const checkoutUrl = await sails.pay.checkout({
-  amount: 5000,
-  email: 'customer@example.com',
-  txRef: 'ORDER-12345',
-  currency: 'NGN',
-  redirectUrl: 'https://yourdomain.com/payment/callback',
-  customerName: 'John Doe',
-  customerPhone: '08012345678',
-  paymentOptions: 'card,banktransfer,ussd',
-  customizations: {
-    title: 'My Store',
-    description: 'Payment for order #12345',
-    logo: 'https://yourdomain.com/logo.png'
-  },
-  meta: {
-    orderId: '12345',
-    customerId: 'CUST-789'
-  }
-})
-
-return res.redirect(checkoutUrl)
-```
-
-### Parameters
-
-All parameters for `sails.pay.checkout()`:
-
-| Parameter        | Type   | Required | Description                                                                          |
-| ---------------- | ------ | -------- | ------------------------------------------------------------------------------------ |
-| `amount`         | Number | Yes      | Amount to charge (in major currency units). E.g., 5000 = ₦5,000.00                   |
-| `email`          | String | Yes      | Customer's email address                                                             |
-| `txRef`          | String | Yes      | Unique transaction reference. Use only alphanumeric characters                       |
-| `currency`       | String | No       | Transaction currency. Defaults to "NGN". Supports 30+ currencies                     |
-| `redirectUrl`    | String | No       | URL to redirect to after payment. Defaults to your dashboard callback URL            |
-| `customerName`   | String | No       | Customer's full name                                                                 |
-| `customerPhone`  | String | No       | Customer's phone number                                                              |
-| `paymentOptions` | String | No       | Comma-separated payment methods to allow. E.g., "card,banktransfer,ussd,mobilemoney" |
-| `customizations` | Object | No       | Customize checkout page with `title`, `description`, and `logo` (URL)                |
-| `meta`           | Object | No       | Custom metadata object for your records                                              |
-
-### Example in an action
-
-```js
-module.exports = {
-  friendlyName: 'Checkout',
-  description: 'Create a payment checkout',
-
-  inputs: {
-    amount: {
-      type: 'number',
-      required: true
-    },
-    email: {
-      type: 'string',
-      required: true
-    },
-    customerName: {
-      type: 'string',
-      required: true
+module.exports.pay = {
+  providers: {
+    default: {
+      adapter: '@sails-pay/flutterwave'
     }
-  },
-
-  exits: {
-    success: {
-      responseType: 'redirect'
-    }
-  },
-
-  fn: async function ({ amount, email, customerName }) {
-    const txRef = `TXN-${Date.now()}`
-
-    const checkoutUrl = await sails.pay.checkout({
-      amount,
-      email,
-      customerName,
-      txRef,
-      currency: 'NGN',
-      redirectUrl: `${sails.config.custom.baseUrl}/payment/verify`,
-      paymentOptions: 'card,banktransfer,ussd',
-      customizations: {
-        title: 'My Shop',
-        description: 'Purchase from My Shop'
-      }
-    })
-
-    return checkoutUrl
   }
 }
 ```
 
-## About Flutterwave
+## Next steps
 
-Flutterwave is Africa's leading payment technology company that provides a payment infrastructure for global merchants and payment service providers. Key features:
-
-- **Multi-currency support**: Accept payments in 30+ currencies
-- **Multiple payment methods**: Cards, bank transfers, mobile money, USSD, and more
-- **Global reach**: Process payments across 150+ countries
-- **High security**: PCI DSS compliant with ISO 27001 & 22301 certification
-- **Developer-friendly**: Comprehensive APIs, SDKs, and documentation
-- **Instant settlement**: Fast payment processing and settlement
+- [Creating checkouts](/sails-pay/checkout) - Redirect users to complete payment
 
 ## Additional resources
 
