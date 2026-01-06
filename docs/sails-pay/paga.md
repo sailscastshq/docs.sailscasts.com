@@ -129,6 +129,30 @@ The callback URL is a webhook endpoint in your application that Paga will send p
 
 Set this to your webhook handler endpoint, e.g., `https://yourdomain.com/webhooks/paga`.
 
+## Local development
+
+Paga does not accept localhost URLs for `callbackUrl` or `chargeUrl`. To test webhooks and redirects during local development, you'll need to expose your local server using a tunneling service:
+
+- [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) - Free, requires a Cloudflare account
+- [ngrok](https://ngrok.com/) - Free tier available
+
+Once you have a public URL (e.g., `https://myapp.ngrok.io`), use it for your `callbackUrl` and `chargeUrl` in development:
+
+```js
+// config/local.js
+module.exports = {
+  pay: {
+    providers: {
+      default: {
+        publicKey: 'your_test_public_key',
+        secretKey: 'your_test_secret_key',
+        callbackUrl: 'https://myapp.ngrok.io/webhooks/paga'
+      }
+    }
+  }
+}
+```
+
 ## Default environment variables
 
 If you don't provide configuration values, the adapter will automatically look for these environment variables as fallbacks:
@@ -150,6 +174,72 @@ module.exports.pay = {
   }
 }
 ```
+
+## Handling redirect response
+
+After payment completion, Paga redirects the customer to your `chargeUrl` (if provided) with query parameters containing the payment result. Here's what Paga sends:
+
+| Parameter          | Type   | Description                                                                 |
+| ------------------ | ------ | --------------------------------------------------------------------------- |
+| `charge_reference` | String | Your `paymentReference` (or a Paga-generated one if you didn't provide one) |
+| `status_message`   | String | `"success"` for successful payments                                         |
+| `status_code`      | String | `"0"` indicates a successful payment                                        |
+
+### Example redirect URL
+
+```
+https://yoursite.com/store?charge_reference=ORD-123456&status_message=success&status_code=0
+```
+
+### Handling the redirect in your action
+
+```js
+module.exports = {
+  friendlyName: 'View store',
+
+  inputs: {
+    charge_reference: {
+      type: 'string'
+    },
+    status_code: {
+      type: 'string'
+    },
+    status_message: {
+      type: 'string'
+    }
+  },
+
+  exits: {
+    success: {
+      responseType: 'inertia' // or 'view'
+    }
+  },
+
+  fn: async function ({ charge_reference, status_code, status_message }) {
+    // Check if this is a redirect from Paga
+    const hasPaymentResponse = !!charge_reference
+    const paymentSuccess = hasPaymentResponse && status_code === '0'
+
+    if (paymentSuccess) {
+      // Payment was successful
+      // You can look up the order using charge_reference
+    }
+
+    return {
+      page: 'store/index',
+      props: {
+        paymentReference: hasPaymentResponse ? charge_reference : null,
+        statusCode: hasPaymentResponse ? status_code : null,
+        statusMessage: hasPaymentResponse ? status_message : null
+      }
+    }
+  }
+}
+```
+
+::: tip
+The redirect response is for displaying immediate feedback to the user. Always verify payments via the webhook callback for updating order status in your database, as the redirect URL can be manipulated by users.
+:::
 
 ## Next steps
 
