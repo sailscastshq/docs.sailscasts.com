@@ -7,10 +7,14 @@ title: Installation
 editLink: true
 ---
 
-# Intallation
+# Installation
 
-In your Sails project run the below command to install wish and it's node-fetch peer-dependency:
+In your Sails project run the below command to install wish:
 
 ```sh
-npm i --save sails-hook-wish @sailscasts/sails-hook-node-fetch
+npm i sails-hook-wish
 ```
+
+::: info Node.js 18+ required
+Wish uses native `fetch` which is available in Node.js 18 and later.
+:::
