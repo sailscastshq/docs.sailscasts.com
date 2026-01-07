@@ -3,50 +3,33 @@ head:
   - - meta
     - property: 'og:image'
       content: https://docs.sailscasts.com/sails-wish-social.png
-title: GitHub OAuth
+title: GitHub
 editLink: true
 ---
 
-# GitHub OAuth
+# GitHub
 
 To set up GitHub OAuth for your app, you'll need to get your `clientId` and `clientSecret` credentials from GitHub. See [Creating an OAuth App](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app) for instructions.
 
 ## Configuration
 
-Add your GitHub credentials under the `wish` namespace in `config/local.js`:
+Add your GitHub provider in `config/wish.js`:
 
 ```js
-// config/local.js
-module.exports = {
-  wish: {
+// config/wish.js
+module.exports.wish = {
+  provider: 'github',
+  providers: {
     github: {
-      clientId: 'CLIENT_ID',
-      clientSecret: 'CLIENT_SECRET',
+      clientId: 'your-client-id',
+      clientSecret: 'your-client-secret',
       redirect: 'http://localhost:1337/auth/callback'
     }
   }
 }
 ```
 
-For production, use environment variables in `config/custom.js`:
-
-```js
-// config/custom.js
-module.exports.wish = {
-  github: {
-    clientId: process.env.GITHUB_CLIENT_ID,
-    clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    redirect:
-      process.env.GITHUB_CALLBACK_URL || 'https://example.com/auth/callback'
-  }
-}
-```
-
-::: tip
-Notice we are using environment variables as it's best practice not to commit your secret credentials. In the case of `local.js` that's okay because that file is never committed to version control.
-:::
-
-### Environment Variables
+Or use environment variables (Wish automatically detects these):
 
 | Variable               | Description                             |
 | ---------------------- | --------------------------------------- |
@@ -54,18 +37,44 @@ Notice we are using environment variables as it's best practice not to commit yo
 | `GITHUB_CLIENT_SECRET` | Your GitHub OAuth App Client Secret     |
 | `GITHUB_CALLBACK_URL`  | The callback URL registered with GitHub |
 
-## Set Default Provider (Optional)
+```js
+// config/wish.js - credentials loaded from env vars
+module.exports.wish = {
+  provider: 'github',
+  providers: {
+    github: {}
+  }
+}
+```
 
-If GitHub is your only OAuth provider, set it as the default in `config/wish.js`:
+### Customizing Scopes
+
+To request additional permissions from GitHub:
 
 ```js
 // config/wish.js
 module.exports.wish = {
-  provider: 'github'
+  provider: 'github',
+  providers: {
+    github: {
+      scopes: ['user:email', 'read:user', 'repo']
+    }
+  }
 }
 ```
 
-This allows you to use the simpler API without specifying the provider each time.
+See [GitHub OAuth Scopes](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps) for available scopes.
+
+### Defaults
+
+Wish provides these defaults for GitHub (override only what you need):
+
+| Option           | Default                                       |
+| ---------------- | --------------------------------------------- |
+| `scopes`         | `['user:email']`                              |
+| `scopeSeparator` | `,`                                           |
+| `tokenUrl`       | `https://github.com/login/oauth/access_token` |
+| `userUrl`        | `https://api.github.com/user`                 |
 
 ## The Redirect
 
@@ -94,11 +103,7 @@ module.exports = {
   },
 
   fn: async function () {
-    // If you set a default provider in config/wish.js:
     return sails.wish.redirect()
-
-    // Or explicitly specify the provider:
-    // return sails.wish.provider('github').redirect()
   }
 }
 ```
@@ -139,7 +144,6 @@ module.exports = {
 
     // Get the GitHub user info
     const githubUser = await sails.wish.user(code)
-    // Or: await sails.wish.provider('github').user(code)
 
     User.findOrCreate(
       { githubId: githubUser.id },

@@ -222,11 +222,11 @@ function wishGuide() {
       ]
     },
     {
-      text: 'Basic usage',
+      text: 'Providers',
       collapsible: true,
       items: [
-        { text: 'GitHub OAuth', link: '/wish/github' },
-        { text: 'Google OAuth', link: '/wish/google' }
+        { text: 'GitHub', link: '/wish/github' },
+        { text: 'Google', link: '/wish/google' }
       ]
     }
   ]

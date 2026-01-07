@@ -3,50 +3,33 @@ head:
   - - meta
     - property: 'og:image'
       content: https://docs.sailscasts.com/sails-wish-social.png
-title: Google OAuth
+title: Google
 editLink: true
 ---
 
-# Google OAuth
+# Google
 
 To set up Google OAuth for your app, you'll need to get your `clientId` and `clientSecret` credentials from the Google Console. See [Google OAuth 2.0](https://developers.google.com/identity/protocols/oauth2) for instructions.
 
 ## Configuration
 
-Add your Google credentials under the `wish` namespace in `config/local.js`:
+Add your Google provider in `config/wish.js`:
 
 ```js
-// config/local.js
-module.exports = {
-  wish: {
+// config/wish.js
+module.exports.wish = {
+  provider: 'google',
+  providers: {
     google: {
-      clientId: 'CLIENT_ID',
-      clientSecret: 'CLIENT_SECRET',
+      clientId: 'your-client-id',
+      clientSecret: 'your-client-secret',
       redirect: 'http://localhost:1337/auth/callback'
     }
   }
 }
 ```
 
-For production, use environment variables in `config/custom.js`:
-
-```js
-// config/custom.js
-module.exports.wish = {
-  google: {
-    clientId: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    redirect:
-      process.env.GOOGLE_CALLBACK_URL || 'https://example.com/auth/callback'
-  }
-}
-```
-
-::: tip
-Notice we are using environment variables as it's best practice not to commit your secret credentials. In the case of `local.js` that's okay because that file is never committed to version control.
-:::
-
-### Environment Variables
+Or use environment variables (Wish automatically detects these):
 
 | Variable               | Description                             |
 | ---------------------- | --------------------------------------- |
@@ -54,18 +37,48 @@ Notice we are using environment variables as it's best practice not to commit yo
 | `GOOGLE_CLIENT_SECRET` | Your Google OAuth Client Secret         |
 | `GOOGLE_CALLBACK_URL`  | The callback URL registered with Google |
 
-## Set Default Provider (Optional)
+```js
+// config/wish.js - credentials loaded from env vars
+module.exports.wish = {
+  provider: 'google',
+  providers: {
+    google: {}
+  }
+}
+```
 
-If Google is your only OAuth provider, set it as the default in `config/wish.js`:
+### Customizing Scopes
+
+To request additional permissions from Google:
 
 ```js
 // config/wish.js
 module.exports.wish = {
-  provider: 'google'
+  provider: 'google',
+  providers: {
+    google: {
+      scopes: [
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/calendar.readonly'
+      ]
+    }
+  }
 }
 ```
 
-This allows you to use the simpler API without specifying the provider each time.
+See [Google OAuth Scopes](https://developers.google.com/identity/protocols/oauth2/scopes) for available scopes.
+
+### Defaults
+
+Wish provides these defaults for Google (override only what you need):
+
+| Option           | Default                                                  |
+| ---------------- | -------------------------------------------------------- |
+| `scopes`         | `['...userinfo.profile', '...userinfo.email']`           |
+| `scopeSeparator` | ` ` (space)                                              |
+| `tokenUrl`       | `https://oauth2.googleapis.com/token`                    |
+| `userUrl`        | `https://www.googleapis.com/oauth2/v2/userinfo?alt=json` |
 
 ## The Redirect
 
@@ -94,11 +107,7 @@ module.exports = {
   },
 
   fn: async function () {
-    // If you set a default provider in config/wish.js:
     return sails.wish.redirect()
-
-    // Or explicitly specify the provider:
-    // return sails.wish.provider('google').redirect()
   }
 }
 ```
@@ -139,7 +148,6 @@ module.exports = {
 
     // Get the Google user info
     const googleUser = await sails.wish.user(code)
-    // Or: await sails.wish.provider('google').user(code)
 
     User.findOrCreate(
       { googleId: googleUser.id },
