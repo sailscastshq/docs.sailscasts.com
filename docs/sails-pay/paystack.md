@@ -7,13 +7,42 @@ title: Paystack
 titleTemplate: Sails Pay
 description: Learn how to use the Paystack adapter for Sails Pay
 prev:
-  text: Getting started
-  link: /sails-pay/getting-started
-next: false
+  text: Paga
+  link: /sails-pay/paga
+next:
+  text: Creating checkouts
+  link: /sails-pay/checkout
 editLink: true
 ---
 
 # Paystack
+
+[Paystack](https://paystack.com) is a Nigerian fintech company that provides online and offline payment solutions for businesses across Africa. Founded in 2015 by Shola Akinlade and Ezra Olubi, Paystack was accepted into Y Combinator in 2016 as the accelerator's first Nigerian startup. In 2020, Paystack was acquired by Stripe for over $200 million—the largest startup acquisition from Nigeria at the time.
+
+## Why Paystack?
+
+Paystack has become the go-to payment gateway for African businesses with compelling advantages:
+
+- **Market Leader**: Processes more than half of all online transactions in Nigeria
+- **Trusted by 60,000+ Businesses**: From startups to enterprises like FedEx, UPS, MTN, and AXA Mansard
+- **Stripe-Backed**: Benefits from Stripe's global infrastructure and continued investment
+- **Developer-First**: Known for excellent documentation, robust APIs, and developer tools
+- **Comprehensive Tools**: Includes fraud detection, detailed dashboards, subscription billing, and identity verification
+
+## Getting Started with Paystack
+
+Before integrating Paystack with Sails Pay, you'll need a Paystack account:
+
+1. **Create an account**: Sign up at [dashboard.paystack.com](https://dashboard.paystack.com)
+2. **Verify your business**: Complete the KYC process with required documents
+3. **Get API credentials**: Access your test and live secret keys from Settings → API Keys
+4. **Test your integration**: Use test mode keys (starting with `sk_test_`) during development
+
+::: tip
+Paystack provides a robust test environment. Use test credentials to thoroughly test your payment flows before switching to live keys. See [Test Payments](https://paystack.com/docs/payments/test-payments/) for test card numbers and credentials.
+:::
+
+## Installation
 
 ### Specifying the adapter
 
@@ -46,7 +75,9 @@ module.exports = {
   pay: {
     providers: {
       default: {
-        apiKey: 'sk_test_xxxxxxxxxxxxxxxxxxxxxx'
+        secretKey: 'sk_test_xxxxxxxxxxxxxxxxxxxxxx',
+        publicKey: 'pk_test_xxxxxxxxxxxxxxxxxxxxxx',
+        callbackUrl: 'http://localhost:1337/payment/callback'
       }
     }
   }
@@ -62,7 +93,9 @@ module.exports.pay = {
   providers: {
     default: {
       adapter: '@sails-pay/paystack',
-      apiKey: process.env.PAYSTACK_SECRET_KEY
+      secretKey: process.env.PAYSTACK_SECRET_KEY,
+      publicKey: process.env.PAYSTACK_PUBLIC_KEY,
+      callbackUrl: process.env.PAYSTACK_CALLBACK_URL
     }
   }
 }
@@ -76,9 +109,9 @@ Note we are using environment variables in production as you don't want to commi
 
 If you're unsure how to obtain the configuration values shown above, please refer to the links and instructions provided below:
 
-### **`apiKey`**
+### **`secretKey`** (required)
 
-To get your Paystack API key:
+To get your Paystack secret key:
 
 1. Log in to your [Paystack Dashboard](https://dashboard.paystack.com)
 2. Navigate to **Settings** → **Developers** → **API Keys & Webhooks**
@@ -88,104 +121,73 @@ To get your Paystack API key:
 Keep your secret key secure! Never commit it to source control or expose it in client-side code.
 :::
 
-## Usage
+### **`publicKey`** (optional)
 
-### Creating a checkout
+To get your Paystack public key:
 
-The `sails.pay.checkout()` method creates a payment checkout URL that you can redirect your users to for completing their payment.
+1. Log in to your [Paystack Dashboard](https://dashboard.paystack.com)
+2. Navigate to **Settings** → **Developers** → **API Keys & Webhooks**
+3. Copy your **Public Key** (starts with `pk_test_` for test mode or `pk_live_` for production)
 
-#### Basic usage
+::: tip
+The public key is safe to use in client-side code and is typically used for inline payment integrations.
+:::
+
+### **`callbackUrl`** (optional)
+
+The callback URL is where Paystack redirects users after a payment attempt. Setting this globally in your config means you don't have to specify it for every checkout call.
 
 ```js
-const checkoutUrl = await sails.pay.checkout({
-  amount: 50000,
-  email: 'customer@example.com'
-})
-
-return res.redirect(checkoutUrl)
+callbackUrl: 'https://yourdomain.com/payment/callback'
 ```
 
-#### With all options
+::: tip
+You can override this per-transaction by passing `callbackUrl` directly to the checkout method.
+:::
+
+## Local development with webhooks
+
+Paystack webhooks require a publicly accessible URL. To test webhooks during local development, you'll need to expose your local server using a tunneling service:
+
+- [localtunnel](https://localtunnel.github.io/www/) - Free, no account required
+- [ngrok](https://ngrok.com/) - Free tier available
+
+::: warning
+Cloudflare Tunnel may not work reliably with Paystack webhooks. If you're experiencing webhook delivery issues with Cloudflare Tunnel, try using localtunnel or ngrok instead.
+:::
+
+Once you have a public URL (e.g., `https://myapp.loca.lt`), configure your Paystack webhook in the dashboard:
+
+1. Log in to your [Paystack Dashboard](https://dashboard.paystack.com)
+2. Navigate to **Settings** → **API Keys & Webhooks**
+3. Add your webhook URL: `https://myapp.loca.lt/webhooks/paystack`
+4. Make sure you configure the webhook in the same mode (Test/Live) as your transactions
+
+## Default environment variables
+
+If you don't provide configuration values, the adapter will automatically look for these environment variables as fallbacks:
+
+| Config Value  | Environment Variable    |
+| ------------- | ----------------------- |
+| `secretKey`   | `PAYSTACK_SECRET_KEY`   |
+| `publicKey`   | `PAYSTACK_PUBLIC_KEY`   |
+| `callbackUrl` | `PAYSTACK_CALLBACK_URL` |
+
+This means you can simply set the environment variables and use a minimal configuration:
 
 ```js
-const checkoutUrl = await sails.pay.checkout({
-  amount: 50000,
-  email: 'customer@example.com',
-  currency: 'NGN',
-  reference: 'ORDER-12345',
-  callbackUrl: 'https://yourdomain.com/payment/callback',
-  plan: 'PLN_xxxxxxxxxx',
-  invoiceLimit: 12,
-  metadata: JSON.stringify({
-    orderId: '12345',
-    customerId: 'CUST-789'
-  }),
-  channels: ['card', 'bank', 'ussd'],
-  splitCode: 'SPL_xxxxxxxxxx',
-  subaccount: 'ACCT_xxxxxxxxxx',
-  transactionCharge: 10000,
-  bearer: 'account'
-})
-
-return res.redirect(checkoutUrl)
-```
-
-### Parameters
-
-All parameters for `sails.pay.checkout()`:
-
-| Parameter           | Type   | Required | Description                                                                                                        |
-| ------------------- | ------ | -------- | ------------------------------------------------------------------------------------------------------------------ |
-| `amount`            | Number | Yes      | Amount in the smallest currency unit (kobo for NGN). E.g., 50000 = ₦500.00                                         |
-| `email`             | String | Yes      | Customer's email address                                                                                           |
-| `currency`          | String | No       | Transaction currency (defaults to your integration currency). E.g., "NGN", "USD", "GHS"                            |
-| `reference`         | String | No       | Unique transaction reference. Only alphanumeric, hyphens, periods, and equal signs allowed                         |
-| `callbackUrl`       | String | No       | URL to redirect to after payment. Overrides dashboard callback URL for this transaction                            |
-| `plan`              | String | No       | Plan code for subscription payments. This invalidates the `amount` parameter                                       |
-| `invoiceLimit`      | Number | No       | Number of times to charge customer during subscription                                                             |
-| `metadata`          | String | No       | Stringified JSON object of custom data. See [Paystack metadata docs](https://paystack.com/docs/payments/metadata/) |
-| `channels`          | Array  | No       | Payment channels to allow. Options: `card`, `bank`, `ussd`, `qr`, `mobile_money`, `bank_transfer`, `eft`           |
-| `splitCode`         | String | No       | Split code for transaction split                                                                                   |
-| `subaccount`        | String | No       | Subaccount code that owns the payment                                                                              |
-| `transactionCharge` | Number | No       | Amount to override split configuration for single split payment                                                    |
-| `bearer`            | String | No       | Who bears transaction charges: `account` or `subaccount` (defaults to `account`)                                   |
-
-### Example in an action
-
-```js
-module.exports = {
-  friendlyName: 'Checkout',
-  description: 'Create a payment checkout',
-
-  inputs: {
-    amount: {
-      type: 'number',
-      required: true
-    },
-    email: {
-      type: 'string',
-      required: true
+module.exports.pay = {
+  providers: {
+    default: {
+      adapter: '@sails-pay/paystack'
     }
-  },
-
-  exits: {
-    success: {
-      responseType: 'redirect'
-    }
-  },
-
-  fn: async function ({ amount, email }) {
-    const checkoutUrl = await sails.pay.checkout({
-      amount: amount * 100,
-      email,
-      currency: 'NGN',
-      callbackUrl: `${sails.config.custom.baseUrl}/payment/verify`
-    })
-
-    return checkoutUrl
   }
 }
 ```
+
+## Next steps
+
+- [Creating checkouts](/sails-pay/checkout) - Redirect users to complete payment
 
 ## Additional resources
 

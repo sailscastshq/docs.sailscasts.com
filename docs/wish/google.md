@@ -3,47 +3,91 @@ head:
   - - meta
     - property: 'og:image'
       content: https://docs.sailscasts.com/sails-wish-social.png
-title: Google OAuth
+title: Google
 editLink: true
 ---
 
-# Google OAuth
+# Google
 
-To setup up a Google OAuth for your app, Wish expects the following key and property in either `config/local.js` or `config/custom.js`.
+To set up Google OAuth for your app, you'll need to get your `clientId` and `clientSecret` credentials from the Google Console. See [Google OAuth 2.0](https://developers.google.com/identity/protocols/oauth2) for instructions.
 
-For example you can have a development Google `clientId` and `clientSecret` in `config/local.js`
+## Configuration
 
-> Do make sure to get the needed `clientId` and `clientSecret` credentials from the Google Console. You can see [here](https://developers.google.com/identity/protocols/oauth2) for instructions on how to get those credentials
+Add your Google provider in `config/wish.js`:
 
 ```js
-google: {
-    clientId: 'CLIENT_ID',
-    clientSecret: 'CLIENT_SECRET',
-    redirect: 'http://localhost:1337/auth/callback',
-  },
+// config/wish.js
+module.exports.wish = {
+  provider: 'google',
+  providers: {
+    google: {
+      clientId: 'your-client-id',
+      clientSecret: 'your-client-secret',
+      redirect: 'http://localhost:1337/auth/callback'
+    }
+  }
+}
 ```
 
-You can override this value for production in either `custom.js` or in an environment specific `custom.js`. I personally set this up for https://sailscasts.com to override the `local.js` value so I can have 3 environments with 3 different `clientId`, `clientSecret`, and `redirect` values.
+Or use environment variables (Wish automatically detects these):
+
+| Variable               | Description                             |
+| ---------------------- | --------------------------------------- |
+| `GOOGLE_CLIENT_ID`     | Your Google OAuth Client ID             |
+| `GOOGLE_CLIENT_SECRET` | Your Google OAuth Client Secret         |
+| `GOOGLE_CALLBACK_URL`  | The callback URL registered with Google |
 
 ```js
-// custom.js
-google: {
-    clientId: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    redirect: 'https://example.com/auth/callback',
-  },
+// config/wish.js - credentials loaded from env vars
+module.exports.wish = {
+  provider: 'google',
+  providers: {
+    google: {}
+  }
+}
 ```
 
-> Notice I am using environment variables as it's best practice not to commit your secret credentials. In the case of `local.js` that's okay because that file is never committed to version control.
+### Customizing Scopes
 
-## The redirect
-
-A typical flow is to have a button on your website say like "Sign in with Google". A good example is implemented in [The Boring JavaScript Stack](https://sailscasts.com/boring) mellow template
-
-Clicking that button should call a redirect route you've set in `routes.js`
+To request additional permissions from Google:
 
 ```js
- 'GET /auth/redirect': 'auth/redirect',
+// config/wish.js
+module.exports.wish = {
+  provider: 'google',
+  providers: {
+    google: {
+      scopes: [
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/calendar.readonly'
+      ]
+    }
+  }
+}
+```
+
+See [Google OAuth Scopes](https://developers.google.com/identity/protocols/oauth2/scopes) for available scopes.
+
+### Defaults
+
+Wish provides these defaults for Google (override only what you need):
+
+| Option           | Default                                                  |
+| ---------------- | -------------------------------------------------------- |
+| `scopes`         | `['...userinfo.profile', '...userinfo.email']`           |
+| `scopeSeparator` | ` ` (space)                                              |
+| `tokenUrl`       | `https://oauth2.googleapis.com/token`                    |
+| `userUrl`        | `https://www.googleapis.com/oauth2/v2/userinfo?alt=json` |
+
+## The Redirect
+
+A typical flow is to have a button on your website like "Sign in with Google". A good example is implemented in [The Boring JavaScript Stack](https://sailscasts.com/boring) mellow template.
+
+Clicking that button should call a redirect route you've set in `routes.js`:
+
+```js
+'GET /auth/redirect': 'auth/redirect',
 ```
 
 Now let's author this `auth/redirect` action:
@@ -63,16 +107,18 @@ module.exports = {
   },
 
   fn: async function () {
-    return sails.wish.provider('google').redirect()
+    return sails.wish.redirect()
   }
 }
 ```
 
-Notice the redirect is a one-line of code and when this action is called, it will redirect to GitHub to begin the OAuth process.
+::: info
+Notice the redirect is a one-line of code and when this action is called, it will redirect to Google to begin the OAuth process.
+:::
 
-## The callback
+## The Callback
 
-Note the callback URL we set above that Wish will callback? Let's also implement that starting from the route in `routes.js`
+Note the callback URL we set above that Wish will callback? Let's also implement that starting from the route in `routes.js`:
 
 ```js
 'GET /auth/callback': 'auth/callback',
@@ -101,7 +147,7 @@ module.exports = {
     const req = this.req
 
     // Get the Google user info
-    const googleUser = await sails.wish.provider('google').user(code)
+    const googleUser = await sails.wish.user(code)
 
     User.findOrCreate(
       { googleId: googleUser.id },
@@ -118,7 +164,6 @@ module.exports = {
       if (error) throw error
 
       // Checks if the user email has changed since last log in
-      // And then update the email change candidate which will be used be used to prompt the user to update their email
       if (!wasCreated && user.email !== googleUser.email) {
         await User.updateOne({ id: user.id }).set({
           emailChangeCandidate: googleUser.email
@@ -150,7 +195,6 @@ module.exports = {
       }
 
       // Modify the active session instance.
-      // (This will be persisted when the response is sent.)
       req.session.userId = user.id
       return exits.success('/')
     })
@@ -158,4 +202,4 @@ module.exports = {
 }
 ```
 
-There you have it, a Google OAuth flow with just two routes and one line of code each to both redirect to Google and get the OAuth user details.
+There you have it, a Google OAuth flow with just two routes!

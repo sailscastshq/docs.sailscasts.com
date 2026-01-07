@@ -76,8 +76,8 @@ function nav() {
       text: 'Commercial products',
       items: [
         { text: 'Sailscasts', link: 'https://sailscasts.com' },
-        { text: 'Guppy', link: 'https://sailscasts.com/guppy' },
-        { text: 'Hagfish', link: 'https://hagfish.io' }
+        { text: 'Hagfish', link: 'https://hagfish.app' },
+        { text: 'The African Engineer', link: 'https://africanengineer.com' }
       ]
     },
     {
@@ -222,11 +222,11 @@ function wishGuide() {
       ]
     },
     {
-      text: 'Basic usage',
+      text: 'Providers',
       collapsible: true,
       items: [
-        { text: 'GitHub OAuth', link: '/wish/github' },
-        { text: 'Google OAuth', link: '/wish/google' }
+        { text: 'GitHub', link: '/wish/github' },
+        { text: 'Google', link: '/wish/google' }
       ]
     }
   ]
@@ -444,12 +444,32 @@ function SailsPayGuide() {
     {
       text: 'Introduction',
       collapsed: false,
-      items: [{ text: 'Getting started', link: 'sails-pay/getting-started' }]
+      items: [
+        { text: 'Getting started', link: 'sails-pay/getting-started' },
+        { text: 'Providers', link: 'sails-pay/providers' }
+      ]
     },
     {
       text: 'Payment Providers',
       collapsed: false,
-      items: [{ text: 'Lemon Squeezy', link: 'sails-pay/lemonsqueezy' }]
+      items: [
+        { text: 'Lemon Squeezy', link: 'sails-pay/lemonsqueezy' },
+        { text: 'Flutterwave', link: 'sails-pay/flutterwave' },
+        { text: 'Paga', link: 'sails-pay/paga' },
+        { text: 'Paystack', link: 'sails-pay/paystack' }
+      ]
+    },
+    {
+      text: 'Checkout',
+      collapsed: false,
+      items: [{ text: 'Creating checkouts', link: 'sails-pay/checkout' }]
+    },
+    {
+      text: 'Subscriptions',
+      collapsed: false,
+      items: [
+        { text: 'Retrieving subscriptions', link: 'sails-pay/subscriptions' }
+      ]
     }
   ]
 }
