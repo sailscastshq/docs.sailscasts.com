@@ -75,7 +75,9 @@ module.exports = {
   pay: {
     providers: {
       default: {
-        apiKey: 'sk_test_xxxxxxxxxxxxxxxxxxxxxx'
+        secretKey: 'sk_test_xxxxxxxxxxxxxxxxxxxxxx',
+        publicKey: 'pk_test_xxxxxxxxxxxxxxxxxxxxxx',
+        callbackUrl: 'http://localhost:1337/payment/callback'
       }
     }
   }
@@ -91,7 +93,9 @@ module.exports.pay = {
   providers: {
     default: {
       adapter: '@sails-pay/paystack',
-      apiKey: process.env.PAYSTACK_SECRET_KEY
+      secretKey: process.env.PAYSTACK_SECRET_KEY,
+      publicKey: process.env.PAYSTACK_PUBLIC_KEY,
+      callbackUrl: process.env.PAYSTACK_CALLBACK_URL
     }
   }
 }
@@ -105,9 +109,9 @@ Note we are using environment variables in production as you don't want to commi
 
 If you're unsure how to obtain the configuration values shown above, please refer to the links and instructions provided below:
 
-### **`apiKey`**
+### **`secretKey`** (required)
 
-To get your Paystack API key:
+To get your Paystack secret key:
 
 1. Log in to your [Paystack Dashboard](https://dashboard.paystack.com)
 2. Navigate to **Settings** → **Developers** → **API Keys & Webhooks**
@@ -117,13 +121,39 @@ To get your Paystack API key:
 Keep your secret key secure! Never commit it to source control or expose it in client-side code.
 :::
 
+### **`publicKey`** (optional)
+
+To get your Paystack public key:
+
+1. Log in to your [Paystack Dashboard](https://dashboard.paystack.com)
+2. Navigate to **Settings** → **Developers** → **API Keys & Webhooks**
+3. Copy your **Public Key** (starts with `pk_test_` for test mode or `pk_live_` for production)
+
+::: tip
+The public key is safe to use in client-side code and is typically used for inline payment integrations.
+:::
+
+### **`callbackUrl`** (optional)
+
+The callback URL is where Paystack redirects users after a payment attempt. Setting this globally in your config means you don't have to specify it for every checkout call.
+
+```js
+callbackUrl: 'https://yourdomain.com/payment/callback'
+```
+
+::: tip
+You can override this per-transaction by passing `callbackUrl` directly to the checkout method.
+:::
+
 ## Default environment variables
 
 If you don't provide configuration values, the adapter will automatically look for these environment variables as fallbacks:
 
-| Config Value | Environment Variable  |
-| ------------ | --------------------- |
-| `apiKey`     | `PAYSTACK_SECRET_KEY` |
+| Config Value  | Environment Variable    |
+| ------------- | ----------------------- |
+| `secretKey`   | `PAYSTACK_SECRET_KEY`   |
+| `publicKey`   | `PAYSTACK_PUBLIC_KEY`   |
+| `callbackUrl` | `PAYSTACK_CALLBACK_URL` |
 
 This means you can simply set the environment variables and use a minimal configuration:
 
