@@ -39,7 +39,7 @@ Before integrating Paystack with Sails Pay, you'll need a Paystack account:
 4. **Test your integration**: Use test mode keys (starting with `sk_test_`) during development
 
 ::: tip
-Paystack provides a robust test environment. Use test credentials to thoroughly test your payment flows before switching to live keys.
+Paystack provides a robust test environment. Use test credentials to thoroughly test your payment flows before switching to live keys. See [Test Payments](https://paystack.com/docs/payments/test-payments/) for test card numbers and credentials.
 :::
 
 ## Installation

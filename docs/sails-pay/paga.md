@@ -40,7 +40,7 @@ Before integrating Paga with Sails Pay, you'll need a Paga Business account:
 4. **Test your integration**: Use test keys during development before going live
 
 ::: tip
-Paga provides test credentials for development. Always test thoroughly in the sandbox environment before processing live transactions.
+Paga provides test credentials for development. Always test thoroughly in the sandbox environment before processing live transactions. See [Testing](https://developer-docs.paga.com/docs/testing) for test card numbers and credentials.
 :::
 
 ## Installation

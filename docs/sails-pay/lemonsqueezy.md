@@ -41,7 +41,7 @@ Before integrating Lemon Squeezy with Sails Pay, you'll need a Lemon Squeezy acc
 5. **Configure webhooks**: Set up webhook endpoints and obtain your signing secret
 
 ::: tip
-Lemon Squeezy uses test mode by default for new stores. You can build and test your integration completely before enabling live payments.
+Lemon Squeezy uses test mode by default for new stores. You can build and test your integration completely before enabling live payments. See [Test Mode](https://docs.lemonsqueezy.com/help/getting-started/test-mode#test-card-numbers) for test card numbers.
 :::
 
 ## Installation
