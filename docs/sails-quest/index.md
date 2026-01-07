@@ -11,6 +11,9 @@ hero:
     - theme: alt
       text: Star on GitHub ⭐️
       link: https://github.com/sailscastshq/sails-hook-quest
+  image:
+    src: /sails-quest-logo.png
+    alt: Sails Quest
 features:
   - icon: 🕐
     title: Flexible Scheduling
