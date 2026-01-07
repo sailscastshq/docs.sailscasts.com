@@ -145,6 +145,24 @@ callbackUrl: 'https://yourdomain.com/payment/callback'
 You can override this per-transaction by passing `callbackUrl` directly to the checkout method.
 :::
 
+## Local development with webhooks
+
+Paystack webhooks require a publicly accessible URL. To test webhooks during local development, you'll need to expose your local server using a tunneling service:
+
+- [localtunnel](https://localtunnel.github.io/www/) - Free, no account required
+- [ngrok](https://ngrok.com/) - Free tier available
+
+::: warning
+Cloudflare Tunnel may not work reliably with Paystack webhooks. If you're experiencing webhook delivery issues with Cloudflare Tunnel, try using localtunnel or ngrok instead.
+:::
+
+Once you have a public URL (e.g., `https://myapp.loca.lt`), configure your Paystack webhook in the dashboard:
+
+1. Log in to your [Paystack Dashboard](https://dashboard.paystack.com)
+2. Navigate to **Settings** → **API Keys & Webhooks**
+3. Add your webhook URL: `https://myapp.loca.lt/webhooks/paystack`
+4. Make sure you configure the webhook in the same mode (Test/Live) as your transactions
+
 ## Default environment variables
 
 If you don't provide configuration values, the adapter will automatically look for these environment variables as fallbacks:
