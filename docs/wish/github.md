@@ -9,42 +9,72 @@ editLink: true
 
 # GitHub OAuth
 
-To setup up a GitHub OAuth for your app, Wish expects the following key and property in either `config/local.js` or `config/custom.js`. For example you can have a development GitHub clientId and clientSecret in `config/local.js`
+To set up GitHub OAuth for your app, you'll need to get your `clientId` and `clientSecret` credentials from GitHub. See [Creating an OAuth App](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app) for instructions.
+
+## Configuration
+
+Add your GitHub credentials under the `wish` namespace in `config/local.js`:
 
 ```js
 // config/local.js
-github: {
-    clientId: 'CLIENT_ID',
-    clientSecret: 'CLIENT_SECRET',
-    redirect: 'http://localhost:1337/auth/callback',
-  },
+module.exports = {
+  wish: {
+    github: {
+      clientId: 'CLIENT_ID',
+      clientSecret: 'CLIENT_SECRET',
+      redirect: 'http://localhost:1337/auth/callback'
+    }
+  }
+}
 ```
 
-You can override this value for production in either `custom.js` or in an environment specific `custom.js`.
-
-I personally set this up for https://sailscasts.com to override the `local.js` value so I can have 3 environments with 3 different `clientId`, `clientSecret`, and `redirect` values.
+For production, use environment variables in `config/custom.js`:
 
 ```js
 // config/custom.js
-github: {
+module.exports.wish = {
+  github: {
     clientId: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    redirect: 'https://example.com/auth/callback',
-  },
+    redirect:
+      process.env.GITHUB_CALLBACK_URL || 'https://example.com/auth/callback'
+  }
+}
 ```
 
 ::: tip
 Notice we are using environment variables as it's best practice not to commit your secret credentials. In the case of `local.js` that's okay because that file is never committed to version control.
 :::
 
-## The redirect
+### Environment Variables
 
-A typical flow is to have a button on your website say like "Sign in with GitHub". A good example can be found [here](https://sailscasts.com/signin)
+| Variable               | Description                             |
+| ---------------------- | --------------------------------------- |
+| `GITHUB_CLIENT_ID`     | Your GitHub OAuth App Client ID         |
+| `GITHUB_CLIENT_SECRET` | Your GitHub OAuth App Client Secret     |
+| `GITHUB_CALLBACK_URL`  | The callback URL registered with GitHub |
 
-Clicking that button should call a redirect route you've set in `routes.js`
+## Set Default Provider (Optional)
+
+If GitHub is your only OAuth provider, set it as the default in `config/wish.js`:
 
 ```js
- 'GET /auth/redirect': 'auth/redirect',
+// config/wish.js
+module.exports.wish = {
+  provider: 'github'
+}
+```
+
+This allows you to use the simpler API without specifying the provider each time.
+
+## The Redirect
+
+A typical flow is to have a button on your website like "Sign in with GitHub". A good example can be found [here](https://sailscasts.com/signin).
+
+Clicking that button should call a redirect route you've set in `routes.js`:
+
+```js
+'GET /auth/redirect': 'auth/redirect',
 ```
 
 Now let's author this `auth/redirect` action:
@@ -64,7 +94,11 @@ module.exports = {
   },
 
   fn: async function () {
-    return sails.wish.provider('github').redirect()
+    // If you set a default provider in config/wish.js:
+    return sails.wish.redirect()
+
+    // Or explicitly specify the provider:
+    // return sails.wish.provider('github').redirect()
   }
 }
 ```
@@ -73,9 +107,9 @@ module.exports = {
 Notice the redirect is a one-line of code and when this action is called, it will redirect to GitHub to begin the OAuth process.
 :::
 
-## The callback
+## The Callback
 
-Note the callback URL we set above that Wish will callback? Let's also implement that starting from the route in `routes.js`
+Note the callback URL we set above that Wish will callback? Let's also implement that starting from the route in `routes.js`:
 
 ```js
 'GET /auth/callback': 'auth/callback',
@@ -104,7 +138,8 @@ module.exports = {
     const req = this.req
 
     // Get the GitHub user info
-    const githubUser = await sails.wish.provider('github').user(code)
+    const githubUser = await sails.wish.user(code)
+    // Or: await sails.wish.provider('github').user(code)
 
     User.findOrCreate(
       { githubId: githubUser.id },
@@ -120,7 +155,6 @@ module.exports = {
       if (error) throw error
 
       // Checks if the user email has changed since last log in
-      // And then update the email change candidate which will be used be used to prompt the user to update their email
       if (!wasCreated && user.email !== githubUser.email) {
         await User.updateOne({ id: user.id }).set({
           emailChangeCandidate: githubUser.email
@@ -128,7 +162,6 @@ module.exports = {
       }
 
       // Checks if the user name has changed since last log in
-      // And then update the name if changed
       if (!wasCreated && user.name !== githubUser.name) {
         await User.updateOne({ id: user.id }).set({
           name: githubUser.name
@@ -148,7 +181,6 @@ module.exports = {
       }
 
       // Modify the active session instance.
-      // (This will be persisted when the response is sent.)
       req.session.userId = user.id
       return exits.success('/')
     })
@@ -158,4 +190,4 @@ module.exports = {
 
 The above is an actual real world use case of Wish in [https://sailscasts.com](https://sailscasts.com). You can perform any business logic you want.
 
-There you have it, a GitHub OAuth flow with just two routes and one line of code each to both redirect to GitHub and get the OAuth user details.
+There you have it, a GitHub OAuth flow with just two routes!
