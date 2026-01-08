@@ -12,8 +12,8 @@ features:
     title: GitHub & Google Support
     details: Built-in support for GitHub and Google OAuth 2.0 with sensible defaults out of the box.
   - icon: 🔧
-    title: Zero Config with Env Vars
-    details: Just set your environment variables and Wish automatically picks up your credentials.
+    title: Near-Zero Config
+    details: Set up your redirect, configure credentials via env vars or config, and you're ready to go.
   - icon: 🚀
     title: Multi-Provider Ready
     details: Support multiple OAuth providers or even multiple instances of the same provider in one app.
