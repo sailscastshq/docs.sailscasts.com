@@ -1,21 +1,30 @@
 ---
 layout: home
-features:
-  - icon: ⚡️
-    title: Software
-    details: Documentation of all software we've made to supercharge your Sails development.
-  - icon: 🖖
-    title: Open source
-    details: Documentation of all our open source libraries and tools
 hero:
   name: The Sailscasts Docs
-  text: Documentation for the Sailscasts ecosystem
-  tagline: We love great docs so we write one for you as well.
+  text: Ship Fullstack JavaScript Apps
+  tagline: Everything you need to build production-ready apps with Sails and The Boring JavaScript Stack.
   actions:
     - theme: brand
-      text: Watch a course
+      text: Watch a Course
       link: https://sailscasts.com
     - theme: alt
-      text: Watch a free screencasts
-      link: https://sailscasts.com/screencasts
+      text: The Boring Stack
+      link: /boring-stack/
+  image:
+    src: /sails-docs-logo.png
+    alt: Sails Docs
+features:
+  - icon: ⛵
+    title: Sails.js
+    details: Master the MVC framework that makes Node.js development productive and enjoyable.
+  - icon: 🥱
+    title: The Boring Stack
+    details: Skip the JavaScript fatigue. Build with battle-tested tools that just work.
+  - icon: 🛠️
+    title: Developer Tools
+    details: Packages and utilities designed to supercharge your fullstack workflow.
+  - icon: 🖖
+    title: Open Source
+    details: Community-driven libraries you can trust, use, and contribute to.
 ---
