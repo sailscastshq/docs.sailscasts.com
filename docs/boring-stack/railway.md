@@ -10,8 +10,8 @@ prev:
   text: 'Render'
   link: '/boring-stack/render'
 next:
-  text: Type checking JS files
-  link: '/boring-stack/render'
+  text: Testing
+  link: '/boring-stack/testing'
 editLink: true
 ---
 
