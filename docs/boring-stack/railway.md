@@ -10,8 +10,8 @@ prev:
   text: 'Render'
   link: '/boring-stack/render'
 next:
-  text: Testing
-  link: '/boring-stack/testing'
+  text: Coolify
+  link: '/boring-stack/coolify'
 editLink: true
 ---
 
