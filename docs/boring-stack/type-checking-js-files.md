@@ -7,8 +7,8 @@ title: Type checking JS files
 titleTemplate: The Boring JavaScript 🥱
 description: Configuration on type checking in JS files
 prev:
-  text: Testing
-  link: '/boring-stack/testing'
+  text: Coolify
+  link: '/boring-stack/coolify'
 next: false
 editLink: true
 ---

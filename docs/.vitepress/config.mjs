@@ -46,7 +46,8 @@ export default {
       '/sails-flash/': SailsFlashGuide(),
       '/clearance/': SailsClearanceGuide(),
       '/sails-sqlite/': SailsSQLiteGuide(),
-      '/sails-quest/': SailsQuestGuide()
+      '/sails-quest/': SailsQuestGuide(),
+      '/sentry-sails/': SentrySailsGuide()
     },
     sitemap: { hostname: 'https://docs.sailscasts.com' },
     editLink: {
@@ -131,6 +132,11 @@ function nav() {
           text: 'Sails Quest',
           link: '/sails-quest/',
           activeMatch: '/sails-quest/'
+        },
+        {
+          text: 'Sentry Sails',
+          link: '/sentry-sails/',
+          activeMatch: '/sentry-sails/'
         }
       ]
     },
@@ -357,7 +363,8 @@ function boringStackGuide() {
         { text: 'Database', link: 'boring-stack/database' },
         { text: 'Email', link: 'boring-stack/email' },
         { text: 'Session', link: 'boring-stack/session' },
-        { text: 'File uploads', link: 'boring-stack/file-uploads' }
+        { text: 'File uploads', link: 'boring-stack/file-uploads' },
+        { text: 'Testing', link: 'boring-stack/testing' }
       ]
     },
     {
@@ -559,6 +566,32 @@ function SailsQuestGuide() {
         { text: 'Events', link: 'sails-quest/events' },
         { text: 'Examples', link: 'sails-quest/examples' }
       ]
+    }
+  ]
+}
+
+function SentrySailsGuide() {
+  return [
+    {
+      text: 'Introduction',
+      collapsed: false,
+      items: [
+        { text: 'Getting started', link: 'sentry-sails/getting-started' },
+        { text: 'Configuration', link: 'sentry-sails/configuration' }
+      ]
+    },
+    {
+      text: 'Usage',
+      collapsed: false,
+      items: [
+        { text: 'Capturing errors', link: 'sentry-sails/capturing-errors' },
+        { text: 'Context & Breadcrumbs', link: 'sentry-sails/context' }
+      ]
+    },
+    {
+      text: 'Advanced',
+      collapsed: false,
+      items: [{ text: 'Source Maps', link: 'sentry-sails/source-maps' }]
     }
   ]
 }

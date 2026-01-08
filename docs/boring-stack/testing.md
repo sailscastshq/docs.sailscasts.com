@@ -7,11 +7,11 @@ title: Testing
 titleTemplate: The Boring JavaScript Stack 🥱
 description: Testing philosophy and setup in The Boring JavaScript Stack
 prev:
-  text: Railway
-  link: '/boring-stack/railway'
+  text: File uploads
+  link: '/boring-stack/file-uploads'
 next:
-  text: Type checking JS files
-  link: '/boring-stack/type-checking-js-files'
+  text: Mellow
+  link: '/boring-stack/mellow'
 editLink: true
 ---
 
@@ -50,6 +50,22 @@ tests/
             └── pricing.test.js
 ```
 
+## Setup
+
+If you scaffolded with a Boring Stack template, these scripts are already in your `package.json`:
+
+```json
+{
+  "scripts": {
+    "test:unit": "node --test --test-concurrency=1 './tests/unit/**/*.test.js'",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test": "npm run test:unit && npm run test:e2e"
+  }
+}
+```
+
 ## Running tests
 
 ```bash
@@ -61,6 +77,9 @@ npm run test:e2e
 
 # Run e2e with UI mode (interactive)
 npm run test:e2e:ui
+
+# Run e2e with visible browser
+npm run test:e2e:headed
 
 # Run all tests
 npm test
@@ -265,10 +284,10 @@ export default defineConfig({
 
 ### GitHub Actions
 
-Create `.github/workflows/e2e.yml`:
+If you scaffolded with a Boring Stack template, `.github/workflows/test.yml` is already set up. If not, create it:
 
 ```yaml
-name: E2E Tests
+name: Tests
 
 on:
   push:
@@ -294,6 +313,9 @@ jobs:
         run: |
           rm -rf node_modules package-lock.json
           npm install
+
+      - name: Run unit tests
+        run: npm run test:unit
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium

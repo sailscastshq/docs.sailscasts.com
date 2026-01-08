@@ -10,8 +10,8 @@ prev:
   text: 'Session'
   link: '/boring-stack/session'
 next:
-  text: 'Deploy on Render'
-  link: '/boring-stack/railway'
+  text: 'Testing'
+  link: '/boring-stack/testing'
 editLink: true
 ---
 
