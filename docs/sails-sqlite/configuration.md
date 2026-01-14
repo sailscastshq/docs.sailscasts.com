@@ -68,20 +68,36 @@ module.exports.datastores = {
 
     // Connection options
     timeout: 15000, // 15 second connection timeout (default: 10000)
-    verbose: process.env.NODE_ENV === 'development' ? console.log : null
+    verbose: true // Enable SQL query logging
   }
 }
 ```
 
 ## Connection Options
 
-| Option          | Type     | Default  | Description                        |
-| --------------- | -------- | -------- | ---------------------------------- |
-| `url`           | String   | Required | Path to SQLite database file       |
-| `timeout`       | Number   | 10000    | Connection timeout in milliseconds |
-| `readonly`      | Boolean  | false    | Open database in read-only mode    |
-| `fileMustExist` | Boolean  | false    | Require database file to exist     |
-| `verbose`       | Function | null     | Logging function for SQL queries   |
+| Option          | Type             | Default  | Description                          |
+| --------------- | ---------------- | -------- | ------------------------------------ |
+| `url`           | String           | Required | Path to SQLite database file         |
+| `timeout`       | Number           | 10000    | Connection timeout in milliseconds   |
+| `readonly`      | Boolean          | false    | Open database in read-only mode      |
+| `fileMustExist` | Boolean          | false    | Require database file to exist       |
+| `verbose`       | Boolean/Function | false    | Enable SQL query logging (see below) |
+
+## SQL Query Logging
+
+The `verbose` option allows you to log all SQL queries executed by the adapter. This is useful for debugging and performance analysis.
+
+```javascript
+// Use console.log for SQL logging
+verbose: true
+
+// Or provide a custom logging function
+verbose: (sql) => sails.log.debug('SQL:', sql)
+```
+
+::: warning
+SQL logging is disabled by default. Enable it only when needed, as it can impact performance and clutter logs in production.
+:::
 
 ## Environment-Specific Configuration
 
@@ -93,7 +109,7 @@ Enable query logging for debugging:
 development: {
   adapter: 'sails-sqlite',
   url: 'db/development.sqlite',
-  verbose: console.log // Log all SQL queries
+  verbose: true // Log all SQL queries to console
   // All performance defaults still apply
 }
 ```
