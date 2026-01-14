@@ -48,7 +48,7 @@ npx create-sails project-name --react --ascent
 ```
 
 ::: warning Ascent Availability
-Ascent is currently only available for React. Vue and Svelte variants are planned for future releases.
+Ascent is currently only available for React and Vue.
 :::
 
 Then `cd` into your project and run `npm i`:
