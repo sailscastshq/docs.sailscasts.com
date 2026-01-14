@@ -336,6 +336,103 @@ jobs:
 The `rm -rf node_modules package-lock.json && npm install` step ensures platform-specific native bindings (like rspack) are installed correctly for the CI environment.
 :::
 
+## Inertia test helpers
+
+For integration testing Inertia responses, `inertia-sails` provides test helpers that work with `sails.request()`. These give you fluent assertions for testing your pages without spinning up a browser.
+
+### Setup
+
+```js
+const { describe, it } = require('node:test')
+const { getSails } = require('../util/get-sails')
+
+describe('Dashboard', () => {
+  it('shows user stats', async () => {
+    const sails = await getSails()
+    const inertia = require('inertia-sails/test')(sails)
+
+    const page = await inertia.request('GET /dashboard')
+
+    page
+      .assertStatus(200)
+      .assertComponent('Dashboard/Index')
+      .assertHas('stats')
+      .assertHas('recentActivity', 5)
+  })
+})
+```
+
+### Available assertions
+
+```js
+// Status and component
+page.assertStatus(200)
+page.assertComponent('Users/Index')
+page.assertUrl('/users')
+
+// Props
+page.assertHas('users') // Prop exists
+page.assertHas('users', 10) // Array with 10 items
+page.assertMissing('adminData') // Prop doesn't exist
+page.assertProps({ 'user.name': 'John' }) // Exact value match (dot notation)
+page.assertProp('user', (user) => {
+  // Custom assertion
+  assert.equal(user.role, 'admin')
+})
+
+// Flash
+page.assertFlash('success') // Flash key exists
+page.assertFlash('success', ['Saved!']) // Flash with value
+page.assertNoFlash('error') // No flash key
+
+// Special props
+page.assertMergeProps(['items']) // Merge props
+page.assertDeepMergeProps(['settings']) // Deep merge props
+page.assertDeferredProps(['stats']) // Deferred props
+```
+
+### POST requests with data
+
+```js
+it('creates a user', async () => {
+  const sails = await getSails()
+  const inertia = require('inertia-sails/test')(sails)
+
+  const page = await inertia.request({
+    url: 'POST /users',
+    data: { name: 'Jane', email: 'jane@example.com' }
+  })
+
+  page
+    .assertStatus(200)
+    .assertComponent('Users/Show')
+    .assertProps({ 'user.name': 'Jane' })
+})
+```
+
+### Testing partial reloads
+
+```js
+it('reloads only users prop', async () => {
+  const sails = await getSails()
+  const inertia = require('inertia-sails/test')(sails)
+
+  const page = await inertia.partialRequest('/users', 'Users/Index', ['users'])
+
+  page.assertHas('users')
+  // Other props won't be included in partial reload
+})
+```
+
+### Getting raw data
+
+```js
+const page = await inertia.request('GET /users')
+
+const pageObject = page.getPage() // Full Inertia page object
+const props = page.getProps() // Just the props
+```
+
 ## Tips
 
 - Tests use the `test` environment (port 3333, sails-disk adapter)
