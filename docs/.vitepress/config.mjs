@@ -351,7 +351,9 @@ function boringStackGuide() {
       items: [
         { text: 'Sharing data', link: 'boring-stack/sharing-data' },
         { text: 'Deferred props', link: 'boring-stack/deferred-props' },
-        { text: 'Merging props', link: 'boring-stack/merging-props' }
+        { text: 'Merging props', link: 'boring-stack/merging-props' },
+        { text: 'Once props', link: 'boring-stack/once-props' },
+        { text: 'Infinite scroll', link: 'boring-stack/infinite-scroll' }
       ]
     },
     {
