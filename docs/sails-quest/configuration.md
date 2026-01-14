@@ -160,6 +160,27 @@ module.exports = {
 }
 ```
 
+### Local Database Configuration
+
+By default, Quest runs jobs with `environment: 'console'`, which loads `config/env/console.js`. If your `console.js` inherits from production config (common for sharing disabled hooks), jobs will try to use your production database settings.
+
+To use your local development database for jobs, set `environment` to `null` in `config/local.js`:
+
+```javascript
+// config/local.js
+module.exports = {
+  quest: {
+    environment: null
+  }
+}
+```
+
+This makes jobs inherit the parent process's `NODE_ENV`, so they'll use your development datastore configuration instead of production.
+
+::: tip
+This is only needed when your `config/env/console.js` extends production config. If you have a standalone console config, you don't need this override.
+:::
+
 ## Defining Jobs in Configuration
 
 You can define job schedules in your config while keeping your scripts pure and reusable. This approach separates scheduling concerns from business logic:
