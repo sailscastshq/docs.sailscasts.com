@@ -454,7 +454,8 @@ function SailsContentGuide() {
       items: [
         { text: 'Content collections', link: 'content/collections' },
         { text: 'Querying collections', link: 'content/querying-collections' },
-        { text: 'Configuration', link: 'content/configuration' }
+        { text: 'Configuration', link: 'content/configuration' },
+        { text: 'Partials', link: 'content/partials' }
       ]
     }
   ]
