@@ -65,23 +65,25 @@ return {
 
 View data is available as local variables in your EJS template:
 
-```ejs
+```html
 <!-- views/app.ejs -->
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <title><%= typeof title !== 'undefined' ? title : 'My App' %></title>
-  <meta name="description" content="<%= typeof description !== 'undefined' ? description : 'Default description' %>">
-  <% if (typeof ogImage !== 'undefined') { %>
-  <meta property="og:image" content="<%= ogImage %>">
-  <% } %>
-  <%- shipwright.styles() %>
-</head>
-<body>
-  <div id="app" data-page="<%- JSON.stringify(page) %>"></div>
-  <%- shipwright.scripts() %>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <title><%= typeof title !== 'undefined' ? title : 'My App' %></title>
+    <meta
+      name="description"
+      content="<%= typeof description !== 'undefined' ? description : 'Default description' %>"
+    />
+    <% if (typeof ogImage !== 'undefined') { %>
+    <meta property="og:image" content="<%= ogImage %>" />
+    <% } %> <%- shipwright.styles() %>
+  </head>
+  <body>
+    <div id="app" data-page="<%- JSON.stringify(page) %>"></div>
+    <%- shipwright.scripts() %>
+  </body>
 </html>
 ```
 

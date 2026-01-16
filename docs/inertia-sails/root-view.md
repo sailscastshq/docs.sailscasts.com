@@ -79,19 +79,19 @@ module.exports = {
 }
 ```
 
-```ejs
+```html
 <!-- views/auth.ejs -->
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <%- shipwright.styles() %>
-</head>
-<body class="auth-layout">
-  <div id="app" data-page="<%- JSON.stringify(page) %>"></div>
-  <%- shipwright.scripts() %>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <%- shipwright.styles() %>
+  </head>
+  <body class="auth-layout">
+    <div id="app" data-page="<%- JSON.stringify(page) %>"></div>
+    <%- shipwright.scripts() %>
+  </body>
 </html>
 ```
 
@@ -174,38 +174,38 @@ module.exports = function defineCustomHook(sails) {
 
 ### Main App Template
 
-```ejs
+```html
 <!-- views/app.ejs -->
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><%= typeof title !== 'undefined' ? title : 'My App' %></title>
-  <%- shipwright.styles() %>
-</head>
-<body>
-  <div id="app" data-page="<%- JSON.stringify(page) %>"></div>
-  <%- shipwright.scripts() %>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= typeof title !== 'undefined' ? title : 'My App' %></title>
+    <%- shipwright.styles() %>
+  </head>
+  <body>
+    <div id="app" data-page="<%- JSON.stringify(page) %>"></div>
+    <%- shipwright.scripts() %>
+  </body>
 </html>
 ```
 
 ### Auth Template
 
-```ejs
+```html
 <!-- views/auth.ejs -->
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sign In - My App</title>
-  <%- shipwright.styles() %>
-</head>
-<body class="min-h-screen bg-gray-50 flex items-center justify-center">
-  <div id="app" data-page="<%- JSON.stringify(page) %>"></div>
-  <%- shipwright.scripts() %>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sign In - My App</title>
+    <%- shipwright.styles() %>
+  </head>
+  <body class="min-h-screen bg-gray-50 flex items-center justify-center">
+    <div id="app" data-page="<%- JSON.stringify(page) %>"></div>
+    <%- shipwright.scripts() %>
+  </body>
 </html>
 ```

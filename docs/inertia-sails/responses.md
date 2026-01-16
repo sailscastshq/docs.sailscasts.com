@@ -103,10 +103,13 @@ return {
 
 Access in your EJS template:
 
-```ejs
+```html
 <head>
   <title><%= typeof title !== 'undefined' ? title : 'My App' %></title>
-  <meta name="description" content="<%= typeof description !== 'undefined' ? description : '' %>">
+  <meta
+    name="description"
+    content="<%= typeof description !== 'undefined' ? description : '' %>"
+  />
 </head>
 ```
 

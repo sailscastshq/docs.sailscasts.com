@@ -43,19 +43,19 @@ module.exports.inertia = {
 
 Your root view should include the Inertia page data:
 
-```ejs
+```html
 <!-- views/app.ejs -->
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <%- shipwright.styles() %>
-</head>
-<body>
-  <div id="app" data-page="<%- JSON.stringify(page) %>"></div>
-  <%- shipwright.scripts() %>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <%- shipwright.styles() %>
+  </head>
+  <body>
+    <div id="app" data-page="<%- JSON.stringify(page) %>"></div>
+    <%- shipwright.scripts() %>
+  </body>
 </html>
 ```
 
