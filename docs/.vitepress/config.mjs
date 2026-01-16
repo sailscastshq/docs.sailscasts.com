@@ -263,20 +263,58 @@ function inertiaSailsGuide() {
   return [
     {
       text: 'Getting started',
-      collapsible: true,
+      collapsed: false,
       items: [
         { text: 'Introduction', link: '/inertia-sails/' },
         {
           text: 'What is inertia-sails?',
           link: '/inertia-sails/what-is-inertia-sails'
         },
-        { text: 'Installation', link: '/inertia-sails/installation' }
+        { text: 'Installation', link: '/inertia-sails/installation' },
+        { text: 'Configuration', link: '/inertia-sails/configuration' },
+        { text: 'Basic usage', link: '/inertia-sails/basic-usage' }
       ]
     },
     {
-      text: 'Basic usage',
-      collapsible: true,
-      items: [{ text: 'Basic usage', link: '/inertia-sails/basic-usage' }]
+      text: 'Responses',
+      collapsed: false,
+      items: [
+        { text: 'Inertia responses', link: '/inertia-sails/responses' },
+        { text: 'Redirects', link: '/inertia-sails/redirects' }
+      ]
+    },
+    {
+      text: 'Sharing Data',
+      collapsed: false,
+      items: [
+        { text: 'Sharing data', link: '/inertia-sails/sharing-data' },
+        { text: 'Flash messages', link: '/inertia-sails/flash-messages' },
+        { text: 'View data', link: '/inertia-sails/view-data' }
+      ]
+    },
+    {
+      text: 'Props',
+      collapsed: false,
+      items: [
+        { text: 'Once props', link: '/inertia-sails/once-props' },
+        { text: 'Deferred props', link: '/inertia-sails/deferred-props' },
+        { text: 'Merge props', link: '/inertia-sails/merge-props' },
+        { text: 'Optional props', link: '/inertia-sails/optional-props' },
+        { text: 'Always props', link: '/inertia-sails/always-props' }
+      ]
+    },
+    {
+      text: 'Advanced',
+      collapsed: false,
+      items: [
+        { text: 'Infinite scroll', link: '/inertia-sails/infinite-scroll' },
+        {
+          text: 'History encryption',
+          link: '/inertia-sails/history-encryption'
+        },
+        { text: 'Root view', link: '/inertia-sails/root-view' },
+        { text: 'Asset versioning', link: '/inertia-sails/asset-versioning' }
+      ]
     }
   ]
 }
@@ -366,7 +404,8 @@ function boringStackGuide() {
         { text: 'Email', link: 'boring-stack/email' },
         { text: 'Session', link: 'boring-stack/session' },
         { text: 'File uploads', link: 'boring-stack/file-uploads' },
-        { text: 'Testing', link: 'boring-stack/testing' }
+        { text: 'Testing', link: 'boring-stack/testing' },
+        { text: 'Error handling', link: 'boring-stack/error-handling' }
       ]
     },
     {

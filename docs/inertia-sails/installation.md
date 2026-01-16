@@ -1,6 +1,12 @@
 ---
 title: Installation
 editLink: true
+prev:
+  text: What is inertia-sails?
+  link: '/inertia-sails/what-is-inertia-sails'
+next:
+  text: Configuration
+  link: '/inertia-sails/configuration'
 ---
 
 # Installation

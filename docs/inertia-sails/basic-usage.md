@@ -1,57 +1,128 @@
 ---
 title: Basic Usage
 editLink: true
+prev:
+  text: Configuration
+  link: '/inertia-sails/configuration'
+next:
+  text: Inertia responses
+  link: '/inertia-sails/responses'
 ---
 
 # Basic Usage
 
-## Responses
+This guide covers the essential patterns for using inertia-sails in your application.
 
-Sending back an Inertia responses is pretty simple, just use the return an Inertia custom response in your Sails actions(You can look at the example actions if you used create-sails). The returned response should be an object with the `page` and optionally a `props` property.
+## Creating Pages
 
-## Shared Data
+### 1. Define an Action
 
-If you have data that you want to be provided as a prop to every component (a common use-case is informationa about the authenticated user) you can use the `sails.inertia.share` method.
-
-In Sails having a custom hook by running `sails generate hook custom` will scaffold a project level hook in which you can share the loggedIn user information for example. Below is a real world use case:
+Create a Sails action that returns an Inertia response:
 
 ```js
-/**
- * custom hook
- *
- * @description :: A hook definition.  Extends Sails by adding shadow routes, implicit actions, and/or initialization logic.
- * @docs        :: https://sailsjs.com/docs/concepts/extending-sails/hooks
- */
+// api/controllers/dashboard/view-dashboard.js
+module.exports = {
+  friendlyName: 'View dashboard',
 
+  description: 'Display the dashboard page.',
+
+  exits: {
+    success: {
+      responseType: 'inertia'
+    }
+  },
+
+  fn: async function () {
+    const user = await User.findOne({ id: this.req.session.userId })
+    const stats = await Stats.find({ user: user.id })
+
+    return {
+      page: 'dashboard/index',
+      props: {
+        user,
+        stats
+      }
+    }
+  }
+}
+```
+
+### 2. Create the Frontend Component
+
+Create a Vue or React component at the path specified in `page`:
+
+**Vue (assets/js/pages/dashboard/index.vue)**
+
+```vue
+<script setup>
+defineProps({
+  user: Object,
+  stats: Array
+})
+</script>
+
+<template>
+  <div>
+    <h1>Welcome, {{ user.fullName }}</h1>
+    <div v-for="stat in stats" :key="stat.id">
+      {{ stat.name }}: {{ stat.value }}
+    </div>
+  </div>
+</template>
+```
+
+**React (assets/js/pages/dashboard/index.jsx)**
+
+```jsx
+export default function Dashboard({ user, stats }) {
+  return (
+    <div>
+      <h1>Welcome, {user.fullName}</h1>
+      {stats.map((stat) => (
+        <div key={stat.id}>
+          {stat.name}: {stat.value}
+        </div>
+      ))}
+    </div>
+  )
+}
+```
+
+### 3. Configure the Route
+
+Add a route in `config/routes.js`:
+
+```js
+module.exports.routes = {
+  'GET /dashboard': 'dashboard/view-dashboard'
+}
+```
+
+## Sharing Data Globally
+
+Share data that's needed across all pages:
+
+```js
+// api/hooks/custom/index.js
 module.exports = function defineCustomHook(sails) {
   return {
-    /**
-     * Runs when this Sails app loads/lifts.
-     */
-    initialize: async function () {
-      sails.log.info('Initializing custom hook (`custom`)')
-    },
     routes: {
       before: {
-        'GET /': {
+        'GET /*': {
           skipAssets: true,
           fn: async function (req, res, next) {
+            // Share authenticated user
             if (req.session.userId) {
-              const loggedInUser = await User.findOne({
-                id: req.session.userId
-              })
-              if (!loggedInUser) {
-                sails.log.warn(
-                  'Somehow, the user record for the logged-in user (`' +
-                    req.session.userId +
-                    '`) has gone missing....'
-                )
-                delete req.session.userId
-                return res.redirect('/signin')
-              }
-              sails.inertia.share('loggedInUser', loggedInUser)
-              return next()
+              const user = await User.findOne({ id: req.session.userId })
+              sails.inertia.share('loggedInUser', user)
             }
+
+            // Share flash messages
+            if (req.session.flash) {
+              sails.inertia.share('flash', req.session.flash)
+              delete req.session.flash
+            }
+
             return next()
           }
         }
@@ -61,28 +132,101 @@ module.exports = function defineCustomHook(sails) {
 }
 ```
 
-## Configuration
+## Form Handling
 
-If you used the `create-sails` scaffolding tool, you will find the configuration file for Inertia.js in `config/inertia.js`. You will mostly use this file for asset-versioning in Inertia by setting either a number or string that you can update when your assets changes. Below is an example of how this file looks like:
+### Submit Form
+
+```vue
+<script setup>
+import { useForm } from '@inertiajs/vue3'
+
+const form = useForm({
+  fullName: '',
+  email: ''
+})
+
+function submit() {
+  form.post('/profile/update')
+}
+</script>
+
+<template>
+  <form @submit.prevent="submit">
+    <input v-model="form.fullName" />
+    <input v-model="form.email" type="email" />
+    <button :disabled="form.processing">Save</button>
+  </form>
+</template>
+```
+
+### Handle Submission
 
 ```js
-/**
- * Inertia configuration
- * (sails.config.inertia)
- *
- * Use the settings below to configure session integration in your app.
- *
- * For more information on Inertia configuration, visit:
- * https://inertia-sails.sailscasts.com
- */
+// api/controllers/profile/update-profile.js
+module.exports = {
+  inputs: {
+    fullName: { type: 'string', required: true },
+    email: { type: 'string', isEmail: true, required: true }
+  },
 
-module.exports.inertia = {
-  /**
-   * https://inertiajs.com/asset-versioning
-   * You can pass a string, number that changes when your assets change
-   *  or a function that returns the said string, number.
-   * e.g 4 or () => 4
-   */
-  // version: 1,
+  exits: {
+    success: { responseType: 'inertiaRedirect' },
+    badRequest: { responseType: 'badRequest' }
+  },
+
+  fn: async function ({ fullName, email }) {
+    await User.updateOne({ id: this.req.session.userId }).set({
+      fullName,
+      email
+    })
+
+    sails.inertia.flash('success', 'Profile updated!')
+    return sails.inertia.back('/profile')
+  }
 }
 ```
+
+## Navigation
+
+Use Inertia's Link component for SPA-like navigation:
+
+**Vue**
+
+```vue
+<script setup>
+import { Link } from '@inertiajs/vue3'
+</script>
+
+<template>
+  <Link href="/dashboard">Dashboard</Link>
+  <Link href="/profile" method="post">Update Profile</Link>
+</template>
+```
+
+**React**
+
+```jsx
+import { Link } from '@inertiajs/react'
+
+function Nav() {
+  return (
+    <nav>
+      <Link href="/dashboard">Dashboard</Link>
+      <Link href="/profile" method="post">
+        Update Profile
+      </Link>
+    </nav>
+  )
+}
+```
+
+## Architecture Note
+
+inertia-sails uses AsyncLocalStorage for request-scoped state. This ensures that `share()`, `flash()`, and other per-request APIs don't leak data between concurrent requests. This is transparent to your application code but critical for correctness in production.
+
+## Next Steps
+
+- [Responses](/inertia-sails/responses) - Learn about Inertia response options
+- [Sharing Data](/inertia-sails/sharing-data) - Deep dive into data sharing
+- [Once Props](/inertia-sails/once-props) - Cache expensive props
+- [Flash Messages](/inertia-sails/flash-messages) - One-time notifications
