@@ -9,7 +9,9 @@ description: Configurations for Sails Content.
 prev:
   text: Querying Collections
   link: '/content/querying-collections'
-next: false
+next:
+  text: Partials
+  link: '/content/partials'
 editLink: true
 ---
 

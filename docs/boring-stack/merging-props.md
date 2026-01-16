@@ -84,6 +84,49 @@ module.exports = {
 }
 ```
 
+## Deep merging
+
+By default, `merge()` performs a shallow merge - arrays are appended and objects are merged at the top level. For nested objects that need recursive merging, use `deepMerge()`:
+
+```js
+module.exports = {
+  exits: {
+    success: {
+      responseType: 'inertia'
+    }
+  },
+  fn: async function ({ page }) {
+    const settings = await Settings.findOne({ userId: this.req.session.userId })
+
+    return {
+      page: 'settings/index',
+      props: {
+        // Deep merge nested settings object
+        settings: sails.inertia.deepMerge(() => settings)
+      }
+    }
+  }
+}
+```
+
+### When to use deep merge
+
+Use `deepMerge()` when your data has nested objects that should be recursively merged:
+
+```js
+// With merge() - shallow merge
+// Old: { notifications: { email: true, push: false } }
+// New: { notifications: { sms: true } }
+// Result: { notifications: { sms: true } }  // email and push lost!
+
+// With deepMerge() - recursive merge
+// Old: { notifications: { email: true, push: false } }
+// New: { notifications: { sms: true } }
+// Result: { notifications: { email: true, push: false, sms: true } }
+```
+
+Use regular `merge()` for arrays and flat objects. Use `deepMerge()` for nested configuration objects, user preferences, or any deeply nested data structures.
+
 ## Resetting props
 
 On the client side, you can instruct the server to reset a prop. This is useful when you need to clear the prop value before merging new data, such as when a user enters a new search query in a paginated list.

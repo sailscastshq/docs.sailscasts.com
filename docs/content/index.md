@@ -21,4 +21,7 @@ features:
   - icon: 🚀
     title: SSG or SSR
     details: Generate HTML from Markdown content at build time (SSG) or request time (SSR).
+  - icon: 🧩
+    title: Partials support
+    details: Share UI components between your content layouts and Sails views with EJS partials.
 ---

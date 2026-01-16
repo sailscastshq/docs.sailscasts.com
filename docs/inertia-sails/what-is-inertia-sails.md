@@ -1,6 +1,12 @@
 ---
 title: What is inertia-sails?
 editLink: true
+prev:
+  text: Introduction
+  link: '/inertia-sails/'
+next:
+  text: Installation
+  link: '/inertia-sails/installation'
 ---
 
 # What is inertia-sails?
