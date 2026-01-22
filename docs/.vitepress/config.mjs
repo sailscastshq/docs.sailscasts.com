@@ -47,7 +47,8 @@ export default {
       '/clearance/': SailsClearanceGuide(),
       '/sails-sqlite/': SailsSQLiteGuide(),
       '/sails-quest/': SailsQuestGuide(),
-      '/sentry-sails/': SentrySailsGuide()
+      '/sentry-sails/': SentrySailsGuide(),
+      '/pellicule/': pelliculeGuide()
     },
     sitemap: { hostname: 'https://docs.sailscasts.com' },
     editLink: {
@@ -137,6 +138,11 @@ function nav() {
           text: 'Sentry Sails',
           link: '/sentry-sails/',
           activeMatch: '/sentry-sails/'
+        },
+        {
+          text: 'Pellicule',
+          link: '/pellicule/',
+          activeMatch: '/pellicule/'
         }
       ]
     },
@@ -634,6 +640,25 @@ function SentrySailsGuide() {
       text: 'Advanced',
       collapsed: false,
       items: [{ text: 'Source Maps', link: 'sentry-sails/source-maps' }]
+    }
+  ]
+}
+
+function pelliculeGuide() {
+  return [
+    {
+      text: 'Introduction',
+      collapsed: false,
+      items: [
+        { text: 'Overview', link: '/pellicule/' },
+        { text: 'What is Pellicule?', link: '/pellicule/what-is-pellicule' },
+        { text: 'Getting Started', link: '/pellicule/getting-started' }
+      ]
+    },
+    {
+      text: 'Reference',
+      collapsed: false,
+      items: [{ text: 'CLI', link: '/pellicule/cli' }]
     }
   ]
 }
