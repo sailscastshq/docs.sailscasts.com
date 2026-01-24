@@ -1,33 +1,77 @@
+---
+prev:
+  text: How It Works
+  link: /pellicule/how-it-works
+next:
+  text: Frames
+  link: /pellicule/frames
+---
+
 # Getting Started
 
-Create your first video with Pellicule in under a minute.
+Get up and running with Pellicule in under a minute.
 
 ## Prerequisites
 
 - **Node.js 18+** — Pellicule uses modern JavaScript features
 - **FFmpeg** — Required for encoding videos ([install guide](https://ffmpeg.org/download.html))
 
-## Quick Start
+## Create a New Project
 
-### 1. Create a Video Component
+The fastest way to start is with `create-pellicule`:
 
-Create a file called `Video.vue`:
+```bash
+npm create pellicule my-video
+cd my-video
+npm install
+```
+
+This scaffolds a new project with a starter `Video.vue`:
+
+```
+my-video/
+├── package.json
+└── Video.vue
+```
+
+## Render Your First Video
+
+```bash
+npx pellicule
+```
+
+That's it! Pellicule will:
+
+1. Start a dev server with your component
+2. Render 90 frames (3 seconds at 30fps)
+3. Encode them into `output.mp4`
+
+## What's in Video.vue?
+
+The scaffolded `Video.vue` demonstrates the basics:
 
 ```vue
 <script setup>
-import { useFrame, useVideoConfig } from 'pellicule'
+import { computed } from 'vue'
+import { useFrame, useVideoConfig, interpolate, Easing } from 'pellicule'
 
 const frame = useFrame()
-const { fps, durationInFrames, width, height } = useVideoConfig()
+const { durationInFrames } = useVideoConfig()
 
-// Calculate current time in seconds
-const currentSecond = frame.value / fps
+// Fade in over 30 frames
+const opacity = computed(() => interpolate(frame.value, [0, 30], [0, 1]))
+
+// Scale up with easing
+const scale = computed(() =>
+  interpolate(frame.value, [0, 30], [0.8, 1], { easing: Easing.easeOut })
+)
 </script>
 
 <template>
   <div class="video">
-    <h1>Frame {{ frame }}</h1>
-    <p>{{ currentSecond.toFixed(2) }}s</p>
+    <h1 :style="{ opacity, transform: `scale(${scale})` }">
+      Hello, Pellicule!
+    </h1>
   </div>
 </template>
 
@@ -36,154 +80,58 @@ const currentSecond = frame.value / fps
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   color: white;
-  font-family: system-ui, sans-serif;
-}
-
-h1 {
-  font-size: 72px;
-  margin: 0;
-}
-
-p {
-  font-size: 24px;
-  opacity: 0.8;
 }
 </style>
 ```
 
-### 2. Render It
+Key points:
 
-```bash
-npx pellicule Video
-```
+- `useFrame()` gives you the current frame number (0, 1, 2, ...)
+- `useVideoConfig()` gives you fps, duration, width, height
+- `interpolate()` maps frame numbers to animation values
+- `Easing` provides smooth animation curves
 
-That's it. Pellicule will:
-
-1. Start a dev server with your component
-2. Render 90 frames (3 seconds at 30fps)
-3. Encode them into `output.mp4`
-
-## Composables
-
-Pellicule provides two composables to access frame and video information:
-
-### `useFrame()`
-
-Returns a reactive ref containing the current frame number (starts at 0).
-
-```vue
-<script setup>
-import { useFrame } from 'pellicule'
-
-const frame = useFrame()
-// frame.value is 0, 1, 2, 3...
-</script>
-```
-
-### `useVideoConfig()`
-
-Returns the video configuration object:
-
-| Property           | Type     | Description            |
-| ------------------ | -------- | ---------------------- |
-| `fps`              | `number` | Frames per second      |
-| `durationInFrames` | `number` | Total number of frames |
-| `width`            | `number` | Video width in pixels  |
-| `height`           | `number` | Video height in pixels |
-
-```vue
-<script setup>
-import { useVideoConfig } from 'pellicule'
-
-const { fps, durationInFrames, width, height } = useVideoConfig()
-</script>
-```
-
-## Customizing Output
+## Customize Your Render
 
 ```bash
 # Custom output filename
-npx pellicule Video -o intro.mp4
+npx pellicule -o intro.mp4
 
 # 5 seconds at 30fps (150 frames)
-npx pellicule Video -d 150
+npx pellicule -d 150
 
 # 4K resolution
-npx pellicule Video -w 3840 -h 2160
+npx pellicule -w 3840 -h 2160
 
-# 60fps video
-npx pellicule Video -f 60
+# 60fps smooth video
+npx pellicule -f 60
+
+# Partial render for faster iteration
+npx pellicule -d 150 -r 0:30
 ```
 
-## Animating with Frames
+## Adding to an Existing Project
 
-The `frame` ref is your animation driver. Here's how to create smooth animations:
+If you already have a project:
 
-```vue
-<script setup>
-import { computed } from 'vue'
-import { useFrame, useVideoConfig } from 'pellicule'
-
-const frame = useFrame()
-const { fps } = useVideoConfig()
-
-// Fade in over the first second
-const opacity = computed(() => Math.min(1, frame.value / fps))
-
-// Slide in from left (0 to 100px over 30 frames)
-const translateX = computed(() => Math.min(100, (frame.value / 30) * 100))
-
-// Loop every 60 frames
-const rotation = computed(() => (frame.value % 60) * 6) // 360° / 60 = 6° per frame
-</script>
-
-<template>
-  <div class="video">
-    <div
-      class="box"
-      :style="{
-        opacity,
-        transform: `translateX(${translateX}px) rotate(${rotation}deg)`
-      }"
-    />
-  </div>
-</template>
+```bash
+npm install pellicule vue
 ```
 
-## Using Easing Functions
+Create a `Video.vue` file and run:
 
-For smoother animations, use easing functions:
-
-```vue
-<script setup>
-import { computed } from 'vue'
-import { useFrame, Easing, interpolate } from 'pellicule'
-
-const frame = useFrame()
-
-// Using Pellicule's built-in interpolate with easing
-const scale = computed(() =>
-  interpolate(frame.value, [0, 60], [0.5, 1], {
-    easing: Easing.out(Easing.cubic)
-  })
-)
-
-// Or manually with custom easing
-function easeOutCubic(t) {
-  return 1 - Math.pow(1 - t, 3)
-}
-
-const progress = computed(() => Math.min(1, frame.value / 60))
-const easedScale = computed(() => 0.5 + easeOutCubic(progress.value) * 0.5)
-</script>
+```bash
+npx pellicule Video.vue
 ```
 
 ## Next Steps
 
-- [CLI Reference](/pellicule/cli) — All command-line options
-- [What is Pellicule?](/pellicule/what-is-pellicule) — How it works under the hood
+Learn the core concepts:
+
+- [Frames](/pellicule/frames) — The fundamental unit of video
+- [Video Config](/pellicule/video-config) — Understanding fps, duration, and dimensions
+- [Sequences](/pellicule/sequences) — Organizing videos into scenes

@@ -1,3 +1,12 @@
+---
+prev:
+  text: Overview
+  link: /pellicule/
+next:
+  text: How It Works
+  link: /pellicule/how-it-works
+---
+
 # What is Pellicule?
 
 Pellicule is a Vue-native engine for rendering videos programmatically. Instead of using timeline-based video editors, you write Vue components that describe your video frame by frame.
