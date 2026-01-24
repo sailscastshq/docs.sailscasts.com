@@ -1,3 +1,9 @@
+---
+prev:
+  text: Easing
+  link: /pellicule/easing
+---
+
 # CLI Reference
 
 The Pellicule CLI is the primary way to render videos. It takes a Vue component and outputs an MP4 file.
@@ -17,15 +23,16 @@ npx pellicule Video.vue    # Same result
 
 ## Options
 
-| Option       | Short | Default        | Description            |
-| ------------ | ----- | -------------- | ---------------------- |
-| `--output`   | `-o`  | `./output.mp4` | Output file path       |
-| `--duration` | `-d`  | `90`           | Duration in frames     |
-| `--fps`      | `-f`  | `30`           | Frames per second      |
-| `--width`    | `-w`  | `1920`         | Video width in pixels  |
-| `--height`   | `-h`  | `1080`         | Video height in pixels |
-| `--help`     |       |                | Show help message      |
-| `--version`  |       |                | Show version number    |
+| Option       | Short | Default        | Description                       |
+| ------------ | ----- | -------------- | --------------------------------- |
+| `--output`   | `-o`  | `./output.mp4` | Output file path                  |
+| `--duration` | `-d`  | `90`           | Duration in frames                |
+| `--fps`      | `-f`  | `30`           | Frames per second                 |
+| `--width`    | `-w`  | `1920`         | Video width in pixels             |
+| `--height`   | `-h`  | `1080`         | Video height in pixels            |
+| `--range`    | `-r`  |                | Frame range to render (start:end) |
+| `--help`     |       |                | Show help message                 |
+| `--version`  |       |                | Show version number               |
 
 ## Examples
 
@@ -102,6 +109,30 @@ npx pellicule Video -f 30
 # 60fps (smooth motion)
 npx pellicule Video -f 60
 ```
+
+### Partial Rendering
+
+Use `--range` (or `-r`) to render only a subset of frames. This is useful for faster iteration when working on a specific section of a longer video.
+
+```bash
+# Render only frames 100-200
+npx pellicule Video -d 300 -r 100:200
+
+# Render frames 0-50 (the beginning)
+npx pellicule Video -d 300 -r 0:50
+
+# Long form
+npx pellicule Video -d 300 --range 150:250
+```
+
+The range format is `start:end` where:
+
+- `start` is the first frame to render (inclusive)
+- `end` is the last frame to render (exclusive)
+
+::: tip
+Partial rendering keeps `durationInFrames` unchanged so your animations calculate correctly. Only the specified frames are actually rendered and encoded.
+:::
 
 ### Combined Example
 

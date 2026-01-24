@@ -652,7 +652,39 @@ function pelliculeGuide() {
       items: [
         { text: 'Overview', link: '/pellicule/' },
         { text: 'What is Pellicule?', link: '/pellicule/what-is-pellicule' },
+        { text: 'How It Works', link: '/pellicule/how-it-works' },
         { text: 'Getting Started', link: '/pellicule/getting-started' }
+      ]
+    },
+    {
+      text: 'Concepts',
+      collapsed: false,
+      items: [
+        { text: 'Frames', link: '/pellicule/frames' },
+        { text: 'Video Config', link: '/pellicule/video-config' },
+        { text: 'Sequences', link: '/pellicule/sequences' }
+      ]
+    },
+    {
+      text: 'Composables',
+      collapsed: false,
+      items: [
+        { text: 'useFrame', link: '/pellicule/use-frame' },
+        { text: 'useVideoConfig', link: '/pellicule/use-video-config' },
+        { text: 'useSequence', link: '/pellicule/use-sequence' }
+      ]
+    },
+    {
+      text: 'Components',
+      collapsed: false,
+      items: [{ text: 'Sequence', link: '/pellicule/sequence' }]
+    },
+    {
+      text: 'Animations',
+      collapsed: false,
+      items: [
+        { text: 'Interpolate', link: '/pellicule/interpolate' },
+        { text: 'Easing', link: '/pellicule/easing' }
       ]
     },
     {
