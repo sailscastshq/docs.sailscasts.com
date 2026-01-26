@@ -74,80 +74,9 @@ export default {
 
 function nav() {
   return [
-    {
-      text: 'Commercial products',
-      items: [
-        { text: 'Sailscasts', link: 'https://sailscasts.com' },
-        { text: 'Hagfish', link: 'https://hagfish.app' },
-        { text: 'The African Engineer', link: 'https://africanengineer.com' }
-      ]
-    },
-    {
-      text: 'Open Source',
-      items: [
-        {
-          text: 'Boring Stack',
-          link: '/boring-stack/',
-          activeMatch: '/boring-stack/'
-        },
-        {
-          text: 'Create Sails',
-          link: '/create-sails/',
-          activeMatch: '/create-sails/'
-        },
-        {
-          text: 'Inertia Sails',
-          link: '/inertia-sails/',
-          activeMatch: '/inertia-sails/'
-        },
-        { text: 'Sails Wish', link: '/wish/', activeMatch: '/wish/' },
-        {
-          text: 'Captain Vane',
-          link: '/captain-vane/',
-          activeMatch: '/captain-vane/'
-        },
-        { text: 'Sails Mail', link: '/mail/', activeMatch: '/mail/' },
-        { text: 'Sails Content', link: '/content/', activeMatch: '/content/' },
-        {
-          text: 'Sails Stash',
-          link: '/sails-stash/',
-          activeMatch: '/sails-stash/'
-        },
-        { text: 'Sails Pay', link: '/sails-pay/', activeMatch: '/sails-pay/' },
-        {
-          text: 'Sails Flash',
-          link: '/sails-flash/',
-          activeMatch: '/sails-flash/'
-        },
-        {
-          text: 'Sails Clearance',
-          link: '/clearance/',
-          activeMatch: '/clearance/'
-        },
-        {
-          text: 'Sails SQLite',
-          link: '/sails-sqlite/',
-          activeMatch: '/sails-sqlite/'
-        },
-        {
-          text: 'Sails Quest',
-          link: '/sails-quest/',
-          activeMatch: '/sails-quest/'
-        },
-        {
-          text: 'Sentry Sails',
-          link: '/sentry-sails/',
-          activeMatch: '/sentry-sails/'
-        },
-        {
-          text: 'Pellicule',
-          link: '/pellicule/',
-          activeMatch: '/pellicule/'
-        }
-      ]
-    },
+    { text: 'Commercial', link: '/commercial' },
+    { text: 'Open Source', link: '/open-source' },
     { text: 'Courses', link: 'https://sailscasts.com/courses' },
-    { text: 'Screencasts', link: 'https://sailscasts.com/screencasts' },
     { text: 'Blog', link: 'https://blog.sailscasts.com' }
   ]
 }
@@ -663,6 +592,13 @@ function pelliculeGuide() {
         { text: 'Frames', link: '/pellicule/frames' },
         { text: 'Video Config', link: '/pellicule/video-config' },
         { text: 'Sequences', link: '/pellicule/sequences' }
+      ]
+    },
+    {
+      text: 'Macros',
+      collapsed: false,
+      items: [
+        { text: 'defineVideoConfig', link: '/pellicule/define-video-config' }
       ]
     },
     {
