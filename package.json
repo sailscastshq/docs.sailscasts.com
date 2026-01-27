@@ -1,6 +1,6 @@
 {
   "name": "sailscasts-docs",
-  "version": "1.16.0",
+  "version": "1.17.0",
   "private": true,
   "description": "The official docs hub for Sailscasts",
   "scripts": {
