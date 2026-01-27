@@ -46,6 +46,7 @@ export default {
       '/sails-flash/': SailsFlashGuide(),
       '/clearance/': SailsClearanceGuide(),
       '/sails-sqlite/': SailsSQLiteGuide(),
+      '/connect-sqlite/': ConnectSQLiteGuide(),
       '/sails-quest/': SailsQuestGuide(),
       '/sentry-sails/': SentrySailsGuide(),
       '/pellicule/': pelliculeGuide()
@@ -477,6 +478,24 @@ function SailsClearanceGuide() {
         { text: 'Getting started', link: 'clearance/getting-started' },
         { text: 'Usage', link: 'clearance/usage' }
       ]
+    }
+  ]
+}
+
+function ConnectSQLiteGuide() {
+  return [
+    {
+      text: 'Introduction',
+      collapsed: false,
+      items: [
+        { text: 'Getting started', link: 'connect-sqlite/getting-started' },
+        { text: 'Configuration', link: 'connect-sqlite/configuration' }
+      ]
+    },
+    {
+      text: 'Reference',
+      collapsed: false,
+      items: [{ text: 'API', link: 'connect-sqlite/api' }]
     }
   ]
 }
