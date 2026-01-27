@@ -92,6 +92,12 @@ export default {
           github: 'https://github.com/sailscastshq/sails-sqlite'
         },
         {
+          name: 'Connect SQLite',
+          description: 'SQLite session store for Sails.js using better-sqlite3',
+          link: '/connect-sqlite/',
+          github: 'https://github.com/sailscastshq/connect-sqlite'
+        },
+        {
           name: 'Sentry Sails',
           description:
             'Sentry error tracking integration for Sails.js applications',
