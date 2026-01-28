@@ -43,13 +43,14 @@ That's it! Pellicule reads the duration from your component.
 
 ## Configuration Options
 
-| Property            | Type     | Default | Description                       |
-| ------------------- | -------- | ------- | --------------------------------- |
-| `durationInSeconds` | `number` | -       | Duration in seconds (recommended) |
-| `durationInFrames`  | `number` | `90`    | Duration in frames                |
-| `fps`               | `number` | `30`    | Frames per second                 |
-| `width`             | `number` | `1920`  | Video width in pixels             |
-| `height`            | `number` | `1080`  | Video height in pixels            |
+| Property            | Type     | Default | Description                                |
+| ------------------- | -------- | ------- | ------------------------------------------ |
+| `durationInSeconds` | `number` | -       | Duration in seconds (recommended)          |
+| `durationInFrames`  | `number` | `90`    | Duration in frames                         |
+| `fps`               | `number` | `30`    | Frames per second                          |
+| `width`             | `number` | `1920`  | Video width in pixels                      |
+| `height`            | `number` | `1080`  | Video height in pixels                     |
+| `audio`             | `string` | -       | Path to audio file (relative to component) |
 
 Use either `durationInSeconds` or `durationInFrames`, not both.
 
@@ -99,6 +100,23 @@ defineVideoConfig({
 })
 </script>
 ```
+
+### With Background Audio
+
+```vue
+<script setup>
+defineVideoConfig({
+  durationInSeconds: 30,
+  audio: './background-music.mp3'
+})
+</script>
+```
+
+The audio path is resolved relative to the component file. Supported formats include MP3, WAV, AAC, and any format FFmpeg supports.
+
+::: tip
+Audio does not affect video duration. If audio is shorter, it ends early. If longer, it's truncated to match the video length.
+:::
 
 ## How It Works
 
