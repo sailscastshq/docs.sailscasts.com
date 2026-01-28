@@ -23,16 +23,17 @@ npx pellicule Video.vue    # Same result
 
 ## Options
 
-| Option       | Short | Default        | Description                       |
-| ------------ | ----- | -------------- | --------------------------------- |
-| `--output`   | `-o`  | `./output.mp4` | Output file path                  |
-| `--duration` | `-d`  | `90`           | Duration in frames                |
-| `--fps`      | `-f`  | `30`           | Frames per second                 |
-| `--width`    | `-w`  | `1920`         | Video width in pixels             |
-| `--height`   | `-h`  | `1080`         | Video height in pixels            |
-| `--range`    | `-r`  |                | Frame range to render (start:end) |
-| `--help`     |       |                | Show help message                 |
-| `--version`  |       |                | Show version number               |
+| Option       | Short | Default        | Description                            |
+| ------------ | ----- | -------------- | -------------------------------------- |
+| `--output`   | `-o`  | `./output.mp4` | Output file path                       |
+| `--duration` | `-d`  | `90`           | Duration in frames                     |
+| `--fps`      | `-f`  | `30`           | Frames per second                      |
+| `--width`    | `-w`  | `1920`         | Video width in pixels                  |
+| `--height`   | `-h`  | `1080`         | Video height in pixels                 |
+| `--range`    | `-r`  |                | Frame range to render (start:end)      |
+| `--audio`    | `-a`  |                | Audio file to include (mp3, wav, etc.) |
+| `--help`     |       |                | Show help message                      |
+| `--version`  |       |                | Show version number                    |
 
 ## Examples
 
@@ -134,6 +135,41 @@ The range format is `start:end` where:
 Partial rendering keeps `durationInFrames` unchanged so your animations calculate correctly. Only the specified frames are actually rendered and encoded.
 :::
 
+### Audio
+
+Add background music or sound effects to your video with the `--audio` flag:
+
+```bash
+# Add background music
+npx pellicule Video -a background.mp3
+
+# With other options
+npx pellicule Video -o intro.mp4 --audio music.wav
+```
+
+Supported formats include MP3, WAV, AAC, and any format FFmpeg supports. The audio is re-encoded to AAC for universal MP4 compatibility.
+
+#### Audio Behavior
+
+- **Video duration is the source of truth** — audio does not affect video length
+- If audio is **shorter** than video: audio ends, video continues (silent for remainder)
+- If audio is **longer** than video: audio is truncated to match video duration
+
+#### Audio in defineVideoConfig
+
+You can also specify audio directly in your component:
+
+```vue
+<script setup>
+defineVideoConfig({
+  durationInSeconds: 10,
+  audio: './background.mp3'
+})
+</script>
+```
+
+The path is resolved relative to the component file. CLI flags override component config.
+
 ### Combined Example
 
 A 10-second 4K video at 60fps for YouTube:
@@ -152,15 +188,18 @@ npx pellicule Video \
 While rendering, Pellicule shows a progress bar:
 
 ```
-  PELLICULE  v0.0.0
+  PELLICULE  v0.0.3
 
   Input      Video.vue
   Output     output.mp4
   Resolution 1920x1080
   Duration   90 frames @ 30fps (3.0s)
+  Audio      background.mp3
 
   █████████████████░░░░░░░░░░░░░ 57% (51/90 @ 28.3 fps)
 ```
+
+The `Audio` line only appears when an audio file is specified.
 
 ## Error Handling
 
@@ -173,6 +212,16 @@ Error: File not found: NotAFile
 ```
 
 Make sure the `.vue` file exists in your current directory.
+
+### Audio File Not Found
+
+```bash
+$ npx pellicule Video --audio missing.mp3
+
+Error: Audio file not found: missing.mp3
+```
+
+Make sure the audio file exists. Paths in `defineVideoConfig` are resolved relative to the component file.
 
 ### FFmpeg Not Installed
 
