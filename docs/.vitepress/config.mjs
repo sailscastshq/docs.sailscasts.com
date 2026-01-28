@@ -646,6 +646,11 @@ function pelliculeGuide() {
       text: 'Reference',
       collapsed: false,
       items: [{ text: 'CLI', link: '/pellicule/cli' }]
+    },
+    {
+      text: 'AI',
+      collapsed: false,
+      items: [{ text: 'Agent Skills', link: '/pellicule/agent-skills' }]
     }
   ]
 }
