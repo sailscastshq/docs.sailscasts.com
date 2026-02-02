@@ -33,6 +33,7 @@ export default {
     search: { provider: 'local' },
     nav: nav(),
     sidebar: {
+      '/slipway/': slipwayGuide(),
       '/captain-vane/': captainVaneGuide(),
       '/guppy/': guppyGuide(),
       '/wish/': wishGuide(),
@@ -410,6 +411,7 @@ function SailsStashGuide() {
       items: [
         { text: 'Memory', link: 'sails-stash/memory' },
         { text: 'Redis', link: 'sails-stash/redis' },
+        { text: 'SQLite', link: 'sails-stash/sqlite' },
         { text: 'Memcached', link: 'sails-stash/memcached' }
       ]
     },
@@ -651,6 +653,80 @@ function pelliculeGuide() {
       text: 'AI',
       collapsed: false,
       items: [{ text: 'Agent Skills', link: '/pellicule/agent-skills' }]
+    }
+  ]
+}
+
+function slipwayGuide() {
+  return [
+    {
+      text: 'Introduction',
+      collapsed: false,
+      items: [
+        { text: 'Overview', link: '/slipway/' },
+        { text: 'What is Slipway?', link: '/slipway/what-is-slipway' },
+        { text: 'Why Slipway?', link: '/slipway/why-slipway' },
+        { text: 'The Name', link: '/slipway/the-name' }
+      ]
+    },
+    {
+      text: 'Getting Started',
+      collapsed: false,
+      items: [
+        { text: 'Requirements', link: '/slipway/requirements' },
+        { text: 'Server Installation', link: '/slipway/server-installation' },
+        { text: 'Initial Setup', link: '/slipway/initial-setup' },
+        { text: 'Your First Deploy', link: '/slipway/first-deploy' }
+      ]
+    },
+    {
+      text: 'Server Administration',
+      collapsed: false,
+      items: [
+        { text: 'Configuration', link: '/slipway/configuration' },
+        { text: 'Instance URL', link: '/slipway/instance-url' },
+        { text: 'Custom Domain & SSL', link: '/slipway/custom-domain' },
+        { text: 'Settings', link: '/slipway/settings' }
+      ]
+    },
+    {
+      text: 'CLI',
+      collapsed: false,
+      items: [
+        { text: 'Installation', link: '/slipway/cli-installation' },
+        { text: 'Authentication', link: '/slipway/cli-authentication' },
+        { text: 'Commands Reference', link: '/slipway/cli-commands' }
+      ]
+    },
+    {
+      text: 'Projects',
+      collapsed: false,
+      items: [
+        { text: 'Creating Projects', link: '/slipway/creating-projects' },
+        {
+          text: 'Project Configuration',
+          link: '/slipway/project-configuration'
+        },
+        { text: 'Linking to Git', link: '/slipway/git-integration' }
+      ]
+    },
+    {
+      text: 'Deployments',
+      collapsed: false,
+      items: [
+        { text: 'How Deployments Work', link: '/slipway/how-deployments-work' },
+        { text: 'Deploy Command', link: '/slipway/deploy-command' },
+        { text: 'Deployment Logs', link: '/slipway/deployment-logs' },
+        { text: 'Rollbacks', link: '/slipway/rollbacks' }
+      ]
+    },
+    {
+      text: 'Environment Variables',
+      collapsed: false,
+      items: [
+        { text: 'Managing Variables', link: '/slipway/environment-variables' },
+        { text: 'Secrets', link: '/slipway/secrets' }
+      ]
     }
   ]
 }

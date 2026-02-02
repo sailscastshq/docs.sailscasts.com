@@ -13,18 +13,17 @@ Connect SQLite provides several configuration options to customize its behavior.
 
 ## Options
 
-| Option         | Default      | Description                                                    |
-| -------------- | ------------ | -------------------------------------------------------------- |
-| `url`          | -            | SQLite URL (`sqlite:./path/to/db.sqlite` or `sqlite::memory:`) |
-| `db`           | `:memory:`   | Database file path (alternative to url)                        |
-| `client`       | -            | Existing better-sqlite3 Database instance                      |
-| `table`        | `'sessions'` | Table name for sessions                                        |
-| `prefix`       | `'sess:'`    | Key prefix for session IDs                                     |
-| `ttl`          | `86400`      | Default TTL in seconds (1 day)                                 |
-| `disableTTL`   | `false`      | Disable TTL expiration                                         |
-| `disableTouch` | `false`      | Disable touch updates                                          |
-| `serializer`   | `JSON`       | Custom serializer with `parse`/`stringify`                     |
-| `wal`          | `true`       | Enable WAL mode for better concurrency                         |
+| Option         | Default      | Description                                |
+| -------------- | ------------ | ------------------------------------------ |
+| `url`          | `:memory:`   | Database path (e.g. `./db/sessions.db`)    |
+| `client`       | -            | Existing better-sqlite3 Database instance  |
+| `table`        | `'sessions'` | Table name for sessions                    |
+| `prefix`       | `'sess:'`    | Key prefix for session IDs                 |
+| `ttl`          | `86400`      | Default TTL in seconds (1 day)             |
+| `disableTTL`   | `false`      | Disable TTL expiration                     |
+| `disableTouch` | `false`      | Disable touch updates                      |
+| `serializer`   | `JSON`       | Custom serializer with `parse`/`stringify` |
+| `wal`          | `true`       | Enable WAL mode for better concurrency     |
 
 ## Example Configurations
 
@@ -35,7 +34,7 @@ Connect SQLite provides several configuration options to customize its behavior.
 module.exports.session = {
   secret: process.env.SESSION_SECRET,
   adapter: '@sailscastshq/connect-sqlite',
-  url: 'sqlite:./db/sessions.db',
+  url: './db/sessions.db',
 
   // Custom TTL (7 days)
   ttl: 7 * 24 * 60 * 60,
@@ -53,7 +52,7 @@ module.exports.session = {
 // config/env/development.js
 module.exports.session = {
   adapter: '@sailscastshq/connect-sqlite',
-  url: 'sqlite::memory:', // In-memory for fast development
+  url: ':memory:', // In-memory for fast development
 
   cookie: {
     secure: false
@@ -66,11 +65,15 @@ module.exports.session = {
 ```javascript
 module.exports.session = {
   adapter: '@sailscastshq/connect-sqlite',
-  url: 'sqlite:./db/sessions.db',
+  url: './db/sessions.db',
   table: 'user_sessions', // Custom table name
   prefix: 'myapp:' // Custom prefix
 }
 ```
+
+## Auto-Create Directory
+
+Connect SQLite automatically creates the parent directory if it doesn't exist. For example, with `url: './db/sessions.db'`, the `./db` directory will be created if needed.
 
 ## WAL Mode
 
@@ -81,7 +84,7 @@ To disable WAL mode:
 ```javascript
 module.exports.session = {
   adapter: '@sailscastshq/connect-sqlite',
-  url: 'sqlite:./db/sessions.db',
+  url: './db/sessions.db',
   wal: false
 }
 ```

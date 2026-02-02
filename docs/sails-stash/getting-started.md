@@ -50,9 +50,10 @@ Sails Stash supports the following cache backends:
 
 - **Memory** (default) - Zero-config in-memory caching
 - [Redis](/sails-stash/redis) - Persistent, distributed caching
+- [SQLite](/sails-stash/sqlite) - Persistent, file-based caching
 - Memcached <Badge type="warning" text="coming soon" />
 
-You can configure any of these stores for development or production. Follow the instructions to setup [Redis](/sails-stash/redis) for persistent caching in your Sails apps.
+You can configure any of these stores for development or production. Follow the instructions to setup [Redis](/sails-stash/redis) or [SQLite](/sails-stash/sqlite) for persistent caching in your Sails apps.
 
 ## Star the repo :star:
 

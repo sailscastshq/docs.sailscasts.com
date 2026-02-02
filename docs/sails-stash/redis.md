@@ -10,8 +10,8 @@ prev:
   text: Memory
   link: '/sails-stash/memory'
 next:
-  text: Memcached
-  link: '/sails-stash/memcached'
+  text: SQLite
+  link: '/sails-stash/sqlite'
 editLink: true
 ---
 
