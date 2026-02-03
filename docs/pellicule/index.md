@@ -16,7 +16,7 @@ hero:
       text: Get Started
       link: /pellicule/getting-started
     - theme: alt
-      text: GitHub
+      text: Star on GitHub ⭐️
       link: https://github.com/sailscastshq/pellicule
 features:
   - icon: 🎬
@@ -24,11 +24,17 @@ features:
     details: Write videos as Vue single-file components. If you know Vue, you know Pellicule.
   - icon: ⚡
     title: Zero Config
-    details: No build tools to configure. Just write a .vue file and render.
+    details: No build tools to configure. Pellicule reads your existing vite.config.js, rsbuild.config.js, config.shipwright.build, or nuxt.config.ts automatically.
   - icon: 🎯
     title: Deterministic
     details: Same frame number = same pixels. Every time. No timelines, no clocks, just math.
   - icon: 🚀
     title: Fast
     details: Renders at 25+ fps using Vue's reactivity system. No page reloads between frames.
+  - icon: 🔌
+    title: Bundler-Agnostic
+    details: Works with Vite, Rsbuild, Nuxt, Laravel, Quasar, and the Boring Stack. No dedicated config file — Pellicule reads what's already there.
+  - icon: 📦
+    title: Lives In Your App
+    details: Put video components next to your pages and app components. Import your real UI — design changes propagate to videos automatically.
 ---

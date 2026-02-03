@@ -95,9 +95,16 @@ Pellicule is _not_ for:
 
 Under the hood, Pellicule:
 
-1. Starts a Vite dev server with your component
-2. Opens the page in Playwright (headless Chromium)
-3. For each frame, updates the `frame` prop and takes a screenshot
-4. Pipes all frames to FFmpeg to encode the final video
+1. Detects your project's build tool and loads your existing config
+2. Starts a dev server with your component (Vite, Rsbuild, or your own server)
+3. Opens the page in Playwright (headless Chromium)
+4. For each frame, updates the `frame` number and takes a screenshot
+5. Pipes all frames to FFmpeg to encode the final video
 
 The entire pipeline is automated. You just write the component and run the CLI.
+
+### Bundler-Agnostic
+
+Pellicule doesn't force you to use a specific build tool. It reads your project's existing config — whether that's `vite.config.js`, `rsbuild.config.js`, `config/shipwright.js`, `nuxt.config.ts`, or `quasar.config.js` — and uses the right adapter automatically. Standalone projects with no config work too, using the built-in Vite adapter.
+
+This means Pellicule lives inside your app, not beside it. Your video components sit next to your pages and app components, import from them freely, and render with the same aliases and plugins your app uses. See [Integrations](/pellicule/integrations) for details.

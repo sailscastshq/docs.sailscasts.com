@@ -21,19 +21,65 @@ npx pellicule Video        # Looks for Video.vue
 npx pellicule Video.vue    # Same result
 ```
 
+Pellicule also checks your project's default video directory based on the detected framework. In a boring stack app, `pellicule InvoiceDemo` finds `assets/js/videos/InvoiceDemo.vue`. In a Laravel app, it finds `resources/js/Videos/InvoiceDemo.vue`. See [Integrations](/pellicule/integrations) for details.
+
 ## Options
 
-| Option       | Short | Default        | Description                            |
-| ------------ | ----- | -------------- | -------------------------------------- |
-| `--output`   | `-o`  | `./output.mp4` | Output file path                       |
-| `--duration` | `-d`  | `90`           | Duration in frames                     |
-| `--fps`      | `-f`  | `30`           | Frames per second                      |
-| `--width`    | `-w`  | `1920`         | Video width in pixels                  |
-| `--height`   | `-h`  | `1080`         | Video height in pixels                 |
-| `--range`    | `-r`  |                | Frame range to render (start:end)      |
-| `--audio`    | `-a`  |                | Audio file to include (mp3, wav, etc.) |
-| `--help`     |       |                | Show help message                      |
-| `--version`  |       |                | Show version number                    |
+| Option         | Short | Default        | Description                                      |
+| -------------- | ----- | -------------- | ------------------------------------------------ |
+| `--output`     | `-o`  | `./output.mp4` | Output file path                                 |
+| `--duration`   | `-d`  | `90`           | Duration in frames                               |
+| `--fps`        | `-f`  | `30`           | Frames per second                                |
+| `--width`      | `-w`  | `1920`         | Video width in pixels                            |
+| `--height`     | `-h`  | `1080`         | Video height in pixels                           |
+| `--range`      | `-r`  |                | Frame range to render (start:end)                |
+| `--audio`      | `-a`  |                | Audio file to include (mp3, wav, etc.)           |
+| `--server-url` |       |                | Use a running dev server instead of starting one |
+| `--bundler`    |       |                | Force a specific bundler (`vite` or `rsbuild`)   |
+| `--config`     |       |                | Path to a specific config file                   |
+| `--videos-dir` |       |                | Override the default video directory             |
+| `--help`       |       |                | Show help message                                |
+| `--version`    |       |                | Show version number                              |
+
+### Project Config (package.json)
+
+Instead of passing integration flags on every command, set them once in your `package.json`:
+
+```json
+{
+  "pellicule": {
+    "serverUrl": "http://localhost:3000",
+    "videosDir": "app/videos",
+    "bundler": "rsbuild"
+  }
+}
+```
+
+| Key         | Type   | Description                                           |
+| ----------- | ------ | ----------------------------------------------------- |
+| `serverUrl` | string | URL of a running dev server (BYOS mode)               |
+| `videosDir` | string | Custom directory for video components (relative path) |
+| `bundler`   | string | Force `vite` or `rsbuild`                             |
+
+Resolution order: **CLI flags > package.json > auto-detected > defaults**.
+
+### Integration Options
+
+Most projects never need these — Pellicule auto-detects your project type and config, and the package.json `pellicule` key handles project-wide settings. These CLI flags are escape hatches for one-off overrides.
+
+```bash
+# Override the default Nuxt server URL (defaults to localhost:3000)
+pellicule AppDemo --server-url http://localhost:4000
+
+# Force Rsbuild adapter
+pellicule Video --bundler rsbuild
+
+# Point at a specific config file
+pellicule Video --config ./custom/vite.config.js
+
+# Override where Pellicule looks for video files
+pellicule InvoiceDemo --videos-dir ./my/videos
+```
 
 ## Examples
 
