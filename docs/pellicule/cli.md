@@ -38,6 +38,7 @@ Pellicule also checks your project's default video directory based on the detect
 | `--bundler`    |       |                | Force a specific bundler (`vite` or `rsbuild`)   |
 | `--config`     |       |                | Path to a specific config file                   |
 | `--videos-dir` |       |                | Override the default video directory             |
+| `--out-dir`    |       |                | Directory for rendered video output              |
 | `--help`       |       |                | Show help message                                |
 | `--version`    |       |                | Show version number                              |
 
@@ -50,6 +51,7 @@ Instead of passing integration flags on every command, set them once in your `pa
   "pellicule": {
     "serverUrl": "http://localhost:3000",
     "videosDir": "app/videos",
+    "outDir": "./renders",
     "bundler": "rsbuild"
   }
 }
@@ -59,7 +61,10 @@ Instead of passing integration flags on every command, set them once in your `pa
 | ----------- | ------ | ----------------------------------------------------- |
 | `serverUrl` | string | URL of a running dev server (BYOS mode)               |
 | `videosDir` | string | Custom directory for video components (relative path) |
+| `outDir`    | string | Directory for rendered video output (relative path)   |
 | `bundler`   | string | Force `vite` or `rsbuild`                             |
+
+When `outDir` is set and no `-o` flag is passed, the output filename is derived from the component name. For example, `pellicule InvoiceDemo` with `outDir` set to `./renders` writes to `./renders/InvoiceDemo.mp4`.
 
 Resolution order: **CLI flags > package.json > auto-detected > defaults**.
 

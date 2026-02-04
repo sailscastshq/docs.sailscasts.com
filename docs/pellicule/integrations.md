@@ -70,6 +70,7 @@ Supported keys:
 | ----------- | ------ | ----------------------------------------------------- |
 | `serverUrl` | string | URL of a running dev server (BYOS mode)               |
 | `videosDir` | string | Custom directory for video components (relative path) |
+| `outDir`    | string | Directory for rendered video output (relative path)   |
 | `bundler`   | string | Force `vite` or `rsbuild`                             |
 
 The resolution order is: **CLI flags > package.json > auto-detected > defaults**. CLI flags always win, but the package.json config means you set it once and forget it.

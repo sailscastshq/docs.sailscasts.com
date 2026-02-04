@@ -9,9 +9,9 @@ next:
 
 # Nuxt
 
-Nuxt is a special case. Unlike other integrations where Pellicule reads a config file and creates its own server, Nuxt requires a running dev server.
+Pellicule provides a Nuxt module that integrates video rendering into your Nuxt app. Add the module, create video components, and render — your full Nuxt environment is available.
 
-## Why Nuxt is Different
+## Why a Nuxt Module?
 
 Nuxt wraps Vite with layers of runtime machinery:
 
@@ -20,15 +20,44 @@ Nuxt wraps Vite with layers of runtime machinery:
 - **Generated aliases** — `#components`, `#imports` are created dynamically
 - **Nuxt modules** — `@nuxtjs/tailwindcss`, `@pinia/nuxt`, etc. inject plugins and config
 
-None of this exists in a static `vite.config.js`. Nuxt's Vite config is constructed at runtime. You can't extract it and hand it to another tool.
+None of this exists in a static `vite.config.js`. Nuxt's Vite config is constructed at runtime. So instead of Pellicule creating its own server, it renders inside your running Nuxt app where all auto-imports, modules, and aliases already work.
 
-So instead of Pellicule creating its own server, it points at yours. Your Nuxt dev server already has all the right config, all the auto-imports, all the modules — Pellicule just uses it.
+The `pellicule/nuxt` module handles this by injecting a hidden `/pellicule` render page into your app that Pellicule's renderer navigates to.
 
 ## Setup
 
-When Pellicule detects `nuxt.config.ts`, it automatically defaults to `http://localhost:3000` — Nuxt's standard dev server address. No configuration needed.
+### 1. Install Pellicule
 
-Start your Nuxt dev server and render:
+```bash
+npm install pellicule
+```
+
+### 2. Add the Module
+
+Add `pellicule/nuxt` to your `nuxt.config.ts`:
+
+```ts
+export default defineNuxtConfig({
+  modules: ['pellicule/nuxt']
+})
+```
+
+This does three things automatically:
+
+- Adds a `/pellicule` render page (used by Pellicule's Playwright renderer)
+- Registers the `defineVideoConfig()` macro so it compiles cleanly
+- Discovers video components in your `app/videos/` directory
+
+If you use ESLint, add `defineVideoConfig` as a global so it doesn't flag the macro as undefined:
+
+```js
+// eslint.config.js (or .eslintrc)
+globals: {
+  defineVideoConfig: 'readonly'
+}
+```
+
+### 3. Start Your Dev Server and Render
 
 ```bash
 # Start your Nuxt dev server
@@ -38,7 +67,7 @@ npx nuxt dev
 pellicule AppDemo
 ```
 
-That's it. Pellicule detects Nuxt, connects to `localhost:3000`, and renders your video.
+Pellicule detects `nuxt.config.ts`, connects to `localhost:3000`, and renders your video through the injected `/pellicule` page.
 
 ::: tip
 Your Nuxt dev server must be running before you run Pellicule. Pellicule doesn't start Nuxt for you — it connects to the server you already have.
@@ -64,6 +93,19 @@ pellicule AppDemo --server-url http://localhost:4000
 
 Resolution order: **CLI flags > package.json > default (`http://localhost:3000`)**.
 
+### Custom Videos Directory
+
+By default, the module looks for video components in `app/videos/`. To change this, configure it in `nuxt.config.ts`:
+
+```ts
+export default defineNuxtConfig({
+  modules: ['pellicule/nuxt'],
+  pellicule: {
+    videosDir: '~/my-videos' // ~ resolves to your srcDir
+  }
+})
+```
+
 ## Project Structure
 
 Create a `videos/` directory inside `app/`, next to your components and pages:
@@ -87,7 +129,7 @@ my-nuxt-app/
 
 ## Example Video Component
 
-Because Pellicule renders inside your Nuxt server, auto-imports work:
+Because Pellicule renders inside your Nuxt app, auto-imports and your project's components work:
 
 ```vue
 <script setup>
@@ -162,3 +204,14 @@ Be mindful of non-deterministic data. If `useFetch` returns different data betwe
 ## Nuxt Modules
 
 Any Nuxt module you've installed works in your video components. If you're using `@nuxtjs/tailwindcss`, your Tailwind classes render. If you're using `@pinia/nuxt`, your stores are available. The video renders inside your full Nuxt environment.
+
+## How It Works
+
+When you run `pellicule AppDemo`:
+
+1. Pellicule detects `nuxt.config.ts` and enters BYOS (Bring Your Own Server) mode
+2. It constructs the URL `http://localhost:3000/pellicule?component=AppDemo&fps=30&duration=150&width=1920&height=1080`
+3. The `/pellicule` page (injected by the module) loads `AppDemo.vue` from your `app/videos/` directory
+4. The page sets up Pellicule's frame injection (`useFrame`, `useVideoConfig`) and signals readiness
+5. Playwright screenshots each frame, advancing the frame counter between shots
+6. Frames are encoded to MP4 with FFmpeg

@@ -9,24 +9,24 @@ next:
 
 # Laravel
 
-If your app uses Laravel + Inertia + Vue, Pellicule detects your `vite.config.js` — which includes `laravel-vite-plugin` — and loads it automatically. Your aliases, your plugins, everything resolves.
+If your app uses Laravel + Inertia + Vue, Pellicule detects your `vite.config.ts` — which includes `laravel-vite-plugin` — and loads it automatically. Your aliases, your plugins, everything resolves.
 
 ## Setup
 
-There is no setup. Pellicule reads your `vite.config.js`.
+There is no setup. Pellicule reads your `vite.config.ts`.
 
 A typical Laravel Vite config:
 
-```js
-// vite.config.js
-import { defineConfig } from 'vite'
-import laravel from 'laravel-vite-plugin'
+```ts
+// vite.config.ts
 import vue from '@vitejs/plugin-vue'
+import laravel from 'laravel-vite-plugin'
+import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [
     laravel({
-      input: ['resources/css/app.css', 'resources/js/app.js'],
+      input: ['resources/js/app.ts'],
       refresh: true
     }),
     vue()
@@ -38,39 +38,38 @@ Pellicule loads this config and merges it with its own requirements. Your Larave
 
 ## Project Structure
 
-Create a `Videos/` directory inside `resources/js/`, right next to your Pages:
+Create a `videos/` directory inside `resources/js/`, right next to your pages:
 
 ```
 my-laravel-app/
 ├── resources/
 │   ├── js/
-│   │   ├── app.js
-│   │   ├── Pages/
+│   │   ├── app.ts
+│   │   ├── pages/
 │   │   │   ├── Dashboard.vue
-│   │   │   └── Invoices/
-│   │   │       └── Index.vue
-│   │   ├── Components/
+│   │   │   └── Welcome.vue
+│   │   ├── components/
 │   │   │   ├── AppLogo.vue
 │   │   │   └── DataTable.vue
-│   │   └── Videos/              ← your video components
+│   │   └── videos/              ← your video components
 │   │       ├── ProductDemo.vue
 │   │       └── Onboarding.vue
 │   └── css/
 │       └── app.css
-├── vite.config.js
+├── vite.config.ts
 └── package.json
 ```
 
-This matches Laravel's conventions. Pages live in `Pages/`, components in `Components/`, videos in `Videos/`.
+This matches Laravel's conventions. Pages live in `pages/`, components in `components/`, videos in `videos/`.
 
 ## Rendering
 
 ```bash
-# Pellicule finds resources/js/Videos/ProductDemo.vue automatically
+# Pellicule finds resources/js/videos/ProductDemo.vue automatically
 pellicule ProductDemo
 
 # Or pass the full path
-pellicule resources/js/Videos/ProductDemo.vue
+pellicule resources/js/videos/ProductDemo.vue
 
 # With options
 pellicule Onboarding -o onboarding-video.mp4 -f 60
@@ -82,8 +81,8 @@ pellicule Onboarding -o onboarding-video.mp4 -f 60
 <script setup>
 import { computed } from 'vue'
 import { useFrame, useVideoConfig, interpolate, Easing } from 'pellicule'
-import AppLogo from '@/Components/AppLogo.vue'
-import DataTable from '@/Components/DataTable.vue'
+import AppLogo from '@/components/AppLogo.vue'
+import DataTable from '@/components/DataTable.vue'
 
 defineVideoConfig({
   durationInSeconds: 6,
