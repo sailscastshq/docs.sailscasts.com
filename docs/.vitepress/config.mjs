@@ -607,6 +607,19 @@ function pelliculeGuide() {
       ]
     },
     {
+      text: 'Integrations',
+      collapsed: false,
+      items: [
+        { text: 'Overview', link: '/pellicule/integrations' },
+        { text: 'Vite', link: '/pellicule/vite' },
+        { text: 'The Boring Stack', link: '/pellicule/boring-stack' },
+        { text: 'Rsbuild', link: '/pellicule/rsbuild' },
+        { text: 'Laravel', link: '/pellicule/laravel' },
+        { text: 'Nuxt', link: '/pellicule/nuxt' },
+        { text: 'Quasar', link: '/pellicule/quasar' }
+      ]
+    },
+    {
       text: 'Concepts',
       collapsed: false,
       items: [

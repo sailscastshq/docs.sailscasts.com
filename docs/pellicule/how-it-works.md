@@ -17,18 +17,28 @@ When you render a video, Pellicule executes these steps:
 
 ```
 ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│  Vite Dev   │ -> │  Playwright │ -> │  Screenshot │ -> │   FFmpeg    │
-│   Server    │    │  (Browser)  │    │   Capture   │    │   Encode    │
+│  Dev Server │ -> │  Playwright │ -> │  Screenshot │ -> │   FFmpeg    │
+│  (auto)     │    │  (Browser)  │    │   Capture   │    │   Encode    │
 └─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
 ```
 
-### 1. Vite Dev Server
+### 1. Dev Server
 
-Pellicule starts a Vite dev server that serves your Vue component. This gives you:
+Pellicule detects your project's build tool and starts a dev server that serves your Vue component. It reads your existing config automatically:
 
-- Hot module replacement during development
+- `vite.config.js` → Vite adapter (standalone projects, Laravel + Inertia)
+- `rsbuild.config.js` → Rsbuild adapter (standalone Rsbuild projects)
+- `config/shipwright.js` → Rsbuild adapter (boring stack apps)
+- `nuxt.config.ts` → Connects to your running Nuxt dev server
+- No config → built-in Vite adapter (standalone projects via `create-pellicule`)
+
+This gives you:
+
 - Full Vue 3 support with single-file components
+- Your project's aliases and plugins, loaded automatically
 - Access to the entire npm ecosystem
+
+See [Integrations](/pellicule/integrations) for framework-specific details.
 
 ### 2. Playwright Browser
 
@@ -108,19 +118,7 @@ Areas we're exploring for future versions:
 
 ## Audio Support
 
-Audio is not currently supported. Pellicule focuses on visual rendering.
-
-If you need audio, you can add it post-render with FFmpeg:
-
-```bash
-# Render video with Pellicule
-npx pellicule -d 300 -o video.mp4
-
-# Add audio track with FFmpeg
-ffmpeg -i video.mp4 -i audio.mp3 -c:v copy -c:a aac -shortest final.mp4
-```
-
-Audio sync is on the roadmap for future versions.
+Pellicule supports adding audio tracks to your videos via the `--audio` CLI flag or the `audio` property in `defineVideoConfig`. See the [CLI reference](/pellicule/cli) for details.
 
 ## Rendering Environment
 

@@ -23,7 +23,7 @@ Configure your session store in `config/session.js`:
 module.exports.session = {
   secret: process.env.SESSION_SECRET,
   adapter: '@sailscastshq/connect-sqlite',
-  url: 'sqlite:./db/sessions.db',
+  url: './db/sessions.db',
 
   cookie: {
     secure: true,
@@ -36,18 +36,22 @@ That's it! Sails will automatically use SQLite to store sessions.
 
 ## URL Formats
 
-Connect SQLite supports multiple URL formats:
+Connect SQLite accepts any valid file path:
 
 ```javascript
-// File-based database (recommended for production)
-url: 'sqlite:./db/sessions.db'
+// Relative path (recommended)
+url: './db/sessions.db'
 
 // Absolute path
-url: 'sqlite:/var/data/sessions.db'
+url: '/var/data/sessions.db'
 
 // In-memory database (for testing)
-url: 'sqlite::memory:'
+url: ':memory:'
 ```
+
+::: tip
+The parent directory will be created automatically if it doesn't exist.
+:::
 
 ## Why SQLite for Sessions?
 

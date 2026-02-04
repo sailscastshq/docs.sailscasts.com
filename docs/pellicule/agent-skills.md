@@ -9,20 +9,20 @@ These are useful for AI agents like [Claude Code](https://claude.ai/claude-code)
 You can install the skills using the following command:
 
 ```bash
-npx skills add sailscastshq/pellicule-skills
+npx skills add sailscastshq/pellicule/skills
 ```
 
 ## What's Included
 
 The skills package includes comprehensive documentation for:
 
-- **getting-started** - Installation, basic setup, and core concepts
+- **getting-started** - Installation, setup, and framework integration (Nuxt, Quasar, Laravel, etc.)
 - **macros** - `defineVideoConfig` compiler macro for zero-config rendering
 - **animations** - Animation utilities: `interpolate`, `sequence`, and easing functions
 - **composables** - Vue composables: `useFrame`, `useVideoConfig`, `useSequence`
 - **sequences** - `Sequence` component and `useSequence` for scene management
 - **patterns** - Common animation patterns (typewriter, staggered, scenes, loops)
-- **rendering** - CLI options and video output configuration
+- **rendering** - CLI options, BYOS mode, auto-detection, and rendering
 - **styling** - CSS, fonts, colors, and visual design
 
 ## Usage
@@ -38,4 +38,4 @@ The AI will:
 
 ## Source
 
-The skills are maintained at [sailscastshq/pellicule-skills](https://github.com/sailscastshq/pellicule-skills) on GitHub.
+The skills are maintained in the [skills/](https://github.com/sailscastshq/pellicule/tree/main/skills) directory of the Pellicule repository.

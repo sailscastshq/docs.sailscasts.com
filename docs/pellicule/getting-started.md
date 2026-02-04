@@ -128,6 +128,10 @@ Create a `Video.vue` file and run:
 npx pellicule Video.vue
 ```
 
+Pellicule auto-detects your project type and reads your existing config. No extra configuration needed — if you have a `vite.config.js`, `config/shipwright.js`, or `nuxt.config.ts`, Pellicule picks it up automatically. Your aliases and plugins just work.
+
+See [Integrations](/pellicule/integrations) for framework-specific guides.
+
 ## Next Steps
 
 Learn the core concepts:
@@ -135,3 +139,4 @@ Learn the core concepts:
 - [Frames](/pellicule/frames) — The fundamental unit of video
 - [Video Config](/pellicule/video-config) — Understanding fps, duration, and dimensions
 - [Sequences](/pellicule/sequences) — Organizing videos into scenes
+- [Integrations](/pellicule/integrations) — Using Pellicule with Vite, Nuxt, Laravel, The Boring Stack, and Quasar
