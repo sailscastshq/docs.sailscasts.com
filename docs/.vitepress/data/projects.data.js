@@ -3,18 +3,27 @@ export default {
     return {
       openSource: [
         {
+          name: 'Slipway',
+          description:
+            'The Sails-native deployment platform. Deploy Sails apps with a single command.',
+          link: '/slipway/',
+          github: 'https://github.com/sailscastshq/slipway'
+        },
+        {
           name: 'Boring Stack',
           description:
             'A full-stack JavaScript framework for building modern web applications with Sails and Inertia.js',
           link: '/boring-stack/',
-          github: 'https://github.com/sailscastshq/boring-stack'
+          github: 'https://github.com/sailscastshq/boring-stack',
+          popular: true
         },
         {
           name: 'Pellicule',
           description:
             'A Vue-native video rendering library for creating videos programmatically with Vue components',
           link: '/pellicule/',
-          github: 'https://github.com/sailscastshq/pellicule'
+          github: 'https://github.com/sailscastshq/pellicule',
+          popular: true
         },
         {
           name: 'Inertia Sails',
@@ -56,7 +65,8 @@ export default {
           description:
             'Payment processing for Sails.js with Lemon Squeezy, Paystack, Flutterwave, and more',
           link: '/sails-pay/',
-          github: 'https://github.com/sailscastshq/sails-hook-pay'
+          github: 'https://github.com/sailscastshq/sails-hook-pay',
+          popular: true
         },
         {
           name: 'Sails Quest',
