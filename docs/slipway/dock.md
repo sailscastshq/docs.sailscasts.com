@@ -380,6 +380,5 @@ If diff seems wrong:
 
 ## What's Next?
 
-- Set up [Backups](/slipway/backups) for disaster recovery
 - Use [Helm](/slipway/helm) for debugging app issues
 - Configure [Auto-Deploy](/slipway/auto-deploy) for continuous deployment
