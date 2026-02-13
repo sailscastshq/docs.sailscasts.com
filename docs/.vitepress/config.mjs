@@ -63,8 +63,8 @@ export default {
         icon: 'github',
         link: 'https://github.com/sailscastshq/docs.sailscasts.com'
       },
-      { icon: 'twitter', link: 'https://twitter.com/sailscastshq' },
-      { icon: 'discord', link: 'https://sailscasts.com/chat' },
+      { icon: 'x', link: 'https://x.com/sailscastshq' },
+      { icon: 'discord', link: 'https://sailsjs.com/chat' },
       { icon: 'youtube', link: 'https://youtube.com/@sailscasts' }
     ],
     footer: {
@@ -679,7 +679,11 @@ function slipwayGuide() {
         { text: 'Overview', link: '/slipway/' },
         { text: 'What is Slipway?', link: '/slipway/what-is-slipway' },
         { text: 'Why Slipway?', link: '/slipway/why-slipway' },
-        { text: 'The Name', link: '/slipway/the-name' }
+        { text: 'The Name', link: '/slipway/the-name' },
+        {
+          text: 'Philosophy & Architecture',
+          link: '/slipway/philosophy-and-architecture'
+        }
       ]
     },
     {
@@ -689,7 +693,8 @@ function slipwayGuide() {
         { text: 'Requirements', link: '/slipway/requirements' },
         { text: 'Server Installation', link: '/slipway/server-installation' },
         { text: 'Initial Setup', link: '/slipway/initial-setup' },
-        { text: 'Your First Deploy', link: '/slipway/first-deploy' }
+        { text: 'Your First Deploy', link: '/slipway/first-deploy' },
+        { text: 'Uninstallation', link: '/slipway/uninstallation' }
       ]
     },
     {
@@ -699,7 +704,8 @@ function slipwayGuide() {
         { text: 'Configuration', link: '/slipway/configuration' },
         { text: 'Instance URL', link: '/slipway/instance-url' },
         { text: 'Custom Domain & SSL', link: '/slipway/custom-domain' },
-        { text: 'Settings', link: '/slipway/settings' }
+        { text: 'Settings', link: '/slipway/settings' },
+        { text: 'Updates', link: '/slipway/updates' }
       ]
     },
     {
@@ -720,7 +726,7 @@ function slipwayGuide() {
           text: 'Project Configuration',
           link: '/slipway/project-configuration'
         },
-        { text: 'Linking to Git', link: '/slipway/git-integration' }
+        { text: 'Git Integration', link: '/slipway/git-integration' }
       ]
     },
     {
@@ -730,15 +736,45 @@ function slipwayGuide() {
         { text: 'How Deployments Work', link: '/slipway/how-deployments-work' },
         { text: 'Deploy Command', link: '/slipway/deploy-command' },
         { text: 'Deployment Logs', link: '/slipway/deployment-logs' },
-        { text: 'Rollbacks', link: '/slipway/rollbacks' }
+        { text: 'Rollbacks', link: '/slipway/rollbacks' },
+        { text: 'Auto-Deploy', link: '/slipway/auto-deploy' }
       ]
     },
     {
-      text: 'Environment Variables',
+      text: 'Configuration',
       collapsed: false,
       items: [
-        { text: 'Managing Variables', link: '/slipway/environment-variables' },
-        { text: 'Secrets', link: '/slipway/secrets' }
+        {
+          text: 'Environment Variables',
+          link: '/slipway/environment-variables'
+        },
+        {
+          text: 'Global Environment Variables',
+          link: '/slipway/global-environment-variables'
+        },
+        { text: 'Secrets', link: '/slipway/secrets' },
+        { text: 'File Uploads', link: '/slipway/file-uploads' },
+        { text: 'Database Services', link: '/slipway/database-services' }
+      ]
+    },
+    {
+      text: 'Toolbox',
+      collapsed: false,
+      items: [
+        { text: 'Helm', link: '/slipway/helm' },
+        { text: 'Bridge', link: '/slipway/bridge' },
+        { text: 'Content', link: '/slipway/content' },
+        { text: 'Quest', link: '/slipway/quest' },
+        { text: 'Dock', link: '/slipway/dock' }
+      ]
+    },
+    {
+      text: 'Team & Security',
+      collapsed: false,
+      items: [
+        { text: 'Team Management', link: '/slipway/team-management' },
+        { text: 'Audit Logs', link: '/slipway/audit-logs' },
+        { text: 'Deploy Tokens', link: '/slipway/deploy-tokens' }
       ]
     }
   ]
