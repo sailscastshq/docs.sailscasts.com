@@ -1,0 +1,19 @@
+<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Slippy — the Slipway octopus -->
+  <!-- Mantle/Head dome -->
+  <path
+    d="M7 17 C7 3 25 3 25 17 Z"
+    stroke="#0284c7"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <!-- Tentacles -->
+  <path d="M7 17 C4 21 4 25 8 28" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/>
+  <path d="M12 17 C11 21 10 25 13 28" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/>
+  <path d="M20 17 C21 21 22 25 19 28" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/>
+  <path d="M25 17 C28 21 28 25 24 28" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/>
+  <!-- Eyes -->
+  <circle cx="13" cy="11" r="1.5" fill="#0284c7"/>
+  <circle cx="19" cy="11" r="1.5" fill="#0284c7"/>
+</svg>
