@@ -10,8 +10,8 @@ prev:
   text: Quest
   link: /slipway/quest
 next:
-  text: Auto-Deploy
-  link: /slipway/auto-deploy
+  text: Lookout
+  link: /slipway/lookout
 editLink: true
 ---
 
