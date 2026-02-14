@@ -168,7 +168,7 @@ Slipway stores two secrets on your server at `/etc/slipway/.env`:
 
 These are generated once during installation and reused on updates. Sensitive model fields (like service passwords) are encrypted at rest using `DATA_ENCRYPTION_KEY`.
 
-## The Toolbox
+## The Platform
 
 Slipway includes a suite of built-in tools that work with your deployed Sails apps:
 

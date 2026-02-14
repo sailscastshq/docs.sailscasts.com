@@ -7,8 +7,8 @@ title: Updates
 titleTemplate: Slipway
 description: Keep your Slipway instance up to date with the latest features and security fixes.
 prev:
-  text: Settings
-  link: /slipway/settings
+  text: Notifications
+  link: /slipway/notifications
 next:
   text: CLI Installation
   link: /slipway/cli-installation

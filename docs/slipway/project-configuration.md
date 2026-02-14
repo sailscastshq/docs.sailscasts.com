@@ -188,6 +188,10 @@ CMD ["node", "app.js"]
 slipway project:update myapp --dockerfile=docker/production.Dockerfile
 ```
 
+::: tip Per-App Dockerfiles
+In [multi-app environments](/slipway/multi-app), each app can have its own Dockerfile path. Configure it on the app settings page or when creating an app. This lets you use `Dockerfile` for the web app and `Dockerfile.worker` for a background worker, for example.
+:::
+
 ## Build Arguments
 
 Pass build-time arguments:

@@ -52,6 +52,20 @@ slipway slide --env=staging
 slipway slide --env=production
 ```
 
+### App
+
+In [multi-app environments](/slipway/multi-app), target a specific app by slug:
+
+```bash
+# Deploy the API app
+slipway slide --app=api
+
+# Deploy the worker app to staging
+slipway slide --env=staging --app=worker
+```
+
+If omitted, the default app in the environment is deployed.
+
 ### Message
 
 Add a deployment message:

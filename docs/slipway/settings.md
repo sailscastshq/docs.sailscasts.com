@@ -10,8 +10,8 @@ prev:
   text: Custom Domain & SSL
   link: /slipway/custom-domain
 next:
-  text: CLI Installation
-  link: /slipway/cli-installation
+  text: Notifications
+  link: /slipway/notifications
 editLink: true
 ---
 

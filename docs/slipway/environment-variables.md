@@ -86,6 +86,35 @@ slipway env:get myapp DATABASE_URL
 slipway env:unset myapp UNUSED_VAR
 ```
 
+## Variable Cascade
+
+When a container starts, Slipway merges variables from three levels. Later levels override earlier ones:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  1. Global Variables (instance-wide)                     │
+│     R2_ACCESS_KEY=abc123                                │
+│     LOG_LEVEL=info                                      │
+├─────────────────────────────────────────────────────────┤
+│  2. Environment Variables (per environment)              │
+│     DATABASE_URL=postgres://...                         │
+│     LOG_LEVEL=debug          ← overrides global         │
+├─────────────────────────────────────────────────────────┤
+│  3. App Variables (per app, multi-app only)              │
+│     WORKER_CONCURRENCY=5                                │
+│     LOG_LEVEL=warn           ← overrides environment    │
+└─────────────────────────────────────────────────────────┘
+```
+
+**Override priority** (highest wins):
+
+1. **App-specific variables** (set per app in [multi-app environments](/slipway/multi-app))
+2. **Environment variables** (set via `slipway env:set` or dashboard)
+3. **Global variables** (set in Settings → Global Environment)
+4. **Slipway defaults** (`PORT`, `NODE_ENV`, etc.)
+
+For single-app environments, levels 1 and 2 are all you need. App-specific variables only matter when running [multiple apps](/slipway/multi-app) in the same environment.
+
 ## When Changes Take Effect
 
 Environment variable changes require a **redeploy** to take effect:

@@ -41,7 +41,12 @@ slipway rollback myapp --deployment=abc123
 
 # Rollback to a specific version tag
 slipway rollback myapp --version=v1.2.0
+
+# Rollback a specific app in a multi-app environment
+slipway rollback myapp --app=api
 ```
+
+In [multi-app environments](/slipway/multi-app), use `--app` to target a specific app. If omitted, the default app is rolled back.
 
 ### Via Dashboard
 
