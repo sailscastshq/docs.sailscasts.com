@@ -50,11 +50,12 @@ In [multi-app environments](/slipway/multi-app), use `--app` to target a specifi
 
 ### Via Dashboard
 
-1. Go to your project
-2. Click the **Deployments** tab
-3. Find the deployment you want to restore
-4. Click **Rollback to this version**
-5. Confirm the rollback
+1. Go to your project and select an environment
+2. Click the app name from the Apps list to go to the app detail page
+3. Scroll to the **Deployments** section
+4. Find the deployment you want to restore
+5. Click **Rollback to this version**
+6. Confirm the rollback
 
 ## Rollback Output
 

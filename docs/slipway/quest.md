@@ -45,8 +45,8 @@ Slipway automatically detects `sails-hook-quest` during deployment and enables t
 ### Via Dashboard
 
 1. Go to your project in Slipway
-2. Select an environment
-3. Click the **Quest** icon (clock icon with amber color)
+2. Select an environment and click the app name from the Apps list
+3. Click the ellipsis dropdown menu and select **Quest**
 4. View and manage your jobs
 
 ### Via Direct URL

@@ -266,10 +266,9 @@ If `--app` is omitted, logs are shown for the default app.
 
 ### Viewing in Dashboard
 
-1. Go to your project
-2. Click **Logs** tab
-3. Select deployment or live logs
-4. Use filters and search
+1. Go to your project and select an environment
+2. Click the app name from the Apps list to go to the app detail page
+3. Expand the **Logs** accordion for live container logs, or click a deployment in the **Deployments** section for build/deploy logs
 
 ### Features
 

@@ -36,12 +36,12 @@ slipway env:set myapp \
 
 ### Via Dashboard
 
-1. Go to your project
-2. Click the **Environment** tab
-3. Select the environment (production, staging, etc.)
-4. Click **Add Variable**
-5. Enter key and value
-6. Click **Save**
+1. Go to your project and select an environment
+2. Expand the **Environment variables** section
+3. Enter a key and value in the input row at the bottom
+4. Click **Add**
+
+For app-specific variables, click the app name from the Apps list to go to the app detail page, then expand the **Environment variables** accordion.
 
 ## Viewing Variables
 

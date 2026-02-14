@@ -54,7 +54,7 @@ Each app has its own:
 ### Via Dashboard
 
 1. Go to your project's environment page
-2. In the **Apps** section, click **Add App**
+2. Click **+ Add app** at the bottom of the Apps section (or use the dropdown menu and select **Create app**)
 3. Fill in:
    - **Name** — Human-readable name (e.g., "Worker")
    - **Dockerfile** — Path to the Dockerfile (e.g., `Dockerfile.worker`)
@@ -188,7 +188,7 @@ Later levels override earlier ones. This means:
 
 ### Setting App Variables
 
-App-specific variables are managed on the app settings page in the dashboard. Navigate to the environment, click the app, and configure its variables.
+App-specific variables are managed on the app detail page. Navigate to the environment, click the app name from the Apps list, then expand the **Environment variables** accordion to configure app-level overrides.
 
 ## Deploying
 
@@ -215,7 +215,7 @@ When a GitHub webhook triggers a deployment, **all apps** in the environment are
 
 ### Dashboard
 
-The environment page shows all apps with their status. Each app has its own **Deploy** button.
+The environment page shows all apps with their status. Click an app name to go to its detail page, where you can use **Slide to Deploy**.
 
 ## Container Naming
 
@@ -250,7 +250,7 @@ slipway rollback myapp --app=api
 
 ## Deleting an App
 
-Delete an app via the dashboard on the app settings page. Restrictions:
+Delete an app via the app settings page (accessible from the app detail page dropdown menu → **Settings**). Restrictions:
 
 - You cannot delete the **default** app
 - You cannot delete the **last** app in an environment

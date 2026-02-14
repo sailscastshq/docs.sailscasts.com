@@ -36,8 +36,8 @@ Helm gives you a live REPL connected to your running Sails application:
 ### Via Dashboard
 
 1. Go to your project in Slipway
-2. Select an environment
-3. Click the **Helm** tab
+2. Select an environment and click the app name from the Apps list
+3. Click the ellipsis dropdown menu and select **Helm**
 4. Start typing in the REPL interface
 
 Your app must be running for Helm to work — it executes code inside the running container.

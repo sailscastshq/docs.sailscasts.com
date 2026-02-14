@@ -771,7 +771,8 @@ function slipwayGuide() {
         { text: 'Content', link: '/slipway/content' },
         { text: 'Quest', link: '/slipway/quest' },
         { text: 'Dock', link: '/slipway/dock' },
-        { text: 'Lookout', link: '/slipway/lookout' }
+        { text: 'Lookout', link: '/slipway/lookout' },
+        { text: 'Bosun', link: '/slipway/bosun' }
       ]
     },
     {
