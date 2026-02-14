@@ -10,8 +10,8 @@ prev:
   text: Quest
   link: /slipway/quest
 next:
-  text: Auto-Deploy
-  link: /slipway/auto-deploy
+  text: Lookout
+  link: /slipway/lookout
 editLink: true
 ---
 
@@ -46,8 +46,8 @@ Once the service is running, the Dock icon appears in your environment's toolbar
 ### Via Dashboard
 
 1. Go to your project in Slipway
-2. Select an environment with a database service
-3. Click the **Dock** icon (cyan database icon)
+2. Select an environment and click the app name from the Apps list
+3. In the **Services** section, click the **Dock** icon next to a database service
 4. Start managing your database
 
 ### Via Direct URL

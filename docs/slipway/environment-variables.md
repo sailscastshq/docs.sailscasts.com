@@ -36,12 +36,12 @@ slipway env:set myapp \
 
 ### Via Dashboard
 
-1. Go to your project
-2. Click the **Environment** tab
-3. Select the environment (production, staging, etc.)
-4. Click **Add Variable**
-5. Enter key and value
-6. Click **Save**
+1. Go to your project and select an environment
+2. Expand the **Environment variables** section
+3. Enter a key and value in the input row at the bottom
+4. Click **Add**
+
+For app-specific variables, click the app name from the Apps list to go to the app detail page, then expand the **Environment variables** accordion.
 
 ## Viewing Variables
 
@@ -85,6 +85,35 @@ slipway env:get myapp DATABASE_URL
 ```bash
 slipway env:unset myapp UNUSED_VAR
 ```
+
+## Variable Cascade
+
+When a container starts, Slipway merges variables from three levels. Later levels override earlier ones:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  1. Global Variables (instance-wide)                     │
+│     R2_ACCESS_KEY=abc123                                │
+│     LOG_LEVEL=info                                      │
+├─────────────────────────────────────────────────────────┤
+│  2. Environment Variables (per environment)              │
+│     DATABASE_URL=postgres://...                         │
+│     LOG_LEVEL=debug          ← overrides global         │
+├─────────────────────────────────────────────────────────┤
+│  3. App Variables (per app, multi-app only)              │
+│     WORKER_CONCURRENCY=5                                │
+│     LOG_LEVEL=warn           ← overrides environment    │
+└─────────────────────────────────────────────────────────┘
+```
+
+**Override priority** (highest wins):
+
+1. **App-specific variables** (set per app in [multi-app environments](/slipway/multi-app))
+2. **Environment variables** (set via `slipway env:set` or dashboard)
+3. **Global variables** (set in Settings → Global Environment)
+4. **Slipway defaults** (`PORT`, `NODE_ENV`, etc.)
+
+For single-app environments, levels 1 and 2 are all you need. App-specific variables only matter when running [multiple apps](/slipway/multi-app) in the same environment.
 
 ## When Changes Take Effect
 

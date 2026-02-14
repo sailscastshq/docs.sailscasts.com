@@ -144,28 +144,41 @@ Go to **Settings → Global Environment** to see all variables.
 
 ## Variable Inheritance
 
-Global variables are inherited by all projects, but can be overridden:
+Global variables are inherited by all environments and apps, but can be overridden at each level:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  Global Variables (instance-wide)                        │
 │  R2_ACCESS_KEY=abc123                                   │
 │  R2_BUCKET=default-bucket                               │
+│  LOG_LEVEL=info                                         │
 └─────────────────────────────────────────────────────────┘
                            │
                            ▼
 ┌─────────────────────────────────────────────────────────┐
-│  Project: my-app                                         │
+│  Environment: production                                 │
 │  Inherited: R2_ACCESS_KEY=abc123                        │
-│  Override:  R2_BUCKET=my-app-bucket  ← project-specific │
+│  Override:  R2_BUCKET=my-app-bucket  ← env-specific     │
+│  Override:  LOG_LEVEL=debug          ← env-specific     │
+└─────────────────────────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────┐
+│  App: worker (multi-app only)                            │
+│  Inherited: R2_ACCESS_KEY=abc123 (from global)          │
+│  Inherited: R2_BUCKET=my-app-bucket (from environment)  │
+│  Override:  LOG_LEVEL=warn           ← app-specific     │
 └─────────────────────────────────────────────────────────┘
 ```
 
 ### Override Priority
 
-1. **Project environment variables** (highest priority)
-2. **Global environment variables**
-3. **Slipway defaults** (PORT, NODE_ENV, etc.)
+1. **App-specific variables** (highest priority, [multi-app](/slipway/multi-app) only)
+2. **Environment variables**
+3. **Global environment variables**
+4. **Slipway defaults** (PORT, NODE_ENV, etc.)
+
+For single-app environments, the app level doesn't apply — environment variables are the highest priority override.
 
 ## Removing Global Variables
 

@@ -254,7 +254,15 @@ CMD ["node", "app.js"]
 
 ## Environment Variables
 
-During deployment, Slipway injects environment variables:
+During deployment, Slipway injects environment variables using a three-tier cascade:
+
+### Variable Cascade
+
+Variables are merged in order, with later levels overriding earlier ones:
+
+1. **Global variables** — shared across all apps (set in Settings)
+2. **Environment variables** — per environment (set via `slipway env:set`)
+3. **App variables** — per app ([multi-app environments](/slipway/multi-app) only)
 
 ### Built-in Variables
 
@@ -490,6 +498,27 @@ curl https://myapp.example.com/health/check
 # Check app logs
 slipway logs myapp -t
 ```
+
+## Multi-App Deployments
+
+Slipway supports running [multiple apps](/slipway/multi-app) in a single environment — for example, a web server and a background worker, or a frontend and API.
+
+Each app in an environment:
+
+- Has its own `Dockerfile` (configurable per app, default: `Dockerfile`)
+- Runs in its own Docker container with a unique name
+- Gets its own deployment record and build/deploy logs
+- Receives the merged environment variables plus any app-specific overrides
+
+When you deploy with `slipway slide`, the **default app** is deployed. To target a specific app:
+
+```bash
+slipway slide --app=worker
+```
+
+When a webhook triggers an auto-deploy, **all apps** in the environment are deployed — each gets its own container rebuild and deployment record.
+
+See [Multi-App Environments](/slipway/multi-app) for the full guide.
 
 ## What's Next?
 

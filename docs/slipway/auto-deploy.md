@@ -222,6 +222,18 @@ abc123    success   webhook    e4f5g6h    main      1 hour ago
 xyz789    success   manual     i7j8k9l    main      1 day ago
 ```
 
+## Multi-App Auto-Deploy
+
+In [multi-app environments](/slipway/multi-app), a webhook push triggers deployments for **all apps** in the environment. Each app gets its own deployment record, build, and container.
+
+```
+Push to main
+  ├── Deploy: web app     (Dockerfile)
+  └── Deploy: worker app  (Dockerfile.worker)
+```
+
+Each deployment runs independently — if the web app build succeeds but the worker fails, the web app still goes live.
+
 ## Deploy Queue
 
 If multiple pushes happen quickly:

@@ -7,54 +7,73 @@ title: Updates
 titleTemplate: Slipway
 description: Keep your Slipway instance up to date with the latest features and security fixes.
 prev:
-  text: Team Management
-  link: /slipway/team-management
+  text: Notifications
+  link: /slipway/notifications
+next:
+  text: CLI Installation
+  link: /slipway/cli-installation
 editLink: true
 ---
 
 # Updates
 
-Slipway includes built-in update checking to help you stay current with the latest features and security fixes.
+Slipway includes built-in update detection and one-click updates from the dashboard.
 
-## Checking for Updates
+## How It Works
 
-### Via Dashboard
+Slipway checks for new versions by querying the [GitHub Releases API](https://github.com/sailscastshq/slipway/releases) for the latest release. Checks are cached for 1 hour to respect rate limits. No data is sent to external servers — Slipway only reads the public release metadata.
 
-1. Go to **Settings → Updates**
-2. View your current version and check if updates are available
-3. Click **Check again** to manually refresh
+When a new version is available, a banner appears at the top of your dashboard with a link to the update page.
 
-### Update Banner
+## Automatic Update (Dashboard)
 
-When a new version is available, a banner appears at the top of the dashboard:
+The recommended way to update Slipway:
+
+1. When a new version is available, click **Update** in the notification banner
+2. On the update page, review the version comparison
+3. Click **Update Now**
+
+Slipway will:
+
+1. Pull the latest Docker image from `ghcr.io/sailscastshq/slipway`
+2. Inspect your current container's configuration (env vars, volumes, network, labels)
+3. Spawn the **bosun** — a temporary sidecar container (`slipway-bosun`) that swaps the old container for the new one
+4. The dashboard goes offline briefly (~5 seconds) while the container restarts
+5. The page automatically reloads when the new version is ready
+
+::: tip Data Persistence
+Your data is stored on Docker volumes (`slipway-db`) and is preserved across updates. Your secrets at `/etc/slipway/.env` are also untouched.
+:::
+
+## Manual Update (SSH)
+
+If the dashboard update doesn't work or you prefer command-line updates, SSH into your server and re-run the install script:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/sailscastshq/slipway/main/install.sh | bash
+```
+
+The script detects your existing installation (via `/etc/slipway/.env`), reuses your secrets (`SESSION_SECRET` and `DATA_ENCRYPTION_KEY`), pulls the latest image, and restarts the container with the same configuration.
+
+You'll see:
 
 ```
-┌────────────────────────────────────────────────────────────┐
-│ 🔄 Slipway 0.2.0 is available                             │
-│    You're currently running 0.1.0                         │
-│                                    [View Update] [Dismiss] │
-└────────────────────────────────────────────────────────────┘
+Existing installation detected — reusing secrets
+Pulling latest Slipway image...
+Starting Slipway dashboard...
+
+========================================================
+  Slipway updated successfully!
+========================================================
 ```
 
-Click **View Update** to see detailed upgrade instructions.
+## Version Checking Configuration
 
-## How Updates Work
-
-### Version Checking
-
-Slipway checks for updates by querying the GitHub Releases API:
-
-- Checks are cached for 1 hour to respect rate limits
-- No data is sent to Slipway servers
-- Works in air-gapped environments (shows current version only)
-
-### Update Notifications
-
-Configure notifications in `config/slipway.js`:
+Update notifications are configured in `config/slipway.js`:
 
 ```javascript
 module.exports.slipway = {
-  // Show update banner in dashboard
+  // Show update banner in dashboard (default: true)
   showUpdateNotifications: true,
 
   // How often to check (default: 1 hour)
@@ -62,229 +81,41 @@ module.exports.slipway = {
 }
 ```
 
-## Updating Slipway
-
-Since Slipway runs in Docker, updates require pulling the new image and recreating the container.
-
-::: tip Data Persistence
-Your data is stored in Docker volumes and will be preserved during updates.
-:::
-
-### Using Docker CLI
-
-**Step 1: Pull the new image**
-
-```bash
-docker pull sailscastshq/slipway:0.2.0
-```
-
-**Step 2: Stop the current container**
-
-```bash
-docker stop slipway
-```
-
-**Step 3: Remove the old container**
-
-```bash
-docker rm slipway
-```
-
-**Step 4: Start with the new image**
-
-```bash
-docker run -d --name slipway \
-  -p 80:1337 \
-  -v slipway-data:/app/data \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  sailscastshq/slipway:0.2.0
-```
-
-### Using Docker Compose
-
-**Step 1: Update your `docker-compose.yml`**
-
-```yaml
-services:
-  slipway:
-    image: sailscastshq/slipway:0.2.0 # Update this line
-    # ... rest of config
-```
-
-**Step 2: Apply the update**
-
-```bash
-docker compose up -d
-```
-
-Docker Compose automatically stops the old container, removes it, and starts the new one.
-
-## Version Pinning
-
-### Using Specific Versions
-
-For production stability, pin to specific versions:
-
-```yaml
-# docker-compose.yml
-services:
-  slipway:
-    image: sailscastshq/slipway:0.2.0 # Pinned version
-```
-
-### Using Latest
-
-For development or auto-updates:
-
-```yaml
-# docker-compose.yml
-services:
-  slipway:
-    image: sailscastshq/slipway:latest
-```
-
-Then update with:
-
-```bash
-docker compose pull && docker compose up -d
-```
-
-## Automatic Updates
-
-### Using Watchtower
-
-[Watchtower](https://containrrr.dev/watchtower/) can automatically update containers:
-
-```yaml
-# docker-compose.yml
-services:
-  slipway:
-    image: sailscastshq/slipway:latest
-    labels:
-      - 'com.centurylinklabs.watchtower.enable=true'
-
-  watchtower:
-    image: containrrr/watchtower
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    command: --cleanup --label-enable
-```
-
-### Using Cron
-
-Create a simple update script:
-
-```bash
-#!/bin/bash
-# /opt/slipway/update.sh
-
-cd /opt/slipway
-docker compose pull
-docker compose up -d
-```
-
-Schedule with cron:
-
-```bash
-# Check for updates weekly at 3 AM Sunday
-0 3 * * 0 /opt/slipway/update.sh
-```
-
 ## Rollback
 
-If an update causes issues, rollback to the previous version:
+If an update causes issues, you can roll back by running the install script with a specific version, or by pulling and running a previous image:
 
 ```bash
-# Stop current container
-docker stop slipway && docker rm slipway
-
-# Start with previous version
-docker run -d --name slipway \
-  -v slipway-data:/app/data \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  sailscastshq/slipway:0.1.0  # Previous version
+docker pull ghcr.io/sailscastshq/slipway:0.1.0
 ```
 
-## Release Notes
+Then re-run the install script — it will use the image already pulled locally.
 
-View release notes for each version:
+Alternatively, check the container logs to diagnose the issue:
 
-- **Dashboard**: Settings → Updates → "View release notes on GitHub"
-- **GitHub**: [github.com/sailscastshq/slipway/releases](https://github.com/sailscastshq/slipway/releases)
+```bash
+docker logs slipway
+```
 
-### What's in a Release
-
-Each release includes:
-
-- New features and improvements
-- Bug fixes
-- Security patches
-- Breaking changes (if any)
+The `--restart unless-stopped` policy means Docker will keep retrying if the container crashes on startup.
 
 ## Troubleshooting
 
-### "Unable to Check for Updates"
+### Update Check Shows "Unable to Check"
 
-If the update check fails:
+- **Network**: Ensure your server can reach `api.github.com` over HTTPS
+- **Rate limiting**: GitHub allows 60 requests/hour for unauthenticated requests. Slipway caches results for 1 hour to stay within limits
 
-1. **Network issues**: Ensure your server can reach `api.github.com`
-2. **Rate limiting**: GitHub API allows 60 requests/hour for unauthenticated requests
-3. **Firewall**: Check if outbound HTTPS is blocked
+### Dashboard Update Fails
 
-### "Container Won't Start After Update"
+If the one-click update fails:
+
+1. Check the browser console for error details
+2. Fall back to the [manual update](#manual-update-ssh) method
+3. If the dashboard is unreachable, SSH into your server and check `docker logs slipway`
+
+### Container Won't Start After Update
 
 1. Check logs: `docker logs slipway`
 2. Verify volumes exist: `docker volume ls | grep slipway`
-3. Check for breaking changes in release notes
-
-### "Data Missing After Update"
-
-Ensure you're using the same volume mounts:
-
-```bash
-# Correct
-docker run -v slipway-data:/app/data ...
-
-# Wrong (different volume name)
-docker run -v slipway-storage:/app/data ...
-```
-
-## Best Practices
-
-### 1. Review Release Notes
-
-Before updating, check for:
-
-- Breaking changes
-- New environment variables
-- Migration steps
-
-### 2. Backup Before Updating
-
-```bash
-# Backup the data volume
-docker run --rm -v slipway-data:/data -v $(pwd):/backup \
-  alpine tar czf /backup/slipway-backup.tar.gz /data
-```
-
-### 3. Test in Staging
-
-If running production workloads:
-
-1. Test updates in a staging environment first
-2. Verify your apps still deploy correctly
-3. Check for any UI/API changes
-
-### 4. Schedule Updates
-
-Plan updates during maintenance windows:
-
-- Low traffic periods
-- When deployments are unlikely
-- With time to rollback if needed
-
-## What's Next?
-
-- Configure [Settings](/slipway/settings) for your instance
-- Set up [Auto-Deploy](/slipway/auto-deploy) for your projects
-- Learn about [Configuration](/slipway/configuration) options
+3. Check the [release notes](https://github.com/sailscastshq/slipway/releases) for breaking changes or new required environment variables

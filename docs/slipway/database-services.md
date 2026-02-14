@@ -44,10 +44,10 @@ slipway db:create docs --type=mongodb
 
 ### Via Dashboard
 
-1. Go to your project's **Services** tab
-2. Click **Add Service**
+1. Go to your project and select an environment
+2. In the **Services** section, click **+ Add service** (or use the dropdown menu and select **Create service**)
 3. Select the database type
-4. Configure name and options
+4. Configure name and version
 5. Click **Create**
 
 ## Linking Databases to Apps

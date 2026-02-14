@@ -705,6 +705,7 @@ function slipwayGuide() {
         { text: 'Instance URL', link: '/slipway/instance-url' },
         { text: 'Custom Domain & SSL', link: '/slipway/custom-domain' },
         { text: 'Settings', link: '/slipway/settings' },
+        { text: 'Notifications', link: '/slipway/notifications' },
         { text: 'Updates', link: '/slipway/updates' }
       ]
     },
@@ -754,18 +755,24 @@ function slipwayGuide() {
         },
         { text: 'Secrets', link: '/slipway/secrets' },
         { text: 'File Uploads', link: '/slipway/file-uploads' },
-        { text: 'Database Services', link: '/slipway/database-services' }
+        { text: 'Database Services', link: '/slipway/database-services' },
+        {
+          text: 'Multi-App Environments',
+          link: '/slipway/multi-app'
+        }
       ]
     },
     {
-      text: 'Toolbox',
+      text: 'Platform',
       collapsed: false,
       items: [
         { text: 'Helm', link: '/slipway/helm' },
         { text: 'Bridge', link: '/slipway/bridge' },
         { text: 'Content', link: '/slipway/content' },
         { text: 'Quest', link: '/slipway/quest' },
-        { text: 'Dock', link: '/slipway/dock' }
+        { text: 'Dock', link: '/slipway/dock' },
+        { text: 'Lookout', link: '/slipway/lookout' },
+        { text: 'Bosun', link: '/slipway/bosun' }
       ]
     },
     {

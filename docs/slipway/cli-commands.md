@@ -131,7 +131,7 @@ slipway environment:update <slug> [--name <name>] [--domain <domain>] [--product
 Deploy your application. This is the **primary deploy command**.
 
 ```bash
-slipway slide [--env <environment>] [--message <message>]
+slipway slide [--env <environment>] [--app <slug>] [--message <message>]
 ```
 
 Aliases: `deploy`, `launch`
@@ -140,10 +140,11 @@ Packages your source code (via `git archive` if in a git repo), pushes it to the
 
 **Options:**
 
-| Option      | Description                                    |
-| ----------- | ---------------------------------------------- |
-| `--env`     | Environment to deploy to (default: production) |
-| `--message` | Deployment message/note                        |
+| Option      | Description                                                                                                |
+| ----------- | ---------------------------------------------------------------------------------------------------------- |
+| `--env`     | Environment to deploy to (default: production)                                                             |
+| `--app`     | Target a specific app by slug (default: the default app). See [Multi-App Environments](/slipway/multi-app) |
+| `--message` | Deployment message/note                                                                                    |
 
 **Examples:**
 
@@ -156,6 +157,9 @@ slipway slide --env staging
 
 # Deploy with a message
 slipway slide --message "Fix login bug"
+
+# Deploy a specific app in a multi-app environment
+slipway slide --app api
 ```
 
 ### push
@@ -183,17 +187,18 @@ Shows deployment ID, status, environment, branch, commit hash, and date. Default
 View deployment or application logs.
 
 ```bash
-slipway logs [--env <environment>] [--follow] [--tail <n>] [--deployment <id>]
+slipway logs [--env <environment>] [--app <slug>] [--follow] [--tail <n>] [--deployment <id>]
 ```
 
 **Options:**
 
-| Option         | Description                            |
-| -------------- | -------------------------------------- |
-| `--env`        | Environment (default: production)      |
-| `--follow`     | Stream logs in real-time               |
-| `--tail`       | Number of lines to show (default: 100) |
-| `--deployment` | View logs for a specific deployment    |
+| Option         | Description                                                                                                |
+| -------------- | ---------------------------------------------------------------------------------------------------------- |
+| `--env`        | Environment (default: production)                                                                          |
+| `--app`        | Target a specific app by slug (default: the default app). See [Multi-App Environments](/slipway/multi-app) |
+| `--follow`     | Stream logs in real-time                                                                                   |
+| `--tail`       | Number of lines to show (default: 100)                                                                     |
+| `--deployment` | View logs for a specific deployment                                                                        |
 
 ## Environment Variables
 
@@ -307,20 +312,20 @@ slipway backup:restore <backup-id>
 Open a terminal session in the running container.
 
 ```bash
-slipway terminal [--env <environment>]
+slipway terminal [--env <environment>] [--app <slug>]
 ```
 
-Shows the container name and `docker exec` command to run on your server.
+Shows the container name and `docker exec` command to run on your server. Use `--app` to target a specific app in [multi-app environments](/slipway/multi-app).
 
 ### run
 
 Run a command in the running container.
 
 ```bash
-slipway run <command...> [--env <environment>]
+slipway run <command...> [--env <environment>] [--app <slug>]
 ```
 
-Shows the container name and `docker exec` command.
+Shows the container name and `docker exec` command. Use `--app` to target a specific app in [multi-app environments](/slipway/multi-app).
 
 ## Administration
 

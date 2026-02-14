@@ -44,9 +44,9 @@ slipway domain:add myapp example.com
 
 ### Via Dashboard
 
-1. Go to your project
-2. Click the **Domains** tab
-3. Click **Add Domain**
+1. Go to your project and select an environment
+2. Click the app name from the Apps list to go to the app detail page
+3. Click the ellipsis dropdown menu and select **Custom domain**
 4. Enter your domain name
 5. Click **Add**
 

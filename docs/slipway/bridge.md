@@ -38,8 +38,8 @@ No configuration required—Bridge introspects your models and generates the UI 
 ### Via Dashboard
 
 1. Go to your project in Slipway
-2. Select an environment
-3. Click the **Bridge** tab
+2. Select an environment and click the app name from the Apps list
+3. Click the ellipsis dropdown menu and select **Bridge**
 4. Browse your models
 
 Your app must be running for Bridge to work — it reads model definitions from the running container.
