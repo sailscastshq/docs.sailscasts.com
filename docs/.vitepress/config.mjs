@@ -226,7 +226,7 @@ function inertiaSailsGuide() {
       items: [
         { text: 'Sharing data', link: '/inertia-sails/sharing-data' },
         { text: 'Flash messages', link: '/inertia-sails/flash-messages' },
-        { text: 'View data', link: '/inertia-sails/view-data' }
+        { text: 'Locals', link: '/inertia-sails/locals' }
       ]
     },
     {
@@ -328,7 +328,8 @@ function boringStackGuide() {
         { text: 'Deferred props', link: 'boring-stack/deferred-props' },
         { text: 'Merging props', link: 'boring-stack/merging-props' },
         { text: 'Once props', link: 'boring-stack/once-props' },
-        { text: 'Infinite scroll', link: 'boring-stack/infinite-scroll' }
+        { text: 'Infinite scroll', link: 'boring-stack/infinite-scroll' },
+        { text: 'Locals', link: 'boring-stack/locals' }
       ]
     },
     {

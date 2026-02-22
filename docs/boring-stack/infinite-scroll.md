@@ -10,8 +10,8 @@ prev:
   text: Once props
   link: '/boring-stack/once-props'
 next:
-  text: Authentication
-  link: '/boring-stack/authentication'
+  text: Locals
+  link: '/boring-stack/locals'
 editLink: true
 ---
 

@@ -45,11 +45,11 @@ module.exports = {
 
 The response object accepts these properties:
 
-| Property   | Type   | Description                                    |
-| ---------- | ------ | ---------------------------------------------- |
-| `page`     | string | **Required.** The frontend component to render |
-| `props`    | object | Data passed to the component                   |
-| `viewData` | object | Data passed to the root EJS template           |
+| Property | Type   | Description                                    |
+| -------- | ------ | ---------------------------------------------- |
+| `page`   | string | **Required.** The frontend component to render |
+| `props`  | object | Data passed to the component                   |
+| `locals` | object | Data passed to the root EJS template           |
 
 ### Page
 
@@ -86,15 +86,15 @@ defineProps({
 </script>
 ```
 
-### View Data
+### Locals
 
-View data is passed to your root EJS template, not to the frontend component. Use this for page titles, meta tags, or other server-rendered content:
+Locals are passed to your root EJS template, not to the frontend component. Use this for page titles, meta tags, or other server-rendered content:
 
 ```js
 return {
   page: 'users/show',
   props: { user },
-  viewData: {
+  locals: {
     title: `${user.fullName} - Profile`,
     description: user.bio
   }
@@ -105,13 +105,12 @@ Access in your EJS template:
 
 ```html
 <head>
-  <title><%= typeof title !== 'undefined' ? title : 'My App' %></title>
-  <meta
-    name="description"
-    content="<%= typeof description !== 'undefined' ? description : '' %>"
-  />
+  <title><%= locals.title || 'My App' %></title>
+  <meta name="description" content="<%= locals.description || '' %>" />
 </head>
 ```
+
+See [Locals](/inertia-sails/locals) for the full API, precedence rules, and real-world examples.
 
 ## Custom Response Files
 
