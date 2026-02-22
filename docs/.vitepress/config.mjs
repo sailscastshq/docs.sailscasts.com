@@ -662,7 +662,10 @@ function pelliculeGuide() {
     {
       text: 'Reference',
       collapsed: false,
-      items: [{ text: 'CLI', link: '/pellicule/cli' }]
+      items: [
+        { text: 'CLI', link: '/pellicule/cli' },
+        { text: 'Dev Preview', link: '/pellicule/dev-preview' }
+      ]
     },
     {
       text: 'AI',

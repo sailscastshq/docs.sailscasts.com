@@ -2,6 +2,9 @@
 prev:
   text: Easing
   link: /pellicule/easing
+next:
+  text: Dev Preview
+  link: /pellicule/dev-preview
 ---
 
 # CLI Reference
