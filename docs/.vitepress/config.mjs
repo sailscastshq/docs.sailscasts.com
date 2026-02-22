@@ -357,6 +357,7 @@ function boringStackGuide() {
       text: 'Deploy',
       collapsed: false,
       items: [
+        { text: 'Slipway', link: 'boring-stack/slipway' },
         { text: 'Render', link: 'boring-stack/render' },
         { text: 'Railway', link: 'boring-stack/railway' },
         { text: 'Coolify', link: 'boring-stack/coolify' }

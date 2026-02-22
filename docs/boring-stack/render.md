@@ -7,8 +7,8 @@ title: Deploy on Render
 titleTemplate: The Boring JavaScript Stack 🥱
 description: Deploy your app on Render
 prev:
-  text: 'File uploads'
-  link: '/boring-stack/file-uploads'
+  text: 'Slipway'
+  link: '/boring-stack/slipway'
 next:
   text: Railway
   link: '/boring-stack/railway'
