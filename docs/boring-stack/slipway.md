@@ -45,7 +45,13 @@ In your Slipway dashboard, [create a new project](/slipway/creating-projects). T
 
 ## Follow the deployment checklist
 
-Once your project is created and you've deployed your app at least once, Slipway reads your app's `package.json` and generates a **deployment checklist** tailored to your app. It detects what your app actually needs and tells you exactly what's missing:
+Once your project is created, link it to your local codebase using the Slipway CLI:
+
+```bash
+slipway link <project>
+```
+
+Slipway reads your app's `package.json` and generates a **deployment checklist** tailored to your app. It detects what your app actually needs and tells you exactly what's missing:
 
 - **Database required** — Slipway sees `sails-postgresql` (or `sails-mysql`, `sails-mongo`) in your dependencies and warns you if no database service is running
 - **Redis required** — Slipway detects `@sailshq/connect-redis` and warns you if Redis isn't set up for session storage
