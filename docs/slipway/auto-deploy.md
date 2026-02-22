@@ -5,7 +5,7 @@ head:
       content: https://docs.sailscasts.com/slipway-social.png
 title: Auto-Deploy
 titleTemplate: Slipway
-description: Set up automatic deployments with GitHub webhooks for continuous deployment.
+description: Automatic deployments on every push to GitHub and preview environments for pull requests.
 prev:
   text: Dock
   link: /slipway/dock
@@ -17,7 +17,7 @@ editLink: true
 
 # Auto-Deploy
 
-Automatically deploy your Sails app when you push to GitHub. No manual deploys, no waiting.
+Automatically deploy your app when you push to GitHub. No manual deploys, no waiting.
 
 ## How It Works
 
@@ -36,191 +36,75 @@ Automatically deploy your Sails app when you push to GitHub. No manual deploys, 
 
 1. You push code to GitHub
 2. GitHub sends a webhook to Slipway
-3. Slipway pulls the code and deploys
-4. You get notified of success or failure
+3. Slipway clones the code using the deploy key, builds the Docker image, and deploys
+4. You get [notified](/slipway/notifications) of success or failure
 
 ## Setting Up Auto-Deploy
 
-### 1. Enable Auto-Deploy in Slipway
+Auto-deploy is enabled automatically when you [connect a GitHub repository](/slipway/git-integration) to your app. There's nothing extra to configure — just connect your repo and push.
 
-#### Via CLI
+If you haven't connected a repository yet:
 
-```bash
-slipway project:update myapp --auto-deploy=true --auto-deploy-branch=main
-```
+1. Go to **Settings > Git** and [connect your GitHub account](/slipway/git-integration#connecting-github)
+2. Navigate to your app's settings page
+3. Under **Git Integration**, select your repository and branch
+4. Click **Connect**
 
-#### Via Dashboard
+That's it. Every push to your configured branch now triggers a deployment.
 
-1. Go to your project
-2. Click **Settings**
-3. Enable **Auto-Deploy**
-4. Set the **Deploy Branch** (e.g., `main`)
-5. Click **Save**
+### Toggling Auto-Deploy
 
-### 2. Get the Webhook URL
-
-```bash
-slipway project:info myapp
-```
-
-Output includes:
-
-```
-Webhook URL: https://slipway.example.com/api/v1/webhook/github/abc123
-Webhook Secret: whsec_xyz789
-```
-
-Or find it in the Dashboard under **Settings → Webhooks**.
-
-### 3. Configure GitHub Webhook
-
-1. Go to your GitHub repository
-2. Click **Settings → Webhooks → Add webhook**
-3. Configure:
-
-| Field        | Value                                                      |
-| ------------ | ---------------------------------------------------------- |
-| Payload URL  | `https://slipway.example.com/api/v1/webhook/github/abc123` |
-| Content type | `application/json`                                         |
-| Secret       | Your webhook secret from Slipway                           |
-| Events       | Just the push event                                        |
-
-4. Click **Add webhook**
-
-### 4. Test the Webhook
-
-GitHub will send a ping. Check it was received:
-
-```bash
-slipway webhook:logs myapp
-```
-
-Or push a commit to trigger a real deployment:
-
-```bash
-git commit --allow-empty -m "Test auto-deploy"
-git push origin main
-```
+You can enable or disable auto-deploy from your app's settings page using the **Auto-deploy** toggle. When disabled, pushes to GitHub are received but no deployments are triggered.
 
 ## Branch Configuration
 
-### Deploy Only from Main
+When you connect a repository, you choose a branch to deploy from. By default, Slipway deploys pushes to your repository's default branch (usually `main`).
 
-```bash
-slipway project:update myapp --auto-deploy-branch=main
+### Branch Mappings
+
+You can map different branches to different environments. For example, deploy `main` to production and `develop` to staging:
+
+```json
+{
+  "main": "production",
+  "develop": "staging"
+}
 ```
 
-Pushes to `main` trigger deploys. Other branches are ignored.
+When branch mappings are configured:
 
-### Deploy from Multiple Branches
+- Pushes to **mapped branches** trigger a deployment to the corresponding environment
+- Pushes to **unmapped branches** are ignored
 
-Configure different environments for different branches:
+When no branch mappings are configured:
 
-```bash
-# main → production
-slipway project:update myapp \
-  --auto-deploy=true \
-  --auto-deploy-branch=main \
-  --env=production
+- Pushes to the **default branch** trigger a deployment
+- Pushes to **other branches** are ignored
 
-# develop → staging
-slipway env:create myapp staging
-slipway project:update myapp \
-  --auto-deploy=true \
-  --auto-deploy-branch=develop \
-  --env=staging
-```
+::: info
+Branch matching is exact — `main` matches `main`, not `main-v2` or `release/main`. Each branch maps to exactly one environment.
+:::
 
-### Branch Pattern Matching
+## Preview Environments
 
-Deploy from branches matching a pattern:
+Slipway can automatically create preview environments for pull requests. When enabled, every PR gets its own isolated environment so you can test changes before merging.
 
-```bash
-# Deploy from any release/* branch
-slipway project:update myapp --auto-deploy-branch="release/*"
-```
+### How It Works
 
-## Deploy Conditions
+| PR Event                         | What Happens                                                    |
+| -------------------------------- | --------------------------------------------------------------- |
+| **Opened**                       | Slipway creates a preview environment and deploys the PR branch |
+| **Updated** (new commits pushed) | Slipway redeploys the preview environment with the latest code  |
+| **Reopened**                     | Same as opened — creates/updates the preview environment        |
+| **Closed** (merged or not)       | Slipway destroys the preview environment and its resources      |
 
-### Skip Deployment
+### Toggling Preview Environments
 
-Add `[skip deploy]` or `[no deploy]` to your commit message to skip auto-deploy:
+Preview environments are enabled by default when you connect a repository. You can control this via the **Auto-deploy previews** setting on the repository.
 
-```bash
-git commit -m "Update README [skip deploy]"
-git push origin main
-# No deployment triggered
-```
+### Branch Cleanup
 
-### Force Deployment
-
-Add `[force deploy]` to deploy even if there are no code changes:
-
-```bash
-git commit --allow-empty -m "Force rebuild [force deploy]"
-git push origin main
-```
-
-## Webhook Security
-
-### Signature Verification
-
-Slipway verifies GitHub's webhook signature using HMAC-SHA256. This ensures:
-
-- The webhook is from GitHub
-- The payload wasn't tampered with
-
-### IP Allowlisting
-
-For extra security, restrict webhook endpoints to GitHub's IPs:
-
-```bash
-# GitHub's webhook IPs (check GitHub docs for current list)
-192.30.252.0/22
-185.199.108.0/22
-140.82.112.0/20
-```
-
-## Notifications
-
-Get notified of auto-deploy results:
-
-### Slack Integration
-
-```bash
-slipway notifications:add myapp slack https://hooks.slack.com/services/xxx
-```
-
-You'll receive messages for:
-
-- Deploy started
-- Deploy succeeded
-- Deploy failed
-
-### Discord Integration
-
-```bash
-slipway notifications:add myapp discord https://discord.com/api/webhooks/xxx
-```
-
-### Email Notifications
-
-Configure in Dashboard under **Settings → Notifications**.
-
-## Viewing Auto-Deploy History
-
-```bash
-slipway deployments myapp
-```
-
-Auto-deploys are marked with their trigger:
-
-```
-ID        STATUS    TRIGGER    COMMIT     BRANCH    DEPLOYED
-def456    running   webhook    a1b2c3d    main      2 minutes ago
-abc123    success   webhook    e4f5g6h    main      1 hour ago
-xyz789    success   manual     i7j8k9l    main      1 day ago
-```
+When a branch is deleted on GitHub (e.g., after merging a PR), Slipway automatically cleans up any associated preview environments.
 
 ## Multi-App Auto-Deploy
 
@@ -234,160 +118,77 @@ Push to main
 
 Each deployment runs independently — if the web app build succeeds but the worker fails, the web app still goes live.
 
-## Deploy Queue
+If a repository is connected to a **specific app** (rather than the whole environment), only that app is deployed on push.
 
-If multiple pushes happen quickly:
+## Webhook Security
 
-1. Slipway queues them
-2. Deploys happen sequentially
-3. Only the latest code is deployed if pushes are rapid
+### Signature Verification
 
-```
-Push 1 → Queued
-Push 2 → Queued (replaces push 1 in queue)
-Push 3 → Queued (replaces push 2 in queue)
-Deploy starts with Push 3's code
-```
+Slipway verifies every incoming webhook using HMAC-SHA256 signature verification. When you connect a repository, Slipway generates a random secret and registers it with the GitHub webhook. This ensures:
+
+- The webhook is genuinely from GitHub
+- The payload wasn't tampered with in transit
+
+The webhook secret is encrypted at rest in Slipway's database and never exposed in the UI.
+
+### Supported Events
+
+Slipway's webhook listens for three GitHub events:
+
+- **push** — triggers deployments
+- **pull_request** — manages preview environments
+- **delete** — cleans up preview environments when branches are deleted
+
+## Viewing Auto-Deploy History
+
+Every webhook-triggered deployment is visible in your Slipway dashboard. Auto-deploys are identified by their **Git** trigger label (as opposed to **Manual** or **CLI**), and include:
+
+- The branch that was pushed to
+- The commit hash and message
+- Who pushed the code
+
+You can view this on the project overview, the environment page, or the individual deployment detail page.
 
 ## Troubleshooting
 
 ### Webhook Not Received
 
-1. **Check GitHub webhook status**:
-   - Go to repo → Settings → Webhooks
-   - Click your webhook
-   - Check "Recent Deliveries"
+1. **Check GitHub webhook status:**
+   - Go to your GitHub repo → Settings → Webhooks
+   - Click the Slipway webhook
+   - Check "Recent Deliveries" for errors
 
-2. **Verify URL is correct**:
-   - Should include `https://`
-   - Check for typos
+2. **Check your server is accessible:**
+   - Slipway must be reachable from the internet
+   - Port 443 (HTTPS) must be open
 
-3. **Check firewall**:
-   - Slipway must be accessible from the internet
-   - Port 443 must be open
+3. **Reconnect the repository:**
+   - If the webhook was deleted from GitHub, disconnect and reconnect the repository in Slipway to regenerate it
 
 ### Deployment Not Starting
 
-1. **Check branch matches**:
+1. **Check auto-deploy is enabled** — look for the auto-deploy toggle in your app's settings
 
-   ```bash
-   slipway project:info myapp
-   # Verify auto-deploy-branch setting
-   ```
+2. **Check the branch** — if you have branch mappings configured, only mapped branches trigger deploys. Pushes to unmapped branches are silently ignored.
 
-2. **Check webhook logs**:
+3. **Check the deploy key** — if the deploy key was removed from GitHub, the clone will fail. Disconnect and reconnect to regenerate it.
 
-   ```bash
-   slipway webhook:logs myapp
-   ```
+### Wrong Branch Deploying
 
-3. **Verify webhook secret**:
-   - Must match between GitHub and Slipway
+Check your branch mappings. If no mappings are configured, Slipway deploys pushes to the repository's **default branch** only. If mappings are configured, Slipway deploys **only** to mapped branches.
 
 ### Deployment Failing
 
-1. **Check deployment logs**:
+1. **Check deployment logs** in the Slipway dashboard — click on the failed deployment to see the build output
 
-   ```bash
-   slipway logs myapp --deployment=latest
-   ```
+2. **Test your Dockerfile locally:**
 
-2. **Test locally**:
    ```bash
    docker build -t test .
    docker run test
    ```
 
-### Wrong Branch Deploying
-
-1. **Check branch configuration**:
-
-   ```bash
-   slipway project:info myapp
-   ```
-
-2. **Update if needed**:
-   ```bash
-   slipway project:update myapp --auto-deploy-branch=main
-   ```
-
-## GitHub Actions Alternative
-
-If you prefer more control, use GitHub Actions instead of webhooks:
-
-```yaml
-# .github/workflows/deploy.yml
-name: Deploy to Slipway
-
-on:
-  push:
-    branches: [main]
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Slipway CLI
-        run: npm install -g slipway
-
-      - name: Deploy
-        env:
-          SLIPWAY_TOKEN: ${{ secrets.SLIPWAY_TOKEN }}
-          SLIPWAY_SERVER: ${{ secrets.SLIPWAY_SERVER }}
-        run: slipway slide --message "Deploy from GitHub Actions"
-```
-
-### Benefits of GitHub Actions
-
-- More control over the deploy process
-- Can run tests before deploying
-- Conditional deploys based on paths changed
-- Integration with other workflows
-
-### Setting Up
-
-1. Generate a Slipway API token in Dashboard → Settings → API Tokens
-2. Add secrets to GitHub repo:
-   - `SLIPWAY_TOKEN`
-   - `SLIPWAY_SERVER`
-
-## GitLab CI/CD
-
-For GitLab repositories:
-
-```yaml
-# .gitlab-ci.yml
-deploy:
-  stage: deploy
-  image: node:22
-  only:
-    - main
-  script:
-    - npm install -g slipway
-    - slipway slide --message "Deploy from GitLab CI"
-  variables:
-    SLIPWAY_TOKEN: $SLIPWAY_TOKEN
-    SLIPWAY_SERVER: $SLIPWAY_SERVER
-```
-
-## Bitbucket Pipelines
-
-For Bitbucket repositories:
-
-```yaml
-# bitbucket-pipelines.yml
-pipelines:
-  branches:
-    main:
-      - step:
-          name: Deploy to Slipway
-          image: node:22
-          script:
-            - npm install -g slipway
-            - slipway slide --message "Deploy from Bitbucket"
-```
+3. **Check health checks** — if the build succeeds but the container fails to start, your app might not be responding on the expected port
 
 ## Best Practices
 
@@ -401,55 +202,18 @@ Require pull requests before merging to `main`:
 
 ### 2. Use Staging First
 
-Configure two environments:
+Map two branches to two environments:
 
 - `develop` → staging (test first)
 - `main` → production (after staging is verified)
 
-### 3. Add Health Checks
+### 3. Use Preview Environments
 
-Configure health checks so Slipway can verify deployments:
-
-```javascript
-// api/controllers/health/check.js
-module.exports = {
-  fn: async function () {
-    // Check database connection
-    await User.count()
-
-    // Check Redis
-    await sails.helpers.cache.get('health')
-
-    return { status: 'healthy' }
-  }
-}
-```
-
-Then configure in Slipway:
-
-```bash
-slipway project:update myapp --health-check-path=/health/check
-```
+Enable auto-deploy previews so every PR gets its own environment. This lets reviewers test changes in isolation before merging.
 
 ### 4. Set Up Notifications
 
-Never miss a failed deploy:
-
-```bash
-slipway notifications:add myapp slack https://hooks.slack.com/services/xxx
-```
-
-### 5. Use Deploy Locks
-
-Prevent deploys during critical periods:
-
-```bash
-# Lock deployments
-slipway deploy:lock myapp --reason="Database migration in progress"
-
-# Unlock when done
-slipway deploy:unlock myapp
-```
+Never miss a failed deploy — configure [notifications](/slipway/notifications) to get alerted on deployment status changes.
 
 ## What's Next?
 

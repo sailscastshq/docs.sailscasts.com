@@ -5,8 +5,8 @@ prev:
   text: Sharing data
   link: '/inertia-sails/sharing-data'
 next:
-  text: View data
-  link: '/inertia-sails/view-data'
+  text: Locals
+  link: '/inertia-sails/locals'
 ---
 
 # Flash Messages

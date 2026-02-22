@@ -7,8 +7,8 @@ title: Authentication
 titleTemplate: The Boring JavaScript Stack 🥱
 description: Authentication in The Boring JavaScript Stack
 prev:
-  text: Merging props
-  link: '/boring-stack/merging-props'
+  text: Locals
+  link: '/boring-stack/locals'
 next:
   text: Authorization
   link: '/boring-stack/authorization'
