@@ -5,7 +5,7 @@ head:
       content: https://docs.sailscasts.com/slipway-social.png
 title: Git Integration
 titleTemplate: Slipway
-description: Connect your Git repositories to Slipway for deployment.
+description: Connect your GitHub repository to Slipway for push-to-deploy.
 prev:
   text: Project Configuration
   link: /slipway/project-configuration
@@ -17,27 +17,78 @@ editLink: true
 
 # Git Integration
 
-Slipway integrates with Git for source code management and automatic deployments.
+Slipway integrates with GitHub for source code management and automatic deployments. Connect your repository and Slipway handles the rest — deploy keys, webhooks, and push-to-deploy are all configured automatically.
 
 ## How It Works
 
 Slipway supports two deployment methods:
 
-1. **CLI Deploy** - Push code directly from your machine
-2. **Webhook Deploy** - Automatic deploys when you push to GitHub/GitLab/Bitbucket
+1. **Push-to-deploy** — Connect a GitHub repository and Slipway deploys automatically on every push
+2. **CLI deploy** — Push code directly from your machine with `slipway slide`
 
-Both methods use Git to track versions and enable rollbacks.
+Both methods track Git commit information (branch, commit hash, message) and enable [rollbacks](/slipway/rollbacks).
+
+## Connecting GitHub
+
+### 1. Configure GitHub OAuth
+
+Before connecting repositories, you need to set up a GitHub OAuth app so Slipway can access your repos.
+
+1. Go to **Settings > Git** in your Slipway dashboard
+2. Follow the link to [create a GitHub OAuth app](https://github.com/settings/developers)
+3. Set the **Authorization callback URL** to the one shown in the Slipway dashboard
+4. Enter the **Client ID** and **Client Secret** and save
+
+### 2. Connect your GitHub account
+
+On the same **Settings > Git** page, click **Connect GitHub**. This authorizes Slipway to list your repositories and create deploy keys and webhooks on your behalf.
+
+### 3. Connect a repository to your app
+
+1. Navigate to your app's settings page: **Project > Environment > App > Settings**
+2. Under **Git Integration**, search for and select the repository you want to connect
+3. Choose the branch to deploy from (defaults to the repository's default branch)
+4. Click **Connect**
+
+Slipway automatically:
+
+- **Generates an SSH deploy key** and adds it to the GitHub repository (for cloning private repos)
+- **Creates a webhook** on the repository so GitHub notifies Slipway on every push, pull request, and branch delete
+- **Enables auto-deploy** by default — pushes to your configured branch trigger deployments immediately
+
+::: tip Zero manual setup
+You don't need to copy webhook URLs, create secrets, or add deploy keys manually. Slipway provisions everything via the GitHub API when you click Connect.
+:::
+
+### 4. Verify the connection
+
+Push a commit to your configured branch:
+
+```bash
+git commit --allow-empty -m "Test auto-deploy"
+git push origin main
+```
+
+You should see a new deployment appear in your Slipway dashboard within seconds.
+
+## Disconnecting a Repository
+
+In your app's settings page under **Git Integration**, click **Disconnect**. Slipway removes the deploy key and webhook from GitHub and deletes the repository connection.
+
+You can reconnect the same or a different repository at any time.
 
 ## CLI-Based Deployment
+
+You can also deploy without connecting a GitHub repository by using the Slipway CLI.
 
 ### How It Works
 
 When you run `slipway slide`:
 
 1. Slipway creates an archive using `git archive`
-2. Only tracked files are included
-3. Untracked files and `.gitignore` entries are excluded
-4. The archive is uploaded to Slipway server
+2. Only tracked files are included (untracked files and `.gitignore` entries are excluded)
+3. The archive is uploaded to your Slipway server
+4. Slipway builds and deploys
 
 ### Requirements
 
@@ -54,190 +105,87 @@ git commit -m "New feature"
 slipway slide
 ```
 
-## GitHub Integration
+See the [deploy command](/slipway/deploy-command) docs for more details.
 
-### Setting Up Webhooks
+## CI/CD Integration
 
-1. **Enable auto-deploy in Slipway:**
+If you prefer to deploy from a CI/CD pipeline instead of push-to-deploy, you can use the Slipway CLI with deploy tokens.
 
-   ```bash
-   slipway project:update myapp --auto-deploy=true --auto-deploy-branch=main
-   ```
+### Generate a deploy token
 
-2. **Get webhook URL:**
+In **Settings > Git**, create a deploy token. You can scope it to a specific project for security.
 
-   ```bash
-   slipway project:info myapp
-   # Webhook URL: https://slipway.example.com/api/v1/webhook/github/abc123
-   # Webhook Secret: whsec_xyz789
-   ```
+### GitHub Actions
 
-3. **Configure GitHub:**
-   - Go to repository → Settings → Webhooks → Add webhook
-   - Payload URL: Your webhook URL
-   - Content type: `application/json`
-   - Secret: Your webhook secret
-   - Events: Just the push event
-   - Click "Add webhook"
+```yaml
+# .github/workflows/deploy.yml
+name: Deploy to Slipway
 
-### Verifying the Webhook
+on:
+  push:
+    branches: [main]
 
-GitHub sends a ping event. Check it was received:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-```bash
-slipway webhook:logs myapp
+      - name: Install Slipway CLI
+        run: npm install -g slipway
+
+      - name: Deploy
+        env:
+          SLIPWAY_TOKEN: ${{ secrets.SLIPWAY_TOKEN }}
+          SLIPWAY_SERVER: ${{ secrets.SLIPWAY_SERVER }}
+        run: slipway slide --message "Deploy from GitHub Actions"
 ```
 
-### Push to Deploy
+### GitLab CI/CD
 
-Now when you push:
-
-```bash
-git push origin main
+```yaml
+# .gitlab-ci.yml
+deploy:
+  stage: deploy
+  image: node:22
+  only:
+    - main
+  script:
+    - npm install -g slipway
+    - slipway slide --message "Deploy from GitLab CI"
+  variables:
+    SLIPWAY_TOKEN: $SLIPWAY_TOKEN
+    SLIPWAY_SERVER: $SLIPWAY_SERVER
 ```
 
-Slipway automatically:
+### Bitbucket Pipelines
 
-1. Receives the webhook
-2. Pulls the code
-3. Builds and deploys
+```yaml
+# bitbucket-pipelines.yml
+pipelines:
+  branches:
+    main:
+      - step:
+          name: Deploy to Slipway
+          image: node:22
+          script:
+            - npm install -g slipway
+            - slipway slide --message "Deploy from Bitbucket"
+```
 
-## GitLab Integration
-
-### Setting Up Webhooks
-
-1. **Enable auto-deploy:**
-
-   ```bash
-   slipway project:update myapp --auto-deploy=true
-   ```
-
-2. **Get webhook URL:**
-
-   ```bash
-   slipway project:info myapp
-   ```
-
-3. **Configure GitLab:**
-   - Go to repository → Settings → Webhooks
-   - URL: Your webhook URL
-   - Secret token: Your webhook secret
-   - Trigger: Push events
-   - Click "Add webhook"
-
-## Bitbucket Integration
-
-### Setting Up Webhooks
-
-1. **Enable auto-deploy:**
-
-   ```bash
-   slipway project:update myapp --auto-deploy=true
-   ```
-
-2. **Configure Bitbucket:**
-   - Go to repository → Settings → Webhooks → Add webhook
-   - Title: Slipway Deploy
-   - URL: Your webhook URL
-   - Triggers: Repository push
-   - Click "Save"
-
-::: warning Bitbucket Limitation
-Bitbucket webhooks don't support secrets. Slipway validates based on IP address.
+::: info
+CI/CD deployment works with any Git provider — GitHub, GitLab, Bitbucket, or self-hosted. Push-to-deploy webhooks currently support GitHub only.
 :::
-
-## Branch Configuration
-
-### Single Branch Deployment
-
-Deploy only from a specific branch:
-
-```bash
-slipway project:update myapp --auto-deploy-branch=main
-```
-
-Pushes to other branches are ignored.
-
-### Multiple Branches
-
-Configure different branches for different environments:
-
-```bash
-# main → production
-slipway project:update myapp --auto-deploy-branch=main --env=production
-
-# develop → staging
-slipway env:create myapp staging
-slipway project:update myapp --auto-deploy-branch=develop --env=staging
-```
-
-### Pattern Matching
-
-Deploy from branches matching a pattern:
-
-```bash
-# Deploy from any release/* branch
-slipway project:update myapp --auto-deploy-branch="release/*"
-```
 
 ## Commit Information
 
-Slipway tracks Git commit information:
+Slipway tracks Git metadata for every webhook-triggered deployment:
 
-```bash
-slipway deployments myapp
-```
+- **Commit hash** — the exact commit that was deployed
+- **Branch** — the branch the push was made to
+- **Commit message** — the head commit message (truncated to 200 characters)
 
-Output:
-
-```
-ID        STATUS    COMMIT     BRANCH    MESSAGE              DEPLOYED
-abc123    running   a1b2c3d    main      Fix payment bug      5 min ago
-def456    stopped   e4f5g6h    main      Add feature          2 hours ago
-```
-
-### Viewing Commit Details
-
-```bash
-slipway deployment:info myapp abc123
-```
-
-Output:
-
-```
-Deployment: abc123
-Status: running
-Started: 2024-01-20 14:30:00
-Finished: 2024-01-20 14:31:42
-Duration: 1m 42s
-
-Git:
-  Commit: a1b2c3d4e5f6g7h8i9j0
-  Branch: main
-  Message: Fix payment bug
-  Author: developer@example.com
-  Committed: 2024-01-20 14:25:00
-```
-
-## Skipping Deployments
-
-### Skip via Commit Message
-
-Add `[skip deploy]` or `[no deploy]` to your commit message:
-
-```bash
-git commit -m "Update README [skip deploy]"
-git push origin main
-# No deployment triggered
-```
-
-### Skip via Files Changed
-
-Configure Slipway to skip deployments when only certain files change:
-
-```bash
-slipway project:update myapp --skip-paths="*.md,docs/*,.github/*"
-```
+This information is visible on the deployment detail page in your dashboard and is used to identify deployments in the activity feed.
 
 ## Git Requirements
 
@@ -257,9 +205,6 @@ node_modules/
 .env.local
 .env.*.local
 
-# Slipway credentials (if using hook)
-.slipway-credentials
-
 # Logs
 *.log
 
@@ -270,7 +215,7 @@ Thumbs.db
 
 ### Tracked Files
 
-These should be tracked:
+These should be tracked in Git:
 
 ```
 package.json
@@ -280,7 +225,7 @@ app.js
 api/
 config/
 views/
-assets/ (source files)
+assets/
 ```
 
 ## Troubleshooting
@@ -314,64 +259,25 @@ git add .
 git commit -m "Initial commit"
 ```
 
-### "Dirty Working Directory"
+### Webhook Not Triggering
 
-Warning when you have uncommitted changes:
+1. **Check the repository is connected** — go to your app's settings and verify the repository shows as connected with auto-deploy enabled
 
-```bash
-slipway slide
-# Warning: You have uncommitted changes. Deploy anyway? [y/N]
-```
+2. **Check the branch** — Slipway only deploys pushes to branches that match your [branch configuration](/slipway/auto-deploy#branch-configuration). Pushes to other branches are ignored.
 
-**Recommendation:** Commit your changes first:
+3. **Check GitHub webhook deliveries** — go to your GitHub repository → Settings → Webhooks → Recent Deliveries to see if GitHub is sending the webhook and what response it's getting
 
-```bash
-git add .
-git commit -m "Your changes"
-slipway slide
-```
+4. **Reconnect the repository** — if the webhook or deploy key was deleted from GitHub, disconnect and reconnect the repository in Slipway to regenerate them
 
-### "Webhook Not Triggering"
+### Signature Verification Failed
 
-1. **Check webhook is configured:**
-   - Verify URL in GitHub/GitLab/Bitbucket settings
+This means the webhook secret doesn't match. The most likely cause is that the webhook was manually modified on GitHub.
 
-2. **Check webhook logs:**
-
-   ```bash
-   slipway webhook:logs myapp
-   ```
-
-3. **Verify branch matches:**
-
-   ```bash
-   slipway project:info myapp
-   # Check auto-deploy-branch setting
-   ```
-
-4. **Check GitHub webhook deliveries:**
-   - Go to repo → Settings → Webhooks → Recent Deliveries
-
-### "Signature Verification Failed"
-
-```bash
-slipway webhook:logs myapp
-# Error: Signature verification failed
-```
-
-**Solution:** Ensure the webhook secret matches:
-
-1. Get the secret from Slipway:
-
-   ```bash
-   slipway project:info myapp
-   ```
-
-2. Update in GitHub/GitLab settings
+**Solution:** Disconnect and reconnect the repository in Slipway. This regenerates the webhook with a fresh secret.
 
 ## Best Practices
 
-### 1. Use a CI/CD Branch Strategy
+### 1. Use a Branch Strategy
 
 ```
 feature/* → develop (staging) → main (production)
@@ -386,6 +292,8 @@ In GitHub:
 - Prevent force pushes
 
 ### 3. Use Meaningful Commit Messages
+
+Commit messages appear in the Slipway dashboard, so make them descriptive:
 
 ```bash
 # Good
@@ -414,6 +322,6 @@ jobs:
 
 ## What's Next?
 
+- Set up [Auto-Deploy](/slipway/auto-deploy) with branch mappings and preview environments
 - Learn [How Deployments Work](/slipway/how-deployments-work)
-- Set up [Auto-Deploy](/slipway/auto-deploy) for full CI/CD
 - Configure [Rollbacks](/slipway/rollbacks) for quick recovery
