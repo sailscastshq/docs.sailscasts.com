@@ -1,3 +1,9 @@
+---
+prev:
+  text: Dev Preview
+  link: /pellicule/dev-preview
+---
+
 # Agent Skills
 
 Pellicule maintains a list of Agent Skills: Guidelines that AI agents can use to learn how to work within Pellicule projects.
