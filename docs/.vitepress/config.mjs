@@ -50,7 +50,8 @@ export default {
       '/connect-sqlite/': ConnectSQLiteGuide(),
       '/sails-quest/': SailsQuestGuide(),
       '/sentry-sails/': SentrySailsGuide(),
-      '/pellicule/': pelliculeGuide()
+      '/pellicule/': pelliculeGuide(),
+      '/sails-ai/': sailsAiGuide()
     },
     sitemap: { hostname: 'https://docs.sailscasts.com' },
     editLink: {
@@ -671,6 +672,37 @@ function pelliculeGuide() {
       text: 'AI',
       collapsed: false,
       items: [{ text: 'Agent Skills', link: '/pellicule/agent-skills' }]
+    }
+  ]
+}
+
+function sailsAiGuide() {
+  return [
+    {
+      text: 'Getting Started',
+      collapsed: false,
+      items: [
+        { text: 'Overview', link: '/sails-ai/' },
+        { text: 'Getting Started', link: '/sails-ai/getting-started' },
+        { text: 'Configuration', link: '/sails-ai/configuration' }
+      ]
+    },
+    {
+      text: 'Usage',
+      collapsed: false,
+      items: [
+        { text: 'Chat', link: '/sails-ai/chat' },
+        { text: 'Streaming', link: '/sails-ai/streaming' }
+      ]
+    },
+    {
+      text: 'Adapters',
+      collapsed: false,
+      items: [
+        { text: 'Local', link: '/sails-ai/local' },
+        { text: 'OpenAI', link: '/sails-ai/openai' },
+        { text: 'Building Adapters', link: '/sails-ai/adapters' }
+      ]
     }
   ]
 }

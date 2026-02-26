@@ -10,6 +10,14 @@ export default {
           github: 'https://github.com/sailscastshq/slipway'
         },
         {
+          name: 'Sails AI',
+          description:
+            'Multi-provider AI hook for Sails.js with a clean adapter pattern. Chat, stream, and reason with any LLM.',
+          link: '/sails-ai/',
+          github: 'https://github.com/sailscastshq/sails-ai',
+          popular: true
+        },
+        {
           name: 'Boring Stack',
           description:
             'A full-stack JavaScript framework for building modern web applications with Sails and Inertia.js',
