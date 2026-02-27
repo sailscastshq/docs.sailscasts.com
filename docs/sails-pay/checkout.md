@@ -10,8 +10,8 @@ prev:
   text: Paystack
   link: /sails-pay/paystack
 next:
-  text: Retrieving subscriptions
-  link: /sails-pay/subscriptions
+  text: Verify transaction
+  link: /sails-pay/verify-transaction
 editLink: true
 ---
 
