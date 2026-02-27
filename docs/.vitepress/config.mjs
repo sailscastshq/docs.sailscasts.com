@@ -455,6 +455,16 @@ function SailsPayGuide() {
       items: [{ text: 'Creating checkouts', link: 'sails-pay/checkout' }]
     },
     {
+      text: 'Transactions',
+      collapsed: false,
+      items: [
+        {
+          text: 'Verify transaction',
+          link: 'sails-pay/verify-transaction'
+        }
+      ]
+    },
+    {
       text: 'Subscriptions',
       collapsed: false,
       items: [
