@@ -10,6 +10,13 @@ export default {
           github: 'https://github.com/sailscastshq/slipway'
         },
         {
+          name: 'Sounding',
+          description:
+            'The Sails-native testing framework for helpers, endpoints, JSON APIs, Inertia pages, mail, and browser flows.',
+          link: '/sounding/',
+          github: 'https://github.com/sailscastshq/sounding'
+        },
+        {
           name: 'Sails AI',
           description:
             'Multi-provider AI hook for Sails.js with a clean adapter pattern. Chat, stream, and reason with any LLM.',
@@ -75,6 +82,13 @@ export default {
           link: '/sails-pay/',
           github: 'https://github.com/sailscastshq/sails-hook-pay',
           popular: true
+        },
+        {
+          name: 'Sails Flare',
+          description:
+            'Multi-channel notification hook for Sails.js — web push, SMS, and more.',
+          link: '/sails-flare/',
+          github: 'https://github.com/sailscastshq/sails-hook-flare'
         },
         {
           name: 'Sails Quest',
