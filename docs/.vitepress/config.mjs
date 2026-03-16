@@ -35,6 +35,7 @@ export default {
     sidebar: {
       '/slipway/': slipwayGuide(),
       '/captain-vane/': captainVaneGuide(),
+      '/sounding/': soundingGuide(),
       '/guppy/': guppyGuide(),
       '/wish/': wishGuide(),
       '/create-sails/': createSailsGuide(),
@@ -51,7 +52,8 @@ export default {
       '/sails-quest/': SailsQuestGuide(),
       '/sentry-sails/': SentrySailsGuide(),
       '/pellicule/': pelliculeGuide(),
-      '/sails-ai/': sailsAiGuide()
+      '/sails-ai/': sailsAiGuide(),
+      '/sails-flare/': sailsFlareGuide()
     },
     sitemap: { hostname: 'https://docs.sailscasts.com' },
     editLink: {
@@ -102,6 +104,44 @@ function captainVaneGuide() {
       text: 'Basic usage',
       collapsible: true,
       items: [{ text: 'Basic usage', link: '/captain-vane/basic-usage' }]
+    }
+  ]
+}
+
+function soundingGuide() {
+  return [
+    {
+      text: 'Introduction',
+      collapsed: false,
+      items: [
+        { text: 'Overview', link: '/sounding/' },
+        { text: 'Why Sounding', link: '/sounding/what-is-sounding' },
+        { text: 'Runtime', link: '/sounding/how-it-works' },
+        { text: 'Getting started', link: '/sounding/getting-started' },
+        { text: 'Configuration', link: '/sounding/configuration' }
+      ]
+    },
+    {
+      text: 'Core concepts',
+      collapsed: false,
+      items: [
+        { text: 'Trials', link: '/sounding/trials' },
+        { text: 'Trial context', link: '/sounding/trial-context' },
+        { text: 'Worlds', link: '/sounding/worlds' },
+        { text: 'Auth and actors', link: '/sounding/auth-and-actors' },
+        { text: 'Suite structure', link: '/sounding/organizing-your-suite' }
+      ]
+    },
+    {
+      text: 'Writing trials',
+      collapsed: false,
+      items: [
+        { text: 'Helpers', link: '/sounding/testing-helpers' },
+        { text: 'JSON APIs', link: '/sounding/testing-json-apis' },
+        { text: 'Inertia', link: '/sounding/testing-inertia' },
+        { text: 'Browser', link: '/sounding/browser-testing' },
+        { text: 'Mail', link: '/sounding/mail-testing' }
+      ]
     }
   ]
 }
@@ -712,6 +752,39 @@ function sailsAiGuide() {
         { text: 'Local', link: '/sails-ai/local' },
         { text: 'OpenAI', link: '/sails-ai/openai' },
         { text: 'Building Adapters', link: '/sails-ai/adapters' }
+      ]
+    }
+  ]
+}
+
+function sailsFlareGuide() {
+  return [
+    {
+      text: 'Introduction',
+      collapsed: false,
+      items: [
+        { text: 'Overview', link: '/sails-flare/' },
+        { text: 'Getting started', link: '/sails-flare/getting-started' },
+        { text: 'Configuration', link: '/sails-flare/configuration' }
+      ]
+    },
+    {
+      text: 'Usage',
+      collapsed: false,
+      items: [
+        {
+          text: 'Firing notifications',
+          link: '/sails-flare/firing-notifications'
+        },
+        { text: 'Client integration', link: '/sails-flare/client-integration' },
+        { text: 'Web push', link: '/sails-flare/web-push' }
+      ]
+    },
+    {
+      text: 'Advanced',
+      collapsed: false,
+      items: [
+        { text: 'Building adapters', link: '/sails-flare/building-adapters' }
       ]
     }
   ]
