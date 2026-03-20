@@ -28,7 +28,3 @@ features:
     title: Release from main
     details: Cut releases directly from main, keep the history boring, and choose how versioning works for your repo with none, file, or npm modes.
 ---
-
-Git Vibe is a lightweight Git workflow for teams that want the speed of worktrees, the clarity of one branch per task, and the safety of AI-friendly isolation.
-
-If you have ever lost track of which branch an agent was editing, which terminal held the real diff, or whether a half-finished experiment polluted your main checkout, Git Vibe exists to make that feeling go away.
