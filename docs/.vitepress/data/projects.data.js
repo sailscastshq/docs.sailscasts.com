@@ -17,6 +17,14 @@ export default {
           github: 'https://github.com/sailscastshq/sounding'
         },
         {
+          name: 'Git Vibe',
+          description:
+            'AI-native Git workflow that gives every task its own worktree, keeps main clean, and makes human plus agent collaboration sane.',
+          link: '/git-vibe/',
+          github: 'https://github.com/sailscastshq/git-vibe',
+          popular: true
+        },
+        {
           name: 'Sails AI',
           description:
             'Multi-provider AI hook for Sails.js with a clean adapter pattern. Chat, stream, and reason with any LLM.',

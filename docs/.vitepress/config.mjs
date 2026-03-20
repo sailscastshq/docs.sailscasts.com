@@ -36,6 +36,7 @@ export default {
       '/slipway/': slipwayGuide(),
       '/captain-vane/': captainVaneGuide(),
       '/sounding/': soundingGuide(),
+      '/git-vibe/': gitVibeGuide(),
       '/guppy/': guppyGuide(),
       '/wish/': wishGuide(),
       '/create-sails/': createSailsGuide(),
@@ -141,6 +142,36 @@ function soundingGuide() {
         { text: 'Inertia', link: '/sounding/testing-inertia' },
         { text: 'Browser', link: '/sounding/browser-testing' },
         { text: 'Mail', link: '/sounding/mail-testing' }
+      ]
+    }
+  ]
+}
+
+function gitVibeGuide() {
+  return [
+    {
+      text: 'Introduction',
+      collapsed: false,
+      items: [
+        { text: 'Overview', link: '/git-vibe/' },
+        { text: 'Getting started', link: '/git-vibe/getting-started' },
+        { text: 'Daily workflow', link: '/git-vibe/daily-workflow' }
+      ]
+    },
+    {
+      text: 'Working with AI',
+      collapsed: false,
+      items: [{ text: 'AI workflows', link: '/git-vibe/ai-workflows' }]
+    },
+    {
+      text: 'Releases and config',
+      collapsed: false,
+      items: [
+        {
+          text: 'Release and versioning',
+          link: '/git-vibe/release-and-versioning'
+        },
+        { text: 'Configuration', link: '/git-vibe/configuration' }
       ]
     }
   ]
