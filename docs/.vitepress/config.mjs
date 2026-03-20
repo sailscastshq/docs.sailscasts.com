@@ -59,7 +59,7 @@ export default {
     sitemap: { hostname: 'https://docs.sailscasts.com' },
     editLink: {
       pattern:
-        'https://github.com/sailscastshq/docs.sailscasts.com/edit/develop/docs/:path',
+        'https://github.com/sailscastshq/docs.sailscasts.com/edit/main/docs/:path',
       text: 'Edit this page on GitHub'
     },
     socialLinks: [

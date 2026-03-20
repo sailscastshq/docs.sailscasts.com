@@ -1,0 +1,10 @@
+[vibe]
+baseBranch = "main"
+branchPrefix = "feat/"
+worktreeRoot = "../.vibe"
+openEditor = "auto"
+openWorkspaceWith = "auto"
+deleteRemoteOnFinish = true
+
+[release]
+versioning = "npm"
