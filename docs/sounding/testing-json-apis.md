@@ -81,6 +81,26 @@ test('publisher can create an issue', async ({ sails, expect }) => {
 })
 ```
 
+When the app's real password login action matters, use the first-party request auth helper instead of inventing session setup by hand:
+
+```js
+test('creator password login redirects to invoices', async ({
+  auth,
+  expect
+}) => {
+  const result = await auth.request.withPassword('creator@example.com', {
+    password: 'secret123',
+    returnUrl: '/invoices'
+  })
+
+  expect(result.response).toHaveStatus(302)
+  expect(result.response).toRedirectTo('/invoices')
+})
+```
+
+Sounding should also keep `request.as(actor)` aligned with the app's auth conventions, including
+`User` / `userId` and `Creator` / `creatorId`.
+
 ## The two request surfaces
 
 Sounding gives you the same request engine in two shapes:

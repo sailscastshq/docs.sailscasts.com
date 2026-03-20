@@ -13,6 +13,16 @@ Sounding is designed to feel natural in a Sails app from the first install.
 npm install -D sounding @playwright/test sails-sqlite
 ```
 
+### Install the Sounding skill for AI agents
+
+If you use Codex, Claude Code, Cursor, or another coding agent, install the Sounding skill too.
+That gives the agent first-class guidance for worlds, actors, transports, mailbox assertions,
+browser trials, and Sounding's auth helpers.
+
+```bash
+npx skills add sailscastshq/sounding/skills
+```
+
 ## 2. Set up your test environment
 
 Sounding does not replace Sails test config.
