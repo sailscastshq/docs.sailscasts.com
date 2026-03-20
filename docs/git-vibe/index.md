@@ -25,6 +25,6 @@ features:
     title: Integrated workflow
     details: Start from an issue, inspect context and diffs, open the pull request, and finish with cleanup built in.
   - icon: ⚡
-    title: Designed for AI-assisted development
-    details: Attach agent and task context, reopen the exact workspace later, and manage parallel human and AI work with clear boundaries.
+    title: Built for Codex and AI work
+    details: Open vibes in Codex or VS Code, attach agent and task context, and return to the exact workspace when you resume the task.
 ---
