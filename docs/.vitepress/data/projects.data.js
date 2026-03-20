@@ -19,7 +19,7 @@ export default {
         {
           name: 'Git Vibe',
           description:
-            'AI-native Git workflow that gives every task its own worktree, keeps main clean, and makes human plus agent collaboration sane.',
+            'The AI-native Git workflow that gives every task its own lane so humans and agents can ship in parallel without branch chaos.',
           link: '/git-vibe/',
           github: 'https://github.com/sailscastshq/git-vibe',
           popular: true

@@ -154,6 +154,7 @@ function gitVibeGuide() {
       collapsed: false,
       items: [
         { text: 'Overview', link: '/git-vibe/' },
+        { text: 'Philosophy', link: '/git-vibe/philosophy' },
         { text: 'Getting started', link: '/git-vibe/getting-started' },
         { text: 'Daily workflow', link: '/git-vibe/daily-workflow' }
       ]

@@ -1,12 +1,12 @@
 ---
 layout: home
 title: Git Vibe
-titleTemplate: Parallel AI work with one clean main
-description: Git Vibe is an AI-native Git workflow that gives every task its own worktree, keeps main clean, and makes human plus agent collaboration feel calm.
+titleTemplate: Parallel AI work without Git chaos
+description: Git Vibe gives every task its own worktree so humans and AI agents can move in parallel without turning main into a junk drawer.
 hero:
   name: Git Vibe
-  text: Parallel AI work. One clean main.
-  tagline: Give every task its own worktree so humans and AI agents can move fast without branch chaos, stash juggling, or context leaks.
+  text: AI agents need lanes.
+  tagline: Give every task its own worktree so your team can move fast, keep main releasable, and stop turning Git into a shared junk drawer.
   actions:
     - theme: brand
       text: Get Started
@@ -15,16 +15,16 @@ hero:
       text: Star on GitHub
       link: https://github.com/sailscastshq/git-vibe
 features:
-  - icon: 🌊
-    title: One vibe, one lane
-    details: Every task gets its own feat/* branch and worktree from the moment it starts, so experiments stay isolated and main stays calm.
   - icon: 🤖
-    title: Built for humans plus AI
-    details: Git Vibe was designed for Codex, VS Code, and parallel agent work. Open a vibe, attach task context, and jump back into the exact lane later.
-  - icon: 🔁
-    title: Issue to PR to finish
-    details: Start from an issue, open the PR, inspect checks, and finish the lane with one small command surface instead of a pile of Git rituals.
-  - icon: 🚢
-    title: Release from main
-    details: Cut releases directly from main, keep the history boring, and choose how versioning works for your repo with none, file, or npm modes.
+    title: Parallel work without collisions
+    details: One task, one branch, one worktree. Humans and AI agents can explore in parallel without stepping on each other's diffs.
+  - icon: ✅
+    title: Main stays boring
+    details: Keep experiments off main, release straight from it, and always know what is safe to ship.
+  - icon: 🧭
+    title: A workflow, not a pile of aliases
+    details: Start from an issue, reopen the right lane, inspect the diff, open the PR, and finish with cleanup built in.
+  - icon: ⚡
+    title: Built for AI-native teams
+    details: Attach agent and task context, reopen the exact lane later, and stop losing track of which thread was working on what.
 ---

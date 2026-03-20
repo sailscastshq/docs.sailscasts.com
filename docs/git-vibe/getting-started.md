@@ -2,6 +2,9 @@
 title: Getting started
 titleTemplate: Git Vibe
 description: Install Git Vibe, open your first vibe, and understand the core loop.
+prev:
+  text: Philosophy
+  link: /git-vibe/philosophy
 next:
   text: Daily workflow
   link: /git-vibe/daily-workflow
@@ -10,7 +13,7 @@ editLink: true
 
 # Getting started
 
-Git Vibe keeps the command surface intentionally small, but the workflow it creates is powerful: every task becomes its own short-lived `feat/*` branch and worktree, so humans and AI agents always have a clean lane to work in.
+Git Vibe is at its best when your team is moving fast with AI. Every task gets its own lane, so you can ask an agent to explore, review, or build without gambling on your current checkout.
 
 ## Install Git Vibe
 
@@ -18,7 +21,9 @@ Git Vibe keeps the command surface intentionally small, but the workflow it crea
 curl -fsSL https://raw.githubusercontent.com/sailscastshq/git-vibe/main/install.sh | bash
 ```
 
-If you are using Codex skills too, install the skill alongside the CLI:
+## Install the skill too
+
+If you use Codex, install the Git Vibe skill alongside the CLI. The CLI creates the Git lane. The skill teaches the agent how to behave inside it.
 
 ```sh
 npx skills add sailscastshq/git-vibe
@@ -53,7 +58,7 @@ git vibe issue 42
 ```
 
 ::: tip
-This is where the AI-friendly part starts to matter. Each vibe is an isolated lane, so you can have one agent in one worktree, a second experiment in another, and a clean `main` checkout still ready to review or release.
+This is where the AI part stops being hype. Each vibe is an isolated lane, so you can run one agent in one worktree, a second experiment in another, and still keep `main` clean for review or release.
 :::
 
 ## Attach AI context when you open a vibe
