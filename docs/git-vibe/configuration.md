@@ -17,7 +17,7 @@ Git Vibe reads configuration in this order:
 3. global Git config
 4. built-in defaults
 
-That gives teams a shared repo-level source of truth while still working nicely for solo developers who just want one place to set the defaults.
+This gives teams a shared repository-level source of truth while still working well for solo developers who want one place to set the defaults.
 
 ## Example `vibe.toml`
 
@@ -63,6 +63,14 @@ git config vibe.releaseVersioning file
 git config vibe.releaseFile VERSION
 ```
 
+## Workspace behavior
+
+`vibe.openEditor=auto|always|never` controls whether Git Vibe tries to launch a workspace app after opening a vibe.
+
+`vibe.openWorkspaceWith=auto|codex|vscode` controls which workspace app Git Vibe prefers.
+
+In `auto`, Git Vibe prefers Codex Desktop inside a Codex shell and otherwise uses VS Code when the `code` CLI is available.
+
 ## Lifecycle hooks
 
 Hooks live under `[hooks]` and run through `sh -c`.
@@ -90,4 +98,4 @@ git config vibe.issueBranchStyle number-only
 git config vibe.deleteRemoteOnFinish true
 ```
 
-The result is simple: one shared workflow for the repo, with room for each developer and each AI tool to tune the edges.
+The result is a shared workflow with predictable defaults and room for local overrides where needed.

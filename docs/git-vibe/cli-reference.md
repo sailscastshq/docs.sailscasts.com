@@ -13,9 +13,9 @@ editLink: true
 
 # CLI reference
 
-Git Vibe keeps the command surface small, but every command has a job.
+Git Vibe keeps the command surface compact, but each command has a specific role.
 
-If you ever forget the shape of the CLI, run:
+If you need the built-in summary, run:
 
 ```sh
 git vibe help
@@ -37,7 +37,7 @@ Options:
 - `--no-editor`: never open the workspace app
 - `--codex`: prefer Codex Desktop for workspace opening
 - `--vscode`: prefer VS Code for workspace opening
-- `--agent <agent>`: attach session metadata like `codex`
+- `--agent <agent>`: attach session metadata such as `codex`
 - `--task <task>`: attach a short task description
 
 ### `git vibe issue <number>`
@@ -54,7 +54,7 @@ Options:
 
 ### `git vibe start <name>`
 
-Friendly alias for opening a vibe without launching the editor.
+Alias for opening a vibe without launching the editor.
 
 ```sh
 git vibe start fix-login-redirect
@@ -112,14 +112,14 @@ git vibe diff 42
 
 ### `git vibe check [name]`
 
-Show branch, path, compare target, PR state, checks summary, session context, and repo settings.
+Show branch, path, compare target, PR state, check summary, session context, and repository settings.
 
 ```sh
 git vibe check
 git vibe status 42
 ```
 
-`check` is the friendly alias. `status` is the canonical Git-shaped name.
+`check` is an alias for `status`.
 
 ### `git vibe checks [name]`
 
@@ -157,7 +157,7 @@ Options:
 - `--title <title>`: set the PR title explicitly
 - `--body <body>`: set the PR body explicitly
 
-`submit` is the friendlier alias for `pr`.
+`submit` is an alias for `pr`.
 
 ## Finish and cleanup
 
@@ -174,7 +174,7 @@ Options:
 - `--sync`: fetch before checking merge state
 - `--local`: fast-forward merge the vibe into the base branch locally before cleanup
 - `--delete-remote`: delete the remote vibe branch after merge verification
-- `--keep-remote`: keep the remote vibe branch even if repo config says to delete it
+- `--keep-remote`: keep the remote vibe branch even if repository config says to delete it
 
 ### `git vibe list`
 
@@ -222,7 +222,7 @@ Options:
 
 - `--push`: push `main` and the new tag after the release is created
 
-`ship` is the friendly alias for `release`.
+`ship` is an alias for `release`.
 
 ## Utilities
 
@@ -240,9 +240,7 @@ Internal hook entrypoint used by the installed Git hooks.
 
 Most users do not run this directly.
 
-## A few good defaults
-
-These are the commands most people end up using every day:
+## A few common commands
 
 ```sh
 git vibe issue 42
