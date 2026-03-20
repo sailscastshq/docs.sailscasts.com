@@ -165,6 +165,11 @@ function gitVibeGuide() {
       items: [{ text: 'AI workflows', link: '/git-vibe/ai-workflows' }]
     },
     {
+      text: 'Reference',
+      collapsed: false,
+      items: [{ text: 'CLI reference', link: '/git-vibe/cli-reference' }]
+    },
+    {
       text: 'Shipping',
       collapsed: false,
       items: [
