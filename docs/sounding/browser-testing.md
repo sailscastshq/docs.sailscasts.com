@@ -74,6 +74,7 @@ When you opt into `{ browser: true }`, the trial context additionally gives you:
 - Playwright-flavored `expect()` behavior for browser assertions
 
 It also makes helpers like `login.as(actorOrEmail, page)` useful in the same trial.
+It also makes helpers like `login.withPassword(actorOrEmail, page, { password })` useful when the real browser form is the behavior.
 
 ## A practical split that keeps browser tests healthy
 
