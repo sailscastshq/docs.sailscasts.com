@@ -48,7 +48,7 @@ That is much better than carrying around anonymous test records.
 
 ## `request.as(actor)`
 
-When a request trial needs to act as a user, use `request.as(actor)`.
+When a request trial needs to act as an authenticated actor, use `request.as(actor)`.
 
 ```js
 test('subscriber can read the issue', async ({ sails, expect }) => {
@@ -63,6 +63,12 @@ test('subscriber can read the issue', async ({ sails, expect }) => {
 ```
 
 This keeps authenticated request trials readable without forcing every test to hand-roll session state.
+
+Sounding should detect the app's auth conventions for you:
+
+- `User` with `req.session.userId`
+- `Creator` with `req.session.creatorId`
+- explicit overrides in `config/sounding.js` when an app uses custom naming
 
 ## `login.as(actorOrEmail, page)`
 
@@ -88,10 +94,36 @@ test(
 A few useful details:
 
 - if you pass an actor name like `'subscriber'`, Sounding will look for it in `world.current.users`
-- if you pass an email address, Sounding will resolve or create that user as needed
+- if you pass an email address, Sounding will resolve or create that actor as needed
 - the default browser login path currently uses a magic-link flow under the hood
 
 That makes the browser story realistic without making every browser test repeat auth boilerplate.
+
+## `login.withPassword(actorOrEmail, page, options)`
+
+For apps that use real password login forms, Sounding should let the browser follow that flow instead of faking session state.
+
+```js
+test(
+  'creator reaches invoices after password login',
+  { browser: true },
+  async ({ login, page, expect }) => {
+    await login.withPassword('creator@example.com', page, {
+      password: 'secret123',
+      returnUrl: '/invoices'
+    })
+
+    await expect(page).toHaveURL(/\/invoices$/)
+  }
+)
+```
+
+This helper should:
+
+- load the configured login page
+- fill the app's real email and password fields
+- respect extras like `rememberMe` and `returnUrl`
+- work for both `User` and `Creator` style apps
 
 ## The `auth` helper surface
 
@@ -99,17 +131,19 @@ The top-level `auth` object is the lower-level auth API.
 
 Today it includes:
 
-- `auth.resolveUser(actorOrEmail)`
+- `auth.resolveActor(actorOrEmail)`
 - `auth.issueMagicLink(actorOrEmail)`
 - `auth.requestMagicLink(actorOrEmail)`
+- `auth.request.withPassword(actorOrEmail, options)`
 - `auth.login.as(actorOrEmail, page)`
+- `auth.login.withPassword(actorOrEmail, page, options)`
 
-### `auth.resolveUser()`
+### `auth.resolveActor()`
 
-Use this when you need a real user record and want Sounding to resolve either:
+Use this when you need a real actor record and want Sounding to resolve either:
 
 - a world actor name
-- a user object
+- a user or creator object
 - an email address
 
 ### `auth.issueMagicLink()`
@@ -136,6 +170,25 @@ test('requesting a magic link sends a usable email', async ({
 
   expect(result.response).toHaveStatus(302)
   expect(email.ctaUrl).toContain('/magic-link/')
+})
+```
+
+### `auth.request.withPassword()`
+
+Use this when you want to exercise the app's real password login action at the request layer.
+
+```js
+test('creator password login redirects to invoices', async ({
+  auth,
+  expect
+}) => {
+  const result = await auth.request.withPassword('creator@example.com', {
+    password: 'secret123',
+    returnUrl: '/invoices'
+  })
+
+  expect(result.response).toHaveStatus(302)
+  expect(result.response).toRedirectTo('/invoices')
 })
 ```
 
