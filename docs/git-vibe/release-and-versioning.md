@@ -39,7 +39,7 @@ Git Vibe supports three release versioning modes:
 
 ### `none`
 
-Use this when your team wants to bump version files manually before release.
+Use this when you want to bump version files manually before release.
 
 ```toml
 [release]

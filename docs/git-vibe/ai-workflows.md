@@ -13,7 +13,7 @@ editLink: true
 
 # AI workflows
 
-Git Vibe is not just a nicer alias for `git worktree`. It is a workflow designed around the reality that modern teams work with multiple terminals, editors, bots, and AI agents at the same time.
+Git Vibe is not just a nicer alias for `git worktree`. It is a workflow designed around the reality that modern developers and teams work with multiple terminals, editors, bots, and AI agents at the same time.
 
 ## Why AI work gets messy in plain Git
 
@@ -70,4 +70,4 @@ You are thinking:
 
 > Open a new vibe and try it there.
 
-That is what makes Git Vibe useful for AI teams. It turns multi-agent work from a scary Git problem into a normal project habit.
+That is what makes Git Vibe useful for solo developers and teams using AI. It turns multi-agent work from a scary Git problem into a normal project habit.

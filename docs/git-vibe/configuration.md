@@ -17,7 +17,7 @@ Git Vibe reads configuration in this order:
 3. global Git config
 4. built-in defaults
 
-That gives teams a shared repo-level source of truth while still letting individual developers override a few preferences locally.
+That gives teams a shared repo-level source of truth while still working nicely for solo developers who just want one place to set the defaults.
 
 ## Example `vibe.toml`
 

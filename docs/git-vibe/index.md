@@ -6,7 +6,7 @@ description: Git Vibe gives every task its own worktree so humans and AI agents 
 hero:
   name: Git Vibe
   text: AI agents need lanes.
-  tagline: Give every task its own worktree so your team can move fast, keep main releasable, and stop turning Git into a shared junk drawer.
+  tagline: Give every task its own worktree so you can move fast, keep main releasable, and stop turning Git into a shared junk drawer.
   actions:
     - theme: brand
       text: Get Started
@@ -25,6 +25,6 @@ features:
     title: A workflow, not a pile of aliases
     details: Start from an issue, reopen the right lane, inspect the diff, open the PR, and finish with cleanup built in.
   - icon: ⚡
-    title: Built for AI-native teams
+    title: Built for AI-native work
     details: Attach agent and task context, reopen the exact lane later, and stop losing track of which thread was working on what.
 ---

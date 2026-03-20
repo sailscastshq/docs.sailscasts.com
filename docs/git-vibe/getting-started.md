@@ -13,7 +13,7 @@ editLink: true
 
 # Getting started
 
-Git Vibe is at its best when your team is moving fast with AI. Every task gets its own lane, so you can ask an agent to explore, review, or build without gambling on your current checkout.
+Git Vibe is at its best when you are moving fast with AI. Every task gets its own lane, so you can ask an agent to explore, review, or build without gambling on your current checkout.
 
 ## Install Git Vibe
 

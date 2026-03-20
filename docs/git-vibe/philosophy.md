@@ -13,7 +13,7 @@ editLink: true
 
 # Philosophy
 
-Git Vibe is for teams that want the speed of AI without the sludge of branch chaos.
+Git Vibe is for solo developers and teams that want the speed of AI without the sludge of branch chaos.
 
 It is not trying to make Git fancier.
 
