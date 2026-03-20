@@ -1,12 +1,12 @@
 ---
 layout: home
 title: Git Vibe
-titleTemplate: AI-native Git workflow for teams that ship from main
+titleTemplate: Parallel AI work with one clean main
 description: Git Vibe is an AI-native Git workflow that gives every task its own worktree, keeps main clean, and makes human plus agent collaboration feel calm.
 hero:
   name: Git Vibe
-  text: AI-native Git workflow for teams that ship from main
-  tagline: Give every task its own worktree, keep main deployable, and let humans plus AI agents collaborate without branch chaos, stash juggling, or context leaks.
+  text: Parallel AI work. One clean main.
+  tagline: Give every task its own worktree so humans and AI agents can move fast without branch chaos, stash juggling, or context leaks.
   actions:
     - theme: brand
       text: Get Started
