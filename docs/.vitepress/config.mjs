@@ -165,7 +165,7 @@ function gitVibeGuide() {
       items: [{ text: 'AI workflows', link: '/git-vibe/ai-workflows' }]
     },
     {
-      text: 'Releases and config',
+      text: 'Shipping',
       collapsed: false,
       items: [
         {
