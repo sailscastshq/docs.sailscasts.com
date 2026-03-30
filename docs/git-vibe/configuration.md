@@ -1,7 +1,7 @@
 ---
 title: Configuration
 titleTemplate: Git Vibe
-description: Configure Git Vibe with checked-in vibe.toml settings, release versioning, and lifecycle hooks.
+description: Configure Git Vibe with checked-in vibe.toml settings, shared runtime plumbing, release versioning, and lifecycle hooks.
 prev:
   text: Release and versioning
   link: /git-vibe/release-and-versioning
@@ -30,6 +30,7 @@ openEditor = "auto"
 openWorkspaceWith = "auto"
 deleteRemoteOnFinish = true
 issueBranchStyle = "number-and-title"
+sharedPaths = "node_modules, .venv"
 
 [release]
 versioning = "npm"
@@ -49,6 +50,7 @@ pre-release = "npm test"
 - `openWorkspaceWith`
 - `deleteRemoteOnFinish`
 - `issueBranchStyle`
+- `sharedPaths`
 
 ## Release settings
 
@@ -71,11 +73,37 @@ git config vibe.releaseFile VERSION
 
 In `auto`, Git Vibe prefers Codex Desktop inside a Codex shell and otherwise uses VS Code when the `code` CLI is available.
 
+## Shared runtime paths
+
+`vibe.sharedPaths` is a comma-separated list of relative repo paths that Git Vibe should symlink from the primary checkout into a fresh vibe before `post-create` runs.
+
+By default, Git Vibe uses:
+
+```sh
+git config --global vibe.sharedPaths node_modules
+```
+
+That default makes a practical difference for Node projects: if your main checkout already has `node_modules`, a fresh vibe can usually run `npm run dev`, `npm test`, and local CLIs immediately.
+
+Useful examples:
+
+```toml
+[vibe]
+sharedPaths = "node_modules, .venv"
+```
+
+```sh
+git config vibe.sharedPaths "node_modules,.direnv"
+git config vibe.sharedPaths none
+```
+
+Use `none` when you want to disable automatic runtime plumbing for a repo.
+
 ## Lifecycle hooks
 
 Hooks live under `[hooks]` and run through `sh -c`.
 
-- `post-create` runs after Git Vibe creates or attaches a fresh worktree
+- `post-create` runs after Git Vibe creates or attaches a fresh worktree and after shared path plumbing is linked
 - `pre-finish` runs after merge verification and before cleanup
 - `pre-release` runs after release validation and before version updates, commit creation, and tagging
 
