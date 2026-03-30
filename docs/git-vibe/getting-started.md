@@ -91,7 +91,12 @@ That creates:
 
 - a branch like `feat/fix-login-redirect`
 - a dedicated worktree under `../.vibe/<repo>/fix-login-redirect`
+- shared runtime plumbing such as `node_modules` from the main checkout when it already exists
 - a context summary showing the path, compare target, and current change state
+
+That last part matters in real day-to-day work. If your base checkout already has the project ready to run, a fresh vibe should feel ready too. For Node projects, Git Vibe links `node_modules` into new vibes by default so commands like `npm run dev`, `npm test`, or framework CLIs can work without a manual fix.
+
+If your project needs more than that, configure `vibe.sharedPaths` in `vibe.toml` for paths like `.venv`, `.direnv`, or `vendor/bundle`.
 
 If you work from issues, you can start directly from the issue number:
 

@@ -40,6 +40,8 @@ Options:
 - `--agent <agent>`: attach session metadata such as `codex`
 - `--task <task>`: attach a short task description
 
+Fresh vibes also inherit shared runtime paths from the primary checkout before any `post-create` hook runs. By default that means `node_modules`, which helps a new vibe feel immediately runnable when the base checkout is already set up.
+
 ### `git vibe issue <number>`
 
 Open or create a vibe from a GitHub issue number.
@@ -112,7 +114,7 @@ git vibe diff 42
 
 ### `git vibe check [name]`
 
-Show branch, path, compare target, PR state, check summary, session context, and repository settings.
+Show branch, path, compare target, PR state, check summary, session context, shared path plumbing, and repository settings.
 
 ```sh
 git vibe check
