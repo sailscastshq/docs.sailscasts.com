@@ -19,6 +19,8 @@ Use browser trials when the real browser matters:
 - gated content flows
 - checkout handoff
 
+When a repo uses a separate functional layer, keep these browser flows under `tests/e2e/pages/` and move request or Inertia contracts down into `tests/functional/`.
+
 ```js
 import { test } from 'sounding'
 

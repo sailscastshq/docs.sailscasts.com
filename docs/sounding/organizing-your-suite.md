@@ -19,6 +19,9 @@ That is why the recommended structure is intentionally boring.
 tests/
   unit/
     helpers/
+  functional/
+    pages/
+    api/
   e2e/
     pages/
       auth/
@@ -31,7 +34,7 @@ tests/
 
 This gives you three useful separations:
 
-- **by layer**: unit vs page/browser
+- **by layer**: unit vs functional vs browser
 - **by product surface**: auth, billing, issues, dashboard
 - **by setup vocabulary**: factories and scenarios live under `tests/`
 
@@ -58,27 +61,29 @@ tests/unit/
 
 This is where light, app-aware helper trials belong.
 
-## Page and browser trials
+## Functional and browser trials
 
-Put request-driven, Inertia-driven, and browser-capable trials under `tests/e2e/pages/`, grouped by product surface.
+Put request-driven and Inertia-driven page contracts under `tests/functional/`, and keep browser-capable trials under `tests/e2e/pages/`.
 
 ```text
-tests/e2e/pages/
-  home.test.js
+tests/functional/pages/
   blog.test.js
   story.test.js
   auth/
     login.test.js
-    magic-link-request.test.js
-    magic-link-browser.test.js
   issues/
     contracts.test.js
+tests/e2e/pages/
+  home.test.js
+  auth/
+    magic-link-browser.test.js
+  issues/
     reader-access.test.js
   dashboard/
     editor.test.js
 ```
 
-This layout works well because related behaviors stay together while different runtimes remain easy to scan.
+This layout works well because related behaviors stay together while the fast non-browser lane stays separate from true browser journeys.
 
 ## Split by behavior, not by tool
 
@@ -159,18 +164,24 @@ tests/
     helpers/
       capitalize.test.js
       get-user-initials.test.js
-  e2e/
+  functional/
     pages/
       auth/
         login.test.js
-        magic-link-request.test.js
+      issues/
+        contracts.test.js
+    api/
+      issues/
+        create.test.js
+  e2e/
+    pages/
+      auth/
         magic-link-browser.test.js
       billing/
         pricing.test.js
       dashboard/
         editor.test.js
       issues/
-        contracts.test.js
         reader-access.test.js
       home.test.js
       blog.test.js

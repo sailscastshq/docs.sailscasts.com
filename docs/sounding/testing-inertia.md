@@ -9,6 +9,8 @@ Inertia responses deserve their own testing lane.
 
 They are not just JSON, and they are not just browser pages. They are a Sails response model with their own shape, props, redirects, validation, and partial reload behavior.
 
+When a repo uses a separate functional layer, these trials usually live under `tests/functional/pages/`.
+
 ## `test()` for Inertia responses
 
 Use `test()` when you want to test the server-side contract of an Inertia response without jumping straight to a browser flow.

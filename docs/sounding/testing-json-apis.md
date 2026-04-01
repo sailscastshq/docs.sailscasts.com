@@ -9,6 +9,8 @@ Sounding should be just as good for API-only Sails apps as it is for full browse
 
 That is why endpoint testing is a first-class part of the framework.
 
+When a repo separates browser E2E from faster app checks, these trials usually live under `tests/functional/api/`.
+
 ## `test()` for JSON and endpoint behavior
 
 Use `test()` for real HTTP behavior:
