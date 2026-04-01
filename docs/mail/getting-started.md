@@ -41,7 +41,7 @@ For example we can send an email verification email when a user signs up success
 // controllers/user/signup.js
 await sails.helpers.mail.send.with({
   subject: 'Verify your email',
-  template: 'email-verify-account',
+  template: 'verify-account',
   to: unverifiedUser.email,
   templateData: {
     token: unverifiedUser.emailProofToken,

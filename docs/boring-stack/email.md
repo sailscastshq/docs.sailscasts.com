@@ -39,7 +39,7 @@ To send emails in The Boring JavaScript Stack, use the `sails.helpers.mail.send(
 // controllers/user/signup.js
 await sails.helpers.mail.send.with({
   subject: 'Verify your email',
-  template: 'email-verify-account',
+  template: 'verify-account',
   to: unverifiedUser.email,
   templateData: {
     token: unverifiedUser.emailProofToken,

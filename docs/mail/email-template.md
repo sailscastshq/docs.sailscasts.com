@@ -19,11 +19,13 @@ Mail expects your email templates to be written in EJS template files or whateve
 
 ## Naming convention
 
-When writing your email templates, you should prepend the file name with `email-` for example for an email template to send the account verification email to a user, the template can be named as `email-confirm-account.ejs`
+Email template names are relative to `views/emails`, so a template can be named plainly like `verify-account.ejs` or nested like `internal/contact-form.ejs`.
+
+Legacy names prefixed with `email-` still work, but they are no longer required.
 
 ## Example
 
-Here is an example email template that's in `views/emails/email-verify-account.ejs`:
+Here is an example email template that's in `views/emails/verify-account.ejs`:
 
 ```html
 <h2

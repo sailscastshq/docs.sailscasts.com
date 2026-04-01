@@ -32,7 +32,7 @@ sails.helpers.mail.send.with({ mailer: 'resend' })
 This is a string matching an [email template](/mail/email-template) in `views/emails` without the file extension.
 
 ```js
-sails.helpers.mail.send.with({ template: 'email-verify-account' })
+sails.helpers.mail.send.with({ template: 'verify-account' })
 ```
 
 ## `templateData`
@@ -101,14 +101,14 @@ sails.helpers.mail.send.with({ fromName: 'The Boring JavaScript Stack' })
 
 ## `layout`
 
-The email layout to use for this email. This isn't required because by default Mail will look for a layout called `layout-email`.
+The email layout to use for this email. This isn't required because by default Mail will look for a layout called `mail`.
 
 However with `layout` you can pass an override and chose another layout to use or you can disable layout by passing `false`
 
 ### Specify a layout
 
 ```js
-await sails.helpers.mail.send.with({ layout: 'layout-account' })
+await sails.helpers.mail.send.with({ layout: 'account' })
 ```
 
 ### Disable layout
@@ -138,7 +138,7 @@ An optional array of attachment objects. Each attachment object should have the 
 await sails.helpers.mail.send.with({
   to: 'jack@blackpearl.com',
   toName: 'Jack Sparrow',
-  template: 'email-verify-account',
+  template: 'verify-account',
   templateData: { token: '3828bsbababvbas', fullName: 'Jack Sparrow' },
   attachments: [
     {
@@ -225,7 +225,7 @@ The ID of the test inbox to use.
 await sails.helpers.mail.send.with({
   to: 'jack@blackpearl.com',
   toName: 'Jack Sparrow',
-  template: 'email-verify-account',
+  template: 'verify-account',
   templateData: { token: '3828bsbababvbas', fullName: 'Jack Sparrow' },
   testInboxId: 5353939
 })
@@ -282,7 +282,7 @@ Schedule email to be sent later. The date should be in natural language (e.g.: i
 await sails.helpers.mail.send.with({
   to: 'jack@blackpearl.com',
   toName: 'Jack Sparrow',
-  template: 'email-verify-account',
+  template: 'verify-account',
   templateData: { token: '3828bsbababvbas', fullName: 'Jack Sparrow' },
   scheduledAt: '2024-08-05T11:52:01.858Z'
 })
@@ -296,7 +296,7 @@ await sails.helpers.mail.send.with({
 await sails.helpers.mail.send.with({
   to: 'jack@blackpearl.com',
   toName: 'Jack Sparrow',
-  template: 'email-verify-account',
+  template: 'verify-account',
   templateData: { token: '3828bsbababvbas', fullName: 'Jack Sparrow' }
 })
 ```
@@ -307,7 +307,7 @@ await sails.helpers.mail.send.with({
 await sails.helpers.mail.send.with({
   to: 'jack@blackpearl.com',
   toName: 'Jack Sparrow',
-  template: 'email-verify-account',
+  template: 'verify-account',
   templateData: { token: '3828bsbababvbas', fullName: 'Jack Sparrow' },
   layout: false
 })

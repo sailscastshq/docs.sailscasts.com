@@ -19,11 +19,11 @@ You can create layouts for the emails in your Sails application. This layout fil
 
 ## Default layout
 
-By default, Mail will look for a layout file in `views/layouts` called `layout-email.ejs` to use as the default layout for all your email templates.
+By default, Mail will look for a layout file in `views/layouts` called `mail.ejs` to use as the default layout for all your email templates.
 
 ## Example
 
-Here is an example email layout that's in `views/layouts/layout-email.ejs`:
+Here is an example email layout that's in `views/layouts/mail.ejs`:
 
 ```html
 <% /* Default layout for email templates */ %>
