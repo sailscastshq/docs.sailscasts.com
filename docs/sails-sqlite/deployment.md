@@ -5,7 +5,7 @@ head:
       content: https://docs.sailscasts.com/sails-sqlite-social.png
 title: Deployment
 titleTemplate: Sails SQLite
-description: Sails SQLite is designed for production deployment with robust defaults and deployment-ready configurations.
+description: Production deployment guidance for Sails SQLite.
 prev:
   text: Performance optimization
   link: '/sails-sqlite/performance-optimization'
@@ -17,7 +17,7 @@ editLink: true
 
 # Deployment
 
-Sails SQLite is designed for production deployment with robust defaults and deployment-ready configurations.
+This page covers production configuration and deployment guidance for Sails SQLite.
 
 ## Production Configuration
 
@@ -290,7 +290,7 @@ async function migrate() {
 
     // Create new indexes
     await sails.sendNativeQuery(`
-      CREATE INDEX IF NOT EXISTS idx_users_phone 
+      CREATE INDEX IF NOT EXISTS idx_users_phone
       ON users(phone_number)
     `)
 
@@ -499,7 +499,7 @@ module.exports = {
 
       // Get database statistics
       const stats = await sails.sendNativeQuery(`
-        SELECT 
+        SELECT
           name,
           (SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name=m.name) as table_count,
           (SELECT COUNT(*) FROM sqlite_master WHERE type='index' AND tbl_name=m.name) as index_count

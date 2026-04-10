@@ -23,7 +23,7 @@ Once props solve this. They're sent to the client on the first request, then aut
 
 ## When to use once props
 
-Once props are ideal for:
+Common uses for once props are:
 
 - **User permissions** - Fetched once at login, skipped until they change
 - **Feature flags** - App-wide settings that rarely update

@@ -1,7 +1,7 @@
 ---
 title: Daily workflow
 titleTemplate: Git Vibe
-description: The issue-to-PR loop that Git Vibe is designed to make natural.
+description: The issue-to-PR loop Git Vibe supports.
 prev:
   text: Getting started
   link: /git-vibe/getting-started
@@ -68,8 +68,6 @@ git vibe doctor
 git vibe doctor --repair
 ```
 
-The objective is simple: make the correct workflow easy to follow and easy to repeat.
-
 ## A full example
 
 ```sh
@@ -82,4 +80,4 @@ git vibe check
 git vibe finish --sync 42
 ```
 
-That is the full cycle: open a vibe, do the work, submit the PR, and clean up.
+This is the standard cycle: open a vibe, do the work, submit the PR, and clean up.

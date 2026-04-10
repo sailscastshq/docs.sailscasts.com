@@ -116,7 +116,7 @@ In the default `worktree` mode, that creates:
 - shared runtime plumbing such as `node_modules` from the main checkout when it already exists
 - a context summary showing the path, compare target, and current change state
 
-That last part matters in real day-to-day work. If your base checkout already has the project ready to run, a fresh vibe should feel ready too. For Node projects, Git Vibe links `node_modules` into new vibes by default so commands like `npm run dev`, `npm test`, or framework CLIs can work without a manual fix.
+If your base checkout is already ready to run, Git Vibe links `node_modules` into new vibes by default so commands like `npm run dev`, `npm test`, or framework CLIs can work without reinstalling dependencies.
 
 If you are in `solo` mode, the same command creates or switches `feat/fix-login-redirect` in your current checkout instead. The editor usually stays aligned automatically because the path does not change.
 

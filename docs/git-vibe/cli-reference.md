@@ -42,7 +42,7 @@ Options:
 - `--agent <agent>`: attach session metadata such as `codex`
 - `--task <task>`: attach a short task description
 
-`worktree` is the default mode. In `solo`, the command creates or switches the vibe branch in your current checkout instead. Fresh worktree-backed vibes also inherit shared runtime paths from the primary checkout before any `post-create` hook runs. By default that means `node_modules`, which helps a new vibe feel immediately runnable when the base checkout is already set up.
+`worktree` is the default mode. In `solo`, the command creates or switches the vibe branch in your current checkout instead. Fresh worktree-backed vibes also inherit shared runtime paths from the primary checkout before any `post-create` hook runs. By default that includes `node_modules`, which lets a new vibe reuse dependencies from the base checkout.
 
 ### `git vibe issue <number>`
 

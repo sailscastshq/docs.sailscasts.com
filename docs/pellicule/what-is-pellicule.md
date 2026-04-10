@@ -13,7 +13,7 @@ Pellicule is a Vue-native engine for rendering videos programmatically. Instead 
 
 ## The Name
 
-**Pellicule** (pronounced _peh-lee-KOOL_) comes from the French word for photographic film or film stock — the physical material that captures images in traditional cinema. We chose this name because Pellicule captures your Vue components frame by frame, much like how film stock captures light.
+**Pellicule** (pronounced _peh-lee-KOOL_) comes from the French word for photographic film or film stock.
 
 ## How It Works
 
@@ -39,9 +39,9 @@ const opacity = computed(() => frame.value / 30)
 </template>
 ```
 
-The key insight is that your component is a **pure function of the frame number**. Given the same frame, you get the same pixels. Every time. This is what we mean by _deterministic rendering_.
+Your component is a **pure function of the frame number**. Given the same frame, it produces the same pixels. This is _deterministic rendering_.
 
-## Vue's Reactivity is Perfect for This
+## Why Vue fits this model
 
 When Pellicule updates the `frame` prop, Vue's reactivity system efficiently re-renders only what changed. There's no page reload between frames — just reactive updates. This is why Pellicule can render at 25+ frames per second.
 
@@ -69,12 +69,12 @@ The main difference is the ecosystem. Remotion is for React developers. Pellicul
 
 ### Why Vue?
 
-If you already know Vue, Pellicule feels natural:
+If you already know Vue, the programming model stays familiar:
 
 - **Single-file components** — Template, script, and styles in one file
 - **Reactive props** — Frame updates trigger efficient re-renders
 - **Vue ecosystem** — Use any Vue library in your videos
-- **No new concepts** — If you can build a Vue component, you can make a video
+- **No new rendering model** — If you can build a Vue component, you can make a video
 
 ## When to Use Pellicule
 
@@ -107,4 +107,4 @@ The entire pipeline is automated. You just write the component and run the CLI.
 
 Pellicule doesn't force you to use a specific build tool. It reads your project's existing config — whether that's `vite.config.js`, `rsbuild.config.js`, `config/shipwright.js`, `nuxt.config.ts`, or `quasar.config.js` — and uses the right adapter automatically. Standalone projects with no config work too, using the built-in Vite adapter.
 
-This means Pellicule lives inside your app, not beside it. Your video components sit next to your pages and app components, import from them freely, and render with the same aliases and plugins your app uses. See [Integrations](/pellicule/integrations) for details.
+This means Pellicule can use the same aliases, plugins, and component imports as the rest of your app. See [Integrations](/pellicule/integrations) for details.

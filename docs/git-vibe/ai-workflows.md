@@ -13,7 +13,7 @@ editLink: true
 
 # AI workflows
 
-Git Vibe is more than a wrapper around `git worktree`. It is a workflow designed for the way developers and teams now work across terminals, editors, bots, and AI agents.
+Git Vibe adds task-scoped branches, worktrees, and metadata on top of `git worktree`.
 
 ## Why AI-assisted work gets difficult in plain Git
 
@@ -34,7 +34,7 @@ When you open a vibe, Git Vibe creates a dedicated `feat/*` branch and worktree 
 - another agent can explore a documentation change
 - your `main` checkout remains clean for review, release, or urgent work
 
-This is the central idea behind Git Vibe: each task receives its own isolated workspace.
+Each task receives its own isolated workspace.
 
 ## Session memory for agents
 
@@ -56,12 +56,12 @@ git vibe diff 11
 git vibe check 11
 ```
 
-That keeps Codex Desktop and VS Code aligned with the worktree even when the shell or editor does not visibly switch in the way you expect.
+This keeps Codex Desktop and VS Code aligned with the same task-specific checkout.
 
 ## Safe parallelism
 
-The main benefit is operational as much as technical: isolated worktrees make it practical to run multiple AI-assisted tasks in parallel.
+Isolated worktrees make it practical to run multiple AI-assisted tasks in parallel.
 
 Instead of wondering whether an experiment will interfere with your current branch, you can open a separate vibe and keep the work contained.
 
-That is what makes Git Vibe useful for solo developers and teams using AI. It turns parallel AI work into a manageable Git workflow.
+This turns parallel AI work into manageable Git state.

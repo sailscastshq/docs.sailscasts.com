@@ -17,7 +17,7 @@ editLink: true
 
 # Local
 
-`@sails-ai/local` connects sails-ai to [Ollama](https://ollama.com), which runs open-source LLMs directly on your machine. No API keys, no usage costs, no data leaving your computer — perfect for development and prototyping.
+`@sails-ai/local` connects sails-ai to [Ollama](https://ollama.com), which runs open-source LLMs directly on your machine. It does not require API keys, usage fees, or sending data to a remote provider.
 
 ## Why use the local adapter?
 

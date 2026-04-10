@@ -15,8 +15,6 @@ inertia-sails is the Sails adapter for Inertia.
 
 ## Motivation
 
-We all love the feeling of an SPA but the SPA/frontend JavaScript ecosytem is not without it's drawback with the vast tooling it needs.
+inertia-sails is the server-side adapter that lets Sails actions return Inertia pages.
 
-inertia-sails is an [Inertia.js](https://inertiajs.com) server-side adapter that aims to simplify building rich SPA with Sails.
-
-With inertia-sails you get all the benefits of a modern SPA without needing a Sails API and decoupling the fronend from your backend in separate repos or monorepo.
+It lets you use Sails routing and controllers to serve Inertia pages without building a separate API or splitting the app into separate frontend and backend repos.

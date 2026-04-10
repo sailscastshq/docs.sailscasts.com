@@ -13,9 +13,9 @@ editLink: true
 
 # Philosophy
 
-Git Vibe is for solo developers and teams that want the speed of AI-assisted development without losing control of their Git workflow.
+Git Vibe keeps Git state explicit when humans and AI agents work across editors, terminals, and worktrees.
 
-Its purpose is straightforward: make development structured, predictable, and easy to resume whether you are running parallel lanes or staying in one checkout.
+Its purpose is to open one isolated lane per task and make that lane easy to inspect, reopen, and finish.
 
 ## `main` should remain releasable
 
@@ -27,9 +27,7 @@ That only works when unfinished work, experiments, and exploratory AI output sta
 
 Creating another worktree is inexpensive. Mixing unrelated changes is not.
 
-When a single checkout contains multiple ideas, experiments, and AI-generated diffs, review becomes slower and releases become less reliable.
-
-Git Vibe addresses that by making `worktree` the default mode.
+Git Vibe uses `worktree` as the default mode so each task can stay on its own branch and checkout.
 
 That is still the right answer when you want:
 
@@ -37,19 +35,15 @@ That is still the right answer when you want:
 - parallel AI agents
 - multiple experiments running side by side
 
-But not every developer day looks like that. Sometimes the right answer is one branch, one checkout, and fast UI iteration. That is why Git Vibe also supports `solo` mode.
+Use `solo` when you want the same branch-based workflow in the current checkout.
 
 ## AI agents need clear boundaries
 
-AI increases throughput, but it also increases the volume of changes that need to be understood and reviewed.
+AI-assisted work increases the number of diffs that still need review. Git Vibe gives agents explicit context, an isolated branch, and, when useful, a dedicated workspace.
 
-Git Vibe treats agents as collaborators that need clear context, an isolated branch, and, when useful, a dedicated workspace.
+## Reduce ambiguity
 
-## Less ceremony, more clarity
-
-Many Git workflows add process when the real problem is ambiguity.
-
-Git Vibe reduces that ambiguity:
+Git Vibe reduces ambiguity by avoiding:
 
 - no `develop`
 - no stash-heavy switching
@@ -58,10 +52,6 @@ Git Vibe reduces that ambiguity:
 
 Open a vibe, do the work, open the PR, and finish cleanly.
 
-That can mean a separate worktree in parallel mode, or a branch switch in the current checkout when `solo` is the better fit.
-
 ## Cleanup is part of the workflow
 
-A good workflow should help you close work as well as start it.
-
-That is why Git Vibe includes finish, check, reopen, diff, and cleanup commands. The objective is not only speed. It is also confidence in the state of the repository.
+Git Vibe includes finish, check, reopen, diff, and cleanup commands so completed work is as explicit as in-progress work.
