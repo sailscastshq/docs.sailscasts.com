@@ -5,9 +5,7 @@ editLink: true
 
 # Browser testing
 
-Sounding uses Playwright for browser trials, but the goal is not to make Playwright feel foreign inside a Sails app.
-
-The goal is to make browser trials feel like the natural top layer of the same testing story.
+Sounding uses Playwright for browser-capable trials.
 
 ## `test()` when the browser matters
 
@@ -38,23 +36,19 @@ test(
 )
 ```
 
-## Why worlds matter even more here
+## Load a world before browser setup
 
-Browser trials become fragile when they carry too much setup.
+Browser trials become harder to maintain when they carry too much setup. Use `sails.sounding.world.use()` to start from a named business situation.
 
-That is why `sails.sounding.world.use()` matters so much. It lets the trial start from a named business situation instead of twenty lines of scattered setup code.
+## Run the same flows across browser projects
 
-## Mobile should be first-class
-
-Sounding should treat mobile browser projects as first-class citizens, not as an afterthought.
-
-A good browser story should make it easy to run the same core flows across:
+Run the same core flows across:
 
 - desktop
 - mobile
 - dark mode when relevant
 
-## The ideal browser split
+## Choose the right layer
 
 Use browser trials for what only the browser can prove.
 
@@ -63,8 +57,6 @@ Leave lower-level behavior to:
 - `test()` with `sails.helpers`
 - `test()` with `get()` / `post()`
 - `test()` with `visit()`
-
-That keeps browser coverage high-value and resilient.
 
 ## What browser-capable trials add
 
@@ -78,7 +70,7 @@ When you opt into `{ browser: true }`, the trial context additionally gives you:
 It also makes helpers like `login.as(actorOrEmail, page)` useful in the same trial.
 It also makes helpers like `login.withPassword(actorOrEmail, page, { password })` useful when the real browser form is the behavior.
 
-## A practical split that keeps browser tests healthy
+## Typical browser cases
 
 Use browser-capable trials for:
 

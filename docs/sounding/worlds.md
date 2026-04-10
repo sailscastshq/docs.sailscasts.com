@@ -7,18 +7,16 @@ editLink: true
 
 If a **trial** is the behavior being proved, a **world** is the business situation that trial lives inside.
 
-If `test()` is the outer shape of Sounding, **worlds** are the inner shape.
+A world is the named, deterministic state returned by a scenario.
 
-A world is the named, deterministic business state that a trial lives inside.
-
-That means a world is not just a bag of fixtures and it is not just raw seed data. A world is a product situation:
+It contains the actors, records, and relationships a trial needs. For example:
 
 - a guest trying to open a gated issue
 - a subscriber with active access
 - a publisher editing a draft
 - a reader requesting a magic link
 
-That distinction matters. Sounding should help you test **product situations**, not just database rows.
+Use worlds to represent business situations instead of anonymous seed data.
 
 ## The four building blocks
 
@@ -56,7 +54,7 @@ Examples:
 - `unlockedReader`
 - `teamOwner`
 
-Actors matter because most product behavior is role-sensitive.
+Actors matter because many behaviors are role-sensitive.
 
 ### World
 
@@ -78,22 +76,22 @@ So the hierarchy looks like this:
 
 ## Why worlds matter
 
-Without worlds, tests usually drift toward one of two bad outcomes:
+Without worlds, tests usually drift toward one of two patterns:
 
 - giant setup blocks that hide the point of the trial
-- tiny fake fixtures that are too thin to trust
+- tiny fixtures that omit important relationships
 
-Worlds give Sounding a better middle path:
+Worlds help by keeping setup:
 
 - realistic enough to trust
 - named clearly enough to understand
-- reusable without feeling abstract
-
-The test stays focused on behavior because the world already carries the setup burden.
+- reusable across related trials
 
 ## Factories are the primitive layer
 
-A good factory should describe one thing well and stay boring.
+A factory describes one record shape.
+
+If you want the full factory surface, read [Factories](/sounding/factories).
 
 ```js
 import { defineFactory } from 'sounding'
@@ -107,20 +105,20 @@ export default defineFactory('user', ({ fake, sequence }) => ({
   .trait('subscriber', { subscriptionStatus: 'active' })
 ```
 
-The important thing here is not fake data generation by itself. It is the **traits**.
+The key part is the **traits**.
 
-Traits let the test vocabulary start sounding like the product:
+Traits add named variants such as:
 
 - `publisher`
 - `subscriber`
 - `expired`
 - `foundingSupporter`
 
-That is how the data layer starts to feel intentional.
-
-## Scenarios are where meaning appears
+## Scenarios compose a business situation
 
 A scenario is where separate records become a named business situation.
+
+If you want the full scenario surface, loading behavior, and file export shapes, read [Scenarios](/sounding/scenarios).
 
 ```js
 import { defineScenario } from 'sounding'
@@ -144,9 +142,7 @@ export default defineScenario('issue-access', async ({ create }) => {
 })
 ```
 
-The return value is the world.
-
-It should be something a test can read without opening the scenario first.
+The return value is the world. It should be something a test can read without opening the scenario first.
 
 ## What makes a good scenario name
 
@@ -171,9 +167,7 @@ The rule is simple:
 
 If the name does not tell you what business situation exists, it is probably not a good scenario name.
 
-## A world should read like the product
-
-Once you load a world, the test should feel like it is operating inside the product, not inside setup code.
+## A world should expose readable handles
 
 ```js
 import { test } from 'sounding'
@@ -189,12 +183,10 @@ test('subscriber can read a members-only issue', async ({ sails, expect }) => {
 })
 ```
 
-That reads well because the world gives the trial meaningful handles:
+The world gives the trial meaningful handles such as:
 
 - `current.users.subscriber`
 - `current.issues.gatedIssue`
-
-Those names do a lot of work.
 
 ## Good worlds vs bad worlds
 
@@ -214,7 +206,7 @@ A bad world:
 - creates too much data just because it can
 - is only understandable if you read 100 lines of setup first
 
-If a scenario starts feeling like a miniature production snapshot, it is too big.
+If a scenario starts looking like a production snapshot, it is too big.
 
 ## Use the same world across multiple trial types
 
@@ -262,7 +254,7 @@ test('reader gets a magic link email', async ({ sails, auth, expect }) => {
 })
 ```
 
-That is the payoff: one world, many useful trial surfaces.
+The same world can support multiple trial types.
 
 ## When to create a new scenario
 
@@ -283,6 +275,8 @@ In those cases, prefer:
 - a small override
 - a small helper inside the scenario
 
+If that helper only exists to support scenario composition, keep it near the scenarios in a named helper area such as `tests/world-helpers/`, not inside the auto-loaded `tests/scenarios/` tree.
+
 ## The relationship between trials, worlds, and actors
 
 A useful way to hold these ideas together is:
@@ -292,7 +286,7 @@ A useful way to hold these ideas together is:
 - the **actor** provides the role operating inside that situation
 - the **trial context** provides the runtime and tools
 
-That is the grammar Sounding is trying to make elegant.
+This is the relationship between the main Sounding concepts.
 
 ## A simple naming pattern that works well
 
@@ -310,13 +304,8 @@ Examples:
 - `billing-upgrade`
 - `team-invite`
 
-It keeps the suite calm and predictable.
+This keeps naming consistent across the suite.
 
-## The main idea to hold onto
+## Summary
 
-If you remember only one thing, let it be this:
-
-**A world is not there to make tests shorter. It is there to make them more truthful.**
-
-The goal is not clever setup reuse.
-The goal is a test that reads like a real product situation and still stays easy to trust.
+Use worlds to represent reusable business situations, not just shorter setup.

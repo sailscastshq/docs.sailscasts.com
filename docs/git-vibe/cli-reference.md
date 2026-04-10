@@ -33,6 +33,8 @@ git vibe code fix-login-redirect
 
 Options:
 
+- `--solo`: force the vibe to open in the current checkout
+- `--worktree`: force the vibe to open in its own worktree
 - `--editor`: always open the workspace app after opening the vibe
 - `--no-editor`: never open the workspace app
 - `--codex`: prefer Codex Desktop for workspace opening
@@ -40,7 +42,7 @@ Options:
 - `--agent <agent>`: attach session metadata such as `codex`
 - `--task <task>`: attach a short task description
 
-Fresh vibes also inherit shared runtime paths from the primary checkout before any `post-create` hook runs. By default that means `node_modules`, which helps a new vibe feel immediately runnable when the base checkout is already set up.
+`worktree` is the default mode. In `solo`, the command creates or switches the vibe branch in your current checkout instead. Fresh worktree-backed vibes also inherit shared runtime paths from the primary checkout before any `post-create` hook runs. By default that means `node_modules`, which helps a new vibe feel immediately runnable when the base checkout is already set up.
 
 ### `git vibe issue <number>`
 
@@ -79,13 +81,16 @@ Options:
 - `--task <task>`: set or replace the task description
 - `--clear`: remove stored session metadata
 
-### `git vibe enter [name]`
+### `git vibe enter [--editor|--no-editor] [--codex|--vscode] [name]`
 
 Re-enter a vibe and print its context.
 
 ```sh
 git vibe enter 42
+git vibe enter --vscode 42
 ```
+
+In `worktree` mode, `enter` jumps back into the worktree path. In `solo` mode, it switches the current checkout back to the vibe branch, keeps the same path, and honors the normal editor-launch policy unless shell integration is driving it through `--shell-output`.
 
 ### `git vibe open [name]`
 
@@ -102,6 +107,8 @@ Options:
 - `--codex`: force Codex Desktop
 - `--vscode`: force VS Code
 
+In `solo` mode, `open` switches the branch first and then reopens the same checkout in the selected workspace app.
+
 ### `git vibe diff [name]`
 
 Show the vibe diff against its merge base, plus untracked files.
@@ -114,7 +121,7 @@ git vibe diff 42
 
 ### `git vibe check [name]`
 
-Show branch, path, compare target, PR state, check summary, session context, shared path plumbing, and repository settings.
+Show branch, path, backing, compare target, PR state, check summary, session context, shared path plumbing, mode, and repository settings.
 
 ```sh
 git vibe check
@@ -133,7 +140,7 @@ git vibe checks 42
 
 ### `git vibe path <name>`
 
-Print the filesystem path for a vibe worktree.
+Print the filesystem path for a vibe.
 
 ```sh
 git vibe path 42

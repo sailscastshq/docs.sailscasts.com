@@ -13,7 +13,7 @@ editLink: true
 
 # Getting started
 
-Git Vibe works best when you are moving quickly with AI-assisted development and still want each task to stay isolated.
+Git Vibe works best when you want one `feat/*` workflow that can handle both parallel lanes and simpler one-checkout work.
 
 ## Recommended tools
 
@@ -43,7 +43,7 @@ If you are working from a local checkout, you can also run:
 
 ## Install the skill too
 
-If you use Codex, install the Git Vibe skill alongside the CLI. The CLI creates the worktree workflow. The skill gives the agent the conventions and commands to follow inside it.
+If you use Codex, install the Git Vibe skill alongside the CLI. The CLI creates the workflow. The skill gives the agent the conventions and commands to follow inside it.
 
 ```sh
 npx skills add sailscastshq/git-vibe
@@ -77,6 +77,28 @@ source ~/.zshrc
 git vibe version
 ```
 
+## Pick the right mode
+
+Git Vibe defaults to `worktree`, which is still the best fit when you want one isolated lane per task.
+
+Use `worktree` when:
+
+- you are running multiple agents or experiments in parallel
+- you want each task in its own directory
+- you want the shell and editor to jump to a dedicated lane
+
+Use `solo` when:
+
+- you usually have one active branch at a time
+- you mostly want `git switch`, `npm run dev`, and quick UI iteration
+- you want the editor to stay on the same checkout while Git Vibe switches branches
+
+Set your personal default with:
+
+```sh
+git config --global vibe.mode solo
+```
+
 ## Open your first vibe
 
 From a clean `main` checkout:
@@ -87,7 +109,7 @@ git pull --ff-only origin main
 git vibe code fix-login-redirect
 ```
 
-That creates:
+In the default `worktree` mode, that creates:
 
 - a branch like `feat/fix-login-redirect`
 - a dedicated worktree under `../.vibe/<repo>/fix-login-redirect`
@@ -95,6 +117,8 @@ That creates:
 - a context summary showing the path, compare target, and current change state
 
 That last part matters in real day-to-day work. If your base checkout already has the project ready to run, a fresh vibe should feel ready too. For Node projects, Git Vibe links `node_modules` into new vibes by default so commands like `npm run dev`, `npm test`, or framework CLIs can work without a manual fix.
+
+If you are in `solo` mode, the same command creates or switches `feat/fix-login-redirect` in your current checkout instead. The editor usually stays aligned automatically because the path does not change.
 
 If your project needs more than that, configure `vibe.sharedPaths` in `vibe.toml` for paths like `.venv`, `.direnv`, or `vendor/bundle`.
 
@@ -105,7 +129,7 @@ git vibe issue 42
 ```
 
 ::: tip
-This is where the AI benefit becomes practical. Each vibe is isolated, so you can run one agent in one worktree, explore a second change in another, and keep `main` clean for review or release.
+This is where the AI benefit becomes practical. In `worktree` mode, each vibe is isolated, so you can run one agent in one worktree, explore a second change in another, and keep `main` clean for review or release.
 :::
 
 ## Attach AI context when you open a vibe
@@ -128,4 +152,4 @@ git vibe pr
 git vibe finish --sync 42
 ```
 
-That fetches the latest remote state, verifies the merge, removes the worktree, and returns you to a clean `main` checkout.
+That fetches the latest remote state, verifies the merge, and cleans up the vibe. In `worktree` mode it removes the worktree. In `solo` mode it switches the current checkout back to `main`.

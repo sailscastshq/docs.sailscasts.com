@@ -23,6 +23,7 @@ This gives teams a shared repository-level source of truth while still working w
 
 ```toml
 [vibe]
+mode = "worktree"
 baseBranch = "main"
 branchPrefix = "feat/"
 worktreeRoot = "../.vibe"
@@ -43,6 +44,7 @@ pre-release = "npm test"
 
 ## Core `vibe` settings
 
+- `mode`
 - `baseBranch`
 - `branchPrefix`
 - `worktreeRoot`
@@ -67,15 +69,27 @@ git config vibe.releaseFile VERSION
 
 ## Workspace behavior
 
-`vibe.openEditor=auto|always|never` controls whether Git Vibe tries to launch a workspace app after opening a vibe.
+`vibe.mode=worktree|solo` controls whether Git Vibe opens vibes in separate worktrees or in the current checkout.
+
+- `worktree` is the built-in default and is the right choice for parallel human or AI lanes
+- `solo` is the better fit when you usually have one active branch at a time and want the editor to stay on the same checkout
+
+Examples:
+
+```sh
+git config --global vibe.mode solo
+git config vibe.mode worktree
+```
+
+`vibe.openEditor=auto|always|never` controls whether Git Vibe tries to launch a workspace app after opening a vibe. In `solo`, that applies to `git vibe code` and `git vibe enter`; in `worktree`, it applies to the vibe-opening commands while `enter` stays shell-oriented unless you explicitly force a launch.
 
 `vibe.openWorkspaceWith=auto|codex|vscode` controls which workspace app Git Vibe prefers.
 
-In `auto`, Git Vibe prefers Codex Desktop inside a Codex shell and otherwise uses VS Code when the `code` CLI is available.
+In `auto`, Git Vibe prefers Codex Desktop inside a Codex shell and otherwise uses VS Code when the `code` CLI is available. If your solo flow should usually reopen in VS Code, set `vibe.openWorkspaceWith=vscode`.
 
 ## Shared runtime paths
 
-`vibe.sharedPaths` is a comma-separated list of relative repo paths that Git Vibe should symlink from the primary checkout into a fresh vibe before `post-create` runs.
+`vibe.sharedPaths` is a comma-separated list of relative repo paths that Git Vibe should symlink from the primary checkout into a fresh worktree-backed vibe before `post-create` runs.
 
 By default, Git Vibe uses:
 
@@ -103,7 +117,7 @@ Use `none` when you want to disable automatic runtime plumbing for a repo.
 
 Hooks live under `[hooks]` and run through `sh -c`.
 
-- `post-create` runs after Git Vibe creates or attaches a fresh worktree and after shared path plumbing is linked
+- `post-create` runs after Git Vibe creates or attaches a fresh worktree-backed vibe and after shared path plumbing is linked
 - `pre-finish` runs after merge verification and before cleanup
 - `pre-release` runs after release validation and before version updates, commit creation, and tagging
 
@@ -120,6 +134,7 @@ Environment variables available to hooks:
 ## A few useful local overrides
 
 ```sh
+git config vibe.mode solo
 git config vibe.openEditor never
 git config vibe.openWorkspaceWith codex
 git config vibe.issueBranchStyle number-only

@@ -128,6 +128,8 @@ function soundingGuide() {
       items: [
         { text: 'Trials', link: '/sounding/trials' },
         { text: 'Trial context', link: '/sounding/trial-context' },
+        { text: 'Factories', link: '/sounding/factories' },
+        { text: 'Scenarios', link: '/sounding/scenarios' },
         { text: 'Worlds', link: '/sounding/worlds' },
         { text: 'Auth and actors', link: '/sounding/auth-and-actors' },
         { text: 'Suite structure', link: '/sounding/organizing-your-suite' }
@@ -142,6 +144,16 @@ function soundingGuide() {
         { text: 'Inertia', link: '/sounding/testing-inertia' },
         { text: 'Browser', link: '/sounding/browser-testing' },
         { text: 'Mail', link: '/sounding/mail-testing' }
+      ]
+    },
+    {
+      text: 'Reference',
+      collapsed: false,
+      items: [
+        {
+          text: 'Request clients and transport',
+          link: '/sounding/request-clients'
+        }
       ]
     }
   ]
