@@ -25,6 +25,14 @@ export default {
           popular: true
         },
         {
+          name: 'Durable UI',
+          description:
+            'State-placement utilities for UI that survives refreshes, navigation, and real users. Built around progress drafts and wizard flows.',
+          link: '/durable-ui/',
+          github: 'https://github.com/sailscastshq/durable-ui',
+          popular: true
+        },
+        {
           name: 'Sails AI',
           description:
             'Multi-provider AI hook for Sails.js with a clean adapter pattern. Chat, stream, and reason with any LLM.',

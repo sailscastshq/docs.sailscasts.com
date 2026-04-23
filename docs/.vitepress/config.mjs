@@ -53,6 +53,7 @@ export default {
       '/sails-quest/': SailsQuestGuide(),
       '/sentry-sails/': SentrySailsGuide(),
       '/pellicule/': pelliculeGuide(),
+      '/durable-ui/': durableUiGuide(),
       '/sails-ai/': sailsAiGuide(),
       '/sails-flare/': sailsFlareGuide()
     },
@@ -771,6 +772,47 @@ function pelliculeGuide() {
       text: 'AI',
       collapsed: false,
       items: [{ text: 'Agent Skills', link: '/pellicule/agent-skills' }]
+    }
+  ]
+}
+
+function durableUiGuide() {
+  return [
+    {
+      text: 'Philosophy',
+      collapsed: false,
+      items: [
+        {
+          text: 'What is Durable UI?',
+          link: '/durable-ui/what-is-durable-ui'
+        }
+      ]
+    },
+    {
+      text: 'Introduction',
+      collapsed: false,
+      items: [
+        { text: 'Overview', link: '/durable-ui/' },
+        { text: 'Getting Started', link: '/durable-ui/getting-started' }
+      ]
+    },
+    {
+      text: 'Progress',
+      collapsed: false,
+      items: [
+        {
+          text: 'Overview',
+          link: '/durable-ui/progress'
+        },
+        {
+          text: 'form-draft',
+          link: '/durable-ui/progress/form-draft'
+        },
+        {
+          text: 'wizard-draft',
+          link: '/durable-ui/progress/wizard-draft'
+        }
+      ]
     }
   ]
 }
