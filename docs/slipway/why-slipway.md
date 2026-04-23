@@ -5,7 +5,7 @@ head:
       content: https://docs.sailscasts.com/slipway-social.png
 title: Why Slipway?
 titleTemplate: Slipway
-description: Learn why Slipway is the best choice for deploying Sails.js applications compared to generic deployment platforms.
+description: Why Slipway exists for deploying and operating Sails.js applications.
 prev:
   text: What is Slipway
   link: /slipway/what-is-slipway
@@ -19,11 +19,11 @@ editLink: true
 
 ## The Problem Today
 
-Developers building with Sails.js and The Boring JavaScript Stack have to cobble together multiple tools:
+Deploying and operating a Sails.js app often requires separate tools for deployment, administration, debugging, and monitoring:
 
 - **Coolify/Dokploy** for deployment (generic, not Sails-aware)
 - **AdminJS/Forest Admin** for admin panels (separate setup, not integrated)
-- **A REPL workaround** for production debugging (no elegant Tinkerwell equivalent)
+- **A REPL workaround** for production debugging (no dedicated Sails REPL equivalent)
 - **Separate job queue monitoring** (no Horizon equivalent)
 - **Multiple dashboards** for different concerns
 
@@ -37,18 +37,18 @@ Developers building with Sails.js and The Boring JavaScript Stack have to cobble
 | Laravel Horizon | Queue monitoring                 |
 | Laravel Pulse   | Application monitoring           |
 
-**Sails developers deserve the same integrated experience.**
+Slipway combines similar concerns in one platform for Sails applications.
 
 ## What Slipway Provides
 
-A **single, unified platform** that:
+Slipway provides one platform that:
 
 - Deploys Sails apps with one command
 - Manages databases (PostgreSQL, MySQL, Redis)
 - Provides a Sails-aware admin panel (like Nova)
 - Offers a production REPL (like Tinkerwell)
 - Monitors queues (Sails Quest integration)
-- All with a **slick, modern dashboard** inspired by Linear and Resend
+- Provides a web dashboard for the same operational tasks
 
 ## Learning from the Best
 
@@ -86,18 +86,18 @@ Slipway combines the best ideas from existing tools:
 | **Queue Dashboard**    | No      | No        | No          | Quest integration |
 | **Transparent Docker** | Hidden  | Hidden    | Yes         | Yes               |
 
-## What Makes Slipway Different
+## Slipway-specific behavior
 
-### 1. Sails-Native, Not Generic
+### 1. Sails-native behavior
 
-Slipway **understands** Sails applications:
+Slipway understands Sails applications:
 
 - Auto-detects `config/models.js`, `config/datastores.js`, `api/models/`
 - Knows about Sails lifecycle, hooks, and policies
 - Integrates with Sails Quest for job queues
-- Provides a REPL where `await User.find()` just works
+- Provides a REPL with direct model and helper access
 
-### 2. The Full Suite
+### 2. Integrated tooling
 
 Instead of piecing together separate tools:
 
@@ -106,7 +106,7 @@ Instead of piecing together separate tools:
 - REPL (custom scripts)
 - Queue monitor (custom dashboard)
 
-You get one integrated platform where everything works together.
+You get one platform for these tasks instead of separate products.
 
 ### 3. Lightweight
 
@@ -118,17 +118,12 @@ You get one integrated platform where everything works together.
 
 Compare to Coolify's ~800MB-1GB footprint.
 
-### 4. Beautiful Dashboard
-
-Inspired by Linear and Resend:
+### 4. Dashboard features
 
 - Dark mode first
 - Keyboard shortcuts everywhere
 - Command palette (Cmd+K)
-- Clean, modern design
 
-## The Bottom Line
+## Summary
 
-If you're building with Sails.js, Slipway is purpose-built for you. No more cobbling together generic tools. No more separate setups for admin panels, REPLs, and queue monitoring.
-
-**One platform. One command. Zero complexity.**
+Slipway groups deployment, admin access, REPL access, service management, and Quest monitoring into one Sails-focused platform.

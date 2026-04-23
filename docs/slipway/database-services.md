@@ -17,7 +17,7 @@ editLink: true
 
 # Database Services
 
-Slipway makes it easy to provision and manage databases for your Sails applications. No more manual Docker commands or connection string juggling.
+Slipway provisions and manages databases for your Sails applications from the same platform.
 
 ## Supported Databases
 

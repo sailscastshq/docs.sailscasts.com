@@ -5,7 +5,7 @@ head:
       content: https://docs.sailscasts.com/boring-stack-social.png
 title: Ascent
 titleTemplate: The Boring JavaScript Stack
-description: Ascent is a production-ready SaaS template built on The Boring JavaScript Stack. Available with React or Vue frontends. Ship products with battle-tested technologies and focus on actual real users instead of wrestling with complex build tools.
+description: Ascent is a SaaS template built on The Boring JavaScript Stack and available with React or Vue frontends.
 prev:
   text: Mellow
   link: '/boring-stack/mellow'
@@ -17,16 +17,14 @@ editLink: true
 
 # Ascent
 
-**Ship products with battle-tested technologies. Say no to chasing JavaScript trends.**
-
-Ascent is a production-ready SaaS template built on The Boring JavaScript Stack. Available with **React** or **Vue** frontends. Focus on shipping to actual real users instead of wrestling with complex build tools and trendy frameworks.
+Ascent is a SaaS template built on The Boring JavaScript Stack and available with **React** or **Vue** frontends.
 
 ## The Boring Stack Philosophy
 
-- **Focus on Your Product** - Effortlessly focus on what really matters: shipping to actual real users
+- **Server-centric product development** - Build product features without maintaining a separate API layer
 - **No API Required** - Each page receives the necessary data as props from your Sails backend
-- **Battle-Tested Technologies** - Built with reliable, proven technologies that just work
-- **Ship Fast** - Iterate quickly and move easily from MVP to scale
+- **Established tools** - Use stable framework and infrastructure choices
+- **One codebase** - Keep routing, data access, and UI work in the same application
 
 ## Tech Stack
 

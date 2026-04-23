@@ -5,11 +5,9 @@ editLink: true
 
 # Mail testing
 
-Sounding makes outgoing mail easy to test without forcing developers to parse logs or invent their own fake inbox.
+Sounding captures outgoing mail during a trial by wrapping `sails.helpers.mail.send`, rendering a preview when a template is used, and storing the normalized result in `sails.sounding.mailbox`.
 
-Because Sails already has a strong mail story, Sounding leans into it. When a trial boots, Sounding wraps `sails.helpers.mail.send`, captures the real outgoing inputs flowing through `sails-hook-mail`, renders a preview when a template is used, and stores the normalized result in `sails.sounding.mailbox`.
-
-That means the mail story stays simple:
+That means:
 
 - your app still uses `sails.helpers.mail.send`
 - Sounding captures what was actually sent during the trial
@@ -51,9 +49,9 @@ And each captured message is normalized enough to assert on comfortably:
 - `status` for sent vs failed deliveries
 - `error` details when delivery fails
 
-## Why this matters
+## Common mail cases
 
-A lot of important product behavior lives in mail:
+Mail assertions are useful for:
 
 - magic links
 - password resets
@@ -61,16 +59,10 @@ A lot of important product behavior lives in mail:
 - billing notifications
 - team access flows
 
-If mail is painful to test, teams either skip it or test it too late.
+## Mail and auth helpers
 
-Sounding should make mail trials feel as natural as endpoint trials.
-
-## Mail and auth work well together
-
-A lot of the nicest early Sounding mail tests involve auth flows:
+Mail tests often use auth helpers such as:
 
 - `auth.requestMagicLink()`
 - `auth.issueMagicLink()`
 - `login.as(actorOrEmail, page)` for the browser-capable follow-through
-
-That combination is what makes passwordless and invitation flows feel first-class instead of bolted on.

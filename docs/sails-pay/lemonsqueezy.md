@@ -17,17 +17,17 @@ editLink: true
 
 # Lemon Squeezy
 
-[Lemon Squeezy](https://www.lemonsqueezy.com) is an all-in-one platform designed specifically for selling digital products and software. Founded in 2020 and acquired by Stripe in 2024, Lemon Squeezy acts as your merchant of record—handling payments, merchant fees, fraud prevention, and sales tax compliance so you can focus on building your product.
+[Lemon Squeezy](https://www.lemonsqueezy.com) is a platform for selling digital products and software. It acts as the merchant of record, handling payments, merchant fees, fraud prevention, and sales tax compliance.
 
-## Why Lemon Squeezy?
+## Provider capabilities
 
-Lemon Squeezy stands out as the ideal choice for digital product creators and SaaS businesses:
+Relevant Lemon Squeezy capabilities include:
 
 - **Merchant of Record**: Lemon Squeezy handles all tax compliance, fraud prevention, and legal responsibilities
 - **Global Reach**: Accept payments from 135+ countries with zero additional setup
 - **No Monthly Fees**: Simple 5% + 50¢ per transaction pricing with no subscription costs
 - **16 Payment Methods**: Including PayPal, credit cards, and regional payment options out of the box
-- **Built for Digital**: Native support for software licenses, subscriptions, digital downloads, and courses
+- **Digital product support**: Software licenses, subscriptions, digital downloads, and courses
 - **AI Fraud Detection**: Real-time fraud prevention across signups, refunds, and transactions
 
 ## Getting Started with Lemon Squeezy

@@ -16,15 +16,7 @@ Examples:
 - a publisher can save a draft
 - requesting a magic link sends a usable email
 
-That idea should feel familiar if you have used tools like Jest or Pest: a file contains a suite of related checks, and each named check proves one thing.
-
-Sounding keeps that familiar shape, but gives it a more intentional name.
-
-Why **trial**?
-
-Because Sounding is part of a maritime ecosystem.
-Before a ship commits to the voyage, it is tested against reality.
-A trial is where you learn whether the app can safely proceed.
+Sounding uses the standard `test()` API. The docs use **trial** as the conceptual term for one test case.
 
 In practice, a trial is still written with `test()`:
 
@@ -37,9 +29,6 @@ test('guest is redirected from dashboard', async ({ get, expect }) => {
   expect(response).toRedirectTo('/login')
 })
 ```
-
-So Sounding does **not** invent a strange new function name.
-It uses the familiar `test()` API, while the docs use **trial** to describe what that test is doing inside the Sounding model.
 
 ## What makes a good trial
 
@@ -63,7 +52,7 @@ Weak trial names:
 - `works correctly`
 - `can call helper`
 
-The title should read like a product truth.
+Prefer names that describe observable behavior.
 
 ## A trial is not the same thing as a world
 
@@ -83,8 +72,7 @@ For example, `issue-access` might support all of these:
 - reader with an unlock can finish the story
 - requesting a magic link from the issue page sends the right email
 
-The world stays the same.
-The trials change because the behaviors being proved are different.
+The world stays the same. The trials change because the behaviors being proved are different.
 
 ## A trial should choose the right layer
 
@@ -140,8 +128,7 @@ test(
 )
 ```
 
-The behavior decides the layer.
-Not the other way around.
+Choose the lowest layer that proves the behavior.
 
 ## A trial context is the environment of the trial
 
@@ -169,12 +156,10 @@ Sounding keeps the larger structure simple:
 - a **file** groups related trials
 - a **suite** is the whole test tree for the app
 
-That is intentionally close to the mental model developers already know from Jest, Pest, and the native Node test runner.
+This matches the structure developers already know from Jest, Pest, and the native Node test runner.
 
-What Sounding adds is a better Sails-native runtime under that familiar shape.
+What Sounding adds is a Sails-aware runtime under that familiar shape.
 
 ## The main rule
 
-A Sounding trial should read like a product truth being proved inside a real Sails app.
-
-That is the bar.
+Name trials after the behavior they prove.

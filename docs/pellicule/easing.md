@@ -9,7 +9,7 @@ next:
 
 # Easing
 
-Easing functions control the rate of change in animations. Instead of linear movement, easing creates natural-feeling motion.
+Easing functions control the rate of change in animations. Instead of constant-speed movement, easing produces non-linear motion.
 
 ## Usage
 
@@ -28,7 +28,7 @@ const scale = interpolate(frame.value, [0, 30], [0, 1], {
 | `Easing.linear`    | Constant speed           | Mechanical motion                |
 | `Easing.easeIn`    | Starts slow, accelerates | Objects falling, starting motion |
 | `Easing.easeOut`   | Starts fast, decelerates | Objects landing, stopping motion |
-| `Easing.easeInOut` | Slow start and end       | Natural movement, UI transitions |
+| `Easing.easeInOut` | Slow start and end       | Repositioning, UI transitions    |
 
 ## Visual Reference
 
@@ -57,7 +57,7 @@ const x = computed(() =>
   })
 )
 
-// Scale up with bounce feel
+// Scale up with deceleration
 const scale = computed(() =>
   interpolate(frame.value, [0, 25], [0.5, 1], {
     easing: Easing.easeOut
@@ -87,7 +87,7 @@ const x = interpolate(frame.value, [0, 30], [0, 200], {
 ### Smooth UI Motion
 
 ```js
-// easeInOut is great for elements that move and stop
+// easeInOut works well for elements that move and stop
 const x = interpolate(frame.value, [0, 60], [0, 400], {
   easing: Easing.easeInOut
 })
@@ -120,12 +120,12 @@ const opacity = Easing.easeInOut(seq.progress.value)
 | Looping/repeating  | `linear`           |
 | Attention-grabbing | `easeOut`          |
 
-### Why?
+### Typical choices
 
-- **easeOut** for entrances: Fast start grabs attention, smooth stop feels natural
-- **easeIn** for exits: Natural acceleration as element leaves
-- **easeInOut** for repositioning: Feels deliberate and polished
-- **linear** for loops: Consistent speed for continuous motion
+- **easeOut** for entrances: starts fast and slows into place
+- **easeIn** for exits: starts slow and accelerates away
+- **easeInOut** for repositioning: slows at the beginning and end
+- **linear** for loops: keeps a constant rate of motion
 
 ## Combining Easings
 

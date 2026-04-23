@@ -6,7 +6,7 @@ head:
 layout: home
 hero:
   name: Mail
-  tagline: The simple elegant way to send emails from a Sails applications.
+  tagline: Send email from Sails applications.
   actions:
     - theme: brand
       text: Get Started
@@ -17,11 +17,11 @@ hero:
 features:
   - icon: 👨🏾‍💻
     title: Easy setup
-    details: Sails Mail provides an amazing and elegant API for sending emails.
+    details: Send mail through `sails.helpers.mail.send()`.
   - icon: 🚚
     title: Multiple transports
-    details: Supports SMTP, Mailtrap, log, and more transports, to allow you use your favorite email service without any stress.
+    details: Use SMTP, Mailtrap, log, Resend, and other configured transports.
   - icon: 🛠️
     title: Flexible configuration
-    details: Need multiple email transports or mailers in the same Sails project? Mail make that a breeze to do.
+    details: Configure one or more mailers in the same Sails project.
 ---

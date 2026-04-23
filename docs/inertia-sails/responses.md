@@ -11,7 +11,7 @@ next:
 
 # Inertia Responses
 
-inertia-sails uses Sails custom responses to handle Inertia page rendering. This integrates seamlessly with Sails' actions2 pattern.
+inertia-sails uses Sails custom responses to return Inertia pages from actions.
 
 ## Basic Usage
 

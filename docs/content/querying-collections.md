@@ -17,7 +17,7 @@ editLink: true
 
 # Querying collections
 
-Sails Content provides the `sails-content` adapter which makes querying your content collections with Waterline queries super easy.
+Sails Content provides the `sails-content` adapter so you can query content collections with Waterline queries.
 
 ## Entries from a collection
 

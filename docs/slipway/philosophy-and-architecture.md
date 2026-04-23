@@ -218,7 +218,7 @@ Backup storage is configured via [global environment variables](/slipway/global-
 | ---------------------- | --------------------------------------------------------------------------------- |
 | **Sails.js**           | Slipway is built with Sails because it's for Sails — dogfooding the framework     |
 | **Vue 3 + Inertia.js** | Server-driven SPA — fast page transitions without a separate API layer            |
-| **SQLite**             | Zero-config database, single file backup, perfect for a self-hosted dashboard     |
+| **SQLite**             | Zero-config database, single file backup, suitable for a self-hosted dashboard    |
 | **Caddy**              | Automatic HTTPS, Docker-native routing via labels, minimal config                 |
 | **Docker**             | Universal container runtime, no vendor lock-in, works on any Linux VPS            |
 | **`node:22-slim`**     | Debian-based for glibc compatibility with native modules like `better-sqlite3`    |

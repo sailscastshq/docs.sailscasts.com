@@ -8,11 +8,11 @@ prev:
 
 # Asset Versioning
 
-Asset versioning ensures clients always receive fresh assets after deployments. When the version changes, Inertia triggers a full page reload to fetch updated assets.
+Asset versioning ensures clients receive updated assets after deployments. When the version changes, Inertia triggers a full page reload.
 
 ## Automatic Versioning
 
-inertia-sails automatically handles asset versioning with zero configuration:
+inertia-sails automatically handles asset versioning by default:
 
 ### With Shipwright
 
@@ -24,7 +24,7 @@ Your assets change → manifest.json updates → version hash changes → client
 
 ### Without Shipwright
 
-When Shipwright isn't available, inertia-sails uses the server startup timestamp as the version. This ensures fresh assets on each server restart.
+When Shipwright isn't available, inertia-sails uses the server startup timestamp as the version. This changes the version on each server restart.
 
 ## How It Works
 

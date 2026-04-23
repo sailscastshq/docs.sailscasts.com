@@ -54,11 +54,11 @@ module.exports.cachestores = {
 }
 ```
 
-That's it, your Sails app is now ready to use SQLite for caching 🥳.
+Your Sails app is now configured to use SQLite for caching.
 
 ## When to Use SQLite Store
 
-The SQLite store is ideal for:
+Use the SQLite store for:
 
 - **Single-server deployments**: When you don't need distributed caching across multiple servers
 - **Persistent caching**: Cache survives application restarts without running an external service

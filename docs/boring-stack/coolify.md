@@ -17,7 +17,7 @@ editLink: true
 
 # Deploy on Coolify
 
-Let's deploy your app on [Coolify](https://coolify.io) :rocket:
+This page covers deploying a Boring Stack app on [Coolify](https://coolify.io).
 
 ## GitHub Repo
 
@@ -119,10 +119,4 @@ Depending on the template you're using, you may need to set additional environme
 
 Click **Deploy** in Coolify. Your app will be built using the Dockerfile and deployed automatically.
 
-That's it! Your app will be live on your Coolify domain as soon as the build finishes :tada:
-
-## Celebrate with a :star:
-
-::: tip Star The Boring JavaScript Stack repo on GitHub :star:
-Let's celebrate deploying your app on Coolify by giving **The Boring JavaScript Stack** [a star on GitHub](https://github.com/sailscastshq/boring-stack).
-:::
+After the build finishes, Coolify deploys the app to the configured domain.

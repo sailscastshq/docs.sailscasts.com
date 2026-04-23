@@ -63,7 +63,7 @@ globals: {
 # Start your Nuxt dev server
 npx nuxt dev
 
-# In another terminal — just works
+# In another terminal
 pellicule AppDemo
 ```
 

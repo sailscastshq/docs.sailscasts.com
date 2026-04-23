@@ -6,7 +6,7 @@ editLink: true
 # Trial context
 
 A **trial** is one named behavior check.
-The **trial context** is the environment Sounding passes into that trial.
+The **trial context** is the object Sounding passes into that trial.
 
 Every Sounding trial starts the same way:
 
@@ -24,30 +24,25 @@ That object passed into the callback is the **trial context**.
 
 If you are looking for the higher-level definition of a trial itself, read [Trials](/sounding/trials).
 
-The trial context is Sounding's most important design decision.
-
-It gives each trial:
+The trial context gives each trial:
 
 - the real Sails runtime
 - the most useful testing surfaces for the current trial
 - a few ergonomic aliases for common work
 
-The goal is not to hide Sails.
-It is to make the right things easy without inventing a second fake app model.
+It does not replace the Sails runtime. `sails` remains the canonical entry point.
 
 ## The canonical center is `sails`
 
 At the center of every trial is `sails`.
 
-That means the normal Sails surfaces still matter most:
+The normal Sails surfaces still matter most:
 
 - `sails.helpers`
 - `sails.models`
 - `sails.config`
 - `sails.hooks`
 - `sails.sounding`
-
-If you already know Sails, the testing story should feel familiar.
 
 ## What is available in the context
 
@@ -84,6 +79,8 @@ It covers:
 
 The scoped request client for the current trial.
 
+If you want the full request client and transport surface, read [Request clients and transport](/sounding/request-clients).
+
 Use it when you want the fuller request surface:
 
 ```js
@@ -94,7 +91,7 @@ const response = await request.as(current.users.subscriber).get('/dashboard')
 
 Convenience aliases bound from `request`.
 
-These are ideal when the trial is simple and readable with a short call:
+Use them when the trial is short and readable with a short call:
 
 ```js
 const response = await get('/dashboard')
@@ -103,6 +100,8 @@ const response = await get('/dashboard')
 ### `visit`
 
 The Inertia-aware request surface.
+
+This is still built on Sounding's request engine, not a separate browser system.
 
 Use it when the real contract is an Inertia page, not just a status code.
 
@@ -115,7 +114,7 @@ expect(page).toBeInertiaPage('billing/pricing')
 
 Sounding's auth helpers.
 
-This is the lower-level auth surface for:
+Use this lower-level auth surface for:
 
 - resolving users
 - issuing magic links
@@ -169,7 +168,7 @@ test(
 )
 ```
 
-This is deliberate. The browser should only show up when the browser actually matters.
+These keys are only available when the trial opts into browser support.
 
 ### `t`
 
@@ -179,7 +178,7 @@ This keeps Sounding grounded in the native Node test runner instead of hiding it
 
 ## Trial options
 
-Sounding keeps trial options intentionally small.
+Sounding-specific trial options are intentionally small.
 
 ### `{ browser: true }`
 
@@ -225,5 +224,3 @@ So if you are not sure which surface to reach for, use this rule:
 
 - use `sails.helpers`, `sails.models`, and `sails.sounding` when you want the most explicit form
 - use `get()`, `post()`, `visit()`, `login`, `world`, and `mailbox` when they make the trial easier to read
-
-That balance is what keeps Sounding elegant instead of magical.

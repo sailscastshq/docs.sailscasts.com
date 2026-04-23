@@ -2,16 +2,16 @@
 layout: home
 features:
   - title: Inertia.js
-    details: powered by inertia-sails
+    details: Generated projects include inertia-sails.
   - title: Choose your frontend
-    details: Vue, React or Svelte
+    details: Generate Vue, React, or Svelte pages.
   - title: Webpack 5
-    details: Webpack 5 takes care of your frontend assets
+    details: Webpack 5 handles the frontend asset pipeline.
 
 hero:
   name: create-sails
   text: Scaffold a modern full-stack Sails project.
-  tagline: Gain all the benefit of an SPA while maintaining a server-centric development
+  tagline: Generate a Sails app with Inertia and your choice of Vue, React, or Svelte.
   actions:
     - theme: brand
       text: Get Started

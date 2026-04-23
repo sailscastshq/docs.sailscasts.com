@@ -14,11 +14,9 @@ editLink: true
 
 # Introduction
 
-Sails Pay simplifies payment integration for Sails.js developers, offering an intuitive interface to seamlessly incorporate payment processing into your applications. Say goodbye to tedious payment-related boilerplate code.
+Sails Pay provides a payment integration layer for Sails.js applications.
 
-Sails Pay handles the heavy lifting of payment management, from basic transactions to advanced features like coupons, subscription swapping, and more.
-
-With Sails Pay, you can focus on building great products while Sails Pay takes care of payment complexities.
+It covers provider adapters, transactions, coupons, and subscription-related flows through one Sails-oriented API.
 
 ## Getting started
 
@@ -62,9 +60,3 @@ Next, follow the instructions below to setup your preferred payment provider.
 - [Flutterwave](/sails-pay/flutterwave)
 - [Paystack](/sails-pay/paystack)
 - [Paga](/sails-pay/paga)
-
-## Star the repo :star:
-
-::: tip Star the Sails Pay repo on GitHub :star:
-If you like Sails Pay, show it some love with [a star on GitHub](https://github.com/sailscastshq/sails-pay).
-:::

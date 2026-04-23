@@ -2,8 +2,8 @@
 layout: home
 hero:
   name: Sails Stash
-  text: Caching made easy for Sails Developers
-  tagline: Sails Stash offers a unified API for cache backends to speed up your web app with fast data retrieval.
+  text: Caching for Sails applications
+  tagline: Unified cache API for memory, Redis, Memcached, and other backends.
   actions:
     - theme: brand
       text: Get Started
@@ -14,14 +14,14 @@ hero:
 features:
   - icon: 🚀
     title: Efficient Caching
-    details: Boost your application's performance by caching frequently accessed data, reducing database load and improving response times.
+    details: Cache frequently accessed data to reduce repeated database work.
   - icon: ⚡
     title: Zero Configuration
     details: Works out of the box with an in-memory store. No Redis required to get started!
   - icon: 🔄
     title: Versatile Store Support
-    details: Choose between memory (default), Redis, or Memcached as your caching store for any environment, allowing flexibility to fit your application's needs.
+    details: Choose between memory (default), Redis, or Memcached for different environments.
   - icon: 🛠️
     title: Simple Integration
-    details: Seamlessly integrate Sails Stash into your project with easy setup and straightforward usage, ensuring quick implementation.
+    details: Add caching through the `sails.cache` API.
 ---

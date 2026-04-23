@@ -5,9 +5,7 @@ editLink: true
 
 # Testing JSON APIs and endpoints
 
-Sounding should be just as good for API-only Sails apps as it is for full browser flows.
-
-That is why endpoint testing is a first-class part of the framework.
+Use Sounding's request helpers for endpoint and JSON API behavior.
 
 When a repo separates browser E2E from faster app checks, these trials usually live under `tests/functional/api/`.
 
@@ -34,7 +32,7 @@ test('guest gets 401 on a private JSON endpoint', async ({ get, expect }) => {
 
 Most endpoint trials should use Sounding's virtual request transport by default. That means `get()` and `post()` are usually powered by `sails.request()`.
 
-When parity with the real HTTP stack matters more, opt in deliberately:
+When the trial needs the real HTTP stack, opt into it explicitly:
 
 ```js
 test(
@@ -100,7 +98,7 @@ test('creator password login redirects to invoices', async ({
 })
 ```
 
-Sounding should also keep `request.as(actor)` aligned with the app's auth conventions, including
+`request.as(actor)` also follows the app's auth conventions, including
 `User` / `userId` and `Creator` / `creatorId`.
 
 ## The two request surfaces
@@ -110,18 +108,18 @@ Sounding gives you the same request engine in two shapes:
 - top-level aliases like `get()` and `post()` for the common path
 - the fuller `sails.sounding.request` client when you want to scope headers, sessions, actors, or transports
 
-A good rule is:
+Use this rule:
 
 - start with `get()` / `post()` when the trial is simple
 - reach for `sails.sounding.request` when you need more control
 
+If you want the full request client API, visit transport behavior, and scoping helpers like `withSession()` and `as(actor)`, read [Request clients and transport](/sounding/request-clients).
+
 ## Useful endpoint matchers
 
-Sounding's request story currently leans on a small set of matchers that map cleanly to product behavior:
+Common matchers include:
 
 - `toHaveStatus()`
 - `toRedirectTo()`
 - `toHaveJsonPath()`
 - `toHaveHeader()`
-
-That keeps endpoint trials precise without making them feel low-level.
