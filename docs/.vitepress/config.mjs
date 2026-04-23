@@ -813,6 +813,20 @@ function durableUiGuide() {
           link: '/durable-ui/progress/wizard-draft'
         }
       ]
+    },
+    {
+      text: 'URL',
+      collapsed: false,
+      items: [
+        {
+          text: 'Overview',
+          link: '/durable-ui/url'
+        },
+        {
+          text: 'query-state',
+          link: '/durable-ui/url/query-state'
+        }
+      ]
     }
   ]
 }

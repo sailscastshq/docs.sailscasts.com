@@ -1,11 +1,11 @@
 ---
 title: Getting Started
-description: Start using Durable UI progress drafts with Vue composables or React hooks.
+description: Start using Durable UI progress and URL primitives with Vue composables or React hooks.
 ---
 
 # Getting Started
 
-Durable UI organizes client state by durability category. Start with Progress when private work should survive refreshes until the user submits.
+Durable UI organizes client state by durability category. Use Progress when private work should survive refreshes until the user submits. Use URL when the view itself should be shareable and bookmarkable.
 
 Install the package for the app you are building.
 
@@ -17,6 +17,36 @@ npm install @durable-ui/vue
 
 ```sh [React]
 npm install @durable-ui/react
+```
+
+:::
+
+## Use The URL Primitive
+
+Vue APIs use composables and refs. React APIs use hooks and state tuples.
+
+::: code-group
+
+```vue [Vue]
+<script setup>
+import { useQueryState } from '@durable-ui/vue'
+
+const activeTab = useQueryState('tab', 'profile')
+const search = useQueryState('search', '', { history: 'replace' })
+</script>
+```
+
+```jsx [React]
+import { useQueryState } from '@durable-ui/react'
+
+export function SettingsPage() {
+  const [activeTab, setActiveTab] = useQueryState('tab', 'profile')
+  const [search, setSearch] = useQueryState('search', '', {
+    history: 'replace'
+  })
+
+  return null
+}
 ```
 
 :::
@@ -66,7 +96,9 @@ export function StudentImport({ form }) {
 
 :::
 
-## Choose The Right Primitive
+## Choose The Right Category
+
+Use [query-state](/durable-ui/url/query-state) for shareable tabs, filters, sorting, pagination, and modal state.
 
 Use [form-draft](/durable-ui/progress/form-draft) for private field values in one form.
 
