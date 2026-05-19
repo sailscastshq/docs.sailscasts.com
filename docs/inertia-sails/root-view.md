@@ -89,7 +89,10 @@ module.exports = {
     <%- shipwright.styles() %>
   </head>
   <body class="auth-layout">
-    <div id="app" data-page="<%- JSON.stringify(page) %>"></div>
+    <script type="application/json" data-page="app">
+      <%- JSON.stringify(page).replace(/</g, '\\u003c') %>
+    </script>
+    <div id="app"></div>
     <%- shipwright.scripts() %>
   </body>
 </html>
@@ -185,7 +188,10 @@ module.exports = function defineCustomHook(sails) {
     <%- shipwright.styles() %>
   </head>
   <body>
-    <div id="app" data-page="<%- JSON.stringify(page) %>"></div>
+    <script type="application/json" data-page="app">
+      <%- JSON.stringify(page).replace(/</g, '\\u003c') %>
+    </script>
+    <div id="app"></div>
     <%- shipwright.scripts() %>
   </body>
 </html>
@@ -204,7 +210,10 @@ module.exports = function defineCustomHook(sails) {
     <%- shipwright.styles() %>
   </head>
   <body class="min-h-screen bg-gray-50 flex items-center justify-center">
-    <div id="app" data-page="<%- JSON.stringify(page) %>"></div>
+    <script type="application/json" data-page="app">
+      <%- JSON.stringify(page).replace(/</g, '\\u003c') %>
+    </script>
+    <div id="app"></div>
     <%- shipwright.scripts() %>
   </body>
 </html>

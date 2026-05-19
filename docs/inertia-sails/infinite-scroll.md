@@ -11,7 +11,7 @@ next:
 
 # Infinite Scroll
 
-inertia-sails provides `sails.inertia.scroll()` for implementing infinite scroll with pagination metadata.
+inertia-sails provides `sails.inertia.scroll()` for implementing infinite scroll with pagination metadata. It wraps your data for Inertia's `<InfiniteScroll>` component, marks the wrapped array path for merging, and emits the `scrollProps` metadata the client needs.
 
 ## Basic Usage
 
@@ -51,12 +51,14 @@ module.exports = {
 
 ## Options
 
-| Option    | Type   | Description                   |
-| --------- | ------ | ----------------------------- |
-| `page`    | number | Current page (0-indexed)      |
-| `perPage` | number | Items per page                |
-| `total`   | number | Total item count              |
-| `wrapper` | string | Optional wrapper key for data |
+| Option     | Type   | Description                                  |
+| ---------- | ------ | -------------------------------------------- |
+| `page`     | number | Current page (0-indexed for Waterline)       |
+| `perPage`  | number | Items per page                               |
+| `total`    | number | Total item count                             |
+| `pageName` | string | Query parameter name for pagination          |
+| `wrapper`  | string | Optional wrapper key for data                |
+| `matchOn`  | string | Optional field used to update matching items |
 
 ## With Wrapper
 
@@ -78,11 +80,13 @@ This produces:
   invoices: {
     data: [...],  // The invoice items
     meta: {
-      page: 0,
-      perPage: 20,
+      current_page: 1,
+      per_page: 20,
       total: 150,
-      totalPages: 8,
-      hasMore: true
+      last_page: 8,
+      next_page: 2,
+      prev_page: null,
+      page_name: 'page'
     }
   }
 }
@@ -147,90 +151,42 @@ module.exports = {
 
 ```vue
 <script setup>
-import { router } from '@inertiajs/vue3'
-import { ref, computed } from 'vue'
+import { InfiniteScroll } from '@inertiajs/vue3'
 
 const props = defineProps({
   invoices: Object,
   status: String
 })
-
-const loading = ref(false)
-
-const hasMore = computed(() => props.invoices.meta.hasMore)
-
-function loadMore() {
-  if (loading.value || !hasMore.value) return
-
-  loading.value = true
-  router.reload({
-    data: {
-      page: props.invoices.meta.page + 1
-    },
-    preserveState: true,
-    preserveScroll: true,
-    only: ['invoices'],
-    onFinish: () => {
-      loading.value = false
-    }
-  })
-}
 </script>
 
 <template>
-  <div>
+  <InfiniteScroll data="invoices">
     <div v-for="invoice in invoices.data" :key="invoice.id">
       {{ invoice.invoiceNumber }} - {{ invoice.totalAmount }}
     </div>
-
-    <button v-if="hasMore" @click="loadMore" :disabled="loading">
-      {{ loading ? 'Loading...' : 'Load More' }}
-    </button>
-
-    <p v-if="!hasMore">No more invoices</p>
-  </div>
+  </InfiniteScroll>
 </template>
 ```
 
 ### Frontend (React)
 
 ```jsx
-import { router } from '@inertiajs/react'
-import { useState } from 'react'
+import { InfiniteScroll } from '@inertiajs/react'
 
 export default function Invoices({ invoices, status }) {
-  const [loading, setLoading] = useState(false)
-
-  function loadMore() {
-    if (loading || !invoices.meta.hasMore) return
-
-    setLoading(true)
-    router.reload({
-      data: { page: invoices.meta.page + 1 },
-      preserveState: true,
-      preserveScroll: true,
-      only: ['invoices'],
-      onFinish: () => setLoading(false)
-    })
-  }
-
   return (
-    <div>
+    <InfiniteScroll data="invoices">
       {invoices.data.map((invoice) => (
         <div key={invoice.id}>
           {invoice.invoiceNumber} - {invoice.totalAmount}
         </div>
       ))}
-
-      {invoices.meta.hasMore && (
-        <button onClick={loadMore} disabled={loading}>
-          {loading ? 'Loading...' : 'Load More'}
-        </button>
-      )}
-    </div>
+    </InfiniteScroll>
   )
 }
 ```
+
+The component decides whether the next request should append or prepend and sends that intent to the server. inertia-sails uses that intent to emit either `mergeProps` or `prependProps` for the wrapped array path.
 
 ## Scroll vs Merge
 
@@ -238,7 +194,7 @@ export default function Invoices({ invoices, status }) {
 | ------------------- | --------------- | ------------- |
 | Pagination metadata | Yes             | No            |
 | Auto-merge behavior | Yes             | Yes           |
-| Wrapper support     | Yes             | No            |
+| Wrapper support     | Yes             | Yes           |
 | Use case            | Full pagination | Simple append |
 
 Use `scroll()` when you need pagination info (page count, has more). Use `merge()` for simple append scenarios.

@@ -8,7 +8,7 @@ prev:
 
 # Asset Versioning
 
-Asset versioning ensures clients always receive fresh assets after deployments. When the version changes, Inertia triggers a full page reload to fetch updated assets.
+Asset versioning ensures clients always receive fresh assets after deployments. When the version changes, Inertia performs a full page visit to fetch the updated JavaScript and CSS.
 
 ## Automatic Versioning
 
@@ -31,8 +31,12 @@ When Shipwright isn't available, inertia-sails uses the server startup timestamp
 1. inertia-sails generates a version string
 2. The version is included in every Inertia response
 3. The client compares the version with its cached version
-4. If different, Inertia triggers a full page reload
-5. The browser fetches fresh assets
+4. On `GET` Inertia requests, a mismatch returns `409 Conflict`
+5. The response includes `X-Inertia-Location` with the current URL
+6. Inertia performs a full page visit to that URL
+7. The browser fetches fresh assets
+
+`409 Conflict` version responses are only sent for `GET` requests. Mutating requests continue through their normal submit and redirect flow.
 
 ## Custom Version
 
@@ -102,9 +106,9 @@ module.exports.inertia = {
 
 ## Debugging
 
-Check the current version in your browser's Network tab. Look for the `X-Inertia-Version` header in responses.
+Check the current version in your browser's Network tab. Look for the `X-Inertia-Version` request header and the `version` value in the Inertia page object.
 
-If versions mismatch, you'll see a full page reload instead of an Inertia visit.
+If versions mismatch on a `GET` Inertia request, you'll see a `409 Conflict` response with `X-Inertia-Location`, followed by a full page visit.
 
 ## Production Considerations
 

@@ -112,6 +112,8 @@ export default function Users({ users }) {
 
 The component uses intersection observers to detect when users scroll near the end and automatically requests the next page. New data is merged with existing content.
 
+Under the hood, `sails.inertia.scroll()` marks the wrapped array path, such as `users.data`, as mergeable and emits `scrollProps` metadata. When the client loads the next page, data is appended; when it loads a previous page, Inertia sends its merge intent and the server marks the same path for prepending.
+
 ## Loading buffer
 
 Control how early content begins loading by setting a buffer distance in pixels:
@@ -343,10 +345,11 @@ This results in URLs like `?usersPage=2&ordersPage=3` instead of conflicting `?p
 
 The `sails.inertia.scroll()` method accepts these options:
 
-| Option     | Type   | Default  | Description                                |
-| ---------- | ------ | -------- | ------------------------------------------ |
-| `page`     | number | `0`      | Current page index (0-based for Waterline) |
-| `perPage`  | number | `10`     | Items per page                             |
-| `total`    | number | `0`      | Total number of items                      |
-| `pageName` | string | `'page'` | Query parameter name for pagination        |
-| `wrapper`  | string | `'data'` | Key to wrap the data array in              |
+| Option     | Type   | Default  | Description                                  |
+| ---------- | ------ | -------- | -------------------------------------------- |
+| `page`     | number | `0`      | Current page index (0-based for Waterline)   |
+| `perPage`  | number | `10`     | Items per page                               |
+| `total`    | number | `0`      | Total number of items                        |
+| `pageName` | string | `'page'` | Query parameter name for pagination          |
+| `wrapper`  | string | `'data'` | Key to wrap the data array in                |
+| `matchOn`  | string | `null`   | Optional field used to update matching items |
