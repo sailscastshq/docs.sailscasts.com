@@ -55,6 +55,31 @@ Notice we set the `responseType` to `redirect` and then we can return a URL stri
 Learn more about [Actions and Controllers](https://sailsjs.com/documentation/concepts/actions-and-controllers) on the Sails docs.
 :::
 
+## Preserving URL fragments
+
+When redirecting from one Inertia page to another, the browser normally does
+not send the URL fragment to the server. If you are redirecting a deep link,
+call `sails.inertia.preserveFragment()` before returning the redirect URL.
+
+```js
+module.exports = {
+  exits: {
+    success: {
+      responseType: 'redirect'
+    }
+  },
+  fn: async function () {
+    const article = await Article.findOne({ slug: this.req.param('slug') })
+
+    sails.inertia.preserveFragment()
+    return `/articles/${article.canonicalSlug}`
+  }
+}
+```
+
+If the visit started at `/articles/old-slug#comments`, Inertia can carry the
+fragment to `/articles/new-slug#comments`.
+
 ## 303 response code for SPAs
 
 When redirecting after a `PUT`, `PATCH`, or `DELETE` request from your SPA, you must use a `303` response code, otherwise the subsequent request will not be treated as a `GET` request. A `303` redirect is very similar to a `302` redirect; however, the follow-up request is explicitly changed to a `GET` request.
