@@ -67,6 +67,35 @@ return sails.inertia.back('/dashboard')
 Express 5 deprecated `res.redirect('back')`, so inertia-sails provides this explicit helper instead.
 :::
 
+## Preserving URL Fragments
+
+Use `sails.inertia.preserveFragment()` when a standard Inertia redirect should
+carry the current URL hash to the redirected page.
+
+```js
+module.exports = {
+  exits: {
+    success: {
+      responseType: 'redirect'
+    }
+  },
+
+  fn: async function () {
+    const article = await Article.findOne({ slug: this.req.param('slug') })
+
+    sails.inertia.preserveFragment()
+    return `/articles/${article.canonicalSlug}`
+  }
+}
+```
+
+If the user starts from `/articles/old-slug#comments`, the Inertia client can
+carry `#comments` to `/articles/new-slug#comments` after the redirect.
+
+Use this with normal `redirect` responses. The `inertiaRedirect` response is a
+full page visit and should be reserved for external redirects or cases where you
+intentionally want to reset the page.
+
 ## External Redirects
 
 For external redirects that require a full page load:

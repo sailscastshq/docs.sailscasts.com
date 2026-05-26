@@ -120,3 +120,13 @@ inertia-sails requires two custom response files in your `api/responses/` direct
 - **inertiaRedirect.js** - Handles Inertia redirects
 
 If you used `create-sails`, these are already set up. Otherwise, copy them from the [boring-stack templates](https://github.com/sailscastshq/boring-stack/tree/main/templates).
+
+## Validation and Error Responses
+
+Boring Stack templates usually also include:
+
+- **badRequest.js** - Delegates to `sails.inertia.handleBadRequest()` for validation errors
+- **serverError.js** - Delegates to `sails.inertia.handleServerError()` for the development error modal and production fallback
+- **expired.js** - Handles expired links and similar one-off flows
+
+These responses can live beside standard Sails responses. In hybrid apps, keep Sails' normal EJS `404` and `500` handling for non-Inertia routes. Add custom `notFound` or `forbidden` responses only when the app needs those errors to render as Inertia pages for Inertia requests.

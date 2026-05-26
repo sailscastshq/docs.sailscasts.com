@@ -389,6 +389,8 @@ page.assertNoFlash('error') // No flash key
 page.assertMergeProps(['items']) // Merge props
 page.assertDeepMergeProps(['settings']) // Deep merge props
 page.assertDeferredProps(['stats']) // Deferred props
+page.assertRescuedProps(['stats']) // Rescued deferred props
+page.assertPreserveFragment() // Redirect fragment preservation
 ```
 
 ### POST requests with data

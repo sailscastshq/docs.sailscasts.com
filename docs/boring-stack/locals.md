@@ -96,7 +96,10 @@ Access locals through EJS's built-in `locals` object with `||` fallbacks:
     <%- shipwright.styles() %>
   </head>
   <body>
-    <div id="app" data-page="<%= JSON.stringify(page) %>"></div>
+    <script type="application/json" data-page="app">
+      <%- JSON.stringify(page).replace(/</g, '\\u003c') %>
+    </script>
+    <div id="app"></div>
     <%- shipwright.scripts() %>
   </body>
 </html>
