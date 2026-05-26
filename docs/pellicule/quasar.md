@@ -42,7 +42,7 @@ globals: {
 # Start your Quasar dev server
 quasar dev
 
-# In another terminal — just works
+# In another terminal
 pellicule ProductShowcase
 ```
 

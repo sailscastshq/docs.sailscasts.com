@@ -17,9 +17,7 @@ editLink: true
 
 # Bridge
 
-Bridge is an **auto-generated data management interface** for your Sails applications. Named after the ship's bridge—the command center where the captain navigates and controls the vessel.
-
-Think of it as [Laravel Nova](https://nova.laravel.com/) or [AdminJS](https://adminjs.co/) built specifically for Sails.
+Bridge is an auto-generated data management interface for your Sails applications.
 
 ## What is Bridge?
 

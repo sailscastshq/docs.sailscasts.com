@@ -17,7 +17,7 @@ editLink: true
 
 # Dock
 
-Dock is your **database command center** for production. Run SQL queries, compare schemas, apply migrations, and browse data—all without external tools or SSH access.
+Dock is Slipway's database management interface for production. Run SQL queries, compare schemas, apply migrations, and browse data without external tools or SSH access.
 
 ## What is Dock?
 
@@ -29,7 +29,7 @@ Dock provides a web-based interface for managing your PostgreSQL or MySQL databa
 - **Schema Diff** - Compare Waterline models with database schema
 - **One-Click Migrations** - Generate and apply schema changes
 
-No more switching to pgAdmin or DBeaver. Manage your production database from Slipway.
+Dock lets you manage the production database from Slipway.
 
 ## Requirements
 

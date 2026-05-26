@@ -5,7 +5,7 @@ head:
       content: https://docs.sailscasts.com/slipway-social.png
 title: What is Slipway?
 titleTemplate: Slipway
-description: Slipway is an open-source, self-hostable deployment platform purpose-built for Sails.js and The Boring JavaScript Stack applications.
+description: Slipway is an open-source, self-hosted deployment platform for Sails.js and The Boring JavaScript Stack applications.
 prev:
   text: Overview
   link: /slipway/
@@ -17,11 +17,11 @@ editLink: true
 
 # What is Slipway?
 
-Slipway is an open-source, self-hostable deployment platform purpose-built for **Sails.js** and **The Boring JavaScript Stack** applications. Think Coolify meets Laravel Forge meets Nova meets Tinkerwell—but designed from the ground up to understand Sails applications deeply.
+Slipway is an open-source, self-hosted deployment platform for **Sails.js** and **The Boring JavaScript Stack** applications. It combines deployment, database management, admin access, REPL access, and Quest monitoring in one platform.
 
 ## The Goal
 
-**One platform to deploy, manage, monitor, and administrate all your Sails applications and their databases.**
+Slipway's goal is to deploy, manage, monitor, and administer Sails applications and their databases from one place.
 
 Slipway provides:
 
@@ -33,7 +33,7 @@ Slipway provides:
 
 ## The Slipway Suite
 
-Slipway isn't just a deployment tool—it's a suite of integrated tools that work together:
+Slipway includes these tools:
 
 | Component           | Equivalent To   | Description                      |
 | ------------------- | --------------- | -------------------------------- |
@@ -44,7 +44,7 @@ Slipway isn't just a deployment tool—it's a suite of integrated tools that wor
 
 ### Helm
 
-Named after the ship's **helm**—where you steer and command the vessel. Helm is a production REPL accessible from the Slipway dashboard that understands your Sails environment:
+Helm is a production REPL accessible from the Slipway dashboard that understands your Sails environment:
 
 ```javascript
 // Query models directly
@@ -62,7 +62,7 @@ sails.config.custom.stripeKey
 
 ### Bridge
 
-Named after the ship's **bridge**—the command center where the captain navigates and controls the vessel. Bridge auto-generates an admin panel from your Sails models:
+Bridge auto-generates an admin panel from your Sails models:
 
 - CRUD operations for all your models
 - Relationship management (hasMany, belongsTo)
@@ -125,9 +125,9 @@ Under the hood, Slipway uses:
 
 ## When to Use Slipway
 
-Slipway is great for:
+Use Slipway for:
 
-- **Sails.js applications** — Purpose-built for the Sails ecosystem
+- **Sails.js applications** — Sails-specific deployment, admin, and operations tooling
 - **The Boring JavaScript Stack** — Vue/React + Inertia + Sails
 - **Self-hosted deployments** — Run on your own VPS or bare metal
 - **Small to medium teams** — No Kubernetes complexity needed

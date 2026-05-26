@@ -5,12 +5,10 @@ editLink: true
 
 # What is create-sails?
 
-An easy way to start a modern full-stack Sails project.
+create-sails scaffolds a full-stack Sails project.
 
-## Motivation
+## What it scaffolds
 
-We all love the feeling of an SPA but the SPA/frontend JavaScript ecosytem is not without it's drawback with the vast tooling it needs.
+Use `npx create-sails <project-name>` to generate a Sails app with Inertia already configured.
 
-create-sails aims to simplify building rich SPA with Sails powering it all.
-
-With the create-sails scaffolding tool you can simplify creating SPAs with a single command `npx create-sails <project-name>` and then pick your frontend framework - Vue, React or Svelte - and you'd be on your way to creating a modern monolith with access to Sails.js routing, policies and data from Waterline you've come to love.
+The generated project includes Sails routing, policies, Waterline models, and a frontend setup for Vue, React, or Svelte.

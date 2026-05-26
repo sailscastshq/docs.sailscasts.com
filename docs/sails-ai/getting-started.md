@@ -14,9 +14,9 @@ editLink: true
 
 # Getting started
 
-Sails AI is a multi-provider AI hook for Sails.js. It gives you a clean, ergonomic API to chat and stream with any LLM provider — Ollama, Cloudflare Workers AI, OpenAI, Anthropic, or your own.
+Sails AI is a multi-provider AI hook for Sails.js. It exposes `sails.ai.chat()` and `sails.ai.stream()` across configured LLM providers such as Ollama, Cloudflare Workers AI, OpenAI, Anthropic, or a custom adapter.
 
-The hook uses an **adapter pattern** (similar to Sails Pay): you install the core hook, pick an adapter for your provider, configure it, and call `sails.ai.chat()` or `sails.ai.stream()`. Swap providers by changing one line of config.
+The hook uses an **adapter pattern**: install the core hook, add an adapter for the provider you want, configure it, and call `sails.ai.chat()` or `sails.ai.stream()`.
 
 ## Install the hook
 
@@ -41,7 +41,7 @@ npm i @sails-ai/openai
 :::
 
 ::: tip
-`@sails-ai/local` connects to [Ollama](https://ollama.com), which runs open-source LLMs on your machine for free. Perfect for development.
+`@sails-ai/local` connects to [Ollama](https://ollama.com), which runs open-source LLMs on your machine. This is useful for local development.
 
 `@sails-ai/openai` works with any OpenAI-compatible provider — [Together AI](https://together.xyz), [Groq](https://groq.com), [Fireworks](https://fireworks.ai), [OpenRouter](https://openrouter.ai), [OpenAI](https://openai.com), and more. See the [OpenAI adapter docs](/sails-ai/openai) for the full list.
 :::

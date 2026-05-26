@@ -57,7 +57,7 @@ The parent directory will be created automatically if it doesn't exist.
 
 - **No external dependencies** - No Redis or Memcached server to manage
 - **Persistent storage** - Sessions survive server restarts
-- **Low memory footprint** - Perfect for single-instance deployments
+- **Low memory footprint** - Suitable for single-instance deployments
 - **Fast** - better-sqlite3 is one of the fastest SQLite bindings for Node.js
 
 ## Next Steps

@@ -5,7 +5,7 @@ head:
       content: https://docs.sailscasts.com/boring-stack-social.png
 title: What's in the stack?
 titleTemplate: The Boring JavaScript Stack 🥱
-description: The Boring JavaScript comes with Sails, Inertia, Tailwind CSS, and Vue, React, or Svelte. It's about proven technologies prioritizing stability and efficiency, letting you focus on solving real web development problems without the noise of constant updates.
+description: The Boring JavaScript Stack combines Sails, Inertia, Tailwind CSS, and Vue, React, or Svelte.
 prev:
   text: 'Who is it for?'
   link: '/boring-stack/who-is-it-for'
@@ -17,27 +17,23 @@ editLink: true
 
 # What's in The Boring JavaScript Stack?
 
-Alright, let's peel back the layers and take a look at what makes up **The Boring JavaScript Stack**.
+The Boring JavaScript Stack combines Sails, Inertia, Tailwind CSS, and your choice of Vue, React, or Svelte.
 
 ## Vue, React, or Svelte
 
-Whether you prefer the simplicity of [Vue](https://vuejs.org/), the flexibility of [React](https://reactjs.org/), or the efficiency of [Svelte](https://svelte.dev/), **The Boring JavaScript Stack** accommodates your choice. With The Boring JavaScript Stack, the UI of your app are simply the components of your chosen UI framework.
-
-So if you enjoy writing React's JSX, you'd love The Boring JavaScript Stack as that's the only thing you have to know from React - writing components. Same thing with Vue and Svelte.
+Pick one UI framework for the app's pages and components. Inertia uses those components as the client-side view layer.
 
 ## Tailwind CSS
 
-[Tailwind CSS](https://tailwindcss.com/), the utility-first CSS framework makes styling feels like cheating. It serves as the styling backbone of this stack.
-
-Since The Boring JavaScript Stack is about being pragmatic, what's better than Tailwind CSS in practicality, efficiency, and ensuring your styles are predictable and easy to manage?
+[Tailwind CSS](https://tailwindcss.com/) provides the utility classes used for styling pages and components.
 
 ## Inertia
 
-[Inertia](https://inertiajs.com/) allows you to build modern single-page apps without the need for a full-blown API. It keeps things simple and straightforward, emphasizing stability in your UI(frontend) development.
+[Inertia](https://inertiajs.com/) lets Sails controllers return pages and props without building a separate JSON API.
 
 ## Sails
 
-At the core of this stack is [Sails](https://sailsjs.com/), a web framework that's been around the block and has proven itself. It's not trying to reinvent the wheel; instead, it focuses on providing a solid foundation for building scalable and maintainable web applications.
+At the core of this stack is [Sails](https://sailsjs.com/), which handles routing, policies, models, helpers, sessions, scripts, and other server-side behavior.
 
 Because we’re using Sails as the web framework, we can leverage a lot of its features including:
 
@@ -48,5 +44,5 @@ Because we’re using Sails as the web framework, we can leverage a lot of its f
 - [WebSocket support](https://sailsjs.com/documentation/concepts/realtime): Sails apps are capable of full-duplex, realtime communication between the client and server.
 - [File uploads](https://sailsjs.com/documentation/concepts/file-uploads): [Skipper](https://github.com/sailshq/skipper) makes it easy to implement streaming file uploads to disk, Amazon S3, Cloudflare R2, DigitalOcean Spaces or any supported file upload adapters.
 - [Shell scripts](https://sailsjs.com/documentation/concepts/shell-scripts): Sails lets you run JavaScript functions as shell scripts. This can be useful for running scheduled jobs with [Sails Quest](https://docs.sailscasts.com/sails-quest) (cron, Heroku scheduler), worker processes, and any other custom, one-off scripts that need access to your Sails app's models, configuration, and helpers.
-- [Sails Mail](https://docs.sailscasts.com/mail/): Sails Mail provides an amazing and elegant API for sending emails.
+- [Sails Mail](https://docs.sailscasts.com/mail/): Send email through a Sails hook and helper-based API.
 - [Sails Quest](https://docs.sailscasts.com/sails-quest): Schedule background jobs in your Sails applications with human-readable intervals, cron expressions, and full access to your app's context.

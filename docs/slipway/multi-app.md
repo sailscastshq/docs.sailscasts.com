@@ -20,7 +20,7 @@ editLink: true
 By default, each Slipway environment runs a single Sails app. Multi-app environments let you run several Sails processes side by side from the same codebase — a web server and a background worker, or the same app serving different route prefixes.
 
 ::: info All Apps Are Sails Apps
-Slipway is purpose-built for [The Boring JavaScript Stack](https://docs.sailscasts.com/boring-stack/getting-started). Every app in a multi-app environment is a Sails application — they all share the same project source code and are built from the same codebase. The difference is _how_ each app is configured to run (web vs. worker, different Sails environments, different route paths).
+Every app in a multi-app environment is a Sails application. The apps share the same project source code; the main difference is how each app is configured to run (web vs. worker, different Sails environments, different route paths).
 
 This means all apps get full access to Slipway's platform features: [Helm](/slipway/helm) REPL, [Bridge](/slipway/bridge) admin, [Quest](/slipway/quest) job dashboard, [Dock](/slipway/dock) migrations, and more.
 :::
@@ -90,7 +90,7 @@ slipway logs            # shows default app logs
 slipway terminal        # opens shell in default app container
 ```
 
-For single-app environments, you never need to think about this — it just works.
+For single-app environments, the default app is used automatically.
 
 ## Route Paths
 

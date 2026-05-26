@@ -11,13 +11,13 @@ next:
 
 # How Quest Works
 
-This page explains the technical architecture of Quest, our design decisions, and what we built upon to create a native job scheduling solution for Sails.js.
+This page explains Quest's architecture, design decisions, and the tradeoffs behind its process-based scheduler.
 
 ## The Core Challenge
 
 When building a job scheduler for Sails.js, we faced a fundamental challenge: How do you run scheduled code with full access to Sails models, helpers, and configurations?
 
-Most JavaScript job schedulers (like Bree) use worker threads for isolation and stability. However, worker threads run in a completely separate context - they can't access your Sails app's models or helpers. You'd need complex message passing between threads, which creates a terrible developer experience.
+Most JavaScript job schedulers (like Bree) use worker threads for isolation and stability. However, worker threads run in a separate context and cannot access your Sails app's models or helpers directly. Supporting that model would require message passing and repeated bootstrap logic.
 
 ## Our Solution: Process-Based Isolation
 
@@ -63,7 +63,7 @@ This minimal Sails lift:
 
 ## Scheduling Engine
 
-Quest combines three battle-tested libraries for maximum flexibility:
+Quest combines three libraries to support multiple scheduling styles:
 
 ### 1. Cron Expressions (cron-parser)
 
@@ -227,7 +227,7 @@ This pattern:
 
 ### Why Not Worker Threads?
 
-Worker threads seem perfect for jobs - they're isolated, efficient, and built into Node.js. But they have a fatal flaw for Sails apps:
+Worker threads seem like a good fit for jobs because they're isolated, efficient, and built into Node.js. But they have a fatal flaw for Sails apps:
 
 ```javascript
 // In a worker thread, this fails:
@@ -420,7 +420,7 @@ The codebase is modular - a main hook file that coordinates separate modules for
 
 ## Summary
 
-Quest is built on a simple insight: Sails already knows how to run scripts with `sails run`. By combining this with robust scheduling libraries and process isolation, we get a job scheduler that feels native to Sails while providing production-grade reliability.
+Quest uses `sails run` as the execution model for scheduled jobs. Combined with the scheduling libraries above and process isolation, this keeps jobs aligned with existing Sails script behavior.
 
 The architecture prioritizes:
 
@@ -429,4 +429,4 @@ The architecture prioritizes:
 3. **Flexibility** - Multiple scheduling formats for different needs
 4. **Simplicity** - No external dependencies or complex setup
 
-This design makes Quest a natural extension of Sails rather than a foreign addition.
+This keeps Quest aligned with Sails scripts instead of introducing a separate job runtime model.

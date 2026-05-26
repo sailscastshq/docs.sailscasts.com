@@ -2,8 +2,8 @@
 layout: home
 hero:
   name: The Sailscasts Docs
-  text: Ship Fullstack JavaScript Apps
-  tagline: Everything you need to build production-ready apps with Sails and The Boring JavaScript Stack.
+  text: Sailscasts Documentation
+  tagline: Documentation for Sails.js, The Boring JavaScript Stack, and related tools.
   actions:
     - theme: brand
       text: Watch a Course
@@ -17,14 +17,14 @@ hero:
 features:
   - icon: ⛵
     title: Sails.js
-    details: Master the MVC framework that makes Node.js development productive and enjoyable.
+    details: Guides and reference material for building Sails applications.
   - icon: 🥱
     title: The Boring Stack
-    details: Skip the JavaScript fatigue. Build with battle-tested tools that just work.
+    details: Server-centric full-stack guides built around Sails, Inertia, Tailwind CSS, and Vue, React, or Svelte.
   - icon: 🛠️
     title: Developer Tools
-    details: Packages and utilities designed to supercharge your fullstack workflow.
+    details: Hooks, CLI tools, and supporting packages for Sails applications.
   - icon: 🖖
     title: Open Source
-    details: Community-driven libraries you can trust, use, and contribute to.
+    details: Documentation for the open-source libraries published through Sailscasts.
 ---

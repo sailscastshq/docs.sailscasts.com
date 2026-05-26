@@ -17,12 +17,12 @@ editLink: true
 
 # Deploy on Slipway
 
-Let's deploy your app on [Slipway](https://github.com/sailscastshq/slipway) :rocket:
+This page covers deploying a Boring Stack app on [Slipway](https://github.com/sailscastshq/slipway).
 
 ::: tip Recommended for self-hosting
-Slipway is our recommended deployment platform for self-hosting. It's built from the ground up for The Boring JavaScript Stack — it understands your Sails app, your Dockerfile, your database, and your Redis out of the box.
+Slipway is the recommended self-hosting option in these docs. It detects the app's Sails setup, Dockerfile, database, and Redis configuration.
 
-No glue code, no adapters, no translating between your stack and your platform. Just push your code and Slipway handles the rest — with push-to-deploy, automatic SSL, preview environments, database management, background jobs monitoring, and a full operational dashboard all running on your own server.
+It also provides push-to-deploy, automatic SSL, preview environments, database management, and background job monitoring on the same server.
 :::
 
 ## Install Slipway
@@ -59,8 +59,8 @@ Slipway reads your app's `package.json` and generates a **deployment checklist**
 
 Each checklist item comes with an actionable button — **Add database**, **Add Redis**, **Generate** — so you can fix issues directly from the checklist without hunting through settings. Once everything is configured, the checklist shows a green "Environment is configured correctly" status.
 
-::: tip No more guesswork
-On other platforms, you have to remember what env vars and services your app needs and set them up manually. Slipway inspects your code and tells you what's missing — then lets you fix it in one click.
+::: tip Deployment checklist
+Slipway inspects the app and reports missing services or environment variables so you can fix them from the checklist.
 :::
 
 ## Connect your GitHub repo
@@ -80,8 +80,8 @@ See the [Git integration guide](/slipway/git-integration) and [auto-deploy](/sli
 
 In your project's environment, click **Add Service** and select the database you need. Slipway supports [PostgreSQL, MySQL, and MongoDB](/slipway/database-services) as one-click services.
 
-::: tip Zero configuration
-When you create a database service, Slipway automatically sets `DATABASE_URL` as an environment variable on your app. No need to copy connection strings around — it just works.
+::: tip Automatic `DATABASE_URL`
+When you create a database service, Slipway automatically sets `DATABASE_URL` as an environment variable on the app.
 :::
 
 ## Add Redis
@@ -184,11 +184,11 @@ slipway slide
 The Boring Stack templates come with a production-ready Dockerfile, so you don't need to create one manually. Slipway detects and uses it automatically.
 :::
 
-That's it! Your app will be live on your domain as soon as the build finishes :tada:
+After the build finishes, Slipway deploys the app to the configured domain.
 
 ## What you get with Slipway
 
-Beyond deployment, Slipway gives you a full operational dashboard purpose-built for your Boring Stack app:
+Slipway also provides operational tools for the deployed app:
 
 - **[Push-to-deploy](/slipway/auto-deploy)** — automatic deployments from GitHub on every push
 - **[Preview environments](/slipway/auto-deploy)** — automatic environments for pull requests
@@ -201,9 +201,3 @@ Beyond deployment, Slipway gives you a full operational dashboard purpose-built 
 - **[Lookout](/slipway/lookout)** — real-time observability with request tracing, exceptions, and metrics
 - **[Rollbacks](/slipway/rollbacks)** — one-click rollback to any previous deployment
 - **[Notifications](/slipway/notifications)** — get alerted on deployment status, container issues, and more
-
-## Celebrate with a :star:
-
-::: tip Star The Boring JavaScript Stack repo on GitHub :star:
-Let's celebrate deploying your app on Slipway by giving **The Boring JavaScript Stack** [a star on GitHub](https://github.com/sailscastshq/boring-stack).
-:::

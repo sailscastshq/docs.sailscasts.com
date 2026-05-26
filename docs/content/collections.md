@@ -33,7 +33,7 @@ From the above config we are specifying that our content collections will be in 
 
 ## Content Collections
 
-Content Collections help to organize your documents and makes querying your content via [Waterline queries](/content/querying-collections) easy.
+Content Collections organize your documents and make them queryable via [Waterline queries](/content/querying-collections).
 
 ### What are Content Collections?
 

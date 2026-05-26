@@ -2,15 +2,15 @@
 layout: home
 features:
   - title: Execute any Javascript code
-    details: guppy is the perfect companion for you to test out your ideas in JavaScript
+    details: Run JavaScript snippets in a scratchpad environment.
   - title: Execute code in the context of a Sails application
-    details: Quickly test out queries and ideas within the context of your Sails application
+    details: Run code with access to a Sails application's models, helpers, and configuration.
   - title: Test your Sails helperr and Waterline queries
-    details: guppy is the perfect sandbox for your Sails prototyping needs
+    details: Try helper calls and Waterline queries before adding them to the app.
 hero:
   name: guppy
-  text: The tinker tool for backend Javascript
-  tagline: This simple yet powerful desktop application allows you to run Javascript code and act as a scratchpad for trying out new ideas – all within the context of your application.
+  text: JavaScript scratchpad for backend development
+  tagline: Run JavaScript code on its own or in the context of a Sails application.
   actions:
     - theme: brand
       text: Get guppy

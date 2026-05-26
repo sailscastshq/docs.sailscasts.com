@@ -17,7 +17,7 @@ editLink: true
 
 # Locals
 
-Locals let you pass data from your actions to the root EJS template (`views/app.ejs`). They're perfect for SEO meta tags, page titles, Open Graph images, and anything that belongs in the HTML `<head>`.
+Locals let you pass data from your actions to the root EJS template (`views/app.ejs`). Use them for SEO meta tags, page titles, Open Graph images, and anything else that belongs in the HTML `<head>`.
 
 Unlike props which go to your React/Vue/Svelte components, locals only go to the EJS template on the initial full-page load — which is exactly when search engines and social media crawlers read your HTML.
 

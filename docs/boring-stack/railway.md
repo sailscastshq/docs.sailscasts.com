@@ -17,7 +17,7 @@ editLink: true
 
 # Deploy on Railway
 
-Let's deploy your app on [Railway](https://railway.com) :rocket:
+This page covers deploying a Boring Stack app on [Railway](https://railway.com).
 
 You have two options to deploy your app on Railway...
 
@@ -183,10 +183,4 @@ Add the following evironment variables to your web service:
 - `REDIS_URL`: This should point to the connection string to the Redis instance you created.
 - `SESSION_SECRET`: A unique production session secret to override the one in `config/session.js`.
 
-That’s it! Your app will be live on your Railway URL as soon as the build finishes :tada:
-
-## Celebrate with a :star:
-
-::: tip Star The Boring JavaScript Stack repo on GitHub :star:
-Let's celebrate deploying your app on Railway by giving **The Boring JavaScript Stack** [a star on GitHub](https://github.com/sailscastshq/boring-stack).
-:::
+After the build finishes, Railway deploys the app to the assigned URL.

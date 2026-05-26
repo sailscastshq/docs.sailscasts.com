@@ -31,11 +31,7 @@ test('signupWithTeam creates a user and team', async ({ sails, expect }) => {
 })
 ```
 
-## Why helper trials matter
-
-A lot of critical Sails behavior lives in helpers.
-
-If helper trials feel great, teams can cover important business logic quickly without reaching for browser tests too early.
+Many Sails apps keep important business logic in helpers, so this layer usually covers behavior more cheaply than a request or browser trial.
 
 ## What helper trials should expose
 
@@ -45,9 +41,9 @@ Helper trials should give you:
 - `sails.sounding.helpers('user.signupWithTeam', inputs)` as the dynamic fallback when the helper identity is not known ahead of time
 - `expect` for clean assertions
 - access to the current app runtime when needed
-- world helpers for setup when the helper depends on existing records
+- world helpers for setup when the helper depends on existing records, usually kept in a nearby folder like `tests/world-helpers/`
 
-That keeps the happy path simple while still allowing realistic setup.
+If the helper needs world setup, read [Scenarios](/sounding/scenarios) and [Worlds](/sounding/worlds).
 
 ## Canonical first, dynamic second
 

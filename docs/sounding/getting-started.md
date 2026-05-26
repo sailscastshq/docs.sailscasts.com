@@ -5,7 +5,7 @@ editLink: true
 
 # Getting started
 
-Sounding is designed to feel natural in a Sails app from the first install.
+Install Sounding, keep your Sails test environment in `config/env/test.js`, and add `config/sounding.js` only when you need overrides.
 
 ## 1. Install Sounding
 
@@ -16,7 +16,7 @@ npm install -D sounding @playwright/test sails-sqlite
 ### Install the Sounding skill for AI agents
 
 If you use Codex, Claude Code, Cursor, or another coding agent, install the Sounding skill too.
-That gives the agent first-class guidance for worlds, actors, transports, mailbox assertions,
+That gives the agent guidance for worlds, actors, transports, mailbox assertions,
 browser trials, and Sounding's auth helpers.
 
 ```bash
@@ -29,7 +29,7 @@ Sounding does not replace Sails test config.
 
 Your app still defines its test environment in `config/env/test.js`, and Sounding builds on top of that.
 
-A strong default is to let Sounding manage the datastore and keep `config/env/test.js` focused on app behavior.
+One common setup is to let Sounding manage the datastore and keep `config/env/test.js` focused on app behavior.
 
 ```js
 // config/env/test.js
@@ -56,12 +56,14 @@ If your app already has a good test datastore strategy, Sounding can still respe
 
 ```js
 module.exports.sounding = {
+  environments: ['test'],
   datastore: 'inherit'
 }
 ```
 
 Most apps can skip this file entirely. Sounding already defaults to:
 
+- `environments = ['test']`
 - `datastore.mode = 'managed'`
 - `datastore.identity = 'default'`
 - `datastore.adapter = 'sails-sqlite'`
@@ -71,7 +73,15 @@ Most apps can skip this file entirely. Sounding already defaults to:
 - `request.transport = 'virtual'`
 - browser projects start with `desktop`
 
-Only add `config/sounding.js` when your app needs a real override, such as `datastore: 'inherit'`, `datastore: 'external'`, or custom browser behavior.
+Only add `config/sounding.js` when your app needs a real override, such as `datastore: 'inherit'`, `datastore: 'external'`, custom browser behavior, or widening Sounding beyond the default test-only environment.
+
+If you intentionally need Sounding in another boot path, widen the allowlist explicitly:
+
+```js
+module.exports.sounding = {
+  environments: ['test', 'console']
+}
+```
 
 ## 4. Write your first trial
 
@@ -128,9 +138,7 @@ test(
 
 ## 6.1 Define your first world
 
-Before a suite gets interesting, give it a named business situation to stand on.
-
-A good first world is usually one of:
+Define a named world for repeatable setup. Common starting points are:
 
 - a signed-out guest
 - a subscriber with active access
@@ -171,7 +179,7 @@ test('subscriber can read the issue', async ({ sails, expect }) => {
 })
 ```
 
-This is the point of worlds: the test stops reading like setup and starts reading like behavior.
+Use worlds when several trials need the same business state.
 
 ## 7. Run the suite
 
@@ -188,5 +196,3 @@ Once the basic runtime is in place, most apps will want to add:
 - a few named actors like `guest`, `subscriber`, and `publisher`
 - at least one endpoint, Inertia, and browser trial for a mission-critical flow
 - a mobile browser project once the core journeys are stable
-
-Sounding works best when your tests read like your product.

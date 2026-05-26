@@ -19,7 +19,7 @@ editLink: true
 
 Flash messages let you send one-time data to users after redirects. Unlike regular props, flash data isn't persisted in browser history - when a user clicks the back button, they won't see old flash messages reappear.
 
-This makes flash perfect for success notifications, error messages, newly created IDs, or any temporary values.
+Use flash for success notifications, error messages, newly created IDs, or any other temporary values.
 
 ## Sending flash messages
 

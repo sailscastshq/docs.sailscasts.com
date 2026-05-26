@@ -9,7 +9,7 @@ titleTemplate:
 hero:
   name: The Boring JavaScript Stack
   text: The reliable full-stack JavaScript stack
-  tagline: Ship products with battle-tested technologies. Say no to chasing JavaScript trends.
+  tagline: Full-stack JavaScript with Sails, Inertia, Tailwind CSS, and Vue, React, or Svelte.
   actions:
     - theme: brand
       text: Get Started
@@ -22,15 +22,15 @@ hero:
     alt: The Boring JavaScript Stack
 features:
   - icon: 🎯
-    title: Focus on Your Product
-    details: Effortlessly focus on what really matters - shipping to actual real users.
+    title: Server-centric product development
+    details: Build product features without maintaining a separate API layer for the frontend.
   - icon: 🙅🏾‍♀️
     title: No API required for your SPA
     details: Each page receives the necessary data as props from your Sails backend.
   - icon: 🫱🏾‍🫲🏿
     title: Bring Your own UI framework
-    details: You can use your favorite frontend framework for your UI be it Vue, React, or Svelte.
+    details: Use Vue, React, or Svelte for the UI layer.
   - icon: 🚀
-    title: Ship Fast
-    details: With The Boring Stack you can iterate quickly and move easily from MVP to scale.
+    title: One codebase
+    details: Keep routing, data access, and UI work in the same application.
 ---

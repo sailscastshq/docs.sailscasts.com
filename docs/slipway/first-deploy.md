@@ -17,7 +17,7 @@ editLink: true
 
 # Your First Deploy
 
-Let's deploy your first Sails.js application with Slipway.
+This page walks through deploying your first Sails.js application with Slipway.
 
 ## Prerequisites
 

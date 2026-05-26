@@ -88,7 +88,7 @@ module.exports = {
 await sails.quest.run('migrate-data', { dryRun: false })
 ```
 
-This is perfect for:
+Common uses include:
 
 - One-time administrative tasks
 - Scripts triggered by user actions

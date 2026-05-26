@@ -17,9 +17,7 @@ editLink: true
 
 # Helm
 
-Helm is a **production REPL** for your Sails applications. Named after the ship's helm—where you steer and command the vessel.
-
-Think of it as [Tinkerwell](https://tinkerwell.app/) for Sails — a live console connected to your running app.
+Helm is a production REPL for your Sails applications.
 
 ## What is Helm?
 

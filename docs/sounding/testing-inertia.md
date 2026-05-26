@@ -5,15 +5,17 @@ editLink: true
 
 # Testing Inertia pages
 
-Inertia responses deserve their own testing lane.
+Use `visit()` when you want to test the server-side contract of an Inertia response.
 
-They are not just JSON, and they are not just browser pages. They are a Sails response model with their own shape, props, redirects, validation, and partial reload behavior.
+Inertia responses have their own component, props, redirect, validation, and partial reload behavior.
 
 When a repo uses a separate functional layer, these trials usually live under `tests/functional/pages/`.
 
+If you want the full `visit()` surface and its relationship to request transport, read [Request clients and transport](/sounding/request-clients).
+
 ## `test()` for Inertia responses
 
-Use `test()` when you want to test the server-side contract of an Inertia response without jumping straight to a browser flow.
+Use `test()` when you want to test the server-side contract of an Inertia response without starting a browser.
 
 ```js
 import { test } from 'sounding'
@@ -52,9 +54,7 @@ test('sign up returns validation errors for invalid input', async ({
 
 ## Partial reloads
 
-A good Inertia testing story should also cover partial reload behavior when a page only requests a subset of props.
-
-That keeps the framework honest about how modern Sails + Inertia apps really behave.
+Use partial reload assertions when a page only requests a subset of props.
 
 ```js
 import { test } from 'sounding'
@@ -81,5 +81,3 @@ Under the hood, Sounding should translate that into the same Inertia headers the
 - `toHaveSharedProp()`
 - `toHaveValidationError()`
 - `toRedirectTo()`
-
-This is one of Sounding's most important jobs: make Inertia testing feel like a first-class citizen instead of a half-step between HTTP and E2E.

@@ -5,7 +5,7 @@ editLink: true
 
 # Configuration
 
-Sounding can be configured through `config/sounding.js`, but the file is optional. Most apps can ride the defaults and only add it when they need an override.
+Sounding can be configured through `config/sounding.js`, but the file is optional. Most apps can rely on the defaults and add it only when they need an override.
 
 That means there are two layers:
 
@@ -50,6 +50,8 @@ Add `config/sounding.js` only when you want to override Sounding's defaults:
 
 ```js
 module.exports.sounding = {
+  environments: ['test'],
+
   datastore: 'inherit',
 
   browser: {
@@ -58,10 +60,11 @@ module.exports.sounding = {
 }
 ```
 
-## Good defaults
+## Default values
 
-Sounding should ship with defaults that feel calm and predictable:
+Sounding defaults to:
 
+- `environments = ['test']`
 - `datastore.mode = 'managed'`
 - `datastore.identity = 'default'`
 - `datastore.adapter = 'sails-sqlite'`
@@ -73,7 +76,33 @@ Sounding should ship with defaults that feel calm and predictable:
 - `request.transport = 'virtual'`
 - `browser.projects = ['desktop']`
 
-These defaults make it easy to install Sounding and go, while still leaving room for deliberate overrides later.
+These are the starting defaults for a new Sounding setup.
+
+## `environments`
+
+The `environments` section tells Sounding which Sails environments are allowed to boot the hook.
+
+The default is:
+
+- `['test']`
+
+That means Sounding stays dark in other app boot paths like `development`, `console`, or `production` unless you opt in deliberately.
+
+Use this when you intentionally need Sounding outside the normal test lane:
+
+```js
+module.exports.sounding = {
+  environments: ['test', 'console']
+}
+```
+
+Or, if you truly want it in production-like boots:
+
+```js
+module.exports.sounding = {
+  environments: ['test', 'production']
+}
+```
 
 ## `world`
 
@@ -93,19 +122,15 @@ The `datastore` section tells Sounding how to work with your app's Sails datasto
 
 #### `inherit`
 
-This is the advanced option for apps that already have a serious test datastore story in `config/env/test.js` and want Sounding to respect it as-is.
+Use `inherit` when the app already defines its own test datastore in `config/env/test.js` and Sounding should use it as-is.
 
 #### `managed`
 
-This is the default. Sounding provisions a temporary datastore for the run before the app lifts, using `sails-sqlite` and storing files under `.tmp/db`.
-
-Use this for the normal zero-ceremony Sounding experience.
+`managed` is the default. Sounding provisions a temporary datastore before the app lifts, using `sails-sqlite` and storing files under `.tmp/db`.
 
 #### `external`
 
-Sounding validates and uses a separately managed test datastore, such as a dedicated Postgres instance.
-
-Use this when you need database-specific behavior without giving Sounding responsibility for provisioning it.
+Use `external` when a separate process manages the test datastore, such as a dedicated Postgres instance.
 
 ### `identity`
 
@@ -113,7 +138,7 @@ The datastore identity Sounding should target, usually `default`.
 
 ### `adapter`
 
-The adapter Sounding should provision when `mode` is `managed`. In `0.0.1`, the first-class choice is `sails-sqlite`.
+The adapter Sounding should provision when `mode` is `managed`. In `0.0.1`, the supported default is `sails-sqlite`.
 
 ### `isolation`
 
@@ -129,15 +154,17 @@ Where Sounding should place managed SQLite files. The default is `.tmp/db`, and 
 
 The `request` section tells Sounding how non-browser trials should talk to the app.
 
+If you want the full request client API on top of these settings, read [Request clients and transport](/sounding/request-clients).
+
 ### `transport`
 
-A calm default is:
+Default:
 
 - `virtual`
 
 That means request helpers like `get()` and `post()` are powered by `sails.request()`.
 
-This is the most Sails-native default for helper-adjacent endpoint trials, JSON API trials, and many Inertia-style trials.
+This is the default for helper-adjacent endpoint trials, JSON API trials, and many Inertia-style trials.
 
 When you need stricter parity with the live HTTP stack, Sounding should also support:
 
@@ -156,11 +183,9 @@ request: {
 }
 ```
 
-### Switching transport cleanly
+### Transport override order
 
-Sounding should let transport choice stay boring and explicit.
-
-The override order should be:
+Transport overrides are applied in this order:
 
 1. request helper call options such as `get('/health', { transport: 'http' })`
 2. trial options such as `test('...', { transport: 'http' }, async (...) => {})`
@@ -175,12 +200,6 @@ const response = await http.get('/health')
 
 That keeps one request API while still letting a trial opt into true HTTP parity when it matters.
 
-## Why this design matters
-
-The goal is not to make datastore choice irrelevant.
-
-The goal is to make datastore choice affect as little test code as possible.
-
 Most Sounding trials should still be written in terms of:
 
 - helpers
@@ -190,5 +209,3 @@ Most Sounding trials should still be written in terms of:
 - Playwright flows
 
 not raw adapter details.
-
-That is how Sounding stays elegant while still respecting real Sails infrastructure.

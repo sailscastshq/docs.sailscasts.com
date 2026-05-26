@@ -1,7 +1,7 @@
 ---
 title: Daily workflow
 titleTemplate: Git Vibe
-description: The issue-to-PR loop that Git Vibe is designed to make natural.
+description: The issue-to-PR loop Git Vibe supports.
 prev:
   text: Getting started
   link: /git-vibe/getting-started
@@ -13,7 +13,9 @@ editLink: true
 
 # Daily workflow
 
-Git Vibe works best when it manages the branch and worktree lifecycle for one task at a time.
+Git Vibe works best when it manages one task at a time, whether that task lives in its own worktree or in your current checkout.
+
+Use `worktree` when you want an isolated lane. Use `solo` when you want the same `feat/*` workflow but prefer to stay in one checkout.
 
 ## Start from an issue
 
@@ -21,7 +23,7 @@ Git Vibe works best when it manages the branch and worktree lifecycle for one ta
 git vibe issue 42
 ```
 
-Git Vibe reads the issue title, creates a deterministic branch, and opens the corresponding worktree.
+Git Vibe reads the issue title, creates a deterministic branch, and opens the corresponding vibe. In `worktree` mode that means a worktree. In `solo` mode that means switching the current checkout to the branch.
 
 ## Do the work inside the vibe
 
@@ -37,8 +39,8 @@ git vibe open 42
 
 - `diff` shows the cumulative change for the current vibe
 - `check` shows branch, compare target, PR, checks, and session context
-- `enter` moves your shell back into the vibe
-- `open` reopens the same vibe in Codex Desktop or VS Code
+- `enter` moves your shell back into the vibe or switches the current checkout back to that branch in `solo`; in normal interactive solo use it can also reopen the same checkout in your configured workspace app
+- `open` reopens the same vibe in Codex Desktop or VS Code and, in `solo`, keeps the editor on the same checkout after the branch switch
 
 ## Open the pull request
 
@@ -66,8 +68,6 @@ git vibe doctor
 git vibe doctor --repair
 ```
 
-The objective is simple: make the correct workflow easy to follow and easy to repeat.
-
 ## A full example
 
 ```sh
@@ -80,4 +80,4 @@ git vibe check
 git vibe finish --sync 42
 ```
 
-That is the full cycle: open a vibe, do the work, submit the PR, and clean up.
+This is the standard cycle: open a vibe, do the work, submit the PR, and clean up.

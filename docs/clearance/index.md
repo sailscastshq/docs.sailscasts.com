@@ -17,11 +17,11 @@ hero:
 features:
   - icon: 🔒
     title: Simple Role Management
-    details: Easily define and manage roles with numeric clearance levels, from guest access to superadmin privileges.
+    details: Define roles with numeric clearance levels, from guest access to superadmin privileges.
   - icon: 🛡️
     title: Flexible Permissions
-    details: Configure route-specific access controls using wildcard patterns and clearance levels for granular permission management.
+    details: Configure route-specific access controls with wildcard patterns and clearance levels.
   - icon: ⚡
     title: Easy Integration
-    details: Seamlessly integrate with Sails.js policies and session management for robust authentication and authorization.
+    details: Integrate with Sails policies and session-based authentication.
 ---

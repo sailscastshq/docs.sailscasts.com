@@ -5,13 +5,9 @@ editLink: true
 
 # Organizing your suite
 
-A testing framework should not force an awkward file structure on your app.
+Organize the suite so the relationship between **trials**, **features**, and **layers** is easy to see.
 
-Sounding works best when your suite makes the relationship between **trials**, **features**, and **layers** easy to see.
-
-Your test tree should look like the product and the testing layers, not like the framework itself.
-
-That is why the recommended structure is intentionally boring.
+The test tree should follow the product and the testing layers, not the framework name.
 
 ## A strong default structure
 
@@ -40,13 +36,7 @@ This gives you three useful separations:
 
 ## Why not `tests/sounding/`
 
-Sounding should power the suite, not distort the suite.
-
-A folder like `tests/sounding/` makes the framework more visible than the product.
-
-That is usually a smell.
-
-The framework should disappear into the way the tests read.
+A folder like `tests/sounding/` makes the framework more visible than the product. Prefer grouping by layer and feature instead.
 
 ## Unit tests
 
@@ -83,7 +73,7 @@ tests/e2e/pages/
     editor.test.js
 ```
 
-This layout works well because related behaviors stay together while the fast non-browser lane stays separate from true browser journeys.
+This layout keeps related behaviors together while separating non-browser checks from browser journeys.
 
 ## Split by behavior, not by tool
 
@@ -91,7 +81,7 @@ A good file should answer this question clearly:
 
 **What family of trials lives here?**
 
-That is why names like `reader-access.test.js` and `magic-link-browser.test.js` are stronger than vague names like `issues.test.js` when the feature has multiple distinct behaviors.
+Names like `reader-access.test.js` and `magic-link-browser.test.js` are clearer than vague names like `issues.test.js` when the feature has multiple distinct behaviors.
 
 Inside a feature folder, split files by **behavior** and **runtime value**, not by arbitrary naming.
 
@@ -102,11 +92,13 @@ For example:
 - `contracts.test.js` for request or Inertia-level issue contracts
 - `reader-access.test.js` for browser-capable reading flows
 
-That keeps the suite fast, legible, and easy to maintain.
+This keeps the suite fast, legible, and easy to maintain.
 
 ## Factories belong under `tests/factories`
 
 Factories should live under `tests/factories` because they are test vocabulary, not app runtime code.
+
+If you want the full factory API and loading behavior, read [Factories](/sounding/factories).
 
 A practical layout might look like:
 
@@ -117,7 +109,7 @@ tests/factories/
   subscription.js
 ```
 
-Each factory should model one record shape well and stay boring.
+Each factory should model one record shape well.
 
 ## Scenarios belong under `tests/scenarios`
 
@@ -128,9 +120,16 @@ tests/scenarios/
   issue-access.js
   publisher-editor.js
   magic-link-signin.js
+tests/world-helpers/
+    create-user-with-team.js
 ```
 
 A good scenario name should tell you the situation before you open the file.
+
+If a helper exists only to keep a scenario readable, keep it near the scenarios.
+Use a named folder such as `tests/world-helpers/` instead of a vague `tests/support/` folder.
+
+If you want the full scenario API and loading behavior, read [Scenarios](/sounding/scenarios).
 
 ## A useful rule of thumb
 
@@ -142,9 +141,11 @@ If a trial just needs one more field value, prefer:
 - a small override
 - a helper inside the scenario
 
+If that helper grows into product-state setup, keep it in a named nearby folder like `tests/world-helpers/`, not inside the auto-loaded `tests/scenarios/` tree.
+
 Do not create a new scenario for every tiny variation.
 
-## Keep the feature folders calm
+## Keep feature folders focused
 
 A few practical rules help a lot:
 
@@ -154,9 +155,9 @@ A few practical rules help a lot:
 - group by feature before grouping by runtime detail
 - do not let one giant file become the whole feature
 
-## A real-app shape that works well
+## Example layout
 
-This is the kind of layout Sounding is designed to support in a real app:
+This is a layout that works well in a real app:
 
 ```text
 tests/
@@ -187,15 +188,15 @@ tests/
       blog.test.js
       contact.test.js
       story.test.js
+  world-helpers/
+    create-user-with-team.js
   scenarios/
     issue-access.js
     publisher-editor.js
 ```
 
-That structure is simple, scalable, and easy to onboard someone into.
+This structure is simple and scalable.
 
-## The main idea
+## Summary
 
-A Sounding suite should look like a well-organized product codebase that happens to use Sounding.
-
-Not like a product codebase that has been bent around the framework.
+A Sounding suite should look like a well-organized product codebase that uses Sounding.

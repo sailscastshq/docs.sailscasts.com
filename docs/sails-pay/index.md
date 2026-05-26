@@ -2,8 +2,8 @@
 layout: home
 hero:
   name: Sails Pay
-  text: Payment made easy for Sails Developers
-  tagline: Simplifying payment integrations for your Sails.js applications.
+  text: Payments for Sails.js
+  tagline: Payment provider integration for Sails applications.
   actions:
     - theme: brand
       text: Get Started
@@ -17,11 +17,11 @@ hero:
 features:
   - icon: 💳
     title: Multiple Payment Providers
-    details: Seamlessly integrate with a variety of payment providers, including Lemon Squeezy, PayPal, Stripe, and more.
+    details: Integrate with providers such as Lemon Squeezy, PayPal, Stripe, and more.
   - icon: ⚙️
     title: Easy Configuration
-    details: Set up payment processing quickly with simple configuration options tailored for Sails.js developers.
+    details: Configure payment processing through Sails-oriented provider settings.
   - icon: 💻
     title: Developer-Friendly API
-    details: Access a well-documented and intuitive API, designed to streamline integration and customization.
+    details: Use a documented API for checkout, subscriptions, and transaction handling.
 ---

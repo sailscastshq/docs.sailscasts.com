@@ -7,7 +7,7 @@ editLink: true
 
 Sounding is a Sails-native testing framework for Sails applications and The Boring JavaScript Stack.
 
-It brings the full testing story under one roof:
+It covers:
 
 - helper and business-logic tests
 - endpoint and JSON API tests
@@ -15,67 +15,49 @@ It brings the full testing story under one roof:
 - browser and end-to-end flows
 - mail assertions
 
-Instead of stitching together a runner, a browser harness, ad hoc seeding code, and test-only app hooks, Sounding gives your app one coherent testing runtime.
+Sounding provides one runtime for these test types so they can share the same app boot, request helpers, world setup, and assertion surface.
 
 ## Where the name comes from
 
 In maritime navigation, **sounding** means measuring the depth of water beneath a ship before it moves forward.
 
-Historically, sailors used a sounding line with a weighted lead to test the seabed and make sure it was safe to proceed.
-
-That metaphor is unusually good for testing:
-
-- before you ship, you test the waters
-- you check what is underneath the surface
-- you make sure the ground beneath the code is safe
-- a failing trial is a warning that the water is shallower than it looked
-
-That is why the name fits this ecosystem so naturally.
-
-Alongside names like Slipway, Quest, Lookout, Wish, and Clearance, Sounding feels like the thing you do before committing the ship to the voyage.
-
-In software terms, that is exactly what a test suite should be.
+The name matches the rest of the ecosystem and the role of checking an application before release.
 
 ## Why Sounding exists
 
-The current Sails testing story has all the right pieces, but they still feel too separate:
+The current Sails testing pieces work well on their own:
 
 - `node:test` is excellent for lightweight tests
 - Playwright is excellent for browser flows
 - `inertia-sails/test` gives us useful response assertions
 - `getSails()` patterns work, but they still ask every app to invent its own ceremony
 
-What is missing is the elegant middle layer: a Sails-aware runtime that makes realistic tests easy to write and easy to trust.
+Sounding adds a Sails-aware runtime that ties these pieces together under one hook and one `test()` API.
 
 ## What Sounding means by a trial
 
-Sounding uses the familiar `test()` API, but it talks about each test as a **trial**.
-
-A trial is one named product truth you are proving inside a real Sails app:
+Sounding uses the standard `test()` API. The docs use **trial** to mean one named behavior check inside a real Sails app, such as:
 
 - _guest is redirected from dashboard_
 - _subscriber can read a members-only issue_
 - _requesting a magic link sends a usable email_
 
-That language matters because it keeps the framework focused on behavior, not plumbing.
 If you want the full concept model, read [Trials](/sounding/trials).
 
 ## What makes Sounding Sails-native
 
-Sounding is designed as a **Sails hook first** and a **CLI second**.
+Sounding is implemented as a Sails hook and exposed on `sails.sounding`.
 
-That means the canonical surfaces are:
+The canonical surfaces are:
 
 - optional `config/sounding.js` when you need overrides
 - `sails.sounding`
 
-Not `config/test.js`, and not `sails.test`.
-
-That choice matters because Sounding should feel like every other serious Sails subsystem in your app. You configure it once, lower the app once, and let the hook give you a clean public runtime.
+By default, the hook only activates in the environments listed under `sounding.environments`, which starts as `['test']`.
 
 ## What Sounding covers
 
-Sounding should feel natural wherever Sails developers actually spend time testing.
+Sounding covers the places Sails developers commonly test.
 
 ### Helpers and business logic
 
@@ -114,17 +96,11 @@ Use `test()` with `page` when a flow is truly about the browser:
 
 Use `test()` and `sails.sounding.mailbox` to assert on outgoing transactional email like magic links, invites, password resets, and billing notifications.
 
-## What Sounding does not want you to do
+## Common problems it helps avoid
 
-Sounding should reduce ceremony, not push you into awkward compromises.
-
-It should help you avoid:
+Sounding helps avoid:
 
 - adding product-code test routes just to seed data
 - booting shadow app instances that fight over the same datastore
 - scattering fixtures across app code and test code
 - treating browser, API, and Inertia tests as unrelated worlds
-
-## Sounding in one sentence
-
-Sounding is the test home for everything Sails already does well.

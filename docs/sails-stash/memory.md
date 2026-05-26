@@ -5,7 +5,7 @@ head:
       content: https://docs.sailscasts.com/sails-stash-social.png
 title: Memory
 titleTemplate: Sails Stash
-description: Learn about the Memory store in Sails Stash - a zero-configuration, in-memory caching solution perfect for development and simple applications
+description: Learn about the Memory store in Sails Stash for development, tests, and single-instance applications.
 prev:
   text: Getting started
   link: '/sails-stash/getting-started'
@@ -17,7 +17,7 @@ editLink: true
 
 # Memory
 
-The Memory store is the default cache backend for Sails Stash. It provides a simple, zero-configuration solution for caching data in memory, making it perfect for development and getting started quickly.
+The Memory store is the default cache backend for Sails Stash. It provides a zero-configuration in-memory cache for development, tests, and simple single-instance applications.
 
 ## Features
 
@@ -47,7 +47,7 @@ The Memory store uses a JavaScript `Map` to store cached values in memory. Each 
 
 ## When to Use Memory Store
 
-The Memory store is ideal for:
+Use the Memory store for:
 
 - **Development environments**: Quick setup with no external dependencies
 - **Single-instance applications**: When you don't need distributed caching
@@ -65,7 +65,7 @@ Keep in mind these limitations of the Memory store:
 
 ## For Production
 
-While the Memory store works in production, consider using [Redis](/sails-stash/redis) for production environments that require:
+While the Memory store can work in production, use [Redis](/sails-stash/redis) when you need:
 
 - Persistent caching across restarts
 - Distributed caching across multiple servers
