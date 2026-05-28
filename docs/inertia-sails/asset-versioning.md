@@ -2,8 +2,8 @@
 title: Asset Versioning
 editLink: true
 prev:
-  text: Root view
-  link: '/inertia-sails/root-view'
+  text: Server-side rendering
+  link: '/inertia-sails/server-side-rendering'
 ---
 
 # Asset Versioning

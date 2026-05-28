@@ -17,426 +17,203 @@ editLink: true
 
 # Testing
 
-The Boring JavaScript Stack takes a pragmatic approach to testing: **unit test your helpers, end-to-end test your pages**.
+The Boring JavaScript Stack uses [Sounding](/sounding/) as the default testing surface.
+
+Sounding is built for Sails apps, so tests can use the real app, real helpers, real routes, real Inertia responses, real mail capture, and real browser automation without each project carrying its own test harness.
 
 ## Philosophy
 
-Why this approach?
+The testing shape is still pragmatic: test the smallest useful surface, and move up a layer only when that layer is the behavior.
 
-- **Helpers are pure logic** - They're isolated, stateless functions. Testing them is fast and catches real bugs.
-- **E2E covers everything else** - Actions, policies, models, routing - they all get exercised through page tests. One e2e test covers what would take 5-10 unit tests.
-- **Less test code to maintain** - Every test is code you have to update when things change. Fewer, higher-value tests mean less maintenance burden.
-- **Tests what users actually do** - E2E tests mirror real usage. A passing e2e suite means the app actually works.
-- **Playwright makes e2e cheap** - It's fast, reliable, and the API is clean. The old argument that "e2e is slow and flaky" doesn't hold anymore.
+- **Unit trials** prove helpers and business logic in a Sails-aware context.
+- **Functional trials** prove endpoints, policies, redirects, JSON APIs, mail, and Inertia response contracts.
+- **Browser trials** prove behavior that only the browser can prove: DOM rendering, navigation, focus, client-side interaction, and full page flows.
+
+All three layers use the same import:
+
+```js
+const { test } = require('sounding')
+```
+
+Sounding runs on top of Node's test runner and uses Playwright for browser-capable trials, but day to day you write one kind of test: a Sounding trial.
 
 ## Directory structure
 
-```
+New Boring Stack templates use this shape:
+
+```txt
 tests/
-├── util/
-│   └── get-sails.js       # Sails singleton for unit tests
 ├── unit/
-│   └── helpers/           # One file per helper
+│   └── helpers/
 │       ├── capitalize.test.js
 │       └── get-user-initials.test.js
+├── functional/
+│   ├── api/
+│   │   └── health.test.js
+│   ├── auth/
+│   │   └── dashboard-access.test.js
+│   └── pages/
+│       └── home.test.js
 └── e2e/
-    └── pages/     # Mirrors your pages in assets/js/pages and views/pages
-        ├── home.test.js
-        ├── features.test.js
-        ├── contact.test.js
-        ├── auth/
-        │   └── login.test.js
-        └── billing/
-            └── pricing.test.js
+    └── pages/
+        └── home.test.js
 ```
+
+Use `tests/functional/` for fast app-aware trials that do not need a browser. Keep `tests/e2e/` for browser-capable trials.
+
+For the full suite layout guidance, read [Organizing your suite](/sounding/organizing-your-suite).
 
 ## Setup
 
-If you scaffolded with a Boring Stack template, these scripts are already in your `package.json`:
+If you scaffolded with a current Boring Stack template, the scripts are already in your `package.json`:
 
 ```json
 {
   "scripts": {
-    "test:unit": "node --test --test-concurrency=1 './tests/unit/**/*.test.js'",
-    "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui",
-    "test:e2e:headed": "playwright test --headed",
-    "test": "npm run test:unit && npm run test:e2e"
+    "test:unit": "node --test --test-concurrency=1 tests/unit/**/*.test.js",
+    "test:functional": "node --test --test-concurrency=1 tests/functional/**/*.test.js",
+    "test:e2e": "node --test --test-concurrency=1 tests/e2e/**/*.test.js",
+    "test": "npm run test:unit && npm run test:functional && npm run test:e2e"
   }
 }
 ```
+
+If you are adding Sounding to an existing app, start with [Sounding getting started](/sounding/getting-started).
 
 ## Running tests
 
 ```bash
-# Run unit tests
+# Run helper and business-logic trials
 npm run test:unit
 
-# Run e2e tests
+# Run endpoint, auth, JSON, mail, and Inertia contract trials
+npm run test:functional
+
+# Run browser-capable trials
 npm run test:e2e
 
-# Run e2e with UI mode (interactive)
-npm run test:e2e:ui
-
-# Run e2e with visible browser
-npm run test:e2e:headed
-
-# Run all tests
+# Run the whole suite
 npm test
 ```
 
-## Unit tests
+Browser-capable trials need Playwright's browser binaries installed:
 
-Unit tests use Node.js's built-in test runner - no extra dependencies needed.
-
-### The `getSails()` utility
-
-The `tests/util/get-sails.js` file provides a singleton Sails instance that's shared across all tests:
-
-```js
-const Sails = require('sails').constructor
-
-// Singleton instance - initialized once, never torn down (process exits after tests)
-let sailsInstance = null
-let initPromise = null
-
-async function getSails() {
-  if (sailsInstance) {
-    return sailsInstance
-  }
-
-  // Prevent multiple concurrent initializations
-  if (initPromise) {
-    return initPromise
-  }
-
-  initPromise = new Promise((resolve, reject) => {
-    const sailsApp = new Sails()
-    sailsApp.load(
-      { environment: 'test', hooks: { shipwright: false, content: false } },
-      (err, sails) => {
-        if (err) {
-          return reject(err)
-        }
-        sailsInstance = sails
-        resolve(sails)
-      }
-    )
-  })
-
-  return initPromise
-}
-
-module.exports = { getSails }
+```bash
+npx playwright install chromium
 ```
 
-This singleton pattern means:
+In CI, use `npx playwright install --with-deps chromium`.
 
-- Sails is initialized once on the first test
-- All subsequent tests reuse the same instance
-- No teardown needed - the process exits after tests complete
+## Unit trials
 
-### Writing a helper test
+Use unit trials for helpers and small business operations. They still get a lifted Sails app through Sounding, so you do not need to maintain a custom `getSails()` singleton.
 
 ```js
-const { describe, it } = require('node:test')
-const assert = require('node:assert/strict')
-const { getSails } = require('../../util/get-sails')
+const { test } = require('sounding')
 
-describe('sails.helpers.capitalize()', () => {
-  it('capitalizes single word correctly', async () => {
-    const sails = await getSails()
-    const capitalized = sails.helpers.capitalize('hello')
-    assert.equal(capitalized, 'Hello')
-  })
+test('capitalize capitalizes a single word correctly', async ({
+  sails,
+  expect
+}) => {
+  const capitalized = await sails.helpers.capitalize('hello')
 
-  it('capitalizes multiple words correctly', async () => {
-    const sails = await getSails()
-    const capitalized = sails.helpers.capitalize('the quick brown fox')
-    assert.equal(capitalized, 'The quick brown fox')
-  })
+  expect(capitalized).toBe('Hello')
 })
 ```
 
-Notice:
+Read [Testing helpers](/sounding/testing-helpers) for the deeper helper-testing guide.
 
-- No `before`/`after` hooks needed
-- Each `it` block calls `getSails()` directly
-- Tests are `async` because `getSails()` returns a promise
+## Functional trials
 
-### Test environment config
+Use functional trials for app behavior that can be proved without a browser.
 
-Create `config/env/test.js` to configure the test environment:
+```js
+const { test } = require('sounding')
+
+test('health endpoint reports ok', async ({ get, expect }) => {
+  const response = await get('/health')
+
+  expect(response).toHaveStatus(200)
+  expect(response).toHaveJsonPath('status', 'ok')
+})
+```
+
+For JSON endpoints, read [Testing JSON APIs](/sounding/testing-json-apis). For auth helpers and actor-driven setup, read [Auth and actors](/sounding/auth-and-actors).
+
+## Inertia trials
+
+Use `visit()` when you want to test the server-side contract of an Inertia page without starting a browser.
+
+```js
+const { test } = require('sounding')
+
+test('home page returns the expected Inertia payload', async ({
+  visit,
+  expect
+}) => {
+  const page = await visit('/')
+
+  expect(page).toHaveStatus(200)
+  expect(page).toBeInertiaPage('index')
+  expect(page).toHaveJsonPath('url', '/')
+  expect(page).toHaveSharedProp('errors')
+})
+```
+
+This is the default replacement for older `inertia-sails/test` examples in new Boring Stack apps. Read [Testing Inertia pages](/sounding/testing-inertia) for partial reloads, validation errors, redirects, and Inertia-specific matchers.
+
+## Browser trials
+
+Use browser trials only when the browser is part of the behavior.
+
+```js
+const { test } = require('sounding')
+
+test(
+  'home page renders in the browser',
+  { browser: true },
+  async ({ page, expect }) => {
+    await page.goto('/')
+
+    await expect(
+      page.getByRole('heading', { name: /Simplify Authentication/i })
+    ).toBeVisible()
+  }
+)
+```
+
+Sounding gives you Playwright's `page` and `expect` inside the same trial style. Read [Browser testing](/sounding/browser-testing) when you need DOM interaction, logged-in browser flows, mobile projects, or Playwright-specific behavior.
+
+## Configuration
+
+Keep app-level test behavior in `config/env/test.js`:
 
 ```js
 module.exports = {
   port: 3333,
-  log: {
-    level: 'error'
-  },
   models: {
     migrate: 'drop'
   },
-  datastores: {
-    default: {
-      adapter: 'sails-disk'
-    }
+  log: {
+    level: 'error'
   },
   mail: {
-    default: 'log',
-    mailers: {
-      log: {
-        transport: 'log'
-      }
-    }
+    default: 'log'
   }
 }
 ```
 
-## E2E tests
+Most apps do not need `config/sounding.js`. Add it only when you need to override Sounding defaults, such as datastore mode, browser projects, request transport, or world paths. Read [Sounding configuration](/sounding/configuration) before adding one.
 
-E2E tests use [Playwright](https://playwright.dev/) and are organized by page/route.
+## What to test
 
-### Writing a page test
+Start with the flows that would hurt to break:
 
-```js
-import { test, expect } from '@playwright/test'
+- a helper or action that carries business rules
+- one health or JSON endpoint
+- guest and authenticated access to a protected page
+- the Inertia payload for the home page or dashboard
+- one real browser render for the first page users see
+- mail delivery when email is the behavior
 
-test.describe('Home Page', () => {
-  test('homepage loads successfully', async ({ page }) => {
-    await page.goto('/')
-    await expect(page).toHaveTitle(/My App/)
-    await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-  })
-})
-```
-
-### Testing guest protection
-
-```js
-import { test, expect } from '@playwright/test'
-
-test.describe('Guest Protection', () => {
-  test('dashboard redirects unauthenticated users to login', async ({
-    page
-  }) => {
-    await page.goto('/dashboard')
-    await expect(page).toHaveURL(/login/)
-  })
-
-  test('settings redirects unauthenticated users to login', async ({
-    page
-  }) => {
-    await page.goto('/settings/profile')
-    await expect(page).toHaveURL(/login/)
-  })
-})
-```
-
-### Selector priority
-
-Prefer user-facing selectors:
-
-1. `getByRole()` - Buttons, headings, forms, links
-2. `getByLabel()` - Form inputs with labels
-3. `getByText()` - Visible text content
-4. `getByPlaceholder()` - Input placeholders
-5. CSS/ID selectors - Only as last resort
-
-### Playwright config
-
-The `playwright.config.js` at your project root:
-
-```js
-import { defineConfig, devices } from '@playwright/test'
-
-export default defineConfig({
-  testDir: './tests/e2e',
-  fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
-
-  use: {
-    baseURL: 'http://localhost:3333',
-    trace: 'on-first-retry',
-    screenshot: 'only-on-failure'
-  },
-
-  projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] }
-    }
-  ],
-
-  webServer: {
-    command: 'sails_environment="test" sails lift',
-    port: 3333,
-    timeout: 120 * 1000,
-    reuseExistingServer: !process.env.CI
-  }
-})
-```
-
-## CI/CD
-
-### GitHub Actions
-
-If you scaffolded with a Boring Stack template, `.github/workflows/test.yml` is already set up. If not, create it:
-
-```yaml
-name: Tests
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-jobs:
-  test:
-    timeout-minutes: 10
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: |
-          rm -rf node_modules package-lock.json
-          npm install
-
-      - name: Run unit tests
-        run: npm run test:unit
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-
-      - name: Run E2E tests
-        run: npm run test:e2e
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 7
-```
-
-::: warning Note on npm install
-The `rm -rf node_modules package-lock.json && npm install` step ensures platform-specific native bindings (like rspack) are installed correctly for the CI environment.
-:::
-
-## Inertia test helpers
-
-For integration testing Inertia responses, `inertia-sails` provides test helpers that work with `sails.request()`. These give you fluent assertions for testing your pages without spinning up a browser.
-
-### Setup
-
-```js
-const { describe, it } = require('node:test')
-const { getSails } = require('../util/get-sails')
-
-describe('Dashboard', () => {
-  it('shows user stats', async () => {
-    const sails = await getSails()
-    const inertia = require('inertia-sails/test')(sails)
-
-    const page = await inertia.request('GET /dashboard')
-
-    page
-      .assertStatus(200)
-      .assertComponent('Dashboard/Index')
-      .assertHas('stats')
-      .assertHas('recentActivity', 5)
-  })
-})
-```
-
-### Available assertions
-
-```js
-// Status and component
-page.assertStatus(200)
-page.assertComponent('Users/Index')
-page.assertUrl('/users')
-
-// Props
-page.assertHas('users') // Prop exists
-page.assertHas('users', 10) // Array with 10 items
-page.assertMissing('adminData') // Prop doesn't exist
-page.assertProps({ 'user.name': 'John' }) // Exact value match (dot notation)
-page.assertProp('user', (user) => {
-  // Custom assertion
-  assert.equal(user.role, 'admin')
-})
-
-// Flash
-page.assertFlash('success') // Flash key exists
-page.assertFlash('success', ['Saved!']) // Flash with value
-page.assertNoFlash('error') // No flash key
-
-// Special props
-page.assertMergeProps(['items']) // Merge props
-page.assertDeepMergeProps(['settings']) // Deep merge props
-page.assertDeferredProps(['stats']) // Deferred props
-```
-
-### POST requests with data
-
-```js
-it('creates a user', async () => {
-  const sails = await getSails()
-  const inertia = require('inertia-sails/test')(sails)
-
-  const page = await inertia.request({
-    url: 'POST /users',
-    data: { name: 'Jane', email: 'jane@example.com' }
-  })
-
-  page
-    .assertStatus(200)
-    .assertComponent('Users/Show')
-    .assertProps({ 'user.name': 'Jane' })
-})
-```
-
-### Testing partial reloads
-
-```js
-it('reloads only users prop', async () => {
-  const sails = await getSails()
-  const inertia = require('inertia-sails/test')(sails)
-
-  const page = await inertia.partialRequest('/users', 'Users/Index', ['users'])
-
-  page.assertHas('users')
-  // Other props won't be included in partial reload
-})
-```
-
-### Getting raw data
-
-```js
-const page = await inertia.request('GET /users')
-
-const pageObject = page.getPage() // Full Inertia page object
-const props = page.getProps() // Just the props
-```
-
-## Tips
-
-- Tests use the `test` environment (port 3333, sails-disk adapter)
-- Database migrates to `drop` mode (fresh DB for each run)
-- Email transport is set to `log` (no actual emails sent)
-- Use unique timestamps for test data: `test-${Date.now()}@example.com`
-- Run unit tests with `--test-concurrency=1` to ensure the Sails singleton works correctly
+As the app grows, use [worlds](/sounding/worlds), [factories](/sounding/factories), and [scenarios](/sounding/scenarios) to keep setup readable.

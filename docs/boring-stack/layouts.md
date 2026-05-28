@@ -10,8 +10,8 @@ prev:
   text: Pages
   link: /boring-stack/pages
 next:
-  text: Redirects
-  link: /boring-stack/redirects
+  text: Server-side rendering
+  link: /boring-stack/server-side-rendering
 editLink: true
 ---
 

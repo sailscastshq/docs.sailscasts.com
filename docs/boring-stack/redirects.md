@@ -7,8 +7,8 @@ title: Redirects
 titleTemplate: The Boring JavaScript Stack 🥱
 description: Redirecting in The Boring JavaScript Stack
 prev:
-  text: Navigation
-  link: '/boring-stack/navigation'
+  text: Server-side rendering
+  link: '/boring-stack/server-side-rendering'
 next:
   text: Validation
   link: '/boring-stack/validation'

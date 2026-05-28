@@ -5,8 +5,8 @@ prev:
   text: History encryption
   link: '/inertia-sails/history-encryption'
 next:
-  text: Asset versioning
-  link: '/inertia-sails/asset-versioning'
+  text: Server-side rendering
+  link: '/inertia-sails/server-side-rendering'
 ---
 
 # Root View

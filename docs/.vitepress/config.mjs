@@ -340,6 +340,10 @@ function inertiaSailsGuide() {
           link: '/inertia-sails/history-encryption'
         },
         { text: 'Root view', link: '/inertia-sails/root-view' },
+        {
+          text: 'Server-side rendering',
+          link: '/inertia-sails/server-side-rendering'
+        },
         { text: 'Asset versioning', link: '/inertia-sails/asset-versioning' }
       ]
     }
@@ -405,6 +409,10 @@ function boringStackGuide() {
         { text: 'Navigation', link: 'boring-stack/navigation' },
         { text: 'Pages', link: 'boring-stack/pages' },
         { text: 'Layouts', link: 'boring-stack/layouts' },
+        {
+          text: 'Server-side rendering',
+          link: 'boring-stack/server-side-rendering'
+        },
         { text: 'Redirects', link: 'boring-stack/redirects' },
         { text: 'Validation', link: 'boring-stack/validation' },
         { text: 'Flash messages', link: 'boring-stack/flash-messages' }
