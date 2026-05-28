@@ -35,7 +35,68 @@ module.exports.inertia = {
 }
 ```
 
-When your app has `assets/js/ssr.js`, `rsbuild-plugin-inertia` builds the server bundle automatically. Sails reads the bundle from `.tmp/ssr/inertia.mjs`.
+When your app has `assets/js/ssr.js`, `rsbuild-plugin-inertia` builds the server bundle automatically. Sails reads the compiled bundle from `.tmp/ssr/inertia.mjs`. You write `assets/js/ssr.js`; Shipwright writes `.tmp/ssr/inertia.mjs`.
+
+## SSR Entry Point
+
+The SSR entry point is framework-specific because it uses the server renderer instead of mounting into the browser DOM.
+
+::: code-group
+
+```js [Vue]
+// assets/js/ssr.js
+import { createSSRApp, h } from 'vue'
+import { renderToString } from 'vue/server-renderer'
+import { createInertiaApp } from '@inertiajs/vue3'
+
+export default function render(page) {
+  return createInertiaApp({
+    page,
+    render: renderToString,
+    resolve: (name) => require(`./pages/${name}`),
+    setup({ App, props, plugin }) {
+      return createSSRApp({ render: () => h(App, props) }).use(plugin)
+    }
+  })
+}
+```
+
+```jsx [React]
+// assets/js/ssr.js
+import { createInertiaApp } from '@inertiajs/react'
+import ReactDOMServer from 'react-dom/server'
+
+export default function render(page) {
+  return createInertiaApp({
+    page,
+    render: ReactDOMServer.renderToString,
+    resolve: (name) => require(`./pages/${name}`),
+    setup({ App, props }) {
+      return <App {...props} />
+    }
+  })
+}
+```
+
+```js [Svelte]
+// assets/js/ssr.js
+import { createInertiaApp } from '@inertiajs/svelte'
+import { render } from 'svelte/server'
+
+export default function ssrRender(page) {
+  return createInertiaApp({
+    page,
+    resolve: (name) => require(`./pages/${name}`),
+    setup({ App, props }) {
+      return render(App, { props })
+    }
+  })
+}
+```
+
+:::
+
+This separate entry keeps browser-only setup such as `document`, `window`, client-only plugins, and `mount()` calls out of the server bundle.
 
 ## Render Selected Pages
 

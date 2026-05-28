@@ -78,6 +78,65 @@ Start with public pages first. SSR is powerful, but it moves rendering work onto
 
 ## Enable SSR For Every Inertia Page
 
+First add an SSR source entry for your framework. Shipwright compiles this file into `.tmp/ssr/inertia.mjs`, which is the private bundle Sails imports at runtime.
+
+::: code-group
+
+```js [Vue]
+// assets/js/ssr.js
+import { createSSRApp, h } from 'vue'
+import { renderToString } from 'vue/server-renderer'
+import { createInertiaApp } from '@inertiajs/vue3'
+
+export default function render(page) {
+  return createInertiaApp({
+    page,
+    render: renderToString,
+    resolve: (name) => require(`./pages/${name}`),
+    setup({ App, props, plugin }) {
+      return createSSRApp({ render: () => h(App, props) }).use(plugin)
+    }
+  })
+}
+```
+
+```jsx [React]
+// assets/js/ssr.js
+import { createInertiaApp } from '@inertiajs/react'
+import ReactDOMServer from 'react-dom/server'
+
+export default function render(page) {
+  return createInertiaApp({
+    page,
+    render: ReactDOMServer.renderToString,
+    resolve: (name) => require(`./pages/${name}`),
+    setup({ App, props }) {
+      return <App {...props} />
+    }
+  })
+}
+```
+
+```js [Svelte]
+// assets/js/ssr.js
+import { createInertiaApp } from '@inertiajs/svelte'
+import { render } from 'svelte/server'
+
+export default function ssrRender(page) {
+  return createInertiaApp({
+    page,
+    resolve: (name) => require(`./pages/${name}`),
+    setup({ App, props }) {
+      return render(App, { props })
+    }
+  })
+}
+```
+
+:::
+
+The SSR entry is separate from `assets/js/app.js` because it uses the framework server renderer instead of mounting into the browser DOM.
+
 ```js
 // config/inertia.js
 module.exports.inertia = {

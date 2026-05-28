@@ -115,16 +115,32 @@ module.exports = {
 
 ## Behavior by environment
 
-| Environment | Inertia request                            | Non-Inertia request             |
-| ----------- | ------------------------------------------ | ------------------------------- |
-| Development | Youch inside the Inertia development modal | Full Youch HTML page            |
-| Production  | Inertia `error` page for configured status | Sails status view or JSON error |
+| Environment | Inertia request                            | Non-Inertia request                                      |
+| ----------- | ------------------------------------------ | -------------------------------------------------------- |
+| Development | Youch inside the Inertia development modal | Full Youch HTML page                                     |
+| Production  | Inertia `error` page for configured status | Inertia `error` page when configured, otherwise EJS/JSON |
 
 ## Hybrid apps and Sails error pages
 
 Boring Stack apps can be hybrid: some routes return Inertia pages and other routes still render traditional Sails/EJS views. Keep the normal Sails `404.ejs` and `500.ejs` pages for non-Inertia requests. They are still the right fallback for direct browser visits, server-rendered EJS routes, crawlers, and any page that is not controlled by the Inertia client.
 
-Only add Inertia-aware `notFound` or `forbidden` responses when you specifically want an Inertia request to stay inside the app shell and render an error component. A good rule is:
+Only add Inertia-aware `notFound` or `forbidden` responses when you specifically want Sails responses to render through the Inertia status-page policy. If `errorPage` is configured, full-page browser requests can render the Inertia error component too. If your app wants EJS for non-Inertia requests and Inertia error pages only for `X-Inertia` requests, branch in your custom response:
+
+```js
+// api/responses/notFound.js
+module.exports = function notFound(error) {
+  if (this.req.header('X-Inertia')) {
+    return this.req._sails.inertia.handleErrorPage(this.req, this.res, {
+      statusCode: 404,
+      error
+    })
+  }
+
+  return this.res.status(404).view('404', { error })
+}
+```
+
+A good rule is:
 
 - non-Inertia request: use the Sails/EJS response
 - Inertia request: either redirect/flash, show the development error modal, or render an Inertia error page if the app has one
