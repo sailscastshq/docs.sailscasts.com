@@ -6,7 +6,7 @@ editLink: true
 
 # Basic Usage
 
-Basic usage of captain-vane is to generate a factory file and use the ` vane`` helper provided by  `captain-vane`` to create records using the generated factory and model definition.
+Basic usage of captain-vane is to generate a factory file and use the `vane` helper provided by `captain-vane` to create records using the generated factory and model definition.
 
 Let's say you have a user model in your Sails application with the following definition:
 

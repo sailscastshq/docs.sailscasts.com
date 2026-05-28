@@ -119,6 +119,42 @@ props: {
 
 All props in the `'dashboard'` group load together.
 
+## Rescuing Deferred Props
+
+Use `rescue()` for non-critical deferred props that should fail gracefully:
+
+```js
+props: {
+  analytics: sails.inertia
+    .defer(async () => {
+      return await Analytics.getExpensiveReport()
+    })
+    .rescue()
+}
+```
+
+When the callback throws, inertia-sails omits `analytics` from `props` and
+adds it to the page object's `rescuedProps` metadata. The Inertia client uses
+that metadata to render the `rescue` slot on the `<Deferred>` component.
+
+```vue
+<Deferred data="analytics">
+  <template #fallback>
+    <div>Loading analytics...</div>
+  </template>
+
+  <template #rescue>
+    <div>Analytics are unavailable right now.</div>
+  </template>
+
+  <AnalyticsPanel :analytics="analytics" />
+</Deferred>
+```
+
+Keep rescue opt-in. Use it for secondary panels like analytics, suggestions,
+notifications, or activity feeds where the page is still useful without the
+deferred data. Critical page data should continue to fail loudly.
+
 ## Use Cases
 
 ### Dashboard Analytics

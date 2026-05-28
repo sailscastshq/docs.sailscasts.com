@@ -102,6 +102,41 @@ In the example above, the `teams`, `projects`, and `tasks` props are grouped tog
 
 You can use any arbitrary string as a group name to organize your deferred props as needed.
 
+## Rescuing failed deferred props
+
+Use `rescue()` for deferred props that improve the page but should not take the
+whole page down when their callback fails.
+
+```js
+const permissions = sails.inertia
+  .defer(async () => {
+    return await Permission.find()
+  })
+  .rescue()
+```
+
+When a rescued deferred prop throws, inertia-sails leaves the prop out of
+`props` and includes its key in `rescuedProps`. Inertia's `<Deferred>`
+component can then render a `rescue` slot.
+
+```vue
+<Deferred data="permissions">
+  <template #fallback>
+    <div>Loading permissions...</div>
+  </template>
+
+  <template #rescue>
+    <div>Permissions are unavailable right now.</div>
+  </template>
+
+  <PermissionsList :permissions="permissions" />
+</Deferred>
+```
+
+Keep rescue for non-critical data like analytics, recommendations,
+notifications, activity feeds, and other secondary panels. If the page cannot
+work without the data, leave rescue off so the error remains visible.
+
 ## Client side
 
 On the client side, Inertia.js offers a `Deferred` component to handle deferred props seamlessly.

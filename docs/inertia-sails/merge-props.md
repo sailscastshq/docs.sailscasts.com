@@ -11,27 +11,81 @@ next:
 
 # Merge Props
 
-Merge props combine new data with existing client-side data instead of replacing it. This is useful for features like infinite scroll or updating nested objects.
+Merge props combine new data with existing client-side data instead of replacing it. This is useful for features like load-more lists, infinite scroll, chat messages, notifications, and updating nested objects.
+
+Prop merging only applies during Inertia visits and partial reloads. Full page visits replace the page props entirely.
 
 ## Shallow Merge
 
-Use `sails.inertia.merge()` for shallow merging:
+Use `sails.inertia.merge()` for shallow merging. By default, arrays are appended at the prop root:
 
 ```js
 messages: sails.inertia.merge(() => newMessages)
 ```
 
-New items are appended to the existing array.
+## Append and Prepend
+
+Use `.append()` or `.prepend()` when you need to control where new items go:
+
+```js
+// Append at the root level
+messages: sails.inertia.merge(() => olderMessages).append()
+
+// Prepend at the root level
+notifications: sails.inertia.merge(() => newestNotifications).prepend()
+```
+
+You can also target nested arrays while replacing the rest of the object. This is the common shape for paginated data:
+
+```js
+users: sails.inertia.merge(() => paginatedUsers).append('data')
+```
+
+Target several nested arrays by passing an array or object:
+
+```js
+dashboard: sails.inertia
+  .merge(() => dashboardData)
+  .append(['activities', 'notifications'])
+  .prepend('announcements')
+```
+
+## Matching Items
+
+When items have stable IDs, use `matchOn` so Inertia updates existing items instead of appending duplicates:
+
+```js
+users: sails.inertia
+  .merge(() => paginatedUsers)
+  .append('data', {
+    matchOn: 'id'
+  })
+```
+
+For several nested arrays, pass a path-to-field map:
+
+```js
+dashboard: sails.inertia
+  .merge(() => dashboardData)
+  .append({
+    'users.data': 'id',
+    messages: 'uuid'
+  })
+```
 
 ## Deep Merge
 
-Use `sails.inertia.deepMerge()` for nested objects:
+Use `sails.inertia.deepMerge()` when the entire nested object should be recursively merged:
 
 ```js
 settings: sails.inertia.deepMerge(() => updatedSettings)
 ```
 
-Nested properties are merged recursively.
+For nested arrays inside a deep merge, add `.matchOn()`:
+
+```js
+chat: sails.inertia.deepMerge(() => chatState).matchOn('messages.id')
+```
 
 ## Example: Chat Messages
 
@@ -56,8 +110,8 @@ module.exports = {
     return {
       page: 'chat/index',
       props: {
-        // Merge with existing messages instead of replacing
-        messages: sails.inertia.merge(() => messages)
+        // Prepend older messages above the existing list
+        messages: sails.inertia.merge(() => messages).prepend()
       }
     }
   }
@@ -122,3 +176,14 @@ defineProps({
 ```
 
 For comprehensive infinite scroll with pagination metadata, see [Infinite Scroll](/inertia-sails/infinite-scroll).
+
+## Resetting Props
+
+When filters change, ask Inertia to reset the merged prop before loading the next payload:
+
+```js
+router.reload({
+  only: ['users'],
+  reset: ['users']
+})
+```

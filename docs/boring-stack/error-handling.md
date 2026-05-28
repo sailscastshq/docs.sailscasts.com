@@ -120,6 +120,17 @@ module.exports = {
 | Development | Youch inside the Inertia development modal | Full Youch HTML page            |
 | Production  | Inertia `error` page for configured status | Sails status view or JSON error |
 
+## Hybrid apps and Sails error pages
+
+Boring Stack apps can be hybrid: some routes return Inertia pages and other routes still render traditional Sails/EJS views. Keep the normal Sails `404.ejs` and `500.ejs` pages for non-Inertia requests. They are still the right fallback for direct browser visits, server-rendered EJS routes, crawlers, and any page that is not controlled by the Inertia client.
+
+Only add Inertia-aware `notFound` or `forbidden` responses when you specifically want an Inertia request to stay inside the app shell and render an error component. A good rule is:
+
+- non-Inertia request: use the Sails/EJS response
+- Inertia request: either redirect/flash, show the development error modal, or render an Inertia error page if the app has one
+
+Do not replace Sails' built-in error handling globally unless every route in the app is truly Inertia-only.
+
 ## Custom responses
 
 The Boring Stack templates include `notFound` and `forbidden` responses that route production-friendly statuses through the Inertia error page:
