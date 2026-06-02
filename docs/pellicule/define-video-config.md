@@ -133,7 +133,7 @@ defineVideoConfig({
 The audio path is resolved relative to the component file. Supported formats include MP3, WAV, AAC, and any format FFmpeg supports.
 
 ::: tip
-Audio does not affect video duration. If audio is shorter, it ends early. If longer, it's truncated to match the video length.
+By default, audio does not affect video duration. If you want the soundtrack to define total length, render with `-A` / `--duration-from-audio`. Audio that is still shorter than the final video ends early; audio that is longer is truncated to match the resolved duration.
 :::
 
 ## How It Works
@@ -214,4 +214,15 @@ defineVideoConfig({
 </script>
 ```
 
-Use `durationInSeconds` instead of computing frames manually.
+Use `durationInSeconds` instead of computing frames manually inside the macro payload.
+
+For timing logic in your component code, use Pellicule's timing helpers instead:
+
+```vue
+<script setup>
+import { secondsToFrames, useVideoConfig } from 'pellicule'
+
+const { fps } = useVideoConfig()
+const lyricStart = secondsToFrames(3.5, fps)
+</script>
+```

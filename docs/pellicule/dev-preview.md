@@ -31,19 +31,34 @@ npx pellicule dev MyVideo
 npx pellicule dev MyVideo -w 1280 -h 720
 ```
 
-All standard [CLI options](/pellicule/cli) work with `pellicule dev` — resolution, fps, duration, bundler, server-url, etc.
+All standard [CLI options](/pellicule/cli) work with `pellicule dev` — resolution, fps, duration, audio, `-A`, bundler, server-url, etc.
 
 ## Preview Controls
 
 The preview overlay appears at the bottom of the browser window with playback controls:
 
-| Control               | Action                       |
-| --------------------- | ---------------------------- |
-| Play / Pause button   | Start or stop auto-playback  |
-| Previous frame button | Step back one frame          |
-| Next frame button     | Step forward one frame       |
-| Timeline scrubber     | Seek to any frame            |
-| Frame counter         | Shows current frame and time |
+| Control               | Action                                 |
+| --------------------- | -------------------------------------- |
+| Play / Pause button   | Start or stop auto-playback            |
+| Previous frame button | Step back one frame                    |
+| Next frame button     | Step forward one frame                 |
+| Timeline scrubber     | Seek to any frame                      |
+| Frame counter         | Shows current frame and time           |
+| Audio sync badge      | Appears when preview audio is attached |
+
+## Audio-Aware Preview
+
+If your video has an audio track, `pellicule dev` keeps the soundtrack in sync with the overlay controls:
+
+```bash
+# Use the component's audio path
+npx pellicule dev Karaoke
+
+# Or pass audio explicitly and let it define the total duration
+npx pellicule dev Karaoke --audio ./song.wav -A
+```
+
+When audio is present, play, pause, frame stepping, and scrubbing all keep the hidden preview audio element aligned with the current frame. This makes lyric, caption, and soundtrack timing much easier to tune before you render.
 
 ### Keyboard Shortcuts
 

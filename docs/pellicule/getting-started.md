@@ -118,6 +118,9 @@ npx pellicule -f 60
 
 # Partial render for faster iteration
 npx pellicule -d 150 -r 0:30
+
+# Sync the total duration to a soundtrack
+npx pellicule --audio ./song.wav -A
 ```
 
 ## Adding to an Existing Project
@@ -137,6 +140,8 @@ npx pellicule Video.vue
 Pellicule auto-detects your project type and reads your existing config. No extra configuration needed — if you have a `vite.config.js`, `config/shipwright.js`, or `nuxt.config.ts`, Pellicule picks it up automatically. Your aliases and plugins just work.
 
 See [Integrations](/pellicule/integrations) for framework-specific guides.
+
+If you're working against music, voiceover, or subtitles, reach for `npx pellicule dev` early. The preview overlay now keeps audio, playback, stepping, and scrubbing in sync so you can tune timing before rendering the final video.
 
 ## Next Steps
 
