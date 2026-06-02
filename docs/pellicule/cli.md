@@ -28,24 +28,25 @@ Pellicule also checks your project's default video directory based on the detect
 
 ## Options
 
-| Option         | Short | Default        | Description                                      |
-| -------------- | ----- | -------------- | ------------------------------------------------ |
-| `--output`     | `-o`  | `./output.mp4` | Output file path                                 |
-| `--preset`     |       | `mp4`          | Output preset (`mp4` or `webm`)                  |
-| `--quality`    |       | `standard`     | Output quality (`draft`, `standard`, or `high`)  |
-| `--duration`   | `-d`  | `90`           | Duration in frames                               |
-| `--fps`        | `-f`  | `30`           | Frames per second                                |
-| `--width`      | `-w`  | `1920`         | Video width in pixels                            |
-| `--height`     | `-h`  | `1080`         | Video height in pixels                           |
-| `--range`      | `-r`  |                | Frame range to render (start:end)                |
-| `--audio`      | `-a`  |                | Audio file to include (mp3, wav, etc.)           |
-| `--server-url` |       |                | Use a running dev server instead of starting one |
-| `--bundler`    |       |                | Force a specific bundler (`vite` or `rsbuild`)   |
-| `--config`     |       |                | Path to a specific config file                   |
-| `--videos-dir` |       |                | Override the default video directory             |
-| `--out-dir`    |       |                | Directory for rendered video output              |
-| `--help`       |       |                | Show help message                                |
-| `--version`    |       |                | Show version number                              |
+| Option                  | Short | Default        | Description                                      |
+| ----------------------- | ----- | -------------- | ------------------------------------------------ |
+| `--output`              | `-o`  | `./output.mp4` | Output file path                                 |
+| `--preset`              |       | `mp4`          | Output preset (`mp4` or `webm`)                  |
+| `--quality`             |       | `standard`     | Output quality (`draft`, `standard`, or `high`)  |
+| `--duration`            | `-d`  | `90`           | Duration in frames                               |
+| `--duration-from-audio` | `-A`  |                | Use the audio file length as total duration      |
+| `--fps`                 | `-f`  | `30`           | Frames per second                                |
+| `--width`               | `-w`  | `1920`         | Video width in pixels                            |
+| `--height`              | `-h`  | `1080`         | Video height in pixels                           |
+| `--range`               | `-r`  |                | Frame range to render (start:end)                |
+| `--audio`               | `-a`  |                | Audio file to include (mp3, wav, etc.)           |
+| `--server-url`          |       |                | Use a running dev server instead of starting one |
+| `--bundler`             |       |                | Force a specific bundler (`vite` or `rsbuild`)   |
+| `--config`              |       |                | Path to a specific config file                   |
+| `--videos-dir`          |       |                | Override the default video directory             |
+| `--out-dir`             |       |                | Directory for rendered video output              |
+| `--help`                |       |                | Show help message                                |
+| `--version`             |       |                | Show version number                              |
 
 ### Project Config (package.json)
 
@@ -154,6 +155,15 @@ npx pellicule Video -d 600 -f 60
 | 30s     | 900   | 1800  |
 | 60s     | 1800  | 3600  |
 
+If you already have a soundtrack, Pellicule can do this math for you:
+
+```bash
+# Probe the audio file and derive the total frame count from it
+npx pellicule Video -a narration.wav -A
+```
+
+Pellicule converts the probed audio duration into frames using the active fps. For example, a 4.25 second track at 30fps becomes 128 frames.
+
 ### Resolution
 
 ```bash
@@ -218,6 +228,9 @@ Add background music or sound effects to your video with the `--audio` flag:
 # Add background music
 npx pellicule Video -a background.mp3
 
+# Let the soundtrack define total duration
+npx pellicule Video -a background.mp3 -A
+
 # With other options
 npx pellicule Video -o intro.mp4 --audio music.wav
 ```
@@ -226,7 +239,9 @@ Supported formats include MP3, WAV, AAC, and any format FFmpeg supports. The aud
 
 #### Audio Behavior
 
-- **Video duration is the source of truth** — audio does not affect video length
+- **By default, video duration is the source of truth** — audio does not affect video length
+- Add `-A` or `--duration-from-audio` to probe the audio file and derive the total duration from it
+- `-d` and `-A` are mutually exclusive — pick one duration source
 - If audio is **shorter** than video: audio ends, video continues (silent for remainder)
 - If audio is **longer** than video: audio is truncated to match video duration
 
