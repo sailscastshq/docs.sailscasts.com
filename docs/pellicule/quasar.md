@@ -36,6 +36,20 @@ globals: {
 }
 ```
 
+If your editor or linter prefers an explicit symbol, you can also import the macro directly:
+
+```vue
+<script setup>
+import { defineVideoConfig } from 'pellicule'
+
+defineVideoConfig({
+  durationInSeconds: 4
+})
+</script>
+```
+
+That import is optional. Pellicule strips the macro during compilation either way.
+
 ### 4. Start Your Dev Server and Render
 
 ```bash
@@ -161,7 +175,7 @@ When you run `pellicule ProductShowcase`:
 2. It constructs the URL `http://localhost:9000/pellicule?component=ProductShowcase&fps=30&duration=120&width=1920&height=1080`
 3. The `/pellicule` page (served by the Vite plugin) creates a Vue app with Quasar installed, dynamically imports your video component, and sets up Pellicule's frame injection
 4. Playwright screenshots each frame, advancing the frame counter between shots
-5. Frames are encoded to MP4 with FFmpeg
+5. Frames are encoded with FFmpeg into the selected output format (`mp4` by default)
 
 ## Webpack Mode
 

@@ -9,7 +9,7 @@ next:
 
 # CLI Reference
 
-The Pellicule CLI is the primary way to render videos. It takes a Vue component and outputs an MP4 file.
+The Pellicule CLI is the primary way to render videos. It takes a Vue component and outputs a video file (`mp4` by default).
 
 ## Basic Usage
 
@@ -31,6 +31,8 @@ Pellicule also checks your project's default video directory based on the detect
 | Option         | Short | Default        | Description                                      |
 | -------------- | ----- | -------------- | ------------------------------------------------ |
 | `--output`     | `-o`  | `./output.mp4` | Output file path                                 |
+| `--preset`     |       | `mp4`          | Output preset (`mp4` or `webm`)                  |
+| `--quality`    |       | `standard`     | Output quality (`draft`, `standard`, or `high`)  |
 | `--duration`   | `-d`  | `90`           | Duration in frames                               |
 | `--fps`        | `-f`  | `30`           | Frames per second                                |
 | `--width`      | `-w`  | `1920`         | Video width in pixels                            |
@@ -67,7 +69,7 @@ Instead of passing integration flags on every command, set them once in your `pa
 | `outDir`    | string | Directory for rendered video output (relative path)   |
 | `bundler`   | string | Force `vite` or `rsbuild`                             |
 
-When `outDir` is set and no `-o` flag is passed, the output filename is derived from the component name. For example, `pellicule InvoiceDemo` with `outDir` set to `./renders` writes to `./renders/InvoiceDemo.mp4`.
+When `outDir` is set and no `-o` flag is passed, the output filename is derived from the component name. For example, `pellicule InvoiceDemo` with `outDir` set to `./renders` writes to `./renders/InvoiceDemo.mp4` by default, or `./renders/InvoiceDemo.webm` when you use `--preset webm`.
 
 Resolution order: **CLI flags > package.json > auto-detected > defaults**.
 
@@ -97,14 +99,33 @@ pellicule InvoiceDemo --videos-dir ./my/videos
 npx pellicule Video
 ```
 
-Renders `Video.vue` to `output.mp4` at 1920×1080, 30fps, for 90 frames (3 seconds).
+Renders `Video.vue` to `output.mp4` by default at 1920×1080, 30fps, for 90 frames (3 seconds).
 
 ### Custom Output Path
 
 ```bash
 npx pellicule Video -o intro.mp4
-npx pellicule Video --output ./renders/my-video.mp4
+npx pellicule Video -o intro        # resolves to intro.mp4 by default
+npx pellicule Video --output ./renders/my-video.webm --preset webm
 ```
+
+### Output Presets and Quality
+
+```bash
+# Default MP4 output (H.264 + AAC)
+npx pellicule Video
+
+# WebM output (VP9 + Opus)
+npx pellicule Video --preset webm
+
+# Higher-quality MP4
+npx pellicule Video --quality high
+
+# Faster draft encode
+npx pellicule Video --quality draft
+```
+
+Pellicule keeps the zero-config path simple: if you do nothing, you still get a web-friendly MP4. Use `--preset` when you need a different delivery target, and `--quality` when you want to trade encode speed for file size and fidelity.
 
 ### Duration
 
@@ -201,7 +222,7 @@ npx pellicule Video -a background.mp3
 npx pellicule Video -o intro.mp4 --audio music.wav
 ```
 
-Supported formats include MP3, WAV, AAC, and any format FFmpeg supports. The audio is re-encoded to AAC for universal MP4 compatibility.
+Supported formats include MP3, WAV, AAC, and any format FFmpeg supports. The audio is re-encoded to match the selected preset (`aac` for `mp4`, `libopus` for `webm`).
 
 #### Audio Behavior
 
@@ -226,7 +247,7 @@ The path is resolved relative to the component file. CLI flags override componen
 
 ### Combined Example
 
-A 10-second 4K video at 60fps for YouTube:
+A 10-second 4K MP4 at 60fps for YouTube:
 
 ```bash
 npx pellicule Video \
@@ -246,6 +267,8 @@ While rendering, Pellicule shows a progress bar:
 
   Input      Video.vue
   Output     output.mp4
+  Preset     mp4
+  Quality    standard
   Resolution 1920x1080
   Duration   90 frames @ 30fps (3.0s)
   Audio      background.mp3

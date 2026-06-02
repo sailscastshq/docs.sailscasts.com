@@ -33,6 +33,24 @@ npx pellicule Video.vue
 
 That's it! Pellicule reads the duration from your component.
 
+## Optional Import for Editor Support
+
+The macro works without an import, and that is still the default recommendation.
+
+If your editor, linter, or TypeScript-based tooling wants an explicit symbol, you can optionally import it from `pellicule`:
+
+```vue
+<script setup>
+import { defineVideoConfig } from 'pellicule'
+
+defineVideoConfig({
+  durationInSeconds: 5
+})
+</script>
+```
+
+Pellicule strips the macro during compilation either way, so the import is only there to make external editor tooling happier.
+
 ## Why a Macro?
 
 `defineVideoConfig` works like Vue's `defineProps` — it's recognized by the compiler and doesn't exist at runtime. This gives you:

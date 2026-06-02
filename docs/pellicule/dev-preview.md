@@ -125,4 +125,4 @@ The recommended workflow with `pellicule dev` is:
 2. **Edit your component** — modify animations, styles, timing
 3. **Save** — HMR instantly refreshes the preview
 4. **Scrub and play** — use the controls to check different parts of the video
-5. **Render** — when you're happy, run `npx pellicule` to produce the final MP4
+5. **Render** — when you're happy, run `npx pellicule` to produce the final video (`mp4` by default)

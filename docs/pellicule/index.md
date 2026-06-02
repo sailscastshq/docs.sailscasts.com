@@ -2,7 +2,7 @@
 layout: home
 title: Pellicule
 titleTemplate: Deterministic video rendering with Vue
-description: Pellicule is a Vue-native engine for generating videos programmatically. Render Vue components frame-by-frame into production-ready MP4 files.
+description: Pellicule is a Vue-native engine for generating videos programmatically. Render Vue components frame-by-frame into production-ready video files.
 head:
   - - meta
     - property: 'og:image'

@@ -73,7 +73,7 @@ Each frame is captured sequentially. The `useFrame()` composable reads from `win
 
 ### 4. FFmpeg Encoding
 
-All captured frames are piped directly to FFmpeg, which encodes them into the final MP4:
+All captured frames are piped directly to FFmpeg, which encodes them into the final output file. By default that is an MP4, but Pellicule can also target WebM via presets:
 
 ```bash
 ffmpeg -framerate 30 -f image2pipe -i - -c:v libx264 -pix_fmt yuv420p output.mp4
@@ -165,11 +165,12 @@ Pellicule accepts `.vue` single-file components:
 ```bash
 npx pellicule Video.vue
 npx pellicule src/intro.vue -o intro.mp4
+npx pellicule src/intro.vue --preset webm -o intro.webm
 ```
 
 ### Output
 
-Currently supports MP4 with H.264 encoding. The output is web-optimized and plays in all modern browsers and video players.
+Pellicule currently supports two built-in output presets: `mp4` (H.264 + AAC) and `webm` (VP9 + Opus). The default remains `mp4` for broad compatibility.
 
 ## Dependencies
 

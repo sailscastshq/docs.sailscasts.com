@@ -21,7 +21,7 @@ Pellicule uses a fundamentally different approach to video creation:
 
 1. **You write a Vue component** — Your video is just a `.vue` file with a `frame` prop
 2. **Pellicule renders each frame** — It sets `frame` to 0, captures a screenshot, sets it to 1, captures again, and so on
-3. **FFmpeg encodes the video** — All those frames become an MP4 file
+3. **FFmpeg encodes the video** — All those frames become a video file (`mp4` by default)
 
 ```vue
 <script setup>
