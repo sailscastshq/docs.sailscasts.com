@@ -57,6 +57,20 @@ globals: {
 }
 ```
 
+If your editor or linter prefers an explicit symbol, you can also import the macro directly:
+
+```vue
+<script setup>
+import { defineVideoConfig } from 'pellicule'
+
+defineVideoConfig({
+  durationInSeconds: 5
+})
+</script>
+```
+
+That import is optional. Pellicule strips the macro during compilation either way.
+
 ### 3. Start Your Dev Server and Render
 
 ```bash
@@ -214,4 +228,4 @@ When you run `pellicule AppDemo`:
 3. The `/pellicule` page (injected by the module) loads `AppDemo.vue` from your `app/videos/` directory
 4. The page sets up Pellicule's frame injection (`useFrame`, `useVideoConfig`) and signals readiness
 5. Playwright screenshots each frame, advancing the frame counter between shots
-6. Frames are encoded to MP4 with FFmpeg
+6. Frames are encoded with FFmpeg into the selected output format (`mp4` by default)

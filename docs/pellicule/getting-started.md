@@ -44,7 +44,7 @@ That's it! Pellicule will:
 
 1. Start a dev server with your component
 2. Render 90 frames (3 seconds at 30fps)
-3. Encode them into `output.mp4`
+3. Encode them into `output.mp4` by default
 
 ## What's in Video.vue?
 
@@ -100,6 +100,12 @@ Key points:
 ```bash
 # Custom output filename
 npx pellicule -o intro.mp4
+
+# WebM output
+npx pellicule --preset webm
+
+# Higher-quality MP4
+npx pellicule --quality high
 
 # 5 seconds at 30fps (150 frames)
 npx pellicule -d 150

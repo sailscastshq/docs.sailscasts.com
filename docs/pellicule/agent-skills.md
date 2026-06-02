@@ -40,7 +40,7 @@ After installing, simply ask your AI assistant to create a video:
 The AI will:
 
 1. Write a Vue component with proper Pellicule animations
-2. Render it to MP4 using `npx pellicule`
+2. Render it with `npx pellicule`
 
 ## Source
 
