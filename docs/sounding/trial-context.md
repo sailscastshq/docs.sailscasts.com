@@ -75,6 +75,8 @@ It covers:
 - Inertia assertions like `toBeInertiaPage()` and `toHaveProp()`
 - Playwright assertions when the trial is browser-capable
 
+Failed response assertions include the Sails-shaped context Sounding has available: request method, target, transport, response status, headers, and a body excerpt. For the full response body while debugging, run with `SOUNDING_DIAGNOSTICS=verbose`.
+
 ### `request`
 
 The scoped request client for the current trial.

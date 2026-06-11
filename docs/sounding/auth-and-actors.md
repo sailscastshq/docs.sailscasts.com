@@ -88,6 +88,8 @@ Useful details:
 - if you pass an email address, Sounding will resolve or create that actor as needed
 - the default browser login path currently uses a magic-link flow under the hood
 
+If an actor alias cannot be resolved, Sounding lists the actor names available in the current world. That makes typo-level failures point back to product language instead of leaving you to inspect the scenario by hand.
+
 ## `login.withPassword(actorOrEmail, page, options)`
 
 For apps that use real password login forms, Sounding should let the browser follow that flow instead of faking session state.
@@ -134,6 +136,8 @@ Use this when you need a real actor record and want Sounding to resolve either:
 - a world actor name
 - a user or creator object
 - an email address
+
+When a world actor name is missing, the error includes the available aliases from common actor collections such as `users` and `creators`.
 
 ### `auth.issueMagicLink()`
 

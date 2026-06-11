@@ -167,6 +167,13 @@ The rule is simple:
 
 If the name does not tell you what business situation exists, it is probably not a good scenario name.
 
+When a factory, trait, or scenario name is wrong, Sounding lists the available names in the failure. This keeps world failures close to the suite vocabulary:
+
+```txt
+Unknown Sounding scenario: missing-dashboard.
+Available scenarios: issue-access, publisher-editor
+```
+
 ## A world should expose readable handles
 
 ```js
