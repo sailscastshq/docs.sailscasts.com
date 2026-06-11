@@ -23,13 +23,63 @@ import { test } from 'sounding'
 test('magic link sends a usable email', async ({ sails, auth, expect }) => {
   await auth.requestMagicLink('reader@example.com')
 
-  const email = sails.sounding.mailbox.latest()
-
-  expect(email.to).toContain('reader@example.com')
-  expect(email.subject).toContain('Sign in')
-  expect(email.html).toContain('/magic-link/')
+  expect(sails.sounding.mailbox).toHaveSentCount(1)
+  expect(sails.sounding.mailbox).toHaveSentMail({
+    to: 'reader@example.com',
+    subject: /sign in/i,
+    template: 'email-magic-link'
+  })
+  expect(sails.sounding.mailbox.latest()).toHaveCtaUrl(/magic-link/)
 })
 ```
+
+Password reset flows follow the same shape:
+
+```js
+import { test } from 'sounding'
+
+test('password reset sends a reset link', async ({
+  request,
+  sails,
+  expect
+}) => {
+  await request.post('/forgot-password', {
+    email: 'reader@example.com'
+  })
+
+  expect(sails.sounding.mailbox).toHaveSentMail({
+    to: 'reader@example.com',
+    subject: /reset/i,
+    template: 'reset-password'
+  })
+  expect(sails.sounding.mailbox.latest()).toHaveCtaUrl(/reset-password/)
+})
+```
+
+## Mail assertions
+
+Use the mailbox-level matchers when you care that a trial sent a matching email:
+
+- `expect(sails.sounding.mailbox).toHaveSentCount(count)`
+- `expect(sails.sounding.mailbox).toHaveSentMail(criteria)`
+- `expect(sails.sounding.mailbox).not.toHaveSentMail(criteria)`
+
+Use message-level matchers when you want to inspect one captured email:
+
+- `expect(sails.sounding.mailbox.latest()).toHaveCtaUrl(expected)`
+- `expect(sails.sounding.mailbox.latest()).not.toHaveCtaUrl(expected)`
+
+`criteria` can match normalized captured fields such as `to`, `cc`, `bcc`, `subject`, `template`, `templateData`, `status`, `ctaUrl`, `links`, `attachments`, and `error`. Recipient fields are stored as arrays, but matching a single recipient string works:
+
+```js
+expect(sails.sounding.mailbox).toHaveSentMail({
+  to: 'reader@example.com',
+  subject: /invite/i,
+  attachments: [{ filename: 'receipt.pdf' }]
+})
+```
+
+When a mail assertion fails, Sounding shows a summary of the captured messages so you can see what was actually sent.
 
 ## What the mailbox gives you
 
