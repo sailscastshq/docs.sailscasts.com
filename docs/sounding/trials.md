@@ -30,6 +30,38 @@ test('guest is redirected from dashboard', async ({ get, expect }) => {
 })
 ```
 
+## Call signatures
+
+Executable trials use one of these forms:
+
+```js
+test(name, handler)
+test(name, options, handler)
+test.only(name, handler)
+test.only(name, options, handler)
+```
+
+`name` should be a non-empty behavior name, `options` should be an object, and `handler` should be the function that receives the trial context.
+
+Sounding-specific options include:
+
+```js
+test('csrf flow uses real HTTP', { transport: 'http' }, async ({ get }) => {
+  await get('/signup')
+})
+
+test('subscriber can finish the issue', { browser: true }, async ({ page }) => {
+  await page.goto('/i/the-nerve-to-build')
+})
+```
+
+Non-executable planning forms still follow Node's test runner:
+
+```js
+test.skip(name)
+test.todo(name)
+```
+
 ## What makes a good trial
 
 A good trial is:
