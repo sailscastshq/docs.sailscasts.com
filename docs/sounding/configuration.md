@@ -250,6 +250,18 @@ Most Sounding trials should still be written in terms of:
 
 not raw adapter details.
 
+## Diagnostics
+
+Sounding keeps failure diagnostics concise by default. Response assertion failures show the request, response status, key headers, and a short body excerpt.
+
+When a failing response needs more inspection, set:
+
+```sh
+SOUNDING_DIAGNOSTICS=verbose npm test
+```
+
+That expands response excerpts in assertion failures without changing `config/sounding.js`.
+
 ## `sockets`
 
 The `sockets` section configures Sounding's Sails websocket helpers.

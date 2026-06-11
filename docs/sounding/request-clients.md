@@ -49,6 +49,36 @@ The request client exposes:
 - `using(transport)`
 - `as(actor)`
 
+## Failure diagnostics
+
+When a response assertion fails, Sounding includes the request and response context that usually explains what happened.
+
+```js
+const response = await request.get('/health')
+
+expect(response).toHaveStatus(200)
+```
+
+If the app returned `500`, the failure includes a compact diagnostic block:
+
+```txt
+Expected response status 200, received 500.
+
+Sounding response diagnostics:
+- Request: GET /health (virtual)
+- Response: 500 Server Error
+- Headers: content-type: application/json, x-request-id: req_123
+- Body: {"message":"Database unavailable","detail":"Connection pool exhausted"}
+```
+
+The same response diagnostics are used by request, visit, Inertia, validation, and socket request assertions when the response shape is available.
+
+By default, Sounding keeps the body excerpt concise. When you need the full response body while debugging a failure, run the trial with:
+
+```sh
+SOUNDING_DIAGNOSTICS=verbose npm test
+```
+
 ## `withHeaders()`
 
 `withHeaders()` returns a new scoped client with default headers applied.
