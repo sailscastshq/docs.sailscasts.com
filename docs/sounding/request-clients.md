@@ -75,6 +75,36 @@ This is especially useful in virtual request trials where session state is part 
 
 Like `withHeaders()`, it returns a new scoped client instead of mutating the original one.
 
+## Inspecting virtual session state
+
+Virtual request responses expose the final `req.session` snapshot as `response.session`.
+
+```js
+const response = await request.post('/login', {
+  email: 'ada@example.com',
+  password: 'secret123'
+})
+
+expect(response.session.userId).toBe(user.id)
+expect(response.session.returnTo).toBe('/dashboard')
+```
+
+This is useful for request-level auth flows where the important behavior is stored in session before the next redirect or page visit.
+
+`response.session` is a snapshot taken after the route handler finishes. Later requests on the same client can keep mutating the shared virtual session, but earlier response snapshots do not change.
+
+For example:
+
+```js
+const login = await request.post('/login', credentials)
+const logout = await request.post('/logout')
+
+expect(login.session.userId).toBe(user.id)
+expect(logout.session.userId).toBeUndefined()
+```
+
+Real HTTP responses leave `response.session` undefined because server-side session state is hidden behind cookies and the app's session store.
+
 ## `using()`
 
 `using()` returns a new scoped client pinned to a transport.

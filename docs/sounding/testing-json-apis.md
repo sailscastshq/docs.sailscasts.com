@@ -101,6 +101,25 @@ test('creator password login redirects to invoices', async ({
 `request.as(actor)` also follows the app's auth conventions, including
 `User` / `userId` and `Creator` / `creatorId`.
 
+Virtual request responses also expose the final `req.session` snapshot. That lets fast request trials prove intermediate auth state without moving the flow into a browser test:
+
+```js
+test('creator password login stores the return URL', async ({
+  auth,
+  expect
+}) => {
+  const result = await auth.request.withPassword('creator@example.com', {
+    password: 'secret123',
+    returnUrl: '/invoices'
+  })
+
+  expect(result.response).toRedirectTo('/invoices')
+  expect(result.response.session.returnUrl).toBe('/invoices')
+})
+```
+
+`response.session` is available for Sounding's virtual transport. If a trial opts into real HTTP, session state remains server-side and `response.session` is undefined.
+
 ## The two request surfaces
 
 Sounding gives you the same request engine in two shapes:
