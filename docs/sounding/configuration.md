@@ -74,6 +74,9 @@ Sounding defaults to:
 - `world.scenarios = 'tests/scenarios'`
 - `mail.capture = true`
 - `request.transport = 'virtual'`
+- `sockets.timeout = 1000`
+- `sockets.transports = ['websocket']`
+- `sockets.path = '/socket.io'`
 - `browser.projects = ['desktop']`
 
 These are the starting defaults for a new Sounding setup.
@@ -246,3 +249,36 @@ Most Sounding trials should still be written in terms of:
 - Playwright flows
 
 not raw adapter details.
+
+## `sockets`
+
+The `sockets` section configures Sounding's Sails websocket helpers.
+
+Most apps do not need to set this manually. Sounding can usually discover the lifted Sails server and connect to the conventional Sails socket path.
+
+```js
+module.exports.sounding = {
+  sockets: {
+    timeout: 1000,
+    transports: ['websocket'],
+    path: '/socket.io'
+  }
+}
+```
+
+Available options:
+
+- `enabled`
+- `timeout`
+- `transports`
+- `path`
+- `baseUrl`
+- `headers`
+- `initialConnectionHeaders`
+
+Use `baseUrl` when Sounding should connect to a socket server that is not the lifted Sails app it can discover automatically.
+
+Use `headers` for headers sent with each Sails socket request.
+Use `initialConnectionHeaders` for headers sent during the Socket.IO handshake, such as cookies or origin-sensitive test headers.
+
+For examples, read [Websocket testing](/sounding/websocket-testing).

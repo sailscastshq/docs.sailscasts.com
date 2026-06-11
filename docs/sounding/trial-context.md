@@ -110,6 +110,19 @@ const page = await visit('/pricing')
 expect(page).toBeInertiaPage('billing/pricing')
 ```
 
+### `sockets`
+
+The Sails websocket testing surface.
+
+Use it when a trial needs real Socket.IO connections, Sails socket requests, room joins, or broadcasts.
+
+```js
+const member = await sockets.connect()
+await member.post('/api/rooms/join', { room: 'arena' })
+```
+
+For the full API, read [Websocket testing](/sounding/websocket-testing).
+
 ### `auth`
 
 Sounding's auth helpers.
@@ -199,6 +212,21 @@ test(
     })
 
     expect(response).toHaveStatus(200)
+  }
+)
+```
+
+### `{ socket: true }`
+
+Lifts the app in socket-capable mode and makes `sockets` useful for real Sails websocket connections.
+
+```js
+test(
+  'room broadcast reaches members',
+  { socket: true },
+  async ({ sockets }) => {
+    const member = await sockets.connect()
+    await member.post('/api/rooms/join', { room: 'arena' })
   }
 )
 ```
