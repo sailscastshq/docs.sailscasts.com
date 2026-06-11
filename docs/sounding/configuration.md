@@ -116,6 +116,43 @@ The `world` section tells Sounding where to find factories and scenarios and how
 
 The `datastore` section tells Sounding how to work with your app's Sails datastore configuration.
 
+Use either the shorthand form:
+
+```js
+module.exports.sounding = {
+  datastore: 'inherit'
+}
+```
+
+or the canonical object form:
+
+```js
+module.exports.sounding = {
+  datastore: {
+    mode: 'managed',
+    identity: 'default',
+    adapter: 'sails-sqlite',
+    root: '.tmp/db',
+    isolation: 'worker'
+  }
+}
+```
+
+Legacy nested managed config is no longer supported:
+
+```js
+// No longer supported.
+module.exports.sounding = {
+  datastore: {
+    managed: {
+      directory: '.tmp/db'
+    }
+  }
+}
+```
+
+Use `mode: 'managed'` and `root` instead of `managed.directory`.
+
 ### `mode`
 
 `mode` controls the relationship between Sounding and your app's test datastore.
