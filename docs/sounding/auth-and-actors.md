@@ -53,6 +53,20 @@ test('subscriber can read the issue', async ({ sails, expect }) => {
 })
 ```
 
+You can also pass the actor alias directly after loading the world:
+
+```js
+test('subscriber can read the issue', async ({ world, request, expect }) => {
+  const current = await world.use('issue-access')
+
+  const response = await request
+    .as('subscriber')
+    .get(`/i/${current.issues.gatedIssue.slug}`)
+
+  expect(response).toHaveStatus(200)
+})
+```
+
 This lets request trials act as an authenticated user without manual session setup.
 
 Sounding resolves common auth conventions such as:
@@ -60,6 +74,14 @@ Sounding resolves common auth conventions such as:
 - `User` with `req.session.userId`
 - `Creator` with `req.session.creatorId`
 - explicit overrides in `config/sounding.js` when an app uses custom naming
+
+`request.as()` also accepts an email address when the configured auth model can resolve an existing actor:
+
+```js
+const response = await request.as('reader@example.com').get('/me')
+```
+
+For Inertia contract tests, `visit.as('subscriber')` applies the same actor resolution before making the visit.
 
 ## `login.as(actorOrEmail, page)`
 
@@ -191,7 +213,7 @@ A common flow is:
 
 1. load a world
 2. pick an actor from the world
-3. use that actor through `request.as()` or `login.as()`
+3. use that actor through `request.as()`, `visit.as()`, or `login.as()`
 
 ```js
 test('publisher can create an issue', async ({ sails, expect }) => {

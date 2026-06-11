@@ -32,6 +32,29 @@ test('pricing page returns the correct component and props', async ({
 })
 ```
 
+## Authenticated visits
+
+Use `visit.as(actor)` when an Inertia page contract depends on the current actor.
+
+```js
+import { test } from 'sounding'
+
+test('creator dashboard returns invoice props', async ({
+  world,
+  visit,
+  expect
+}) => {
+  await world.use('creator-dashboard')
+
+  const page = await visit.as('owner')('/dashboard')
+
+  expect(page).toBeInertiaPage('dashboard/index')
+  expect(page).toHaveProp('invoices')
+})
+```
+
+`visit.as()` uses the same actor resolution as `request.as()`, including aliases from the current world and email strings that match the configured auth model.
+
 ## Validation and redirects
 
 ```js
