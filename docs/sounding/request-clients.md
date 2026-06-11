@@ -148,14 +148,30 @@ This is how a single trial can keep most requests fast and virtual while opting 
 
 ## `as()`
 
-`as(actor)` scopes the client through a world actor.
+`as(actor)` scopes the client through an actor.
 
 ```js
 const response = await request.as(current.users.publisher).get('/dashboard')
 ```
 
+When a named world has been loaded, you can pass the actor alias directly:
+
+```js
+await world.use('publisher-dashboard')
+
+const response = await request.as('publisher').get('/dashboard')
+```
+
+You can also pass an email address when the app's configured auth model can resolve it:
+
+```js
+const response = await request.as('reader@example.com').get('/me')
+```
+
 Sounding looks for actor data in this order:
 
+- an actor alias in the current world, such as `world.current.users.publisher`
+- an existing auth model record when the actor is an email string
 - `actor.headers` or `actor.sounding.headers`
 - `actor.session` or `actor.sounding.session`
 - otherwise it derives a session from the actor identity
@@ -166,6 +182,8 @@ When it derives a session automatically, it uses:
 - `teamId` from `actor.team` or `actor.teamId` when present
 
 This lets `request.as(actor)` follow the app's auth conventions without manual session setup.
+
+If an alias cannot be resolved, Sounding lists the available actor names from the current world.
 
 ## The visit client
 
@@ -195,8 +213,19 @@ The visit client exposes:
 - `visit.delete(target, payload, options?)`
 - `visit.del(target, payload, options?)`
 - `visit.using(transport)`
+- `visit.as(actor)`
 
 `visit.transport` also reflects the current transport.
+
+`visit.as(actor)` mirrors `request.as(actor)`, so Inertia contract trials can use world actor aliases too:
+
+```js
+await world.use('billing-dashboard')
+
+const page = await visit.as('owner')('/billing')
+
+expect(page).toBeInertiaPage('billing/show')
+```
 
 ## What `visit()` adds
 
