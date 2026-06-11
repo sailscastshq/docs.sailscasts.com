@@ -15,6 +15,8 @@ Underneath those clients, Sounding can run over two transports:
 - `virtual`
 - `http`
 
+For Sails websocket requests and realtime event assertions, use [Websocket testing](/sounding/websocket-testing). Socket trials have HTTP-shaped helpers too, but they exercise Sails' socket request interpreter instead of the normal request transports on this page.
+
 ## The request client
 
 The request client is the fuller non-browser request surface in Sounding.

@@ -143,6 +143,7 @@ function soundingGuide() {
         { text: 'Helpers', link: '/sounding/testing-helpers' },
         { text: 'JSON APIs', link: '/sounding/testing-json-apis' },
         { text: 'Inertia', link: '/sounding/testing-inertia' },
+        { text: 'Websockets', link: '/sounding/websocket-testing' },
         { text: 'Browser', link: '/sounding/browser-testing' },
         { text: 'Mail', link: '/sounding/mail-testing' }
       ]
