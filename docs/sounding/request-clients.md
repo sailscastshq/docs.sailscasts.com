@@ -154,12 +154,19 @@ This is how a single trial can keep most requests fast and virtual while opting 
 const response = await request.as(current.users.publisher).get('/dashboard')
 ```
 
-When a named world has been loaded, you can pass the actor alias directly:
+When a named world has been loaded, you can pass the actor alias directly.
+The most concise form is to load the world from the test declaration:
 
 ```js
-await world.use('publisher-dashboard')
+test(
+  'publisher can see the dashboard',
+  { world: 'publisher-dashboard' },
+  async ({ request, expect }) => {
+    const response = await request.as('publisher').get('/dashboard')
 
-const response = await request.as('publisher').get('/dashboard')
+    expect(response).toHaveStatus(200)
+  }
+)
 ```
 
 You can also pass an email address when the app's configured auth model can resolve it:
@@ -220,11 +227,15 @@ The visit client exposes:
 `visit.as(actor)` mirrors `request.as(actor)`, so Inertia contract trials can use world actor aliases too:
 
 ```js
-await world.use('billing-dashboard')
+test(
+  'owner can see billing',
+  { world: 'billing-dashboard' },
+  async ({ visit, expect }) => {
+    const page = await visit.as('owner')('/billing')
 
-const page = await visit.as('owner')('/billing')
-
-expect(page).toBeInertiaPage('billing/show')
+    expect(page).toBeInertiaPage('billing/show')
+  }
+)
 ```
 
 ## What `visit()` adds

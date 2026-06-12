@@ -180,10 +180,9 @@ Use `sockets.as(actor).connect()` when the socket should start as an actor from 
 ```js
 test(
   'the active player can ask for their private match state',
-  { socket: true },
-  async ({ world, sockets, expect }) => {
-    const current = await world.use('match-in-progress')
-    const player = await sockets.as(current.users.playerOne).connect()
+  { socket: true, world: 'match-in-progress' },
+  async ({ sockets, expect }) => {
+    const player = await sockets.as('playerOne').connect()
 
     const response = await player.get('/api/matches/current/private-state')
 
@@ -195,7 +194,6 @@ test(
 If you pass a string, Sounding looks in the current world using your auth collection.
 
 ```js
-const current = await world.use('match-in-progress')
 const player = await sockets.as('playerOne').connect()
 ```
 

@@ -165,11 +165,41 @@ It does **not** exist on top-level `world.create()` or `world.build()`.
 
 ## Loading a scenario in a trial
 
-Trials usually load a scenario through the world engine:
+When a trial has one obvious business situation, put the world on the test declaration:
 
 ```js
 import { test } from 'sounding'
 
+test(
+  'subscriber can read a members-only issue',
+  { world: 'issue-access' },
+  async ({ world, request, expect }) => {
+    const response = await request
+      .as('subscriber')
+      .get(`/i/${world.current.issues.gatedIssue.slug}`)
+
+    expect(response).toHaveStatus(200)
+  }
+)
+```
+
+Sounding loads that scenario before the handler runs, so aliases such as `request.as('subscriber')`, `visit.as('owner')`, and `sockets.as('player')` can read from `world.current`.
+
+If a scenario needs a small input, pass `context`:
+
+```js
+test(
+  'subscriber can read a regional issue',
+  { world: { name: 'issue-access', context: { region: 'lagos' } } },
+  async ({ world, expect }) => {
+    expect(world.current.region).toBe('lagos')
+  }
+)
+```
+
+Manual loading is still available when a trial needs dynamic setup or more than one world:
+
+```js
 test('subscriber can read a members-only issue', async ({ world, expect }) => {
   const current = await world.use('issue-access')
 

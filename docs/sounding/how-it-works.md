@@ -41,7 +41,13 @@ Tests keep the same helper, request, and browser APIs regardless of the selected
 
 ### 3. Sounding loads a world
 
-Sounding loads a named world from `tests/factories` and `tests/scenarios`.
+Sounding loads a named world from `tests/factories` and `tests/scenarios` when a trial declares one:
+
+```js
+test('subscriber can read the issue', { world: 'issue-access' }, async () => {
+  // world.current is ready here
+})
+```
 
 If you want those layers in detail, read [Factories](/sounding/factories), [Scenarios](/sounding/scenarios), and [Worlds](/sounding/worlds).
 

@@ -149,7 +149,21 @@ await login.as('subscriber', page)
 
 A convenience alias for `sails.sounding.world`.
 
-Use it to load named business situations:
+Prefer the trial option when the test has one clear business situation:
+
+```js
+test(
+  'subscriber can read the issue',
+  { world: 'issue-access' },
+  async ({ request }) => {
+    const response = await request.as('subscriber').get('/issues/first')
+  }
+)
+```
+
+Inside the handler, the resolved world is available at `world.current`.
+
+Use manual loading when the setup needs to be dynamic:
 
 ```js
 const current = await world.use('issue-access')

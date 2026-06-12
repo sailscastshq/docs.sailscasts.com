@@ -124,9 +124,8 @@ import { test } from 'sounding'
 
 test(
   'subscriber can read a members-only issue',
-  { browser: true },
-  async ({ sails, page, login, expect }) => {
-    await sails.sounding.world.use('issue-access')
+  { browser: true, world: 'issue-access' },
+  async ({ page, login, expect }) => {
     await login.as('subscriber', page)
 
     await page.goto('/issues/the-nerve-to-build')
@@ -168,15 +167,17 @@ export default defineScenario('issue-access', async ({ create }) => {
 Then the trial can read from the product situation directly:
 
 ```js
-test('subscriber can read the issue', async ({ sails, expect }) => {
-  const current = await sails.sounding.world.use('issue-access')
+test(
+  'subscriber can read the issue',
+  { world: 'issue-access' },
+  async ({ world, request, expect }) => {
+    const response = await request
+      .as('subscriber')
+      .get(`/i/${world.current.issues.gatedIssue.slug}`)
 
-  const response = await sails.sounding.request
-    .as(current.users.subscriber)
-    .get(`/i/${current.issues.gatedIssue.slug}`)
-
-  expect(response).toHaveStatus(200)
-})
+    expect(response).toHaveStatus(200)
+  }
+)
 ```
 
 Use worlds when several trials need the same business state.

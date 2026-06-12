@@ -24,9 +24,8 @@ import { test } from 'sounding'
 
 test(
   'subscriber can finish a members-only issue',
-  { browser: true },
-  async ({ sails, page, login, expect }) => {
-    await sails.sounding.world.use('issue-access')
+  { browser: true, world: 'issue-access' },
+  async ({ page, login, expect }) => {
     await login.as('subscriber', page)
 
     await page.goto('/issues/the-nerve-to-build')
@@ -38,7 +37,7 @@ test(
 
 ## Load a world before browser setup
 
-Browser trials become harder to maintain when they carry too much setup. Use `sails.sounding.world.use()` to start from a named business situation.
+Browser trials become harder to maintain when they carry too much setup. Use the trial's `world` option to start from a named business situation before the browser flow begins.
 
 ## Run the same flows across browser projects
 
