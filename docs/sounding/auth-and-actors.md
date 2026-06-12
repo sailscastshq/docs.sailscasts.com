@@ -39,28 +39,32 @@ Then the trial can reference them clearly:
 
 ## `request.as(actor)`
 
-When a request trial needs to act as an authenticated actor, use `request.as(actor)`.
+When a request trial needs to act as an authenticated actor, load a world on the test declaration and use `request.as(actor)`.
 
 ```js
-test('subscriber can read the issue', async ({ sails, expect }) => {
-  const current = await sails.sounding.world.use('issue-access')
+test(
+  'subscriber can read the issue',
+  { world: 'issue-access' },
+  async ({ world, request, expect }) => {
+    const response = await request
+      .as('subscriber')
+      .get(`/i/${world.current.issues.gatedIssue.slug}`)
 
-  const response = await sails.sounding.request
-    .as(current.users.subscriber)
-    .get(`/i/${current.issues.gatedIssue.slug}`)
-
-  expect(response).toHaveStatus(200)
-})
+    expect(response).toHaveStatus(200)
+  }
+)
 ```
 
-You can also pass the actor alias directly after loading the world:
+That keeps the scenario name in the trial declaration and lets the request body read like product behavior.
+
+You can also pass the resolved actor object directly:
 
 ```js
 test('subscriber can read the issue', async ({ world, request, expect }) => {
   const current = await world.use('issue-access')
 
   const response = await request
-    .as('subscriber')
+    .as(current.users.subscriber)
     .get(`/i/${current.issues.gatedIssue.slug}`)
 
   expect(response).toHaveStatus(200)

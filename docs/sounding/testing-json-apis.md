@@ -67,18 +67,18 @@ test('mix virtual speed with one real-http check', async ({
 ```js
 import { test } from 'sounding'
 
-test('publisher can create an issue', async ({ sails, expect }) => {
-  const current = await sails.sounding.world.use('publisher-team')
-
-  const response = await sails.sounding.request
-    .as(current.users.publisher)
-    .post('/api/issues', {
+test(
+  'publisher can create an issue',
+  { world: 'publisher-team' },
+  async ({ request, expect }) => {
+    const response = await request.as('publisher').post('/api/issues', {
       title: 'New issue'
     })
 
-  expect(response).toHaveStatus(201)
-  expect(response).toHaveJsonPath('title', 'New issue')
-})
+    expect(response).toHaveStatus(201)
+    expect(response).toHaveJsonPath('title', 'New issue')
+  }
+)
 ```
 
 When the app's real password login action matters, use the first-party request auth helper instead of inventing session setup by hand:
