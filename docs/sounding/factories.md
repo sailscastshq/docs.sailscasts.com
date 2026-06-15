@@ -161,29 +161,18 @@ Function traits receive the current built value.
 
 ```js
 .trait('published', (issue) => ({
-  ...issue,
   status: 'published',
   publishedAt: String(Date.now())
 }))
 ```
 
-Function traits replace the current value with whatever they return.
-So if you do not merge the base record, you can accidentally wipe out required fields.
-
-Dangerous:
-
-```js
-.trait('published', () => ({
-  status: 'published'
-}))
-```
-
-Safer:
+Sounding merges the returned patch into the current value, so return only the fields the trait changes.
+Use the current value when the trait needs to derive something:
 
 ```js
 .trait('published', (issue) => ({
-  ...issue,
-  status: 'published'
+  status: 'published',
+  slug: `${issue.slug}-published`
 }))
 ```
 
@@ -201,7 +190,10 @@ Inside a scenario, `build()` and `create()` return a thenable builder with a sma
 - `.trait(name)`
 - `.traits(names)`
 - `.with(overrides)`
+- `.withOnly(overrides)`
 - `.value()`
+
+Repeated `.with()` calls merge override objects. Use `.withOnly()` when you intentionally want to use only the next overrides.
 
 That means this works:
 
@@ -224,9 +216,7 @@ const preview = await build('user')
 
 ## On the top-level world engine
 
-The top-level world engine has the same concepts, but not the same fluent shape.
-
-Use:
+Top-level `world.build()` returns an immediate value, so pass traits through options:
 
 ```js
 const preview = world.build(
@@ -236,23 +226,28 @@ const preview = world.build(
     traits: ['publisher']
   }
 )
-
-const publisher = await world.create(
-  'user',
-  {},
-  {
-    traits: ['publisher']
-  }
-)
 ```
 
-Not:
+Top-level `world.create()` is awaitable and fluent, so this works when you want to persist a record with traits:
 
 ```js
-await world.create('user').trait('publisher')
+const publisher = await world
+  .create('user')
+  .trait('publisher')
+  .with({ email: 'publisher@example.com' })
 ```
 
-That chaining style is for the scenario-local `build()` and `create()` helpers, not the top-level `world.build()` and `world.create()` methods.
+The previous options form is still supported:
+
+```js
+const publisher = await world.create('user', {}, { traits: ['publisher'] })
+```
+
+Because the builder is thenable, this simpler form still creates the default record:
+
+```js
+const reader = await world.create('user')
+```
 
 ## Building or creating many records
 

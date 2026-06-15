@@ -144,7 +144,10 @@ Inside a scenario, `build()` and `create()` return thenable builders with a smal
 - `.trait(name)`
 - `.traits(names)`
 - `.with(overrides)`
+- `.withOnly(overrides)`
 - `.value()`
+
+Repeated `.with()` calls merge override objects. Use `.withOnly()` when you intentionally want to use only the next overrides.
 
 That means all of these work:
 
@@ -160,8 +163,7 @@ const preview = await build('issue')
   .with({ title: 'Preview only' })
 ```
 
-This fluent builder exists on the scenario-local helpers.
-It does **not** exist on top-level `world.create()` or `world.build()`.
+Top-level `world.create()` supports the same fluent persisted-record shape. Top-level `world.build()` returns an immediate object, so use its `options.traits` argument when building outside a scenario.
 
 ## Loading a scenario in a trial
 
