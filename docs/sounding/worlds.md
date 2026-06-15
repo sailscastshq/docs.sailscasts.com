@@ -226,7 +226,7 @@ test('guest sees the paywall state', async ({ sails, visit, expect }) => {
   const current = await sails.sounding.world.use('issue-access')
   const page = await visit(`/i/${current.issues.gatedIssue.slug}`)
 
-  expect(page).toHaveProp('hasSubscription', false)
+  expect(page).toHaveInertiaProp('hasSubscription', false)
 })
 ```
 

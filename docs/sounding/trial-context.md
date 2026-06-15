@@ -72,7 +72,7 @@ It covers:
 
 - generic assertions like `toBe()` and `toEqual()`
 - request assertions like `toHaveStatus()` and `toRedirectTo()`
-- Inertia assertions like `toBeInertiaPage()` and `toHaveProp()`
+- Inertia assertions like `toBeInertiaPage()` and `toHaveInertiaProp()`
 - Playwright assertions when the trial is browser-capable
 
 Failed response assertions include the Sails-shaped context Sounding has available: request method, target, transport, response status, headers, and a body excerpt. For the full response body while debugging, run with `SOUNDING_DIAGNOSTICS=verbose`.

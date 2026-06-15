@@ -141,7 +141,7 @@ test('pricing returns the right page props', async ({ visit, expect }) => {
   const page = await visit('/pricing')
 
   expect(page).toBeInertiaPage('billing/pricing')
-  expect(page).toHaveProp('plans')
+  expect(page).toHaveInertiaProp('plans')
 })
 ```
 
