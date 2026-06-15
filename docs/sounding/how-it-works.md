@@ -104,6 +104,29 @@ When a trial fails, the output should identify:
 - which request or browser step failed
 - which part of app state was relevant
 
+For browser-capable trials, Sounding captures failure artifacts before teardown closes the Playwright context.
+That timing matters because the page still knows its current URL, can still take a screenshot, and can still flush trace or video output.
+
+By default, failed browser trials keep:
+
+- the current URL
+- `current-url.txt`
+- `screenshot.png`
+
+When enabled, they can also keep:
+
+- `trace.zip`
+- `video.webm`
+
+Those files live under:
+
+```txt
+.tmp/sounding/artifacts/<trial-name>/<browser-project>/
+```
+
+The original error remains the main failure, and Sounding appends the artifact paths beneath it.
+That means an assertion still reads like an assertion failure, but the terminal output also points to the browser evidence.
+
 ## As a hook, Sounding can access
 
 As a Sails hook, Sounding can understand and expose:

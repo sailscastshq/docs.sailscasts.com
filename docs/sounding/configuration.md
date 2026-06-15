@@ -78,6 +78,11 @@ Sounding defaults to:
 - `sockets.transports = ['websocket']`
 - `sockets.path = '/socket.io'`
 - `browser.projects = ['desktop']`
+- `browser.artifacts.outputDir = '.tmp/sounding/artifacts'`
+- `browser.artifacts.screenshot = true`
+- `browser.artifacts.currentUrl = true`
+- `browser.artifacts.trace = false`
+- `browser.artifacts.video = false`
 
 These are the starting defaults for a new Sounding setup.
 
@@ -249,6 +254,153 @@ Most Sounding trials should still be written in terms of:
 - Playwright flows
 
 not raw adapter details.
+
+## `browser`
+
+The `browser` section controls Playwright-backed browser trials.
+
+The default project is `desktop`, and browser support is enabled by default:
+
+```js
+module.exports.sounding = {
+  browser: {
+    enabled: true,
+    type: 'chromium',
+    projects: ['desktop'],
+    defaultProject: 'desktop'
+  }
+}
+```
+
+Most apps can leave this alone and opt into browser behavior trial by trial:
+
+```js
+test(
+  'subscriber can read a gated issue',
+  { browser: true },
+  async ({ page }) => {
+    await page.goto('/issues/the-nerve-to-build')
+  }
+)
+```
+
+### `artifacts`
+
+The `browser.artifacts` section controls what Sounding keeps when browser trials fail.
+
+Defaults:
+
+```js
+module.exports.sounding = {
+  browser: {
+    artifacts: {
+      outputDir: '.tmp/sounding/artifacts',
+      screenshot: true,
+      currentUrl: true,
+      trace: false,
+      video: false
+    }
+  }
+}
+```
+
+By default, failed browser trials keep the current URL and a full-page screenshot.
+The files are written under:
+
+```txt
+.tmp/sounding/artifacts/<trial-name>/<browser-project>/
+```
+
+For example:
+
+```txt
+.tmp/sounding/artifacts/subscriber-can-read-a-gated-issue/desktop/current-url.txt
+.tmp/sounding/artifacts/subscriber-can-read-a-gated-issue/desktop/screenshot.png
+```
+
+### Artifact settings
+
+Each artifact setting accepts a boolean:
+
+- `true` keeps the artifact when the trial fails
+- `false` disables the artifact
+
+For trace and video, that gives a concise opt-in:
+
+```js
+module.exports.sounding = {
+  browser: {
+    artifacts: {
+      trace: true,
+      video: true
+    }
+  }
+}
+```
+
+Artifact settings also accept explicit modes:
+
+- `off`
+- `on-failure`
+- `on`
+
+Use `on` when you want evidence from successful browser trials too:
+
+```js
+module.exports.sounding = {
+  browser: {
+    artifacts: {
+      trace: 'on'
+    }
+  }
+}
+```
+
+### Per-trial artifact overrides
+
+A trial can override artifact settings without changing the app-wide defaults:
+
+```js
+test(
+  'checkout keeps the cart after refresh',
+  {
+    browser: {
+      artifacts: {
+        trace: true,
+        video: true
+      }
+    }
+  },
+  async ({ page }) => {
+    await page.goto('/checkout')
+  }
+)
+```
+
+Use `artifacts: false` as a trial-level off switch:
+
+```js
+test(
+  'fast browser smoke test',
+  { browser: { artifacts: false } },
+  async ({ page }) => {
+    await page.goto('/health')
+  }
+)
+```
+
+### Artifact cleanup
+
+Sounding writes browser artifacts to `.tmp/sounding/artifacts` by default, which keeps them out of source control in typical Sails apps.
+
+Clean them whenever you want a fresh debug directory:
+
+```sh
+rm -rf .tmp/sounding/artifacts
+```
+
+If your CI uploads artifacts, upload `.tmp/sounding/artifacts` after failed test runs.
+If your CI workspace is persistent, add a cleanup step before or after the test command.
 
 ## Diagnostics
 
