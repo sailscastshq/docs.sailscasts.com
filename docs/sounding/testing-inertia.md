@@ -27,8 +27,8 @@ test('pricing page returns the correct component and props', async ({
   const page = await visit('/pricing')
 
   expect(page).toBeInertiaPage('billing/pricing')
-  expect(page).toHaveProp('plans')
-  expect(page).toHaveProp('auth.user', null)
+  expect(page).toHaveInertiaProp('plans')
+  expect(page).toHaveInertiaProp('auth.user', null)
 })
 ```
 
@@ -46,7 +46,7 @@ test(
     const page = await visit.as('owner')('/dashboard')
 
     expect(page).toBeInertiaPage('dashboard/index')
-    expect(page).toHaveProp('invoices')
+    expect(page).toHaveInertiaProp('invoices')
   }
 )
 ```
@@ -68,8 +68,7 @@ test('sign up returns validation errors for invalid input', async ({
   })
 
   expect(page).toBeInertiaPage('auth/signup')
-  expect(page).toHaveValidationError('fullName')
-  expect(page).toHaveValidationError('emailAddress')
+  expect(page).toHaveInertiaErrors(['fullName', 'emailAddress'])
 })
 ```
 
@@ -88,7 +87,12 @@ test('dashboard can request only notifications', async ({ visit, expect }) => {
   })
 
   expect(page).toBeInertiaPage('dashboard/index')
-  expect(page).toHaveProp('notifications')
+  expect(page).toHaveInertiaPartialReload({
+    component: 'dashboard/index',
+    only: ['notifications'],
+    reset: ['sidebar']
+  })
+  expect(page).toHaveOnlyInertiaProps(['notifications'])
 })
 ```
 
@@ -97,8 +101,15 @@ Under the hood, Sounding should translate that into the same Inertia headers the
 ## Useful Inertia matchers
 
 - `toBeInertiaPage()`
-- `toHaveProp()`
-- `toMatchProp()`
-- `toHaveSharedProp()`
-- `toHaveValidationError()`
+- `toHaveInertiaProp()`
+- `toHaveInertiaProps()`
+- `toHaveInertiaPropCount()`
+- `toHaveOnlyInertiaProps()`
+- `toMatchInertiaProp()`
+- `toHaveSharedInertiaProp()`
+- `toHaveSharedInertiaProps()`
+- `toHaveInertiaError()`
+- `toHaveInertiaErrors()`
+- `toHaveNoInertiaErrors()`
+- `toHaveInertiaPartialReload()`
 - `toRedirectTo()`
