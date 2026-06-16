@@ -191,11 +191,75 @@ Browser trials become harder to maintain when they carry too much setup. Use the
 
 ## Run the same flows across browser projects
 
-Run the same core flows across:
+Run the same core flows across named browser projects:
 
 - desktop
 - mobile
+- WebKit or Firefox when the browser engine matters
 - dark mode when relevant
+
+The default project is `desktop`, so most browser trials can stay terse:
+
+```js
+test(
+  'subscriber can read a gated issue',
+  { browser: true },
+  async ({ page }) => {
+    await page.goto('/issues/the-nerve-to-build')
+  }
+)
+```
+
+When a trial needs a specific project, use the string shorthand:
+
+```js
+test(
+  'mobile navigation opens the account menu',
+  { browser: 'mobile' },
+  async ({ page }) => {
+    await page.goto('/dashboard')
+  }
+)
+```
+
+Or use the object form when the trial also needs artifacts or direct browser overrides:
+
+```js
+test(
+  'checkout works in WebKit',
+  {
+    browser: {
+      project: 'safari',
+      artifacts: {
+        trace: true
+      }
+    }
+  },
+  async ({ page }) => {
+    await page.goto('/checkout')
+  }
+)
+```
+
+Define the projects in `config/sounding.js`:
+
+```js
+module.exports.sounding = {
+  browser: {
+    projects: {
+      desktop: {},
+      mobile: {
+        device: 'iPhone 13'
+      },
+      safari: {
+        type: 'webkit'
+      }
+    }
+  }
+}
+```
+
+If a trial references a project that is not configured, Sounding fails before opening the browser and lists the available project names.
 
 ## Choose the right layer
 
