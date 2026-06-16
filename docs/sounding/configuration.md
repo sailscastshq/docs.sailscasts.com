@@ -284,6 +284,101 @@ test(
 )
 ```
 
+Select a configured project with a string:
+
+```js
+test('mobile navigation works', { browser: 'mobile' }, async ({ page }) => {
+  await page.goto('/dashboard')
+})
+```
+
+Or use the object form when you also need trial-level browser options:
+
+```js
+test(
+  'checkout works in WebKit',
+  {
+    browser: {
+      project: 'safari'
+    }
+  },
+  async ({ page }) => {
+    await page.goto('/checkout')
+  }
+)
+```
+
+### `projects`
+
+The simplest project list is still an array of names:
+
+```js
+module.exports.sounding = {
+  browser: {
+    projects: ['desktop', 'mobile'],
+    defaultProject: 'desktop'
+  }
+}
+```
+
+Use named project objects when a project needs its own Playwright device, browser type, viewport, context options, or launch options:
+
+```js
+module.exports.sounding = {
+  browser: {
+    projects: {
+      desktop: {},
+      mobile: {
+        device: 'iPhone 13'
+      },
+      safari: {
+        type: 'webkit',
+        viewport: {
+          width: 1280,
+          height: 720
+        },
+        contextOptions: {
+          colorScheme: 'dark'
+        },
+        launchOptions: {
+          slowMo: 25
+        }
+      }
+    },
+    defaultProject: 'desktop'
+  }
+}
+```
+
+Supported project fields:
+
+- `type` - Playwright browser type: `chromium`, `firefox`, or `webkit`
+- `device` - Playwright device name, such as `iPhone 13`
+- `viewport` - `{ width, height }`
+- `contextOptions` - options passed to `browser.newContext()`
+- `launchOptions` - options merged into the browser launch call
+
+The project-specific options are merged before per-trial overrides, so a trial can still fine-tune one run:
+
+```js
+test(
+  'publisher can edit on mobile dark mode',
+  {
+    browser: {
+      project: 'mobile',
+      contextOptions: {
+        colorScheme: 'dark'
+      }
+    }
+  },
+  async ({ page }) => {
+    await page.goto('/publisher/issues/42/edit')
+  }
+)
+```
+
+If a trial names a project that is not configured, Sounding fails with the requested project and the list of available projects.
+
 ### `artifacts`
 
 The `browser.artifacts` section controls what Sounding keeps when browser trials fail.
