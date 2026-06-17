@@ -10,8 +10,8 @@ prev:
   text: Testing
   link: '/boring-stack/testing'
 next:
-  text: Deployment
-  link: '/boring-stack/deployment'
+  text: Testing cookbook
+  link: '/boring-stack/cookbook/testing'
 editLink: true
 ---
 

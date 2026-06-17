@@ -7,8 +7,8 @@ title: Mellow
 titleTemplate: The Boring JavaScript Stack
 description: Mellow is the default starter template for The Boring JavaScript Stack. It provides a solid foundation with essential features like complete authentication, OAuth integration, and support for React, Vue, or Svelte.
 prev:
-  text: File uploads
-  link: '/boring-stack/file-uploads'
+  text: Testing cookbook
+  link: '/boring-stack/cookbook/testing'
 next:
   text: Ascent
   link: '/boring-stack/ascent'

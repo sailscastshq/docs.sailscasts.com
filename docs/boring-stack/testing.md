@@ -10,8 +10,8 @@ prev:
   text: File uploads
   link: '/boring-stack/file-uploads'
 next:
-  text: Mellow
-  link: '/boring-stack/mellow'
+  text: Error handling
+  link: '/boring-stack/error-handling'
 editLink: true
 ---
 
@@ -20,6 +20,8 @@ editLink: true
 The Boring JavaScript Stack uses [Sounding](/sounding/) as the default testing surface.
 
 Sounding is built for Sails apps, so tests can use the real app, real helpers, real routes, real Inertia responses, real mail capture, and real browser automation without each project carrying its own test harness.
+
+Once the suite shape is in place, use the [Testing cookbook](/boring-stack/cookbook/testing) for real app recipes.
 
 ## Philosophy
 

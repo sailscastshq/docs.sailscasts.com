@@ -447,6 +447,11 @@ function boringStackGuide() {
       ]
     },
     {
+      text: 'Cookbook',
+      collapsed: false,
+      items: [{ text: 'Testing', link: 'boring-stack/cookbook/testing' }]
+    },
+    {
       text: 'Templates',
       collapsed: false,
       items: [
