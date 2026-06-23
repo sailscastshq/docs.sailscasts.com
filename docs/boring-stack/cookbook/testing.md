@@ -388,7 +388,9 @@ test(
 ```
 
 Read [Browser testing](/sounding/browser-testing) for artifacts, mobile
-projects, smoke route collections, traces, and videos.
+projects, smoke route collections, traces, and videos. Use
+[Visual regression testing](/sounding/visual-regression) when the whole rendered
+page is the contract.
 
 ## Prove layout problems in the browser
 
