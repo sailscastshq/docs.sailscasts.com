@@ -201,7 +201,7 @@ PASS  tests/arch.test.js
 
 PASS  Tests: 2 passed, 2 total
 
-Duration: 94ms
+      Duration: 94ms
 ```
 
 When a trial fails, Sounding keeps the first application frame in view and
@@ -231,7 +231,7 @@ FAIL  tests/billing.test.js
 
 FAIL  Tests: 1 failed, 1 total
 
-Duration: 70ms
+      Duration: 70ms
 ```
 
 Use `--verbose` when you want full stacks and expanded diagnostics:
