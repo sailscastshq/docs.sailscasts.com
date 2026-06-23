@@ -269,6 +269,10 @@ test.stress(
 `test.stress()` is still a normal Sounding trial. The plugin gives it an HTTP
 transport default, then adds the `stress` helper to the trial context.
 
+It belongs to the same declaration family as `test.it()`, `test.only()`,
+`test.skip()`, and `test.concurrent()`. Use it when the trial itself is about
+load behavior. Use `test.it()` for ordinary behavior trials.
+
 You can also use the helper from an explicitly HTTP trial:
 
 ```js

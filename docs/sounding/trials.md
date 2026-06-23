@@ -30,6 +30,19 @@ test('guest is redirected from dashboard', async ({ get, expect }) => {
 })
 ```
 
+If you prefer the behavior-reading alias, use `test.it()`:
+
+```js
+test.it('guest is redirected from dashboard', async ({ get, expect }) => {
+  const response = await get('/dashboard')
+
+  expect(response).toRedirectTo('/login')
+})
+```
+
+`test()` and `test.it()` run through the same Sounding trial wrapper. The alias
+exists so suites can read naturally without creating a second testing dialect.
+
 ## Call signatures
 
 Executable trials use one of these forms:
@@ -37,8 +50,12 @@ Executable trials use one of these forms:
 ```js
 test(name, handler)
 test(name, options, handler)
+test.it(name, handler)
+test.it(name, options, handler)
 test.only(name, handler)
 test.only(name, options, handler)
+test.it.only(name, handler)
+test.it.only(name, options, handler)
 ```
 
 `name` should be a non-empty behavior name, `options` should be an object, and `handler` should be the function that receives the trial context.
@@ -60,6 +77,15 @@ Non-executable planning forms still follow Node's test runner:
 ```js
 test.skip(name)
 test.todo(name)
+test.it.skip(name)
+test.it.todo(name)
+```
+
+Independent trials can use the concurrent aliases:
+
+```js
+test.concurrent(name, handler)
+test.it.concurrent(name, handler)
 ```
 
 ## What makes a good trial

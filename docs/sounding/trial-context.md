@@ -22,6 +22,16 @@ test('guest is redirected from dashboard', async ({ get, expect }) => {
 
 That object passed into the callback is the **trial context**.
 
+The behavior-reading alias receives the same context:
+
+```js
+test.it('guest is redirected from dashboard', async ({ get, expect }) => {
+  const response = await get('/dashboard')
+
+  expect(response).toRedirectTo('/login')
+})
+```
+
 If you are looking for the higher-level definition of a trial itself, read [Trials](/sounding/trials).
 
 The trial context gives each trial:
