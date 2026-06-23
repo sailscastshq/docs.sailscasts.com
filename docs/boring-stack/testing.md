@@ -186,6 +186,14 @@ test(
 
 Sounding gives you Playwright's `page` and `expect` inside the same trial style. Read [Browser testing](/sounding/browser-testing) when you need DOM interaction, logged-in browser flows, mobile projects, or Playwright-specific behavior.
 
+For a quick public-page browser check, use Sounding's smoke helper:
+
+```js
+test('public pages do not smoke', async ({ smoke }) => {
+  await smoke(['/', '/pricing', '/contact'])
+})
+```
+
 ## Configuration
 
 Keep app-level test behavior in `config/env/test.js`:
