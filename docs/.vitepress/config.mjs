@@ -133,7 +133,8 @@ function soundingGuide() {
         { text: 'Scenarios', link: '/sounding/scenarios' },
         { text: 'Worlds', link: '/sounding/worlds' },
         { text: 'Auth and actors', link: '/sounding/auth-and-actors' },
-        { text: 'Suite structure', link: '/sounding/organizing-your-suite' }
+        { text: 'Suite structure', link: '/sounding/organizing-your-suite' },
+        { text: 'Plugins', link: '/sounding/plugins' }
       ]
     },
     {
@@ -146,7 +147,8 @@ function soundingGuide() {
         { text: 'Websockets', link: '/sounding/websocket-testing' },
         { text: 'Browser', link: '/sounding/browser-testing' },
         { text: 'Visual regression', link: '/sounding/visual-regression' },
-        { text: 'Mail', link: '/sounding/mail-testing' }
+        { text: 'Mail', link: '/sounding/mail-testing' },
+        { text: 'Stress testing', link: '/sounding/stress-testing' }
       ]
     },
     {
