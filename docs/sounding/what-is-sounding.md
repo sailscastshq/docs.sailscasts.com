@@ -96,6 +96,16 @@ Use `test()` with `page` when a flow is truly about the browser:
 
 Use `test()` and `sails.sounding.mailbox` to assert on outgoing transactional email like magic links, invites, password resets, and billing notifications.
 
+## Plugin-powered features
+
+Sounding keeps heavier or specialized features in installable plugins. The first
+plugin-powered surface is [Stress testing](/sounding/stress-testing), which adds
+`sounding stress`, `test.stress(...)`, and a `stress` trial helper through
+`sounding-plugin-stress`.
+
+Read [Plugins](/sounding/plugins) for how plugin discovery, commands, trial
+helpers, and lifecycle events work.
+
 ## Common problems it helps avoid
 
 Sounding helps avoid:

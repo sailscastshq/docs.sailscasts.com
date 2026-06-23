@@ -83,6 +83,25 @@ module.exports.sounding = {
 }
 ```
 
+## Optional: install plugin features
+
+Sounding keeps heavier capabilities in plugins. Install the plugin package, then
+use the API it adds.
+
+This is separate from the core configuration above. There is no `plugins` array
+and no `config/sounding.js` registration step for plugin discovery. The dev
+dependency is the registration.
+
+For example, stress testing is powered by `sounding-plugin-stress`:
+
+```bash
+npm install -D sounding-plugin-stress
+npx sounding stress /api/health --duration=10 --concurrency=25
+```
+
+Read [Plugins](/sounding/plugins) for the plugin model and
+[Stress testing](/sounding/stress-testing) for the full stress API.
+
 ## 4. Write your first trial
 
 If you are new to Sounding's callback shape, read [Trials](/sounding/trials) and [Trial context](/sounding/trial-context) alongside this guide. They explain what a trial is, what arrives inside `test()`, and when things like `page` and `login` appear.
