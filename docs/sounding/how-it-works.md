@@ -124,10 +124,11 @@ Those files live under:
 .tmp/sounding/artifacts/<trial-name>/<browser-project>/
 ```
 
-The reporter parses Node test events into a structured Sounding failure before
-rendering terminal output. That lets Sounding spotlight the first application
-frame, group metadata like World, Request, Response, Body, and Browser, and keep
-browser evidence beside the assertion that failed.
+The reporter parses Node test events into a structured `SoundingTrial` before
+rendering terminal output. Passed trials stay lightweight, while failed trials
+carry a richer `SoundingFailure` payload with the message, cause chain, primary
+frame, code frame, raw error data, and grouped metadata like World, Request,
+Response, Body, and Browser.
 
 The formatted output is the default path because it is optimized for debugging
 the behavior. When you need the unformatted Node error object, run
