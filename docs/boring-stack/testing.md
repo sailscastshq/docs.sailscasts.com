@@ -194,6 +194,8 @@ test('public pages do not smoke', async ({ smoke }) => {
 })
 ```
 
+When the rendered page itself is the contract, use [Visual regression testing](/sounding/visual-regression) deliberately rather than replacing behavior assertions with screenshots.
+
 ## Configuration
 
 Keep app-level test behavior in `config/env/test.js`:

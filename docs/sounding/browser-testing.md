@@ -65,10 +65,13 @@ Use these matchers for browser pages:
 | `expect(page).toHaveNoConsoleLogs()`      | Fail on any console message, including `log`, `warn`, `info`, and `error`. |
 | `expect(page).toHaveNoConsoleErrors()`    | Fail only on `console.error`.                                              |
 | `expect(page).toHaveNoSmoke()`            | Fail on JavaScript errors or console errors.                               |
+| `expect(page).toMatchScreenshot(name)`    | Compare a full-page screenshot with an approved visual baseline.           |
 
 `toHaveNoConsoleLogs()` is intentionally strict. Use it when a flow should leave
 the browser console completely silent. Use `toHaveNoSmoke()` for the normal
 smoke-safety check.
+
+For page-level layout contracts, read [Visual regression testing](/sounding/visual-regression).
 
 ## Browser smoke helpers
 

@@ -145,6 +145,7 @@ function soundingGuide() {
         { text: 'Inertia', link: '/sounding/testing-inertia' },
         { text: 'Websockets', link: '/sounding/websocket-testing' },
         { text: 'Browser', link: '/sounding/browser-testing' },
+        { text: 'Visual regression', link: '/sounding/visual-regression' },
         { text: 'Mail', link: '/sounding/mail-testing' }
       ]
     },
