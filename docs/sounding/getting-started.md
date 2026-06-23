@@ -200,6 +200,7 @@ PASS  tests/arch.test.js
   ✓ JSON paths read like product facts    0ms
 
 PASS  Tests: 2 passed, 2 total
+
 Duration: 94ms
 ```
 
@@ -229,6 +230,7 @@ FAIL  tests/billing.test.js
   -> 25    expect(response).toHaveStatus(200)
 
 FAIL  Tests: 1 failed, 1 total
+
 Duration: 70ms
 ```
 
