@@ -248,6 +248,51 @@ the readable failure first, then prints the original Node test error, its
 npx sounding test --raw-error
 ```
 
+Use `--compact` for failure-focused output in CI. Passing trials stay quiet, but
+the final summary and the full Sounding failure block remain readable:
+
+```bash
+npx sounding test --compact
+```
+
+Use `--profile` when a suite starts feeling slow. The reporter prints the
+slowest trials before the final summary so you can see whether time is going
+into browser flows, app boot, auth setup, or request trials:
+
+```bash
+npx sounding test --profile
+npx sounding test --profile --slow=10
+```
+
+`--slow` controls how many trials appear in the profile list and implies
+`--profile`.
+
+For larger suites, split the same discovered test files across CI jobs with
+`--shard=part/total`:
+
+```bash
+npx sounding test --shard=1/4
+npx sounding test --shard=2/4 --parallel
+```
+
+Sharding composes with the normal Sounding filters:
+
+```bash
+npx sounding test --lane browser --shard=1/4
+npx sounding test --file tests/sounding/examples.test.js --shard=2/4
+```
+
+A GitHub Actions matrix can pass the shard number directly:
+
+```yaml
+strategy:
+  matrix:
+    shard: [1, 2, 3, 4]
+
+steps:
+  - run: npx sounding test --shard=${{ matrix.shard }}/4 --profile --slow=10
+```
+
 ## What to add next
 
 Once the basic runtime is in place, most apps will want to add:
