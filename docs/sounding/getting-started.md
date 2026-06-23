@@ -185,7 +185,67 @@ Use worlds when several trials need the same business state.
 ## 7. Run the suite
 
 ```bash
-npm run test
+npx sounding test
+```
+
+Most generated apps wire `npm test` to the same command.
+
+By default, `sounding test` uses Sounding's readable reporter. Small passing
+runs list the trial names and end with a compact summary:
+
+```txt
+PASS  tests/arch.test.js
+
+  ✓ request helpers stay response-shaped  1ms
+  ✓ JSON paths read like product facts    0ms
+
+PASS  Tests: 2 passed, 2 total
+
+      Duration: 94ms
+```
+
+When a trial fails, Sounding keeps the first application frame in view and
+groups the context that usually explains the behavior:
+
+```txt
+FAIL  tests/billing.test.js
+
+  × creator sees billing summary
+
+  Expected response status 200, received 500.
+
+  Request
+    GET /api/billing/summary (http) -> http://localhost:1337/api/billing/summary
+    headers: accept: application/json
+
+  Response
+    500 Server Error
+    headers: content-type: application/json
+
+  Body
+    {"message":"boom"}
+
+  at tests/billing.test.js:25
+
+  -> 25    expect(response).toHaveStatus(200)
+
+FAIL  Tests: 1 failed, 1 total
+
+      Duration: 70ms
+```
+
+Use `--verbose` when you want full stacks and expanded diagnostics:
+
+```bash
+npx sounding test --verbose
+```
+
+Use `--raw-error` when formatted output hides something you need. Raw mode keeps
+the readable failure first, then prints the original Node test error, its
+`cause`, Sounding metadata, and the primary frame payload:
+
+```bash
+npx sounding test --raw-error
 ```
 
 ## What to add next

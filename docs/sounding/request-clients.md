@@ -59,21 +59,41 @@ const response = await request.get('/health')
 expect(response).toHaveStatus(200)
 ```
 
-If the app returned `500`, the failure includes a compact diagnostic block:
+If the app returned `500`, the default reporter groups the useful context:
 
 ```txt
-Expected response status 200, received 500.
+FAIL  tests/billing.test.js
 
-Sounding response diagnostics:
-- Request: GET /health (virtual)
-- Response: 500 Server Error
-- Headers: content-type: application/json, x-request-id: req_123
-- Body: {"message":"Database unavailable","detail":"Connection pool exhausted"}
+  × creator sees billing summary
+
+  Expected response status 200, received 500.
+
+  Request
+    GET /health (virtual)
+
+  Response
+    500 Server Error
+    headers: content-type: application/json, x-request-id: req_123
+
+  Body
+    {"message":"Database unavailable","detail":"Connection pool exhausted"}
+
+  at tests/health.test.js:6
+
+  -> 6     expect(response).toHaveStatus(200)
 ```
 
-The same response diagnostics are used by request, visit, Inertia, validation, and socket request assertions when the response shape is available.
+The same response diagnostics are used by request, visit, Inertia, validation,
+and socket request assertions when the response shape is available.
 
-By default, Sounding keeps the body excerpt concise. When you need the full response body while debugging a failure, run the trial with:
+By default, Sounding keeps the body excerpt concise. When you need full response
+excerpts and full stacks while debugging, run the trial with:
+
+```sh
+npx sounding test --verbose
+```
+
+If you are calling Node or npm directly, set the diagnostic environment variable:
 
 ```sh
 SOUNDING_DIAGNOSTICS=verbose npm test
