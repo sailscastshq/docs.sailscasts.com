@@ -124,8 +124,16 @@ Those files live under:
 .tmp/sounding/artifacts/<trial-name>/<browser-project>/
 ```
 
-The original error remains the main failure, and Sounding appends the artifact paths beneath it.
-That means an assertion still reads like an assertion failure, but the terminal output also points to the browser evidence.
+The reporter parses Node test events into a structured Sounding failure before
+rendering terminal output. That lets Sounding spotlight the first application
+frame, group metadata like World, Request, Response, Body, and Browser, and keep
+browser evidence beside the assertion that failed.
+
+The formatted output is the default path because it is optimized for debugging
+the behavior. When you need the unformatted Node error object, run
+`sounding test --raw-error` or set `SOUNDING_RAW=1`. Raw mode prints the original
+Node wrapper error, its `cause`, Sounding metadata, and the selected primary
+frame after the readable failure.
 
 ## As a hook, Sounding can access
 

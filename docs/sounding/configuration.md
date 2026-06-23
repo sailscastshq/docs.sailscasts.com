@@ -501,13 +501,30 @@ If your CI workspace is persistent, add a cleanup step before or after the test 
 
 Sounding keeps failure diagnostics concise by default. Response assertion failures show the request, response status, key headers, and a short body excerpt.
 
-When a failing response needs more inspection, set:
+When a failing response needs more inspection through the Sounding CLI, run:
+
+```sh
+npx sounding test --verbose
+```
+
+That expands response excerpts and shows full stacks without changing
+`config/sounding.js`.
+
+If you are calling Node or npm directly, set:
 
 ```sh
 SOUNDING_DIAGNOSTICS=verbose npm test
 ```
 
-That expands response excerpts in assertion failures without changing `config/sounding.js`.
+When formatted output hides something important, use raw error output:
+
+```sh
+npx sounding test --raw-error
+SOUNDING_RAW=1 npm test
+```
+
+Raw mode prints the original Node test error, its `cause`, Sounding metadata, and
+the primary frame payload after the readable failure.
 
 ## `sockets`
 
