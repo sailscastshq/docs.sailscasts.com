@@ -388,7 +388,7 @@ test(
 ```
 
 Read [Browser testing](/sounding/browser-testing) for artifacts, mobile
-projects, traces, and videos.
+projects, smoke route collections, traces, and videos.
 
 ## Prove layout problems in the browser
 

@@ -70,6 +70,69 @@ Use these matchers for browser pages:
 the browser console completely silent. Use `toHaveNoSmoke()` for the normal
 smoke-safety check.
 
+## Browser smoke helpers
+
+Use `smoke()` when the trial is only trying to answer one question: do these
+pages boot cleanly in a real browser?
+
+```js
+import { test } from 'sounding'
+
+test('public pages do not smoke', async ({ smoke }) => {
+  await smoke(['/', '/pricing', '/contact'])
+})
+```
+
+`smoke()` opens the browser lazily. That means a normal request-level trial can
+stay light until it actually asks for browser proof:
+
+```js
+test('pricing page has a contract and browser smoke', async ({
+  visit,
+  smoke,
+  expect
+}) => {
+  const page = await visit('/pricing')
+
+  expect(page).toBeInertiaPage('marketing/pricing')
+  await smoke('/pricing')
+})
+```
+
+Pass a browser project when the route list should run through a named browser
+configuration:
+
+```js
+test('mobile public pages do not smoke', async ({ smoke }) => {
+  await smoke(['/', '/pricing', '/contact'], { project: 'mobile' })
+})
+```
+
+Use `visit.all()` when you want the inspected route collection back:
+
+```js
+test('public pages do not smoke', async ({ visit, expect }) => {
+  const pages = await visit.all(['/', '/pricing', '/contact'])
+
+  expect(pages).toHaveNoSmoke()
+  expect(pages.entries[0].target).toBe('/')
+})
+```
+
+Each collection entry includes:
+
+- `target`
+- `project`
+- `currentUrl`
+- `javascriptErrors`
+- `consoleMessages`
+- `consoleErrors`
+- `page`
+
+On failure, Sounding stops at the first smoky route. The terminal output names
+the route, project, current URL, JavaScript errors, and console errors, and the
+browser artifacts point at that same page.
+
 ## Browser test handles
 
 Use `@name` for stable browser test handles. This is a Sounding convention:
