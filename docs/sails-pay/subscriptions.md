@@ -7,8 +7,8 @@ title: Retrieving subscriptions
 titleTemplate: Sails Pay
 description: Learn how to retrieve and manage subscriptions with Sails Pay
 prev:
-  text: Verify transaction
-  link: /sails-pay/verify-transaction
+  text: Verifying webhooks
+  link: /sails-pay/webhooks
 next: false
 editLink: true
 ---

@@ -10,8 +10,8 @@ prev:
   text: Paga
   link: /sails-pay/paga
 next:
-  text: Creating checkouts
-  link: /sails-pay/checkout
+  text: Bachs
+  link: /sails-pay/bachs
 editLink: true
 ---
 

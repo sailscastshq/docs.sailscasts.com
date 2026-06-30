@@ -29,6 +29,7 @@ Sails Pay currently supports the following payment providers:
 | [Flutterwave](/sails-pay/flutterwave)    | `@sails-pay/flutterwave`  |
 | [Paystack](/sails-pay/paystack)          | `@sails-pay/paystack`     |
 | [Paga](/sails-pay/paga)                  | `@sails-pay/paga`         |
+| [Bachs](/sails-pay/bachs)                | `@sails-pay/bachs`        |
 
 ## Configuring a provider
 

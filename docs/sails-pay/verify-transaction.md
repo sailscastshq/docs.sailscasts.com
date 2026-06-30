@@ -10,21 +10,22 @@ prev:
   text: Creating checkouts
   link: /sails-pay/checkout
 next:
-  text: Retrieving subscriptions
-  link: /sails-pay/subscriptions
+  text: Verifying webhooks
+  link: /sails-pay/webhooks
 editLink: true
 ---
 
 # Verify transaction
 
-The `sails.pay.verify()` method verifies the status of a payment transaction by its reference. This is useful for confirming payment status directly with the provider, independent of webhooks.
+The `sails.pay.verify()` method verifies the status of a payment transaction directly with the provider, independent of webhooks. The lookup key depends on the adapter: Paystack verifies by `reference`, while Bachs verifies by `chargeId`.
 
 ::: info Adapter support
 
 - [Paystack](/sails-pay/paystack)
+- [Bachs](/sails-pay/bachs)
   :::
 
-## Basic usage
+## Paystack basic usage
 
 ```js
 const transaction = await sails.pay.verify({
@@ -33,6 +34,16 @@ const transaction = await sails.pay.verify({
 ```
 
 The method returns the full transaction object from the payment provider, including `status`, `amount`, `currency`, and `metadata`.
+
+## Bachs basic usage
+
+```js
+const charge = await sails.pay.verify({
+  chargeId: 'chr_1a2b3c4d5e6f'
+})
+```
+
+Bachs verifies a charge by `chargeId`. If your app only has `checkoutId`, fetch the checkout first with `sails.pay.checkout.get({ checkoutId })`, then read `checkout.charge.charge_id`.
 
 ## Example in an action
 
@@ -88,6 +99,13 @@ module.exports = {
 | ----------- | ------ | -------- | ---------------------------------------------------------- |
 | `reference` | String | Yes      | The transaction reference used to initiate the transaction |
 | `secretKey` | String | No       | Override the configured secret key                         |
+
+### Bachs parameters
+
+| Parameter  | Type   | Required | Description                     |
+| ---------- | ------ | -------- | ------------------------------- |
+| `chargeId` | String | Yes      | The Bachs charge ID to verify   |
+| `apiKey`   | String | No       | Override the configured API key |
 
 ## Response
 
@@ -202,6 +220,15 @@ module.exports = {
 }
 ```
 
+### Bachs checkout return verification
+
+When Bachs redirects the customer back to your `returnUrl`, it appends `checkout_id`. Use that value to fetch the checkout and inspect the embedded charge.
+
+```js
+const checkout = await sails.pay.checkout.get({ checkoutId })
+const charge = checkout.charge
+```
+
 ## Using a specific provider
 
 If you have multiple payment providers configured, you can specify which one to use:
@@ -214,8 +241,12 @@ const transaction = await sails.pay.verify({ reference: '...' })
 const transaction = await sails.pay
   .provider('paystack')
   .verify({ reference: '...' })
+
+// Use Bachs
+const charge = await sails.pay.provider('bachs').verify({ chargeId: '...' })
 ```
 
 ## Additional resources
 
 - [Paystack Verify Transaction API](https://paystack.com/docs/api/transaction/#verify)
+- [Bachs Get Charge Status](https://docs.bachs.io/guides/payments/get-charge-status)

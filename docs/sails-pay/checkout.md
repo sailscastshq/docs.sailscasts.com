@@ -7,8 +7,8 @@ title: Creating checkouts
 titleTemplate: Sails Pay
 description: Learn how to create payment checkouts with Sails Pay
 prev:
-  text: Paystack
-  link: /sails-pay/paystack
+  text: Bachs
+  link: /sails-pay/bachs
 next:
   text: Verify transaction
   link: /sails-pay/verify-transaction
@@ -25,6 +25,7 @@ The `sails.pay.checkout()` method creates a payment checkout URL that you can re
 - [Flutterwave](/sails-pay/flutterwave)
 - [Paystack](/sails-pay/paystack)
 - [Paga](/sails-pay/paga)
+- [Bachs](/sails-pay/bachs)
   :::
 
 ## Basic usage
@@ -321,6 +322,104 @@ module.exports = {
   }
 }
 ```
+
+### Bachs parameters
+
+Bachs supports product Checkout Sessions and Pure Checkout through `sails.pay.checkout()`.
+
+#### Product Checkout Session parameters
+
+| Parameter                   | Type   | Required | Description                                                 |
+| --------------------------- | ------ | -------- | ----------------------------------------------------------- |
+| `items`                     | Array  | Yes      | Product cart items. Each item uses `product` or `productId` |
+| `productCollectionId`       | String | Yes      | Product collection ID for selection-mode checkout           |
+| `customer`                  | Object | Yes      | Customer details or an existing Bachs customer ID           |
+| `billingCurrency`           | String | No       | Currency used to select the product price row               |
+| `allowedPaymentMethodTypes` | Array  | No       | Payment method allowlist, such as `bank_transfer` or `card` |
+| `returnUrl`                 | String | No       | URL Bachs redirects to after checkout-session payment       |
+| `cancelUrl`                 | String | No       | URL Bachs redirects to when checkout is cancelled           |
+| `reference`                 | String | No       | Unique merchant reference                                   |
+| `metadata`                  | Object | No       | Metadata returned in webhook payloads                       |
+| `idempotencyKey`            | String | No       | Value sent as the `Idempotency-Key` header                  |
+
+Provide exactly one of `items` or `productCollectionId`.
+
+#### Pure Checkout parameters
+
+| Parameter          | Type   | Required | Description                                        |
+| ------------------ | ------ | -------- | -------------------------------------------------- |
+| `amount`           | String | Yes      | Decimal amount string, such as `"50.00"`           |
+| `currency`         | String | Yes      | Currency code, such as `"USD"` or `"NGN"`          |
+| `currencyOptions`  | Object | No       | Per-currency amount overrides                      |
+| `customerEmail`    | String | Yes      | Customer email address                             |
+| `customerName`     | String | No       | Customer full name                                 |
+| `successUrl`       | String | No       | URL Bachs redirects to after Pure Checkout payment |
+| `cancelUrl`        | String | No       | URL Bachs redirects to when checkout is cancelled  |
+| `reference`        | String | No       | Unique merchant reference                          |
+| `metadata`         | Object | No       | Metadata returned in webhook payloads              |
+| `expiresInMinutes` | Number | No       | Minutes until the checkout expires                 |
+
+#### Bachs product checkout example
+
+```js
+module.exports = {
+  friendlyName: 'Bachs checkout',
+
+  inputs: {
+    productId: {
+      type: 'string',
+      required: true
+    }
+  },
+
+  exits: {
+    success: {
+      responseType: 'redirect'
+    }
+  },
+
+  fn: async function ({ productId }) {
+    const loggedInUser = await User.findOne({
+      id: this.req.session.userId
+    }).select(['email', 'fullName'])
+
+    const purchase = await Purchase.create({
+      reference: `ORD-${Date.now()}`,
+      user: loggedInUser.id
+    }).fetch()
+
+    const checkoutUrl = await sails.pay.checkout({
+      items: [{ product: productId, quantity: 1 }],
+      customer: {
+        email: loggedInUser.email,
+        name: loggedInUser.fullName
+      },
+      reference: purchase.reference,
+      metadata: {
+        purchase: purchase.id.toString(),
+        user: loggedInUser.id.toString()
+      },
+      returnUrl: `${sails.config.custom.baseUrl}/payment/return`,
+      cancelUrl: `${sails.config.custom.baseUrl}/payment/cancel`,
+      idempotencyKey: purchase.reference
+    })
+
+    return checkoutUrl
+  }
+}
+```
+
+The adapter keeps your Sails code camelCase and maps to Bachs snake case internally:
+
+| Sails Pay input             | Bachs request field            |
+| --------------------------- | ------------------------------ |
+| `items`                     | `product_cart`                 |
+| `items[].product`           | `product_cart[].product_id`    |
+| `productCollectionId`       | `product_collection_id`        |
+| `billingCurrency`           | `billing_currency`             |
+| `allowedPaymentMethodTypes` | `allowed_payment_method_types` |
+| `returnUrl`                 | `return_url`                   |
+| `idempotencyKey`            | `Idempotency-Key` header       |
 
 ## Using a specific provider
 

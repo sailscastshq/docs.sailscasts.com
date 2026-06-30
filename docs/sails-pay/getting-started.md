@@ -48,6 +48,10 @@ npm i @sails-pay/paystack
 npm i @sails-pay/paga
 ```
 
+```sh [Bachs]
+npm i @sails-pay/bachs
+```
+
 :::
 
 ::: tip
@@ -60,3 +64,4 @@ Next, follow the instructions below to setup your preferred payment provider.
 - [Flutterwave](/sails-pay/flutterwave)
 - [Paystack](/sails-pay/paystack)
 - [Paga](/sails-pay/paga)
+- [Bachs](/sails-pay/bachs)

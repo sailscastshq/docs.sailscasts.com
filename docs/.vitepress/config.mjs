@@ -553,7 +553,8 @@ function SailsPayGuide() {
         { text: 'Lemon Squeezy', link: 'sails-pay/lemonsqueezy' },
         { text: 'Flutterwave', link: 'sails-pay/flutterwave' },
         { text: 'Paga', link: 'sails-pay/paga' },
-        { text: 'Paystack', link: 'sails-pay/paystack' }
+        { text: 'Paystack', link: 'sails-pay/paystack' },
+        { text: 'Bachs', link: 'sails-pay/bachs' }
       ]
     },
     {
@@ -570,6 +571,11 @@ function SailsPayGuide() {
           link: 'sails-pay/verify-transaction'
         }
       ]
+    },
+    {
+      text: 'Webhooks',
+      collapsed: false,
+      items: [{ text: 'Verifying webhooks', link: 'sails-pay/webhooks' }]
     },
     {
       text: 'Subscriptions',
