@@ -116,6 +116,20 @@ $ slipway slide
   URL: https://my-sails-app.example.com
 ```
 
+## Verify Direct Access
+
+Slipway assigns the deployment a direct URL using a port from `1338–1500`. Test it from your computer or another network so the request crosses the provider firewall:
+
+```bash
+curl -I --connect-timeout 5 http://YOUR_SERVER_IP:ALLOCATED_PORT/health
+```
+
+A successful health response confirms that the app is running and the allocated port is reachable publicly. If the deployment log confirms a healthy container and a live Docker mapping but this request times out, allow the allocated port in both the VPS provider firewall and any active host firewall.
+
+::: tip Custom Domains
+Direct URLs are useful during setup and troubleshooting. Applications with a [custom domain](/slipway/custom-domain) receive traffic through ports `80` and `443` instead.
+:::
+
 ## Set Environment Variables
 
 Most Sails apps need environment variables. Set them before or after deploying:

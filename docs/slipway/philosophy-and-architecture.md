@@ -131,6 +131,8 @@ Slipway uses [caddy-docker-proxy](https://github.com/lucaslorentz/caddy-docker-p
 
 No Nginx config files. No manual cert renewal. No `certbot` cron jobs.
 
+The allocated port also provides a direct `http://SERVER_IP:PORT` endpoint. That endpoint must be allowed through both the server's host firewall and any firewall managed by the VPS provider. Domain traffic only requires public access to ports `80` and `443`.
+
 ### How Deployments Work
 
 Slipway uses **blue-green deployments** for zero downtime:
