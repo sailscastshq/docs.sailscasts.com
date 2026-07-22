@@ -35,7 +35,8 @@ This script will:
 4. Generate secrets (`SESSION_SECRET` and `DATA_ENCRYPTION_KEY`) and save them to `/etc/slipway/.env`
 5. Start the Caddy reverse proxy
 6. Pull and start the Slipway dashboard
-7. Display your access URL
+7. Add Slipway's ports to UFW or firewalld when either host firewall is active
+8. Display your access URL
 
 ## What Gets Installed
 
@@ -99,6 +100,10 @@ http://YOUR_SERVER_IP:1337
 
 ::: warning Before Custom Domain
 Until you configure a custom domain, Slipway runs on port 1337 with HTTP. For production use, you should [configure a custom domain](/slipway/custom-domain) to enable HTTPS.
+:::
+
+::: warning Provider Firewall
+The installer can configure an active firewall on the server, but it cannot change a firewall or security group managed by your VPS provider. Allow the required ports in the provider's control panel too. See [Network Requirements](/slipway/requirements#network-requirements) for the complete port list.
 :::
 
 ## Manual Installation
