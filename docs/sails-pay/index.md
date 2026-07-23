@@ -23,5 +23,5 @@ features:
     details: Configure payment processing through Sails-oriented provider settings.
   - icon: 💻
     title: Developer-Friendly API
-    details: Use a documented API for checkout, subscriptions, and transaction handling.
+    details: Use a documented API for checkout, customer portals, subscriptions, and transaction handling.
 ---

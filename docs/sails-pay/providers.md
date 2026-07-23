@@ -54,6 +54,28 @@ const checkoutUrl = await sails.pay.checkout({
 })
 ```
 
+## Provider-specific capabilities
+
+Sails Pay exposes the selected adapter through `sails.pay`. In addition to common methods such as `checkout()`, adapters can provide nested APIs for provider-specific capabilities.
+
+For example, `@sails-pay/bachs` 0.0.2 and later exposes `customer.portal()` for creating a fresh customer billing portal session:
+
+```js
+const portalUrl = await sails.pay.customer.portal({
+  customerId: 'cust_1a2b3c4d5e6f'
+})
+```
+
+You can access the same capability through a named Bachs provider:
+
+```js
+const portalUrl = await sails.pay.provider('bachs').customer.portal({
+  customerId: 'cust_1a2b3c4d5e6f'
+})
+```
+
+Provider-specific methods are documented on each provider's page. See [Bachs customer portal sessions](/sails-pay/bachs#customer-portal) for configuration, permissions, lifecycle, and error behavior.
+
 ## Multiple providers
 
 You can configure multiple providers simultaneously. This is useful when you need to offer different payment options or operate in different regions:

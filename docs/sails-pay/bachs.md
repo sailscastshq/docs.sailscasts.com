@@ -29,6 +29,7 @@ Relevant Bachs capabilities include:
 - **Pure Checkout**: Create hosted checkouts from runtime amount and currency data.
 - **Charge verification**: Retrieve charge status with `sails.pay.verify({ chargeId })`.
 - **Checkout lookup**: Fetch checkout or checkout-session details after redirect or webhook delivery.
+- **Customer portal sessions**: Create fresh, short-lived billing management URLs with `sails.pay.customer.portal({ customerId })`.
 - **Webhook signatures**: Verify `X-Bachs-Timestamp` and `X-Bachs-Signature` using HMAC SHA-256.
 - **Refunds**: Create full or partial refunds for completed charges.
 
@@ -38,9 +39,10 @@ Before integrating Bachs with Sails Pay:
 
 1. Create a Bachs account at [bachs.io](https://bachs.io).
 2. Generate a sandbox or live secret API key.
-3. Create products in Bachs if you want product-based checkout sessions.
-4. Configure a webhook destination and copy its signing secret.
-5. Add return and cancel URLs for your application.
+3. Grant the API key `customers:write` if your application will create customer portal sessions.
+4. Create products in Bachs if you want product-based checkout sessions.
+5. Configure a webhook destination and copy its signing secret.
+6. Add return and cancel URLs for your application.
 
 ::: tip
 Use sandbox keys starting with `sk_sandbox_` during development. The adapter automatically uses `https://sandbox-api.bachs.io` for sandbox keys unless you provide `baseUrl`.
@@ -53,6 +55,10 @@ Install Sails Pay and the Bachs adapter:
 ```sh
 npm i sails-pay @sails-pay/bachs
 ```
+
+::: info
+Customer portal sessions require `@sails-pay/bachs` 0.0.2 or later.
+:::
 
 ## Specifying the adapter
 
@@ -253,6 +259,81 @@ const checkout = await sails.pay.checkout.get({
 
 The checkout includes `charge` once the customer submits payment.
 
+## Customer portal
+
+Create a customer portal session when a customer wants to manage their Bachs billing.
+
+When Bachs is your default provider:
+
+```js
+const portalUrl = await sails.pay.customer.portal({
+  customerId: 'cust_1a2b3c4d5e6f'
+})
+```
+
+When Bachs is configured as a named provider:
+
+```js
+const portalUrl = await sails.pay.provider('bachs').customer.portal({
+  customerId: 'cust_1a2b3c4d5e6f'
+})
+```
+
+The method calls `POST /v1/customers/{customer_id}/portal-sessions` without a request body and returns the hosted portal URL as a string.
+
+### Required permission
+
+The API key must include the `customers:write` permission. A key without that permission returns a normalized `403` error.
+
+### Configuration
+
+`customer.portal()` uses the same API key and base URL resolution as the other Bachs adapter methods:
+
+- An `apiKey` or `baseUrl` passed to the method takes precedence.
+- Otherwise, the method uses the configured Bachs provider values.
+- An `sk_sandbox_` key automatically selects `https://sandbox-api.bachs.io`.
+- An explicit `baseUrl` is always respected.
+
+```js
+const portalUrl = await sails.pay.customer.portal({
+  customerId: 'cust_1a2b3c4d5e6f',
+  apiKey: sails.config.pay.providers.default.apiKey,
+  baseUrl: sails.config.pay.providers.default.baseUrl
+})
+```
+
+In most applications, configure `apiKey` and `baseUrl` once in `config/pay.js` rather than passing them on every call.
+
+### Create sessions on demand
+
+Bachs customer portal sessions are short-lived. Create a new session whenever the customer asks to manage billing.
+
+::: warning
+Do not cache, persist, or reuse the returned portal URL. The adapter creates a fresh session for every call.
+:::
+
+A typical Sails action can redirect the customer immediately:
+
+```js
+module.exports = {
+  friendlyName: 'Open billing portal',
+
+  exits: {
+    success: {
+      responseType: 'redirect'
+    }
+  },
+
+  fn: async function () {
+    return sails.pay.customer.portal({
+      customerId: this.req.me.bachsCustomerId
+    })
+  }
+}
+```
+
+Portal session failures use the Bachs adapter's normalized error path, including `401`, `403`, `404`, `429`, `500`, and `503` responses. A successful response without a valid `url` also exits through `couldNotCreatePortalUrl`.
+
 ## Charge verification
 
 Bachs verifies payments by `chargeId`, not by checkout reference.
@@ -309,6 +390,7 @@ const refund = await sails.pay.refund.create({
 ## Next steps
 
 - [Creating checkouts](/sails-pay/checkout) - Redirect users to complete payment
+- [Create a customer portal session](#customer-portal) - Let customers manage billing
 - [Verify transaction](/sails-pay/verify-transaction) - Confirm charge status
 - [Verifying webhooks](/sails-pay/webhooks) - Verify provider webhook deliveries
 
@@ -320,3 +402,5 @@ const refund = await sails.pay.refund.create({
 - [Get Charge Status](https://docs.bachs.io/guides/payments/get-charge-status)
 - [Bachs Webhooks](https://docs.bachs.io/guides/webhooks/overview)
 - [Create Refund](https://docs.bachs.io/api-reference/refunds/create-refund)
+- [Bachs Customer Portal](https://docs.bachs.io/guides/customer-portal/overview)
+- [Create Portal Session](https://docs.bachs.io/guides/customer-portal/create-portal-session)
