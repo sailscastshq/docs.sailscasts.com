@@ -131,6 +131,44 @@ slipway slide
 Future versions will support automatic container restarts when variables change.
 :::
 
+## Referencing other variables
+
+Values may reference another effective environment variable with `$NAME` or `${NAME}`:
+
+```bash
+HOST=app.internal
+ORIGIN=http://$HOST:${PORT}
+HEALTH_URL=${ORIGIN}/health
+```
+
+When the container starts, Slipway resolves the merged global, environment, app, and Slipway-owned runtime values:
+
+```text
+HOST=app.internal
+ORIGIN=http://app.internal:1337
+HEALTH_URL=http://app.internal:1337/health
+```
+
+`PORT` is the internal port assigned to the running application, not the public host port.
+
+Use `$$` for a literal dollar sign:
+
+```bash
+TEMPLATE=literal=$$PORT resolved=$PORT
+```
+
+This becomes:
+
+```text
+TEMPLATE=literal=$PORT resolved=1337
+```
+
+::: info Safe expansion
+Expansion is performed without a shell. Command substitutions, backticks, and other shell-like text are passed to Docker as literal data and are never executed. Unknown references and cyclic references remain unchanged instead of being guessed.
+:::
+
+Expanded values are limited to 1 MiB, and deeply recursive reference graphs stop safely. Keep reference chains short enough that another operator can understand the effective value.
+
 ## Environment-Specific Variables
 
 ### Multiple Environments

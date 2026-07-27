@@ -5,7 +5,7 @@ head:
       content: https://docs.sailscasts.com/slipway-social.png
 title: Content
 titleTemplate: Slipway
-description: Edit markdown content files directly from the Slipway dashboard. A visual CMS for sails-content powered apps.
+description: Manage sails-content Markdown and JSON files from a visual, Git-backed editor in Slipway.
 prev:
   text: Bridge
   link: /slipway/bridge
@@ -17,237 +17,197 @@ editLink: true
 
 # Content
 
-Content is a **visual CMS** for your [sails-content](https://docs.sailscasts.com/sails-content) powered applications. Edit markdown files, manage frontmatter, and deploy changes—all from the Slipway dashboard.
-
-## What is Content?
-
-Content provides a web-based interface for managing your `sails-content` files:
-
-- **Browse collections** - Navigate your content directory structure
-- **Edit markdown** - Visual editor with live preview
-- **Manage frontmatter** - Edit metadata fields directly
-- **One-click deploy** - Save changes and trigger a deploy
-
-No need to push to git for simple content updates.
+Content is Slipway's Git-backed editor for
+[sails-content](https://docs.sailscasts.com/sails-content) applications. It lets
+an editor manage Markdown, frontmatter, images, and JSON without leaving the
+dashboard while keeping the repository as the source of truth.
 
 ## Requirements
 
-Content is available when your app uses [sails-content](https://docs.sailscasts.com/sails-content):
+Install `sails-content` in the application:
 
 ```bash
 npm install sails-content
 ```
 
-Slipway automatically detects `sails-content` during deployment and enables the Content feature.
+Slipway detects the hook during deployment and enables Content for that
+application. A connected Git repository is recommended: it gives every change
+a durable commit and lets **Save & Deploy** deploy the exact revision that was
+just saved.
 
-## Accessing Content
+## Open Content
 
-### Via Dashboard
+1. Open the project and environment.
+2. Choose **Content**.
+3. Select the application when the environment contains more than one app.
+4. Open a collection and document.
 
-1. Go to your project in Slipway
-2. Select an environment
-3. Click the **Content** icon (document icon with violet color)
-4. Browse your collections
+The production environment uses:
 
-### Via Direct URL
-
-```
-https://your-slipway-instance.com/projects/myapp/content
-```
-
-Or with a specific environment:
-
-```
-https://your-slipway-instance.com/projects/myapp/environments/staging/content
+```text
+/projects/:projectSlug/content
 ```
 
-## Content Structure
+Other environments include the environment slug:
 
-Content follows the standard `sails-content` directory structure:
-
+```text
+/projects/:projectSlug/environments/:environmentSlug/content
 ```
+
+Content follows the normal `sails-content` directory structure:
+
+```text
 content/
 ├── blog/
 │   ├── hello-world.md
-│   ├── getting-started.md
-│   └── advanced-features.md
+│   └── getting-started.md
 ├── docs/
-│   ├── introduction.md
-│   ├── installation.md
-│   └── api-reference.md
-└── pages/
-    ├── about.md
-    └── contact.md
+│   └── installation.md
+└── settings/
+    └── site.json
 ```
 
-Each subdirectory becomes a **collection** in the Content Manager.
+Each directory is shown as a collection. Markdown and JSON files appear as
+records inside it.
 
-## Collections
+## Create a document
 
-### Viewing Collections
+Choose **New content** from a collection, then enter a slug and optional title.
+The slug becomes the filename. For example, `getting-started` creates
+`getting-started.md`.
 
-The Content Manager lists all collections with:
+Slipway creates a Markdown document with initial frontmatter and commits it as:
 
-- Collection name
-- Number of files
-- Individual file listings
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│ Content Manager                               sails-content     │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│ 📁 blog                                    3 files        [+]   │
-│ ├── hello-world                                                 │
-│ ├── getting-started                                             │
-│ └── advanced-features                                           │
-│                                                                 │
-│ 📁 docs                                    3 files        [+]   │
-│ ├── introduction                                                │
-│ ├── installation                                                │
-│ └── api-reference                                               │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
+```text
+chore(content): create blog/getting-started
 ```
 
-### Creating New Content
+Use meaningful, URL-safe slugs because applications commonly use them in public
+routes.
 
-1. Click the **+** button next to a collection
-2. Enter a slug (becomes the filename)
-3. Optionally add a title
-4. Click **Create**
+## Visual Markdown editor
 
-The new file is created with basic frontmatter:
+Markdown files open in a minimal TipTap editor. The document still remains
+Markdown on disk; the visual editor is an authoring surface, not a proprietary
+content format.
+
+You can:
+
+- write headings, paragraphs, lists, blockquotes, links, code, and horizontal
+  rules;
+- use Markdown shortcuts such as `## ` for a heading or `- ` for a list;
+- select text to open the compact formatting menu for bold, italic,
+  strikethrough, inline code, and links;
+- press `Cmd/Ctrl + K` to add a link to selected text;
+- press `Cmd/Ctrl + S` to save;
+- paste a public image URL, or paste and drop image files when uploads are
+  configured.
+
+Choose **Markdown** in the header whenever you want to edit the source directly.
+Choose **Visual** to return to the TipTap surface.
+
+### Safe Markdown round trips
+
+Slipway checks that TipTap can parse and serialize the document without changing
+its meaning. If a file contains syntax the visual editor cannot preserve
+exactly, Slipway keeps it in Markdown mode and explains why. The source remains
+editable and is not silently rewritten.
+
+This protection is important for hand-written Markdown that uses custom HTML,
+unusual extensions, or other constructs outside the visual editor's supported
+set.
+
+## Metadata
+
+Frontmatter appears in a collapsed **Metadata** section above the document.
+Open it to edit values such as title, description, author, publication date, or
+tags.
 
 ```markdown
 ---
-title: My New Post
-createdAt: 2024-01-20T10:30:00.000Z
+title: Getting Started with Sails
+description: Build and deploy your first Sails application.
+published: true
+tags: ['sails', 'deployment']
 ---
-
-# My New Post
-
-Start writing your content here.
 ```
 
-## Editor
+String, number, boolean, array, and object values are serialized back to valid
+frontmatter. Use Markdown mode when a document needs advanced YAML formatting
+that the form cannot represent safely.
 
-### Split View
+## Images
 
-The default editor shows a split view:
+When upload storage is configured in Slipway settings, paste or drop an image
+into the visual editor. Slipway:
 
-- **Left**: Edit panel with frontmatter and markdown body
-- **Right**: Live preview of rendered content
+1. accepts AVIF, GIF, JPEG, PNG, and WebP files up to 5 MB;
+2. uploads the file through the authenticated Content endpoint;
+3. validates the returned URL;
+4. inserts the image URL and editable alt text into the Markdown.
 
-### Editor Modes
+If uploads are not configured, paste a public image URL instead. Storage
+credentials stay in Slipway settings and are never written into the content
+file.
 
-Toggle between modes using the toolbar:
+## Save and deploy
 
-| Mode        | Description                     |
-| ----------- | ------------------------------- |
-| **Edit**    | Full-width editor, no preview   |
-| **Split**   | Side-by-side editor and preview |
-| **Preview** | Full-width preview only         |
+The main **Save** action records the change without deploying. Its menu also
+offers **Save & Deploy**.
 
-### Raw Mode
+With a connected GitHub repository, saving:
 
-Click the code icon to toggle raw mode:
+1. checks that the file has not changed since the editor loaded it;
+2. commits the update to the application's configured branch;
+3. refreshes Slipway's local build context only after the repository write
+   succeeds.
 
-- Edit the complete file including YAML frontmatter
-- Useful for complex frontmatter or troubleshooting
+Updates use a conventional commit such as:
 
-### Keyboard Shortcuts
-
-| Shortcut       | Action                 |
-| -------------- | ---------------------- |
-| `Cmd/Ctrl + S` | Save without deploying |
-
-## Frontmatter
-
-### Editing Frontmatter
-
-The editor displays frontmatter fields as form inputs:
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│ FRONTMATTER                                                     │
-├─────────────────────────────────────────────────────────────────┤
-│ title      │ Getting Started with Sails                       │ │
-│ author     │ John Doe                                          │ │
-│ date       │ 2024-01-20                                        │ │
-│ tags       │ ["sails", "nodejs", "tutorial"]                   │ │
-└─────────────────────────────────────────────────────────────────┘
+```text
+chore(content): update blog/getting-started
 ```
 
-### Supported Types
+**Save & Deploy** then queues a deployment pinned to that commit SHA. A later
+push to the branch cannot change what that deployment builds.
 
-Frontmatter values are preserved as their original types:
+For applications without a writable repository source, Slipway can keep the
+local content source in sync, but durable repository history and exact Git
+revisions require a connected repository.
 
-- **Strings**: Regular text input
-- **Numbers**: Preserved as numbers
-- **Booleans**: true/false values
-- **Arrays**: JSON arrays
-- **Objects**: JSON objects
-
-## Saving and Deploying
-
-### Save Only
-
-Click **Save** to write changes to the file without deploying:
-
-- Changes are saved to disk immediately
-- The running app won't see changes (SSG mode)
-- Use this when making multiple edits
-
-### Save & Deploy
-
-Click **Save & Deploy** to:
-
-1. Save the file
-2. Trigger a new deployment
-3. Redirect to the deployment page
-
-::: tip SSG Mode
-sails-content uses Static Site Generation (SSG). Content is compiled at build time, so changes require a redeploy to take effect.
+::: tip Static content
+Applications that compile content at build time need **Save & Deploy** before
+the change appears in the running release.
 :::
 
-## Deleting Content
+## Concurrent edits
 
-1. Open the content file in the editor
-2. Click the trash icon in the toolbar
-3. Confirm the deletion
+The editor remembers the Git blob SHA that was loaded. If another person or
+process changes the file first, Slipway rejects the stale save instead of
+overwriting the newer content.
 
-::: warning
-Deleting content removes the file permanently. Consider saving a backup before deleting important content.
-:::
+Reload the document, review the newer version, reapply the intended edit, and
+save again.
 
-## File Types
+## Delete a document
 
-Content supports both Markdown and JSON files:
+Open the save menu, choose **Delete**, and confirm the destructive action.
+Slipway checks the loaded blob SHA before deleting and records a commit such as:
 
-### Markdown Files (.md)
-
-Standard markdown with YAML frontmatter:
-
-```markdown
----
-title: Hello World
-author: Jane Doe
-publishedAt: 2024-01-20
----
-
-# Hello World
-
-This is the body content in **markdown**.
+```text
+chore(content): delete blog/getting-started
 ```
 
-### JSON Files (.json)
+The repository history remains the recovery path for Git-backed content.
+Deleting local-only content cannot be undone from the dashboard.
 
-Structured data without a markdown body:
+## JSON files
+
+JSON records use a source editor rather than the visual Markdown surface:
 
 ```json
 {
-  "title": "Site Configuration",
+  "title": "Site configuration",
   "navigation": [
     { "label": "Home", "url": "/" },
     { "label": "About", "url": "/about" }
@@ -255,119 +215,36 @@ Structured data without a markdown body:
 }
 ```
 
-## API Endpoints
-
-Content provides REST API endpoints for programmatic access:
-
-### List Collections
-
-```bash
-GET /api/v1/projects/:projectSlug/content/collections
-```
-
-### Get Content
-
-```bash
-GET /api/v1/projects/:projectSlug/content/:collection/:file
-```
-
-### Create Content
-
-```bash
-POST /api/v1/projects/:projectSlug/content/:collection
-
-{
-  "slug": "my-new-post",
-  "title": "My New Post",
-  "body": "Initial content..."
-}
-```
-
-### Update Content
-
-```bash
-PUT /api/v1/projects/:projectSlug/content/:collection/:file
-
-{
-  "frontmatter": { "title": "Updated Title" },
-  "body": "Updated content...",
-  "deploy": true
-}
-```
-
-### Delete Content
-
-```bash
-DELETE /api/v1/projects/:projectSlug/content/:collection/:file
-```
-
-## Best Practices
-
-### 1. Use Meaningful Slugs
-
-Slugs become URLs, so use descriptive, URL-friendly names:
-
-```
-# Good
-getting-started-with-sails
-api-authentication-guide
-
-# Avoid
-post-1
-untitled-2024-01-20
-```
-
-### 2. Consistent Frontmatter
-
-Use consistent frontmatter fields across collections:
-
-```yaml
----
-title: Post Title
-description: Brief description for SEO
-author: Author Name
-publishedAt: 2024-01-20
-tags: ['tag1', 'tag2']
----
-```
-
-### 3. Preview Before Deploying
-
-Use the preview mode to check rendering before deploying.
-
-### 4. Batch Edits Together
-
-When making multiple edits, save without deploying, then deploy once at the end.
+Slipway preserves the raw JSON file and applies the same Git conflict protection
+when saving it.
 
 ## Troubleshooting
 
-### Content Not Appearing
+### Content is not available
 
-If the Content feature isn't showing:
+1. Confirm `sails-content` is installed in the application.
+2. Deploy the application so Slipway can detect its features.
+3. Confirm you are viewing the correct application and environment.
 
-1. Verify `sails-content` is in your `package.json`
-2. Deploy your app (detection happens during deployment)
-3. Check the environment page for the content icon
+### Visual mode is unavailable
 
-### Changes Not Visible
+Read the warning above the Markdown source. The file contains syntax that
+Slipway cannot round-trip safely. Continue in Markdown mode or simplify the
+unsupported construct.
 
-Remember that sails-content uses SSG:
+### A save conflicts
 
-1. Save your changes
-2. Click "Save & Deploy"
-3. Wait for the deployment to complete
-4. Your changes are now live
+The repository version changed after the editor loaded. Reload before making
+another save so the newer change is not overwritten.
 
-### Frontmatter Parse Errors
+### A saved change is not live
 
-If frontmatter isn't parsing correctly:
+Use **Save & Deploy** and wait for the pinned deployment to become healthy.
+Saving alone does not rebuild an application that compiles content at build
+time.
 
-1. Switch to raw mode
-2. Check YAML syntax (proper indentation, colons, quotes)
-3. Validate complex values are proper JSON/YAML
+## What's next?
 
-## What's Next?
-
-- Learn about [sails-content](https://docs.sailscasts.com/sails-content) for setting up content in your app
-- Use [Helm](/slipway/helm) for database queries
-- Set up [Auto-Deploy](/slipway/auto-deploy) for git-based deployments
+- Configure [file uploads](/slipway/file-uploads) for pasted and dropped images.
+- Use [Auto-Deploy](/slipway/auto-deploy) for other repository changes.
+- Learn more about [sails-content](https://docs.sailscasts.com/sails-content).

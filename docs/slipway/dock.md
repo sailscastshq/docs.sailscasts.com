@@ -85,6 +85,21 @@ Results display in a formatted table with:
 - Query execution time
 - Scrollable data view
 
+When the editor contains more than one SQL statement, Dock keeps a separate,
+labeled result for every statement. Select the result tabs to move between
+rowsets, command summaries, and errors. The tabs support the left and right
+arrow keys, and each rowset can be copied as CSV independently.
+
+```sql
+SELECT count(*) AS creators FROM creators;
+SELECT count(*) AS teams FROM teams;
+```
+
+The results remain in statement order. If a later statement fails outside an
+explicit transaction, Dock preserves the earlier results so you can see exactly
+what ran before the failure. If you need all-or-nothing behavior, wrap the
+statements in `BEGIN` and `COMMIT`.
+
 ### Safety Features
 
 Dock blocks dangerous queries that could harm your database:
@@ -94,6 +109,21 @@ Dock blocks dangerous queries that could harm your database:
 - System table modifications
 
 For destructive operations, use a dedicated migration or backup first.
+
+## Importing SQL and database dumps
+
+Use **Import** to paste SQL or upload a database dump. Slipway streams uploaded
+data through a temporary file rather than loading the complete backup into
+application memory.
+
+The default maximum import size is 500 MB. Operators can change it with the
+database operation limits in Slipway's server configuration. An oversized
+upload is rejected before it reaches the database, and the temporary file is
+removed after either success or failure.
+
+PostgreSQL custom-format dumps and MySQL/SQL text imports use their native
+database clients. Import errors are returned in Dock so a failed restore does
+not look successful.
 
 ## Table Browser
 
@@ -360,6 +390,15 @@ For long-running queries:
 1. Default timeout is 30 seconds
 2. Optimize your query (add indexes, limit results)
 3. For complex reports, consider using a read replica
+
+### Import Rejected
+
+If a dump is rejected before it begins:
+
+1. Check its size against the configured import limit.
+2. Confirm that its format matches the selected database service.
+3. Check available host disk space; streaming avoids a memory spike but the
+   temporary upload still needs disk capacity.
 
 ### Migration Fails
 

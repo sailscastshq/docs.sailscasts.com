@@ -55,6 +55,22 @@ The **Infrastructure** tab shows real-time resource usage for all running contai
 
 Click a container to expand its 24-hour history chart.
 
+### Collection and retention health
+
+Lookout stores infrastructure samples and application telemetry in
+`db/observability.db`. The host-health card shows the latest collector and
+retention state, including:
+
+- the last attempt and last successful run;
+- the number of retained rows;
+- a stale or failed state and the latest error.
+
+Docker collection and storage maintenance are deliberately independent.
+Container metrics are collected every 30 seconds, while the
+`maintain-observability` Quest job checks disk health and removes expired rows
+every 5 minutes. Retention therefore continues even when Docker is temporarily
+unavailable or no application containers are running.
+
 ## Requests
 
 The **Requests** tab shows HTTP traffic from the last hour:
@@ -140,6 +156,35 @@ module.exports.slipway = {
 ::: tip
 When deployed via Slipway, you don't need to set `telemetryUrl` or `telemetryToken` — they're injected automatically.
 :::
+
+## Data retention
+
+Slipway keeps enough history for diagnosis without allowing observability data
+to grow without a bound.
+
+| Data                                              | Default  | Environment variable                           |
+| ------------------------------------------------- | -------- | ---------------------------------------------- |
+| Container CPU, memory, network, and I/O samples   | 24 hours | `SLIPWAY_CONTAINER_METRICS_RETENTION_HOURS`    |
+| Requests, exceptions, queries, and app-level data | 7 days   | `SLIPWAY_APPLICATION_TELEMETRY_RETENTION_DAYS` |
+
+Retention removes at most 500 rows per table in one batch and performs at most
+20 batches per table during a maintenance run. Operators can tune those bounds
+with:
+
+```bash
+SLIPWAY_OBSERVABILITY_PRUNE_BATCH_SIZE=500
+SLIPWAY_OBSERVABILITY_MAX_PRUNE_BATCHES=20
+```
+
+Values must be positive. The prune batch is capped at 900 rows to stay within
+SQLite's statement parameter limit.
+
+### Existing installations
+
+On startup, Slipway creates any missing observability tables and indexes. It
+migrates legacy container samples from `db/app.db` in bounded, idempotent
+batches, verifies the copied row count, and only then removes the legacy rows.
+An interrupted migration safely resumes on the next startup.
 
 ## What's Next?
 

@@ -28,6 +28,21 @@ Slipway provisions and manages databases for your Sails applications from the sa
 | **Redis**      | Key-Value  | Caching, sessions, queues       |
 | **MongoDB**    | Document   | Document-based storage          |
 
+## Tested image versions
+
+Slipway provisions new services from tested numeric Docker tags and records the immutable digest or image ID that Docker actually ran. New services never store `latest`.
+
+| Service    | Default | Other tested line | Automated upgrade |
+| ---------- | ------- | ----------------- | ----------------- |
+| PostgreSQL | 17      | 16                | 16 → 17           |
+| MySQL      | 8.4     | 8.0               | 8.0 → 8.4         |
+| Redis      | 7.2     | —                 | Not yet           |
+| MongoDB    | 8.0     | 7.0               | 7.0 → 8.0         |
+
+Docker may publish newer patches within a supported line, but restarting, recreating, restoring, or updating Slipway reuses the exact image recorded for that service.
+
+Existing services created with `latest` are migrated conservatively. Slipway inspects the running container, records its actual image and digest, and leaves its volume untouched. If the original container no longer exists, the version remains visibly unresolved rather than being guessed.
+
 ## Creating a Database
 
 ### Via CLI
@@ -37,10 +52,15 @@ Slipway provisions and manages databases for your Sails applications from the sa
 slipway db:create mydb
 
 # Explicit type
-slipway db:create mydb --type=postgres
+slipway db:create mydb --type=postgresql
 slipway db:create cache --type=redis
 slipway db:create docs --type=mongodb
+
+# Choose another tested line
+slipway db:create legacy-db --type=postgresql --version=16
 ```
+
+Custom versions must be numeric tags such as `17.4` or `8.0.12`. Mutable aliases, image variants, repository names, and shell syntax—such as `latest`, `17-alpine`, or `postgres:17`—are rejected.
 
 ### Via Dashboard
 
@@ -104,6 +124,25 @@ slipway db:unlink mydb myapp
 ```
 
 This removes the environment variable. The database itself is not deleted.
+
+## Upgrading a service
+
+Supported adjacent upgrades appear on the service settings page. An upgrade is a recoverable data migration, not an in-place image restart:
+
+1. Slipway creates and verifies a logical backup in configured object storage.
+2. It resolves the target image before interrupting the running service.
+3. It starts the target version on a fresh named volume.
+4. It restores the verified backup and waits for the database to become ready.
+5. It promotes the restored container to the canonical service name.
+6. It retains the stopped previous container and volume for explicit recovery.
+
+The settings page streams every step. Backup, image pull, startup, and restore failures stop before promotion.
+
+Slipway only automates tested adjacent major-version upgrades. It does not automate downgrades, skipped releases, custom-version upgrades, or Redis upgrades without a verified restore path.
+
+::: warning Verify before cleanup
+After an upgrade, verify application reads and writes before deleting the retained previous container or volume. The service settings page records the exact previous container and backup used for recovery.
+:::
 
 ## Connecting Directly
 
@@ -298,6 +337,12 @@ slipway db:restore mydb mydb-2024-01-20-143022.sql.gz --from-s3
 ::: danger Destructive Operation
 Restoring a backup will **replace all data** in the database. Make sure you have a recent backup before restoring.
 :::
+
+### Large backups and restores
+
+Backup creation, object-storage upload/download, restore, and Dock SQL imports are streamed through files and child processes instead of being buffered into Slipway's memory. Slipway checks disk capacity before materializing temporary data and enforces configured byte limits while streaming.
+
+This lets backup size be governed by available disk and configured limits rather than the Slipway Node.js process heap. A failed stream or database process produces an explicit error and cleans up its temporary files.
 
 ### Download Backup
 
