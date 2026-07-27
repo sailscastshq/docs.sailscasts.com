@@ -97,6 +97,20 @@ module.exports.slipway = {
         authorization: {
           helper: 'bridge.authorize'
         },
+        relationships: {
+          chapters: {
+            fields: ['id', 'title'],
+            search: ['title'],
+            limit: 8
+          },
+          lessons: {
+            fields: ['id', 'title'],
+            search: ['title'],
+            limit: 12,
+            attach: true,
+            detach: true
+          }
+        },
         fields: {
           price: {
             label: 'Price',
@@ -125,6 +139,13 @@ module.exports.slipway = {
               storage: 'bridge',
               directory: 'courses/thumbnails',
               store: 'url'
+            }
+          },
+          creator: {
+            relation: {
+              label: 'Creator',
+              search: ['fullName', 'email'],
+              limit: 20
             }
           }
         }
@@ -188,6 +209,7 @@ You can also use `{ hidden: true }` when a complete resource object is easier to
 | `actions`       | Enable or disable resource operations                          |
 | `authorization` | Target Sails helper for actor-aware action decisions           |
 | `fields`        | Presentation metadata for individual attributes                |
+| `relationships` | Collection display and explicit attach/detach behavior         |
 
 Bridge always includes the model's primary key in `list` and `show`, even when it is omitted from the configured arrays.
 
@@ -426,6 +448,87 @@ creating the record. The generated primary key is not rendered in the form and
 cannot be replaced by a forged mutation value.
 
 Do not parse a Bridge URL to infer that an application's records use integers.
+
+## Relationships
+
+Bridge understands both Waterline `model` and `collection` associations.
+Belongs-to fields render as searchable selectors using the related resource's
+primary key and `title` field, so UUIDs stay opaque while people see useful
+names.
+
+Override the generated selector under the field's `relation` key:
+
+```js
+lesson: {
+  fields: {
+    chapter: {
+      relation: {
+        label: 'Chapter',
+        search: ['title', 'slug'],
+        limit: 20
+      }
+    },
+    creator: {
+      relation: {
+        search: ['fullName', 'email']
+      }
+    }
+  }
+}
+```
+
+Bridge sends only the first bounded page with the form. The selector searches
+and paginates through a dedicated JSON transport as the user types, instead of
+placing an entire user, course, or chapter table in the Inertia page.
+
+Create and update requests repeat the related resource's `viewAny`
+authorization and verify that each submitted belongs-to ID still exists.
+Hiding a selector therefore cannot be bypassed with a forged form payload.
+
+Collection associations appear as compact related-record lists on the detail
+page. Configure their safe columns and page size with `relationships`:
+
+```js
+course: {
+  relationships: {
+    chapters: {
+      label: 'Chapters',
+      fields: ['id', 'title', 'position'],
+      search: ['title'],
+      limit: 8
+    },
+    lessons: {
+      fields: ['id', 'title'],
+      search: ['title'],
+      limit: 12,
+      attach: true,
+      detach: true
+    }
+  }
+}
+```
+
+`fields` and `search` may contain only attributes already allowed by the
+related resource contract. `limit` must be between 1 and 50. Hidden resources
+and denied `viewAny` decisions do not appear.
+
+::: warning Collection mutation is opt-in
+Bridge never enables collection mutation from Waterline discovery alone.
+`attach` and `detach` must be explicitly set to `true` for each collection.
+:::
+
+Attach and detach call Waterline's `addToCollection()` and
+`removeFromCollection()` methods; they never delete the related record. A
+mutation proceeds only when:
+
+1. the exact operation is enabled in `relationships`;
+2. the target authorization helper permits `update` on the parent resource;
+   and
+3. it permits `viewAny` on the related resource.
+
+Waterline remains responsible for association semantics. For example, a
+one-to-many detach is rejected when it would clear a required foreign key, and
+Bridge reports that failure instead of forcing invalid data.
 
 ## Server enforcement
 
