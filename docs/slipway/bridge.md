@@ -198,7 +198,7 @@ Disabled actions are removed from the interface and rejected by the server. Hidi
 | `readOnly`    | Display the field without accepting mutations   |
 | `sortable`    | Allow or prevent list sorting                   |
 | `options`     | Values for a select field                       |
-| `default`     | Initial value in a create form                  |
+| `default`     | Literal create value or primary-key helper      |
 | `currency`    | Serializable currency display metadata          |
 | `relation`    | Serializable relationship metadata              |
 | `upload`      | Upload behaviour and canonical storage metadata |
@@ -220,9 +220,45 @@ All field metadata must be serializable because the normalized contract is sent 
 Bridge treats record identifiers as opaque values:
 
 - numeric IDs work normally, including `0`;
-- UUID and other string primary keys are URL-encoded;
+- UUID and other string primary keys are preserved and URL-encoded;
 - long identifiers are compacted visually but remain available in full; and
 - queries use the model's configured `primaryKey`, not an assumed `id` column.
+
+Bridge also derives every belongs-to selector from the related model's primary
+key. It converts a submitted relationship value only when that primary key is
+numeric. UUIDs and other string foreign keys remain unchanged through create
+and update operations.
+
+Auto-incrementing primary keys and model-level `defaultsTo` values stay
+server-managed. A required primary key without either default appears on the
+create form so Bridge does not invent your application's identifier format.
+
+If the application generates IDs with a Sails helper, configure that helper as
+the primary-key default:
+
+```js
+module.exports.slipway = {
+  bridge: {
+    resources: {
+      course: {
+        fields: {
+          id: {
+            default: {
+              helper: 'getUuid'
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Namespaced identities such as `ids.getUuid` also work. Slipway resolves the
+helper inside the target app, calls it without client-controlled inputs, and
+passes the result through the target Waterline model's validation before
+creating the record. The generated primary key is not rendered in the form and
+cannot be replaced by a forged mutation value.
 
 Do not parse a Bridge URL to infer that an application's records use integers.
 
@@ -274,7 +310,7 @@ The stored model value should be the canonical public URL. Configure provider cr
 
 ### A form field is missing
 
-Check the correct surface: `create`, `edit`, or `show`. Protected, encrypted, generated timestamp, read-only, and primary-key fields are not writable by default.
+Check the correct surface: `create`, `edit`, or `show`. Protected, encrypted, generated timestamp, and read-only fields are not writable by default. Primary keys remain hidden when they are auto-incrementing, have a model default, or use a configured helper default; otherwise a required primary key is available on the create surface.
 
 ### A save is rejected
 
