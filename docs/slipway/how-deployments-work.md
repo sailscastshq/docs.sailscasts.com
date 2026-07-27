@@ -21,24 +21,41 @@ Understanding the deployment process helps you debug issues and optimize your wo
 
 ## The Deployment Pipeline
 
-When you run `slipway slide`, here's what happens:
+Every deployment—CLI, Git, dashboard, API, or Content—enters the same coordinated pipeline:
 
 ```
-┌──────────────┐    ┌──────────────┐    ┌──────────────┐
-│   Package    │ -> │    Build     │ -> │    Push      │
-│   Source     │    │    Image     │    │   to Server  │
-└──────────────┘    └──────────────┘    └──────────────┘
-                                               │
-                                               ▼
-┌──────────────┐    ┌──────────────┐    ┌──────────────┐
-│   Update     │ <- │    Start     │ <- │    Stop      │
-│   Proxy      │    │    New       │    │    Old       │
-└──────────────┘    └──────────────┘    └──────────────┘
+Source readiness → Queue → Build image → Start candidate
+       → Health check → Transactional traffic cutover → Finalize
 ```
+
+Slipway keeps the current release serving traffic until the candidate is healthy and the proxy update has been verified.
 
 ## Step-by-Step
 
-### 1. Package Source Code
+### 1. Verify source readiness
+
+Before creating active work, Slipway confirms that the target app has deployable source:
+
+- a connected Git repository and branch;
+- a source archive previously pushed by the Slipway CLI; or
+- an exact commit created by the Content Manager.
+
+Dashboard redeploys work for both Git-connected and CLI-pushed applications. If no source is available, Slipway stops during preflight and displays the actionable reason instead of creating an unexplained failed deployment.
+
+### 2. Queue and coordinate
+
+Only one deployment can build or change traffic for an app at a time. Additional deployments remain **Queued** and start in order after the active deployment reaches a terminal state.
+
+This prevents two builds, rollbacks, or proxy updates for the same app from racing each other. Different apps can still deploy independently.
+
+Slipway records the queue and lease in its database. After a Slipway or host restart, reconciliation:
+
+- resumes eligible queued work;
+- marks interrupted work with an accurate terminal state;
+- removes abandoned candidate containers and proxy transactions; and
+- restores the app's status from the running Docker container.
+
+### 3. Package or fetch source code
 
 ```bash
 $ slipway slide
@@ -55,7 +72,7 @@ Slipway packages your code using `git archive`:
 - `node_modules/` is excluded (installed during build)
 - Untracked files are excluded
 
-### 2. Upload to Server
+### 4. Upload to Server
 
 ```bash
   ▶ Uploading to server...
@@ -65,7 +82,7 @@ Slipway packages your code using `git archive`:
 
 The archive is uploaded to your Slipway server via HTTPS.
 
-### 3. Build Docker Image
+### 5. Build Docker Image
 
 ```bash
   ▶ Building image...
@@ -87,7 +104,7 @@ Slipway builds a Docker image using your `Dockerfile`:
 - Assets compiled (if using Shipwright/Vite)
 - Image tagged with deployment ID
 
-### 4. Stop Old Container (Zero-Downtime)
+### 6. Start a candidate release
 
 ```bash
   ▶ Starting zero-downtime deployment...
@@ -101,7 +118,7 @@ For zero-downtime deploys:
 3. Once healthy, traffic switches
 4. Old container stops
 
-### 5. Start New Container
+### 7. Verify candidate health
 
 ```bash
   ▶ Starting new container...
@@ -118,7 +135,7 @@ The new container:
 - Links to database services
 - Starts the Sails application
 
-### 6. Update Proxy Routes
+### 8. Cut over traffic transactionally
 
 ```bash
   ▶ Updating proxy routes...
@@ -132,7 +149,17 @@ Caddy is updated to route traffic to the new container:
 - WebSocket support enabled
 - SSL termination active
 
-### 7. Cleanup
+The cutover is a transaction:
+
+1. Slipway snapshots the current route.
+2. It writes the candidate route.
+3. Caddy validates and reloads the configuration.
+4. Slipway verifies that the expected route is active.
+5. Only then does it finalize the new release and stop the previous container.
+
+If writing, reloading, or verifying the route fails, Slipway restores the previous route and keeps the previous release serving traffic.
+
+### 9. Cleanup
 
 ```bash
   ▶ Cleaning up...
@@ -143,6 +170,25 @@ Caddy is updated to route traffic to the new container:
   ✓ Deployed myapp (abc123) in 42s
     https://myapp.example.com
 ```
+
+## Cancelling a deployment
+
+Cancelling is cooperative process termination, not only a status change. Slipway stops an active Docker build, health check, source operation, or rollback; removes candidate artifacts; releases the app's deployment lease; and starts the next queued deployment when appropriate.
+
+If cancellation happens before traffic cutover, the current release remains untouched. If a cutover transaction has begun, Slipway restores the previous verified route before cleanup.
+
+The deployment page records who cancelled the work and whether any candidate release was removed.
+
+## Deployment history
+
+Deployment history is ordered from the app's actual current and active state:
+
+1. executing work;
+2. current releases;
+3. queued deployments in queue order; and
+4. completed history from newest to oldest.
+
+Each row identifies the app, status, source, actor, branch, commit, and creation time. The history updates active statuses without requiring a full page refresh.
 
 ## The Dockerfile
 

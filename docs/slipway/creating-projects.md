@@ -255,26 +255,27 @@ slipway project:update my-sails-app \
 ## Deleting Projects
 
 ::: danger Destructive Action
-Deleting a project removes all environments, deployments, and data.
+Deleting a project removes its applications, environments, routes, and
+deployment records from Slipway. Recovery data is retained by default.
 :::
 
-```bash
-slipway project:destroy my-sails-app
-```
+Open **Project Settings**, choose **Delete project**, and confirm the action.
+Slipway stops active work, removes traffic routes and running containers, and
+cleans up the project's control-plane records.
 
-You'll be prompted to confirm:
+By default, service volumes, backups, application source, and Docker images are
+retained as recovery data. Select **Also permanently delete retained data** only
+when you intentionally want to purge those artifacts as well.
 
-```
-Are you sure you want to delete 'my-sails-app'?
-This will delete:
-  - 2 environments (production, staging)
-  - 15 deployments
-  - All environment variables
+::: warning Purging cannot be undone
+The purge option deletes service volumes, backups, source, and Docker images.
+Confirm that any required database backup or source revision exists somewhere
+outside the Slipway host first.
+:::
 
-Type 'my-sails-app' to confirm: my-sails-app
-
-✓ Project deleted
-```
+Environment, application, and service deletion use the same explicit retention
+model. Automatically-created preview environments are an exception: Slipway
+purges them when their lifecycle ends because they are temporary by design.
 
 ## Best Practices
 

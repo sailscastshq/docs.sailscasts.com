@@ -278,6 +278,20 @@ If `--app` is omitted, logs are shown for the default app.
 - Time range selection
 - Download logs
 
+### Browser-tab deployment status
+
+Slipway also reflects deployment state in the browser favicon, so you can keep working in another tab without losing the outcome:
+
+| Favicon state | Meaning                                     |
+| ------------- | ------------------------------------------- |
+| Deploying     | At least one deployment is queued or active |
+| Success       | A deployment completed successfully         |
+| Failed        | A deployment failed                         |
+| Cancelled     | A deployment was cancelled                  |
+| Idle          | No active or recently completed deployment  |
+
+Active work always takes precedence over a completed state. Success remains visible for about 10 seconds; failed and cancelled states remain for about 12 seconds. Opening or returning to the relevant Slipway tab acknowledges the terminal state, after which the normal idle icon returns.
+
 ## Configuring Sails Logging
 
 ### Log Levels
