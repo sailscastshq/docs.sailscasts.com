@@ -85,6 +85,9 @@ module.exports.slipway = {
         actions: {
           bulkDelete: false
         },
+        authorization: {
+          helper: 'bridge.authorize'
+        },
         fields: {
           title: {
             label: 'Course title',
@@ -165,6 +168,7 @@ You can also use `{ hidden: true }` when a complete resource object is easier to
 | `sort`          | Default `{ field, direction }` ordering                        |
 | `hidden`        | Remove the resource from Bridge                                |
 | `actions`       | Enable or disable resource operations                          |
+| `authorization` | Target Sails helper for actor-aware action decisions           |
 | `fields`        | Presentation metadata for individual attributes                |
 
 Bridge always includes the model's primary key in `list` and `show`, even when it is omitted from the configured arrays.
@@ -186,6 +190,62 @@ actions: {
 
 Disabled actions are removed from the interface and rejected by the server. Hiding a button is not the security boundary.
 
+### Actor-aware authorization
+
+Use a target app helper when permissions depend on the person using Bridge:
+
+```js
+course: {
+  authorization: {
+    helper: 'bridge.authorize'
+  }
+}
+```
+
+Slipway calls the helper inside the running target application for `viewAny`, `view`, `create`, `update`, `delete`, `bulkDelete`, and configured custom action names. The helper receives:
+
+- `actor`: the signed-in Slipway user's ID, email, full name, team role, and current project/environment identifiers;
+- `action`: the operation being checked;
+- `resource`: the resource identity, primary key, and labels; and
+- `recordId`: the normalized primary key when a record is in scope.
+
+The target application should map `actor.email` or another stable identifier to its own user record and make the domain-specific decision:
+
+```js
+// api/helpers/bridge/authorize.js
+const levels = {
+  user: 0,
+  editor: 1,
+  admin: 2
+}
+
+module.exports = {
+  friendlyName: 'Authorize Bridge',
+
+  inputs: {
+    actor: { type: 'ref', required: true },
+    action: { type: 'string', required: true },
+    resource: { type: 'ref', required: true },
+    recordId: { type: 'ref' }
+  },
+
+  fn: async function ({ actor, action }) {
+    const user = await User.findOne({ email: actor.email })
+    if (!user) return false
+
+    const requiredLevel = ['update', 'delete', 'bulkDelete'].includes(action)
+      ? levels.admin
+      : levels.editor
+
+    return (levels[user.role] ?? -1) >= requiredLevel
+  }
+}
+```
+
+This gives the same split as the existing Sailscasts Nexus clearance: editors can discover, read, and create; admins can also update and delete. Return `true` or `{ allowed: true }` to permit the action. A falsey result, missing helper, thrown error, or malformed result fails closed.
+
+The existing Slipway team/project check remains the outer gate. The target helper is the application-specific gate; receiving an actor object is not authorization by itself.
+
 ## Field options
 
 | Option        | Purpose                                         |
@@ -199,9 +259,38 @@ Disabled actions are removed from the interface and rejected by the server. Hidi
 | `sortable`    | Allow or prevent list sorting                   |
 | `options`     | Values for a select field                       |
 | `default`     | Literal create value or primary-key helper      |
+| `sensitive`   | Mark an additional field as hidden by default   |
+| `visibility`  | Per-surface field visibility                    |
 | `currency`    | Serializable currency display metadata          |
 | `relation`    | Serializable relationship metadata              |
 | `upload`      | Upload behaviour and canonical storage metadata |
+
+`visibility` accepts boolean values for `list`, `show`, `create`, `edit`, and `filter`:
+
+```js
+fields: {
+  internalNote: {
+    sensitive: true,
+    visibility: {
+      show: true,
+      edit: true
+    }
+  },
+  githubAccessToken: {
+    visibility: {
+      list: false,
+      show: false,
+      create: false,
+      edit: false,
+      filter: false
+    }
+  }
+}
+```
+
+A `false` value is a hard deny for that surface, including direct requests. A `true` value explicitly opts a sensitive-name field into that surface. Listing a field in the resource-level `list`, `show`, `create`, `edit`, or `filters` array is also an explicit opt-in.
+
+Bridge hides encrypted and protected attributes, plus names that look like passwords, tokens, secrets, API keys, credentials, recovery codes, `emailChangeCandidate`, `planCode`, or `subscriptionCode`. This prevents zero-configuration discovery from turning private operational fields into an accidental admin form. Set `sensitive: true` for application-specific private data.
 
 The form supports text, email, password, number, select, toggle, JSON, and long-form inputs. Set `type: 'richtext'` and `format: 'markdown'` to activate the TipTap visual editor while keeping the model value as Markdown.
 
@@ -268,9 +357,11 @@ The resource contract is an authorization boundary as well as UI configuration:
 
 - list queries select only configured `list` fields;
 - detail and edit queries select only their configured surfaces;
+- records are redacted again after parsing and before becoming Inertia props;
 - create and update payloads reject attributes outside `create` or `edit`;
 - Markdown-backed rich-text mutations reject raw HTML by default;
 - hidden resources and disabled actions cannot be reached by calling their endpoints directly;
+- actor-aware authorization uses the same server decision that hides unavailable controls;
 - sort fields and directions are allowlisted; and
 - search values are serialized as data before execution in the target container.
 
