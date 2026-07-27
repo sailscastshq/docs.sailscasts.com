@@ -286,6 +286,146 @@ This gives the same split as the existing Sailscasts Nexus clearance: editors ca
 
 The existing Slipway team/project check remains the outer gate. The target helper is the application-specific gate; receiving an actor object is not authorization by itself.
 
+### Custom actions
+
+Custom actions connect a small, declarative Bridge UI contract to a Sails
+helper in the target application. They use the same authorization helper as
+the built-in actions.
+
+```js
+course: {
+  authorization: 'bridge.authorize',
+  actions: {
+    bulkDelete: false,
+
+    syncCatalog: {
+      scope: 'resource',
+      helper: 'bridge.syncCatalog',
+      label: 'Sync catalog',
+      success: 'Catalog synchronized.'
+    },
+
+    publish: {
+      scope: 'record',
+      helper: 'bridge.publishCourse',
+      label: 'Publish course',
+      description: 'Make this course available to students.',
+      confirm: 'Publish this course now?',
+      success: 'Course published.',
+      fields: {
+        notifyStudents: {
+          type: 'boolean',
+          label: 'Notify students',
+          default: true
+        },
+        releaseNote: {
+          type: 'textarea',
+          label: 'Release note',
+          help: 'Included in the student notification.',
+          required: true,
+          minLength: 3,
+          maxLength: 280
+        }
+      }
+    },
+
+    regenerateLicenses: {
+      scope: 'bulk',
+      helper: 'bridge.regenerateLicenses',
+      label: 'Regenerate licenses',
+      destructive: true,
+      confirm: 'Existing license links will stop working.',
+      fields: {
+        reason: {
+          type: 'select',
+          required: true,
+          default: 'security',
+          options: [
+            { label: 'Security rotation', value: 'security' },
+            { label: 'Content update', value: 'content' }
+          ]
+        }
+      }
+    }
+  }
+}
+```
+
+The scope controls where an action appears and which identifiers its helper
+receives:
+
+| Scope      | UI location                             | Helper context |
+| ---------- | --------------------------------------- | -------------- |
+| `resource` | Resource list toolbar                   | No record IDs  |
+| `record`   | Record detail action menu               | `recordId`     |
+| `bulk`     | Selected-record action menu on the list | `recordIds`    |
+
+Bulk actions accept at most 100 selected records per execution. Slipway
+normalizes and deduplicates every identifier against the resource primary key
+before authorization or execution.
+
+An action without fields, confirmation, or destructive behavior runs directly
+from the menu. Fields and confirmation use one focused dialog. A destructive
+action gets the red confirmation treatment and a safe default confirmation
+message when `confirm` is omitted.
+
+Action fields reuse Bridge's browser and server field validation. They support
+`text`, `textarea`, `richtext`, `email`, `url`, `number`, `currency`,
+`boolean`, `select`, `json`, `date`, `datetime`, and `timestamp`. Fields may
+define `label`, `help`, `placeholder`, `required`, `default`, `options`, `min`,
+`max`, `minLength`, `maxLength`, `format`, and `currency`.
+
+Defaults and select options are checked while Bridge normalizes the resource
+contract. Rich text supports the explicit Markdown format and repeats the
+raw-HTML check on the server. Relationship and upload fields remain record-form
+workflows rather than action inputs.
+
+The target helper declares the context it needs:
+
+```js
+// api/helpers/bridge/publish-course.js
+module.exports = {
+  friendlyName: 'Publish course',
+
+  inputs: {
+    actor: { type: 'ref', required: true },
+    resource: { type: 'ref', required: true },
+    values: { type: 'ref', required: true },
+    recordId: { type: 'ref', required: true }
+  },
+
+  fn: async function ({ actor, values, recordId }) {
+    await Course.updateOne({ id: recordId }).set({ published: true })
+
+    if (values.notifyStudents) {
+      await sails.helpers.course.notifyStudents.with({
+        courseId: recordId,
+        note: values.releaseNote,
+        triggeredBy: actor.email
+      })
+    }
+
+    return { message: 'Course published and students notified.' }
+  }
+}
+```
+
+Resource helpers omit `recordId`. Bulk helpers declare
+`recordIds: { type: 'ref', required: true }`. A helper may return a string or
+`{ message }`; other return data stays in the target application. Slipway
+normalizes feedback to plain text and limits it to 500 characters.
+
+Execution is synchronous with Bridge's existing target-container timeout. For
+long-running work, start a Quest job or another background task in the helper
+and return a message that the job was queued.
+
+Authorization is evaluated when rendering the action and again immediately
+before execution. A denied action is absent from the UI and a forged request
+still fails closed. Successful and failed helper executions create a Slipway
+audit event containing the actor, project, environment, action, scope, and
+affected record identifiers. Submitted field values and helper return data are
+not stored in the audit log.
+
 ## Field options
 
 | Option        | Purpose                                         |
