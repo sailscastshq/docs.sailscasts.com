@@ -60,12 +60,13 @@ module.exports.slipway = {
         group: 'Content',
         title: 'title',
         search: ['title'],
-        list: ['title', 'published', 'createdAt'],
+        list: ['title', 'price', 'published', 'createdAt'],
         show: [
           'id',
           'title',
           'description',
           'thumbnailUrl',
+          'price',
           'published',
           'creator'
         ],
@@ -73,10 +74,18 @@ module.exports.slipway = {
           'title',
           'description',
           'thumbnailUrl',
+          'price',
           'published',
           'creator'
         ],
-        edit: ['title', 'description', 'thumbnailUrl', 'published', 'creator'],
+        edit: [
+          'title',
+          'description',
+          'thumbnailUrl',
+          'price',
+          'published',
+          'creator'
+        ],
         filters: ['published'],
         sort: {
           field: 'createdAt',
@@ -89,6 +98,15 @@ module.exports.slipway = {
           helper: 'bridge.authorize'
         },
         fields: {
+          price: {
+            label: 'Price',
+            type: 'currency',
+            currency: {
+              code: 'USD',
+              storage: 'minor',
+              submit: 'major'
+            }
+          },
           title: {
             label: 'Course title',
             placeholder: 'A clear, specific course title'
@@ -264,6 +282,7 @@ The existing Slipway team/project check remains the outer gate. The target helpe
 | `currency`    | Serializable currency display metadata          |
 | `relation`    | Serializable relationship metadata              |
 | `upload`      | Upload behaviour and canonical storage metadata |
+| `component`   | Registered field component extension point      |
 
 `visibility` accepts boolean values for `list`, `show`, `create`, `edit`, and `filter`:
 
@@ -292,7 +311,59 @@ A `false` value is a hard deny for that surface, including direct requests. A `t
 
 Bridge hides encrypted and protected attributes, plus names that look like passwords, tokens, secrets, API keys, credentials, recovery codes, `emailChangeCandidate`, `planCode`, or `subscriptionCode`. This prevents zero-configuration discovery from turning private operational fields into an accidental admin form. Set `sensitive: true` for application-specific private data.
 
-The form supports text, email, password, number, select, toggle, JSON, and long-form inputs. Set `type: 'richtext'` and `format: 'markdown'` to activate the TipTap visual editor while keeping the model value as Markdown.
+The field engine supports `text`, `textarea`, `richtext`, `email`, `url`,
+`number`, `currency`, `boolean`, `select`, `belongsTo`, `json`, `date`,
+`datetime`, `timestamp`, `password`, `secret`, `file`, `image`, and `upload`.
+Bridge infers email, URL, enum, boolean, JSON, relationship, timestamp,
+encrypted, and long-text behavior from Waterline metadata. Use an explicit
+`type` when the stored Waterline type does not describe the intended editor.
+
+JSON is validated before submit and hydrated into an object before the target
+model mutation. Email and URL values receive native browser input behavior plus
+server validation. URLs must use HTTP or HTTPS. Required fields keep the create
+or save button disabled until the current values are valid.
+
+Select fields accept Waterline `isIn` values or labeled options:
+
+```js
+status: {
+  type: 'select',
+  options: [
+    { label: 'Draft', value: 'draft' },
+    { label: 'Published', value: 'published' }
+  ]
+}
+```
+
+### Currency fields
+
+Currency configuration separates display hydration from mutation hydration:
+
+```js
+price: {
+  type: 'currency',
+  currency: {
+    code: 'USD',
+    locale: 'en-US',
+    storage: 'minor',
+    submit: 'major'
+  }
+}
+```
+
+This displays a stored value of `3499` as `$34.99`, then submits `34.99` to the
+target Waterline model. Existing `beforeCreate` and `beforeUpdate` callbacks
+can therefore keep converting dollars to cents. Use `submit: 'minor'` when the
+model expects Bridge to submit `3499` directly, or `storage: 'major'` when the
+database already stores `34.99`.
+
+The fraction digit options default to `2` and can be changed with
+`minimumFractionDigits` and `maximumFractionDigits`.
+
+### Markdown fields
+
+Set `type: 'richtext'` and `format: 'markdown'` to activate the TipTap visual
+editor while keeping the model value as Markdown.
 
 The editor supports Markdown shortcuts, a compact formatting menu when text is selected, and direct Markdown source editing. Before entering visual mode, Bridge verifies that the value can round-trip safely. Unsupported Markdown stays in source mode instead of being silently rewritten. Rich-text fields without the explicit `markdown` format continue to use a multiline input.
 
@@ -303,6 +374,11 @@ Treat the stored Markdown as untrusted when the application displays it. Parse i
 Unrecognized field types use a safe text fallback.
 
 All field metadata must be serializable because the normalized contract is sent to the Bridge client. Functions, symbols, cyclic objects, and secrets are rejected or must remain outside the contract.
+
+The optional `component` field value names a component registered in
+Slipway's Bridge field registry. A registration may provide separate `form`,
+`list`, and `show` components. The target application's contract carries only
+the safe component name, never executable UI code.
 
 ## Primary keys
 
@@ -373,7 +449,8 @@ Never place R2, S3, database, or API credentials in `config/slipway.js` field me
 
 ## Upload field boundary
 
-An upload field describes what a future or installed upload renderer should do; it does not contain provider credentials:
+An upload field describes its file constraints and stores the resulting public
+URL. It does not contain provider credentials:
 
 ```js
 thumbnailUrl: {
@@ -382,12 +459,47 @@ thumbnailUrl: {
     kind: 'image',
     storage: 'bridge',
     directory: 'courses/thumbnails',
-    store: 'url'
+    store: 'url',
+    accept: ['image/avif', 'image/jpeg', 'image/png', 'image/webp'],
+    maxBytes: 5242880
   }
 }
 ```
 
 The stored model value should be the canonical public URL. Configure provider credentials with `BRIDGE_`-prefixed environment variables at the app level for an app-specific bucket, at the environment level for shared project defaults, or globally for instance defaults.
+
+For Cloudflare R2:
+
+```text
+BRIDGE_STORAGE_PROVIDER=r2
+BRIDGE_R2_ACCESS_KEY=...
+BRIDGE_R2_SECRET_KEY=...
+BRIDGE_R2_BUCKET=...
+BRIDGE_R2_ENDPOINT=https://ACCOUNT_ID.r2.cloudflarestorage.com
+BRIDGE_R2_PUBLIC_URL=https://cdn.example.com
+BRIDGE_R2_REGION=auto
+```
+
+For S3-compatible storage, use `BRIDGE_STORAGE_PROVIDER=s3` and the equivalent
+`BRIDGE_S3_ACCESS_KEY`, `BRIDGE_S3_SECRET_KEY`, `BRIDGE_S3_BUCKET`,
+`BRIDGE_S3_ENDPOINT`, `BRIDGE_S3_PUBLIC_URL`, and `BRIDGE_S3_REGION` names.
+
+App values override environment values; environment values override
+instance-global values. Variables without the `BRIDGE_` prefix are ignored by
+this field engine.
+
+Bridge authorizes the actor and target resource before streaming the file to
+object storage. It enforces the MIME allowlist and size limit without buffering
+the entire upload in application memory. The response contains the public URL
+and a short-lived receipt signed by Slipway. A create or update accepts that
+URL only when the receipt matches the current actor, project, environment,
+resource, and field, so a browser cannot substitute an arbitrary remote URL or
+reuse a receipt on another app.
+
+Use a dedicated asset origin and configure an object-store lifecycle rule for
+abandoned objects under the `bridge/` prefix. A user can upload a file and
+leave the form before saving; the short-lived receipt protects the mutation
+boundary, while the lifecycle rule controls storage left by abandoned forms.
 
 ## Troubleshooting
 
