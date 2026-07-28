@@ -213,6 +213,254 @@ You can also use `{ hidden: true }` when a complete resource object is easier to
 
 Bridge always includes the model's primary key in `list` and `show`, even when it is omitted from the configured arrays.
 
+## Dashboards
+
+Bridge can give an application its own operational landing page without adding
+an analytics service or maintaining a second admin schema. Dashboard
+configuration lives beside the resource contract in the target application's
+`config/slipway.js`. Slipway resolves its data server-side and sends ordinary
+Inertia props to the existing Bridge page.
+
+Use `dashboard` for one dashboard:
+
+```js
+module.exports.slipway = {
+  bridge: {
+    dashboard: {
+      label: 'Content overview',
+      description: 'The content and audience signals that need attention.',
+      cards: {
+        users: {
+          type: 'metric',
+          label: 'Total users',
+          resource: 'user',
+          aggregate: 'count'
+        },
+        courses: {
+          type: 'metric',
+          label: 'Published courses',
+          resource: 'course',
+          aggregate: 'count',
+          where: { published: true }
+        },
+        recentLessons: {
+          type: 'recent',
+          resource: 'lesson',
+          fields: ['title', 'createdAt'],
+          limit: 5
+        },
+        recentSignups: {
+          type: 'recent',
+          resource: 'user',
+          fields: ['fullName', 'email', 'createdAt'],
+          limit: 5
+        },
+        newCourse: {
+          type: 'action',
+          label: 'New Course',
+          resource: 'course'
+        },
+        newChapter: {
+          type: 'action',
+          label: 'New Chapter',
+          resource: 'chapter'
+        },
+        newLesson: {
+          type: 'action',
+          label: 'New Lesson',
+          resource: 'lesson'
+        }
+      }
+    }
+  }
+}
+```
+
+Card keys must be safe JavaScript-style identifiers and remain stable across
+deployments. Bridge uses them to match configuration with the server result.
+Cards are displayed in their configured order. A contract may contain up to 12
+dashboards and 24 cards per dashboard.
+
+### Multiple dashboards and scope
+
+Use `dashboards` instead of `dashboard` when the app needs multiple views:
+
+```js
+bridge: {
+  dashboards: {
+    overview: {
+      default: true,
+      scope: 'environment',
+      cards: {
+        users: {
+          type: 'metric',
+          resource: 'user'
+        }
+      }
+    },
+
+    courseHealth: {
+      scope: 'resource',
+      resource: 'course',
+      cards: {
+        published: {
+          type: 'metric',
+          resource: 'course',
+          aggregate: 'count',
+          where: { published: true }
+        }
+      }
+    }
+  }
+}
+```
+
+`scope` accepts `global`, `project`, `environment`, or `resource`. Global,
+project, and environment dashboards appear on the Bridge landing page. A
+resource dashboard appears above that resource's records and must declare its
+`resource`. Mark one dashboard per scope as `default: true`; otherwise Bridge
+uses the first configured dashboard for that scope. When a scope has multiple
+dashboards, Bridge shows a compact selector.
+
+### Metrics
+
+Metric cards use Waterline directly:
+
+```js
+revenue: {
+  type: 'metric',
+  label: 'Revenue',
+  resource: 'order',
+  aggregate: 'sum',
+  field: 'total',
+  where: { status: 'paid' },
+  format: 'currency',
+  currency: 'USD'
+}
+```
+
+| Option      | Values                                                        |
+| ----------- | ------------------------------------------------------------- |
+| `aggregate` | `count`, `sum`, `average`, `min`, or `max`                    |
+| `field`     | Numeric field required by every aggregate except `count`      |
+| `where`     | Waterline criteria using fields on the list or filter surface |
+| `format`    | `number`, `compact`, `currency`, or `percent`                 |
+| `currency`  | Three-letter code required by `currency`                      |
+| `prefix`    | Short text placed before the formatted value                  |
+| `suffix`    | Short text placed after the formatted value                   |
+
+`percent` follows `Intl.NumberFormat` semantics, so store `0.42` to display
+`42%`.
+
+### Recent records and quick actions
+
+A `recent` card performs one bounded Waterline query. `limit` defaults to `5`
+and cannot exceed `10`. `fields` must be fields already available to the
+resource, and Bridge always includes the real primary key so links work for
+integer, string, and UUID identifiers.
+
+```js
+recentLessons: {
+  type: 'recent',
+  resource: 'lesson',
+  fields: ['title', 'published', 'createdAt'],
+  limit: 5,
+  sort: {
+    field: 'createdAt',
+    direction: 'DESC'
+  }
+}
+```
+
+An `action` card currently supports the built-in `create` action. Bridge
+derives the route from the project, environment, and resource:
+
+```js
+newLesson: {
+  type: 'action',
+  label: 'New Lesson',
+  resource: 'lesson',
+  action: 'create'
+}
+```
+
+### Helper-backed cards
+
+Use target-app Sails helpers for domain-specific values, trends, and
+partitions:
+
+```js
+signupTrend: {
+  type: 'trend',
+  label: 'Signups this week',
+  resource: 'user',
+  helper: 'bridge.dashboard.signups'
+},
+lessonStatus: {
+  type: 'partition',
+  label: 'Lesson status',
+  resource: 'lesson',
+  helper: 'bridge.dashboard.lessonStatus'
+},
+releaseHealth: {
+  type: 'custom',
+  label: 'Release health',
+  helper: 'bridge.dashboard.releaseHealth'
+}
+```
+
+The helper receives the authenticated `actor`, the selected `dashboard`, and a
+small serializable `card` description:
+
+```js
+// api/helpers/bridge/dashboard/signups.js
+module.exports = {
+  friendlyName: 'Bridge signup trend',
+
+  inputs: {
+    actor: { type: 'ref', required: true },
+    dashboard: { type: 'ref', required: true },
+    card: { type: 'ref', required: true }
+  },
+
+  fn: async function ({ actor }) {
+    const member = await User.findOne({ email: actor.email })
+    if (!member || member.role !== 'admin') {
+      throw new Error('This metric is unavailable.')
+    }
+
+    return {
+      points: [
+        { label: 'Mon', value: 18 },
+        { label: 'Tue', value: 26 },
+        { label: 'Wed', value: 21 }
+      ]
+    }
+  }
+}
+```
+
+Trend helpers return `{ points: [{ label, value }] }` with at most 31 points.
+Partition helpers return `{ segments: [{ label, value }] }` with at most 12
+segments. Custom helpers return `{ value, detail }`; `value` must be a string,
+finite number, or boolean. Slipway truncates labels and detail text,
+re-normalizes all helper results, and never accepts helper-provided HTML.
+
+### Dashboard authorization
+
+Dashboard cards use the same server-enforced resource authorization as CRUD:
+
+- a metric or recent-record card requires `viewAny`;
+- a quick action requires `create`;
+- hidden or denied resources remove the card entirely;
+- recent records select configured fields and are redacted again before they
+  become Inertia props; and
+- resource-free custom cards must make their domain-specific decision inside
+  the helper using `actor`.
+
+The browser never receives a denied card, count, or record. A helper or query
+failure affects only that card; the rest of the dashboard remains usable.
+
 ## Actions
 
 Every action defaults to `true`:
