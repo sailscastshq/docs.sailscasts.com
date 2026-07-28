@@ -221,7 +221,31 @@ module.exports.slipway = {
           'published',
           'creator'
         ],
-        filters: ['published'],
+        filters: ['title', 'price', 'published', 'creator', 'createdAt'],
+        lenses: {
+          published: {
+            label: 'Published courses',
+            filters: {
+              published: true
+            },
+            columns: ['title', 'creator', 'published', 'createdAt'],
+            sort: {
+              field: 'createdAt',
+              direction: 'DESC'
+            }
+          },
+          drafts: {
+            label: 'Draft courses',
+            filters: {
+              published: false
+            },
+            columns: ['title', 'creator', 'createdAt'],
+            sort: {
+              field: 'createdAt',
+              direction: 'DESC'
+            }
+          }
+        },
         sort: {
           field: 'createdAt',
           direction: 'DESC'
@@ -339,6 +363,7 @@ You can also use `{ hidden: true }` when a complete resource object is easier to
 | `create`        | Attributes accepted when creating records                      |
 | `edit`          | Attributes accepted when updating records                      |
 | `filters`       | Attributes available to filter controls                        |
+| `lenses`        | Named list views with fixed filters, columns, and ordering     |
 | `sort`          | Default `{ field, direction }` ordering                        |
 | `hidden`        | Remove the resource from Bridge                                |
 | `actions`       | Enable or disable resource operations                          |
@@ -347,6 +372,102 @@ You can also use `{ hidden: true }` when a complete resource object is easier to
 | `relationships` | Collection display and explicit attach/detach behavior         |
 
 Bridge always includes the model's primary key in `list` and `show`, even when it is omitted from the configured arrays.
+
+## Filters
+
+Bridge does not expose arbitrary database filtering. A field appears in the
+filter menu only when its resource includes that attribute in `filters`.
+Bridge then derives the control and permitted operators from the normalized
+Waterline field:
+
+| Field type                         | Available filtering                  |
+| ---------------------------------- | ------------------------------------ |
+| text, textarea, rich text, URL     | contains or exact match              |
+| boolean and select                 | exact match                          |
+| number and currency                | exact value or range                 |
+| date, datetime, and timestamp      | exact value or range                 |
+| belongs-to relationship            | authorized, searchable record picker |
+| nullable fields of supported types | `is empty` and `is not empty`        |
+
+Global search remains separate and uses only the fields in `search`. Search,
+filters, sorting, pagination, and the selected lens live in the page URL. An
+authorized teammate can therefore bookmark or share an exact list view without
+Bridge keeping hidden browser state.
+
+Bridge validates the field, operator, value type, relationship, and bounded
+input length before serializing Waterline criteria for the target app. A
+forged URL cannot add an encrypted, protected, hidden, or unconfigured field.
+
+## Saved lenses
+
+A lens is a named list view for a resource. Use one when the team repeatedly
+needs the same segment, columns, and ordering:
+
+```js
+resources: {
+  lesson: {
+    search: ['title', 'slug'],
+    filters: ['title', 'published', 'creator', 'createdAt'],
+    lenses: {
+      published: {
+        label: 'Published lessons',
+        filters: { published: true },
+        columns: ['title', 'creator', 'published', 'createdAt'],
+        sort: { field: 'createdAt', direction: 'DESC' }
+      },
+      drafts: {
+        label: 'Draft lessons',
+        filters: { published: false },
+        columns: ['title', 'creator', 'createdAt'],
+        sort: { field: 'createdAt', direction: 'DESC' }
+      }
+    }
+  }
+}
+```
+
+A Bridge user can still search and add an allowed filter while a lens is
+active. Set `default: true` on at most one lens when that should be the
+resource's initial view. The **All records** option remains available.
+
+### Custom lens queries
+
+Most lenses should use fixed filters because the contract stays easy to read.
+For a view that requires aggregates, joins, or application-specific logic,
+point the lens at a target-app Sails helper:
+
+```js
+recentSignups: {
+  label: 'Recent signups',
+  columns: ['fullName', 'email', 'createdAt'],
+  helper: 'bridge.lenses.recentSignups'
+}
+```
+
+```js
+// api/helpers/bridge/lenses/recent-signups.js
+module.exports = {
+  friendlyName: 'Load recent Bridge signups',
+
+  inputs: {
+    actor: { type: 'ref', required: true },
+    resource: { type: 'ref', required: true },
+    query: { type: 'ref', required: true }
+  },
+
+  fn: async function ({ query }) {
+    const records = await User.find(query.criteria)
+    const total = await User.count(query.where)
+    return { records, total }
+  }
+}
+```
+
+The helper runs inside the target application and receives the authenticated
+actor, a small resource description, and the normalized query. It must return
+`{ records, total }`. Bridge applies the lens column allowlist and field
+redaction before rendering the result, so extra properties returned by the
+helper do not become visible.
 
 ## Dashboards
 
