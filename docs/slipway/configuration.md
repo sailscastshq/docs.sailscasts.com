@@ -120,36 +120,38 @@ slipway project:update myapp \
 
 ## App Configuration (config/slipway.js)
 
-For apps using `sails-hook-slipway`, create `config/slipway.js`:
+`sails-hook-slipway` is zero-config when deployed by Slipway. Create
+`config/slipway.js` only when the app needs identity or telemetry behavior
+overrides:
 
 ```javascript
 // config/slipway.js
 module.exports.slipway = {
-  // Enable/disable features
   bridge: {
-    enabled: true,
-    path: '/slipway/bridge'
+    loginPath: '/login',
+    identity: {
+      model: 'user',
+      sessionKey: 'userId',
+      emailAttribute: 'email',
+      nameAttribute: 'fullName',
+      emailStatusAttribute: 'emailStatus',
+      verifiedEmailStatuses: ['verified', 'confirmed']
+    }
   },
 
-  helm: {
+  lookout: {
     enabled: true,
-    path: '/slipway/helm',
-    readOnly: process.env.NODE_ENV === 'production'
-  },
-
-  // Quest integration (if sails-quest installed)
-  quest: {
-    enabled: true,
-    path: '/slipway/quest'
-  },
-
-  // Telemetry (send metrics to Slipway server)
-  telemetry: {
-    enabled: true,
-    serverUrl: process.env.SLIPWAY_URL
+    captureQueries: true,
+    captureExceptions: true,
+    slowQueryThreshold: 100
   }
 }
 ```
+
+Enable the app-local `/bridge` route from the app's **Bridge access** page and
+redeploy. Slipway injects its app-scoped credential; never commit it to
+`config/slipway.js`. Read [Bridge app-local access](/slipway/bridge#app-local-access)
+for the invitation and custom identity-helper flow.
 
 ## Docker Configuration
 

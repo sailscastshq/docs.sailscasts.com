@@ -303,38 +303,42 @@ Now `slipway slide` deploys to staging by default.
 
 ## sails-hook-slipway Configuration
 
-For apps using the Slipway hook:
+Slipway injects the Bridge exchange credential and Lookout telemetry
+credentials during deployment. Keep those secrets out of source control.
+
+Most Boring Stack apps need no configuration. Use `config/slipway.js` only for
+behavioral overrides:
 
 ```javascript
 // config/slipway.js
 module.exports.slipway = {
-  // Bridge (admin panel)
   bridge: {
-    enabled: true,
-    path: '/slipway/bridge',
-    roles: ['admin']
+    loginPath: '/login',
+    identity: {
+      model: 'user',
+      sessionKey: 'userId',
+      emailAttribute: 'email',
+      nameAttribute: 'fullName',
+      emailStatusAttribute: 'emailStatus',
+      verifiedEmailStatuses: ['verified', 'confirmed']
+    }
   },
 
-  // Helm (REPL)
-  helm: {
+  lookout: {
     enabled: true,
-    path: '/slipway/helm',
-    readOnly: process.env.NODE_ENV === 'production'
-  },
-
-  // Quest dashboard (if sails-quest installed)
-  quest: {
-    enabled: true,
-    path: '/slipway/quest'
-  },
-
-  // Telemetry
-  telemetry: {
-    enabled: process.env.SLIPWAY_URL ? true : false,
-    serverUrl: process.env.SLIPWAY_URL
+    captureQueries: true,
+    captureExceptions: true,
+    captureQuestEvents: true,
+    captureCache: true,
+    slowQueryThreshold: 100
   }
 }
 ```
+
+Enable the app-local `/bridge` route from **App → Bridge access** in Slipway
+and redeploy. Do not hard-code `SLIPWAY_BRIDGE_SECRET` or
+`SLIPWAY_TELEMETRY_TOKEN`. See [Bridge](/slipway/bridge#app-local-access) for
+host-account invitations and custom identity helpers.
 
 ## Validation
 
