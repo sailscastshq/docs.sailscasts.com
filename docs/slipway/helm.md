@@ -44,17 +44,70 @@ Your app must be running for Helm to work — it executes code inside the runnin
 
 When you run code in Helm, Slipway:
 
-1. Takes your code and wraps it in a Sails bootstrap script
-2. Executes it inside your running container via `docker exec`
-3. Captures the output and returns it to the browser
+1. Parses your editor contents as the body of an async JavaScript function
+2. Returns the complete final top-level expression, if there is one
+3. Starts an isolated process and boots the Sails application without its HTTP server
+4. Executes project Helm inside the running app container via `docker exec`
+5. Captures console logs, the final value, timing, and structured errors
+6. Lowers the Sails application and terminates the isolated process
 
 This means you have full access to your app's Sails environment — models, helpers, config, and everything else.
 
+Project Helm and Bosun Helm use the same parser and result contract. Valid JavaScript therefore behaves the same in both consoles.
+
 ::: info Execution Timeout
-Each Helm execution has a **30-second timeout**. Long-running queries will be terminated automatically.
+Each Helm execution has a **30-second wall-clock timeout**. This covers synchronous code, awaited work, and application boot. A timed-out execution is terminated, so it cannot continue running after Helm reports the timeout.
+:::
+
+::: info Bounded output
+Helm accepts up to **64 KB of source**, captures up to **64 KB of console logs**, and bounds the serialized result. If output is too large, Helm returns the safe portion and marks the result as truncated instead of buffering without limit.
 :::
 
 ## Using Helm
+
+### Multi-line JavaScript
+
+Write normal multi-line JavaScript. You do not need to add `return` before the final query:
+
+```javascript
+const now = new Date().toISOString()
+
+await Creator.find({
+  where: {
+    subscriptionStatus: 'active',
+    subscriptionEndsAt: { '>=': now }
+  },
+  select: ['publicId', 'subscriptionProvider', 'subscriptionStatus']
+})
+```
+
+Helm parses the whole snippet, recognizes the complete `await Creator.find(...)` expression, and displays its value.
+
+The execution rules are:
+
+- Top-level `await` works.
+- The complete final top-level expression becomes the displayed value.
+- An explicit top-level `return` is preserved.
+- A final declaration or control statement produces no value unless you log or explicitly return one.
+- `return` inside a nested function, string, regular expression, or comment does not change how the outer snippet runs.
+- `console.log()`, `console.info()`, `console.warn()`, and `console.error()` stay ordered ahead of the final value.
+
+For example:
+
+```javascript
+console.log('Checking active subscriptions')
+
+const creators = await Creator.find({
+  subscriptionStatus: 'active'
+}).limit(10)
+
+creators.map((creator) => ({
+  publicId: creator.publicId,
+  provider: creator.subscriptionProvider
+}))
+```
+
+Helm shows the log first, followed by the mapped array.
 
 ### Querying Models
 
@@ -197,6 +250,12 @@ The query took too long (>30 seconds).
 1. Add `.limit()` to large queries
 2. Add indexes to frequently queried columns
 3. Simplify the query
+
+### Source-oriented errors
+
+Syntax and runtime errors refer to `helm-input.js` and report the line and column from the code in the editor. The Sails bootstrap wrapper is not counted, so `2:9` means line 2, column 9 of your submitted snippet.
+
+Values are formatted without reading property getters. Helm also handles circular objects and JavaScript values such as `BigInt`, `Date`, `Error`, `Map`, and `Set` without failing the entire execution.
 
 ## What's Next?
 
