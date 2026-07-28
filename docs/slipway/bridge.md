@@ -1033,6 +1033,29 @@ editor while keeping the model value as Markdown.
 
 The editor supports Markdown shortcuts, a compact formatting menu when text is selected, and direct Markdown source editing. Before entering visual mode, Bridge verifies that the value can round-trip safely. Unsupported Markdown stays in source mode instead of being silently rewritten. Rich-text fields without the explicit `markdown` format continue to use a multiline input.
 
+Add an image upload contract to let an editor paste or drop an image directly
+into Markdown:
+
+```js
+description: {
+  type: 'richtext',
+  format: 'markdown',
+  upload: {
+    kind: 'image',
+    storage: 'bridge',
+    directory: 'descriptions',
+    store: 'url',
+    accept: ['image/avif', 'image/jpeg', 'image/png', 'image/webp'],
+    maxBytes: 10485760
+  }
+}
+```
+
+Bridge streams the image through the same authorized R2/S3 boundary as an
+ordinary upload field, inserts its canonical URL as Markdown image syntax, and
+keeps the model value as Markdown. Pasted public image URLs continue to work
+without an upload.
+
 Raw HTML is denied automatically. You do not need another field option. Bridge disables the save with an inline error and repeats the validation on the server before running the target application's mutation. Normal Markdown and autolinks continue to work.
 
 Treat the stored Markdown as untrusted when the application displays it. Parse it with raw HTML disabled and sanitize the generated HTML before rendering. Editor validation protects the Bridge mutation boundary; output sanitization protects the application's readers.
@@ -1191,7 +1214,7 @@ The resource contract is an authorization boundary as well as UI configuration:
 Unknown resources, fields, actions, and configuration options fail closed.
 
 ::: warning Keep credentials out of the contract
-Never place R2, S3, database, or API credentials in `config/slipway.js` field metadata. Use app, environment, or instance environment variables. Bridge upload providers use `BRIDGE_`-prefixed variables so each app can override an environment or instance default without exposing credentials to the browser.
+Never place R2, S3, database, or API credentials in `config/slipway.js` field metadata. Use app, environment, or instance environment variables. Bridge can reuse conventional app-scoped R2/S3 credentials or use explicit `BRIDGE_` overrides without exposing credentials to the browser.
 :::
 
 ## Upload field boundary
@@ -1213,7 +1236,9 @@ thumbnailUrl: {
 }
 ```
 
-The stored model value should be the canonical public URL. Configure provider credentials with `BRIDGE_`-prefixed environment variables at the app level for an app-specific bucket, at the environment level for shared project defaults, or globally for instance defaults.
+The stored model value should be the canonical public URL. Configure provider
+credentials at the app level for an app-specific bucket, at the environment
+level for shared project defaults, or globally for instance defaults.
 
 For Cloudflare R2:
 
@@ -1231,9 +1256,72 @@ For S3-compatible storage, use `BRIDGE_STORAGE_PROVIDER=s3` and the equivalent
 `BRIDGE_S3_ACCESS_KEY`, `BRIDGE_S3_SECRET_KEY`, `BRIDGE_S3_BUCKET`,
 `BRIDGE_S3_ENDPOINT`, `BRIDGE_S3_PUBLIC_URL`, and `BRIDGE_S3_REGION` names.
 
+### Reuse an app's existing storage
+
+Bridge detects a complete conventional R2 credential set:
+
+```text
+R2_ACCESS_KEY=...
+R2_SECRET_KEY=...
+R2_BUCKET=...
+R2_ENDPOINT=https://ACCOUNT_ID.r2.cloudflarestorage.com
+```
+
+When those values already belong to the app, add only its canonical public
+origin:
+
+```text
+BRIDGE_R2_PUBLIC_URL=https://assets.example.com
+```
+
+R2 region defaults to `auto`; neither duplicate credentials nor a region
+variable is required. A complete conventional `S3_` set works the same way.
+If both providers are configured, set `BRIDGE_STORAGE_PROVIDER` explicitly.
+
 App values override environment values; environment values override
-instance-global values. Variables without the `BRIDGE_` prefix are ignored by
-this field engine.
+instance-global values. Within each scope, explicit `BRIDGE_R2_*` or
+`BRIDGE_S3_*` values override the corresponding conventional value. This lets
+Bridge use a separate bucket without changing the app's own upload setup.
+
+### Preserve an existing bucket hierarchy
+
+Uploads remain isolated under a team/project/environment namespace by default.
+An app with a dedicated bucket can explicitly write into an established
+bucket-root hierarchy:
+
+```js
+videoUrl: {
+  type: 'upload',
+  upload: {
+    kind: 'file',
+    storage: 'bridge',
+    scope: 'bucket',
+    directory: '{course.title|slug}/{chapter.title|slug}',
+    filename: '{title|slug}',
+    store: 'url',
+    accept: ['video/mp4', 'video/quicktime', 'video/webm'],
+    maxBytes: 2 * 1024 * 1024 * 1024
+  }
+}
+```
+
+This produces an object key such as:
+
+```text
+building-durable-uis/introduction/course-assumptions.mp4
+```
+
+Use `{field}` for a scalar field and `{relationship.field}` for a scalar field
+on a belongs-to record. Add `|slug` to create a lowercase URL-safe segment.
+`filename` is an extension-free stem; Bridge derives the extension from the
+accepted file type.
+
+Path templates are declarative and reusable—none of the field or relationship
+names are hardcoded in Slipway. Bridge validates every reference against the
+normalized resource contract, rejects sensitive or non-scalar fields, loads
+related records from the target app, blocks uploads until required selections
+exist, sanitizes every segment, and rejects traversal. `scope: 'bucket'` must
+be explicit because it intentionally omits Slipway's normal namespace.
 
 Bridge authorizes the actor and target resource before streaming the file to
 object storage. It enforces the MIME allowlist and size limit without buffering
@@ -1244,9 +1332,10 @@ resource, and field, so a browser cannot substitute an arbitrary remote URL or
 reuse a receipt on another app.
 
 Use a dedicated asset origin and configure an object-store lifecycle rule for
-abandoned objects under the `bridge/` prefix. A user can upload a file and
-leave the form before saving; the short-lived receipt protects the mutation
-boundary, while the lifecycle rule controls storage left by abandoned forms.
+abandoned objects under the default `bridge/` prefix or the bucket-root prefix
+selected by the application. A user can upload a file and leave the form
+before saving; the short-lived receipt protects the mutation boundary, while
+the lifecycle rule controls storage left by abandoned forms.
 
 ## Troubleshooting
 
