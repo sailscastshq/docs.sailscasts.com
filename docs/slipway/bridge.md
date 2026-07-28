@@ -29,6 +29,141 @@ Use the zero-configuration interface for internal tools and early applications. 
 
 Open an app in Slipway, use its ellipsis menu, and select **Bridge**.
 
+## App-local access
+
+By default, Bridge is available to the Slipway team from the app page. You can
+also expose a secure Bridge entry at the deployed application's own
+`/bridge` route for editors and operators who should manage application data
+without receiving access to deployments, secrets, logs, servers, or other
+Slipway infrastructure.
+
+Install `sails-hook-slipway`, open **App → Bridge access**, enable Bridge, and
+redeploy the app. The redeploy injects a dedicated credential scoped to that
+app. Do not add that credential to `config/slipway.js`.
+
+### Invite a host-app user
+
+Bridge access is deliberately separate from Slipway team membership:
+
+1. A Slipway owner or administrator invites an email and chooses `Viewer`,
+   `Editor`, or `Administrator`.
+2. The recipient opens the invitation and signs in through the deployed
+   application's normal login.
+3. `sails-hook-slipway` resolves the signed-in host-app user on the server.
+4. Slipway activates the invitation only when the authenticated account has a
+   verified email that exactly matches the invitation.
+5. A short-lived, single-use handoff opens the app-scoped Bridge session.
+
+The account does not need to exist when the invitation is sent. The recipient
+may create it through the application's normal sign-up flow, but Bridge remains
+unavailable until that account verifies the invited email address.
+
+Someone who only possesses the invitation link cannot activate it with a
+different account. Invitations expire after seven days. Use the access menu to
+resend an invitation, change a role, or revoke access. Revocation and disabling
+Bridge are enforced on the next server request, even if the person already has
+Bridge open.
+
+### Default identity convention
+
+The Boring JavaScript Stack works without application code. The hook uses:
+
+- `User` as the identity model;
+- `req.session.userId` as the authenticated ID;
+- `email` and `fullName` as identity attributes; and
+- `emailStatus` equal to `verified` or `confirmed` as proof of verification.
+
+For a conventional model-backed session with different names, map the
+attributes:
+
+```js
+// config/slipway.js
+module.exports.slipway = {
+  bridge: {
+    loginPath: '/sign-in',
+    identity: {
+      model: 'member',
+      sessionKey: 'memberId',
+      emailAttribute: 'emailAddress',
+      nameAttribute: 'name',
+      emailVerifiedAttribute: 'hasVerifiedEmail'
+    }
+  }
+}
+```
+
+If authentication is not model-backed, configure one Sails helper:
+
+```js
+// config/slipway.js
+module.exports.slipway = {
+  bridge: {
+    loginPath: '/sign-in',
+    identity: {
+      helper: 'bridge.identity'
+    }
+  }
+}
+```
+
+```js
+// api/helpers/bridge/identity.js
+module.exports = {
+  friendlyName: 'Resolve Bridge identity',
+
+  inputs: {
+    req: { type: 'ref', required: true }
+  },
+
+  exits: {
+    success: { outputType: 'ref' }
+  },
+
+  fn: async function ({ req }) {
+    const member = await Member.findOne({ id: req.session.memberId })
+    if (!member) return null
+
+    return {
+      id: member.id,
+      email: member.email,
+      fullName: member.name,
+      emailVerified: member.emailVerified === true
+    }
+  }
+}
+```
+
+The helper executes inside the host app and must return
+`emailVerified: true`. Slipway fails closed when it cannot prove verification.
+
+### Role ceilings and application authorization
+
+App-local roles form a platform ceiling:
+
+| Role            | Platform ceiling                                       |
+| --------------- | ------------------------------------------------------ |
+| `Viewer`        | Open dashboards, lists, and records                    |
+| `Editor`        | Viewer access plus create, update, upload, and actions |
+| `Administrator` | Editor access plus single and bulk deletion            |
+
+The resource `authorization.helper` described below still runs inside the
+target app. Its decision can narrow a role but never widen it. For example, an
+`Editor` can be denied one course by the application's policy, and cannot gain
+delete permission even if a custom helper mistakenly allows it.
+
+### Security lifecycle
+
+- Bridge is disabled per app by default.
+- Its encrypted app credential is separate from Lookout telemetry.
+- Enabling Bridge rotates that credential, so a stale container cannot
+  activate access before the required redeploy.
+- Invitation and launch tokens are stored as hashes.
+- Launch codes expire after two minutes and are consumed atomically once.
+- The handoff regenerates the session before granting Bridge authorization.
+- Dedicated Bridge sessions expire after eight hours.
+- Disabling Bridge, revoking a grant, or rotating the app credential
+  invalidates authorization server-side.
+
 ## Zero-configuration discovery
 
 Without Bridge configuration, Slipway derives sensible defaults from Waterline metadata:
