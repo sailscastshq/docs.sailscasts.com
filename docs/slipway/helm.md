@@ -64,6 +64,22 @@ Each Helm execution has a **30-second wall-clock timeout**. This covers synchron
 Helm accepts up to **64 KB of source**, captures up to **64 KB of console logs**, and bounds the serialized result. If output is too large, Helm returns the safe portion and marks the result as truncated instead of buffering without limit.
 :::
 
+### Stopping and reading execution status
+
+While Helm is evaluating code, **Run** becomes **Stop** and the result pane shows the
+elapsed wall-clock time. Stop works for both synchronous code and awaited work. It
+terminates the isolated process; in project Helm, Slipway also verifies and terminates
+the exact Node process inside the app container. Closing the request has the same
+effect, so disconnected work cannot continue invisibly.
+
+The result bar distinguishes **Success**, **Error**, **Timed out**, and **Cancelled**.
+It also reports the row count when the result is an array, serialized output size,
+duration, and whether output was truncated. Console lines captured before a timeout or
+cancellation remain available when safe and are labelled **partial**.
+
+Each run has a unique execution ID. If you stop one run and immediately start another,
+a late response from the older run cannot replace the newer result.
+
 ## Using Helm
 
 ### Inspecting Results
@@ -102,7 +118,8 @@ as text; Helm never inserts it as executable page markup.
 
 Project Helm keeps recent runs for the current page session. Select an entry to put its
 source back in the editor, or use **Clear** to remove the recent-run list. Clearing
-history does not change the editor or the current result.
+history does not change the editor or the current result. Recent-run dots distinguish
+successful, failed, timed-out or truncated, and cancelled executions.
 
 ### Run a Selection or the Whole Editor
 
