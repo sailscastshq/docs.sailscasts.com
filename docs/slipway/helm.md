@@ -28,6 +28,8 @@ Helm gives you a live REPL connected to your running Sails application:
 - Inspect configuration
 - Debug issues in real-time
 - Inspect returned values as tables, expandable trees, or raw text
+- Find and reuse your source-only execution history
+- Save personal or project snippets without running them
 - All without SSH or direct database access
 
 ## Accessing Helm
@@ -148,10 +150,57 @@ the result bar displays **Truncated** beside the execution time.
 Returned strings are always treated as data. HTML inside a result is escaped and shown
 as text; Helm never inserts it as executable page markup.
 
-Project Helm keeps recent runs for the current page session. Select an entry to put its
-source back in the editor, or use **Clear** to remove the recent-run list. Clearing
-history does not change the editor or the current result. Recent-run dots distinguish
-successful, failed, timed-out or truncated, and cancelled executions.
+### Durable history
+
+Use the **History** icon beside Run to open your history for the current project
+environment. History follows your Slipway account across navigation and browser
+sessions. It is private to you and remains separated by project and environment.
+
+Each entry stores only:
+
+- the JavaScript source you executed;
+- status and duration;
+- the target app; and
+- the execution time.
+
+Returned records, console output, captured logs, and error details are never stored in
+Helm history. Slipway writes a separate security audit event without copying the
+executed source or returned data into its details. Clearing editable history therefore
+does not remove the audit trail.
+
+Select an entry to load it into the editor. Its ellipsis menu can also rerun, pin,
+save, or delete it. Rerun still uses a fresh execution ID and follows the same timeout
+and output bounds as a new run. Search matches the stored source.
+
+**Clear** removes the unpinned history for this user and environment. Pinned runs stay
+until you unpin or explicitly delete them. Unpinned history is retained for 30 days
+and capped at 200 entries per user, project, and environment by default. A Slipway
+operator can change those bounds:
+
+```text
+SLIPWAY_HELM_HISTORY_RETENTION_DAYS=30
+SLIPWAY_HELM_HISTORY_MAX_ENTRIES=200
+```
+
+### Reusable snippets
+
+Use the **Snippets** icon beside Run to keep repeatable Helm source under a clear name.
+You can save the whole editor, the current selection, or an existing history entry.
+Selecting a snippet inserts its source into the editor and **never executes it**. Review
+the source, then press Run when you are ready.
+
+A snippet can be:
+
+- **Personal** — visible only to you in that project.
+- **Project** — visible to Slipway team members who can access that project.
+
+A project snippet keeps its creator as the owner. Other project members can insert it,
+but only its owner can rename it, replace its source, change its visibility, or delete
+it. This prevents a shared operational command from being overwritten accidentally.
+The list shows the owner as provenance.
+
+Snippet source follows the same 64 KB maximum as a Helm execution. Snippet lifecycle
+events are audited without copying the snippet source into audit details.
 
 ### Run a Selection or the Whole Editor
 
