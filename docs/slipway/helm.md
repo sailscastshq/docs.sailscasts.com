@@ -82,6 +82,38 @@ a late response from the older run cannot replace the newer result.
 
 ## Using Helm
 
+### Sails-aware completion
+
+Helm completes the Sails application that is actually connected to the editor. Start
+typing a model global such as `Cre`, a helper path such as `sails.helpers.mail`, or a
+config path such as `sails.config.custom` to see matching suggestions.
+
+Completion understands:
+
+- model global IDs such as `Creator`, `Invoice`, and `User`
+- model attributes inside criteria, selection, sorting, and `Model.attributes`
+- Waterline model methods and chained query modifiers
+- `sails.helpers` namespaces and helper names
+- `sails.config` keys and their value types
+- lowercase model identities under `sails.models`
+
+Use <kbd>↑</kbd> and <kbd>↓</kbd> to move through suggestions, <kbd>Enter</kbd> to
+accept one, and <kbd>Esc</kbd> to close the list. <kbd>Ctrl Space</kbd> opens
+completion explicitly. The existing <kbd>⌘ Enter</kbd> or <kbd>Ctrl Enter</kbd>
+shortcut still runs the current selection or editor.
+
+Project Helm reads names and types from the running app in the selected environment.
+Bosun reads the same metadata from Slipway itself. Helm refreshes project metadata
+when the page regains focus, so returning after a deployment picks up the new app
+shape. If the app is stopped, still booting, or cannot be inspected, the editor
+continues to work without completion.
+
+::: info Configuration values stay private
+Completion returns configuration key names and value types only. It does not return
+configuration values, model records, attribute defaults, credentials, tokens, or
+secrets to the browser.
+:::
+
 ### Inspecting Results
 
 Helm chooses the clearest view for the returned value:
