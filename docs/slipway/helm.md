@@ -30,6 +30,9 @@ Helm gives you a live REPL connected to your running Sails application:
 - Inspect returned values as tables, expandable trees, or raw text
 - Find and reuse your source-only execution history
 - Save personal or project snippets without running them
+- Bind executions to the exact app, container, and deployment target
+- Require a short-lived write arm for obvious production mutations
+- Record privacy-safe production execution audits for owners and admins
 - All without SSH or direct database access
 
 ## Accessing Helm
@@ -141,6 +144,7 @@ Use the result ellipsis menu to:
 
 - **Copy as JSON** for the complete value received by the browser
 - **Export CSV** when the result is compatible with the table view
+- **Copy diagnostics** for target and execution metadata without returned values
 - **Clear result** in project Helm
 
 CSV exports preserve the visible columns and protect text values from being interpreted
@@ -160,7 +164,7 @@ Each entry stores only:
 
 - the JavaScript source you executed;
 - status and duration;
-- the target app; and
+- the project, environment, app, container, and deployment version target; and
 - the execution time.
 
 Returned records, console output, captured logs, and error details are never stored in
@@ -180,6 +184,62 @@ operator can change those bounds:
 ```text
 SLIPWAY_HELM_HISTORY_RETENTION_DAYS=30
 SLIPWAY_HELM_HISTORY_MAX_ENTRIES=200
+```
+
+### Production target and write arming
+
+The Helm breadcrumb identifies the active project, environment, and app. Slipway
+resolves the container and deployment again on the server for every execution. The
+production mutation confirmation shows that resolved target before writes can be
+armed, and **Copy diagnostics** includes it without including returned values.
+
+Slipway parses every project Helm submission on the server. When it sees an obvious
+Waterline create, update, destroy, collection mutation, native query, or recognizable
+external side effect in production, Helm pauses instead of sending the source to the
+container.
+
+Choose **Arm writes** only after reviewing the target and detected calls. The arm:
+
+- expires after 60 seconds by default;
+- belongs to the current signed-in user and team;
+- is bound to the exact source hash, app, container, and deployment version;
+- is persisted only as a token hash; and
+- is consumed by one execution attempt.
+
+Editing the source or deploying a new version invalidates the arm. Operators can
+shorten the window:
+
+```text
+SLIPWAY_HELM_WRITE_ARM_TTL_SECONDS=60
+```
+
+::: warning Safety friction, not a sandbox
+Mutation detection is deliberately described as a heuristic. Arbitrary JavaScript
+can construct or hide side effects that static analysis cannot prove. Strong
+read-only enforcement requires read-only database credentials and restricted runtime
+capabilities.
+:::
+
+### Production audit
+
+Team owners and admins can open **Settings → Audit Log**, filter to Helm, and search
+by action, target, source hash, person, resource, or IP address. Team members cannot
+open the audit page or its JSON endpoint.
+
+Helm records the actor, target, request IP, SHA-256 source hash, source and output byte
+counts, start time, duration, status, classifier metadata, and whether writes were
+armed. Blocked execution attempts and write-arm actions are separate events.
+
+The audit event never stores submitted source, returned values, console logs,
+credentials, or full production records. Audit is therefore independent from the
+private, editable source history.
+
+Helm audit events are retained for 90 days and capped at 5,000 entries per team by
+default:
+
+```text
+SLIPWAY_HELM_AUDIT_RETENTION_DAYS=90
+SLIPWAY_HELM_AUDIT_MAX_ENTRIES=5000
 ```
 
 ### Reusable snippets
@@ -376,7 +436,8 @@ await User.find()
 
 ### 2. Never Store Credentials
 
-Don't type passwords or API keys in the Helm — treat it as a shared console.
+Don't type passwords or API keys in Helm. Source history is private to your account,
+but credentials still do not belong in executable source or operational history.
 
 ### 3. Test Queries Locally First
 
