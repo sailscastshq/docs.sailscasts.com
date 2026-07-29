@@ -27,6 +27,7 @@ Helm gives you a live REPL connected to your running Sails application:
 - Execute Sails helpers
 - Inspect configuration
 - Debug issues in real-time
+- Inspect returned values as tables, expandable trees, or raw text
 - All without SSH or direct database access
 
 ## Accessing Helm
@@ -48,7 +49,7 @@ When you run code in Helm, Slipway:
 2. Returns the complete final top-level expression, if there is one
 3. Starts an isolated process and boots the Sails application without its HTTP server
 4. Executes project Helm inside the running app container via `docker exec`
-5. Captures console logs, the final value, timing, and structured errors
+5. Captures console logs separately from the final value, timing, and structured errors
 6. Lowers the Sails application and terminates the isolated process
 
 This means you have full access to your app's Sails environment — models, helpers, config, and everything else.
@@ -64,6 +65,44 @@ Helm accepts up to **64 KB of source**, captures up to **64 KB of console logs**
 :::
 
 ## Using Helm
+
+### Inspecting Results
+
+Helm chooses the clearest view for the returned value:
+
+- A non-empty array of flat records with the same fields opens as a **Table**.
+- A nested object or array opens as an expandable **Tree**.
+- Strings, primitive values, and exact serialized output remain available in **Raw**.
+
+The compact icon view switcher only shows choices that apply to the current value.
+Hover an icon to see its Table, Tree, or Raw tooltip; every button also has an
+accessible name. Tables preserve their column layout and scroll horizontally when
+needed. `null` values appear as `NULL`, booleans and numbers remain visibly typed,
+dates use their ISO value, and long values stay bounded instead of widening the whole
+workspace.
+
+Console calls are not mixed into the returned value. When an execution logs output,
+Helm adds a small **Console** disclosure below the result and immediately above the
+bottom view controls. It stays collapsed after a successful run and opens automatically
+when the execution fails. Expanded logs grow upward inside a bounded scrolling area, so
+diagnostics remain available without replacing the result.
+
+Use the result ellipsis menu to:
+
+- **Copy as JSON** for the complete value received by the browser
+- **Export CSV** when the result is compatible with the table view
+- **Clear result** in project Helm
+
+CSV exports preserve the visible columns and protect text values from being interpreted
+as spreadsheet formulas. If the bounded runtime had to shorten the value or its logs,
+the result bar displays **Truncated** beside the execution time.
+
+Returned strings are always treated as data. HTML inside a result is escaped and shown
+as text; Helm never inserts it as executable page markup.
+
+Project Helm keeps recent runs for the current page session. Select an entry to put its
+source back in the editor, or use **Clear** to remove the recent-run list. Clearing
+history does not change the editor or the current result.
 
 ### Run a Selection or the Whole Editor
 
@@ -117,7 +156,8 @@ creators.map((creator) => ({
 }))
 ```
 
-Helm shows the log first, followed by the mapped array.
+Helm keeps the log in the **Console** disclosure and presents the mapped array
+separately in its table, tree, or raw representation.
 
 ### Querying Models
 
