@@ -65,6 +65,16 @@ Helm accepts up to **64 KB of source**, captures up to **64 KB of console logs**
 
 ## Using Helm
 
+### Run a Selection or the Whole Editor
+
+Helm runs the current selection when you have selected code. The existing **Run** button changes to **Run selection**, and <kbd>⌘ Enter</kbd> on macOS or <kbd>Ctrl Enter</kbd> elsewhere follows the same rule.
+
+When there is no selection, Helm runs the whole editor. A whitespace-only selection is not executable, so Helm disables the run action instead of unexpectedly running code outside the selection.
+
+Only the selected source is sent for execution. Definitions elsewhere in the editor are not silently included. Helm keeps the selection and keyboard focus after the result arrives so you can adjust the same query and rerun it quickly.
+
+Syntax and runtime errors still point to the original line and column in the editor, even when the selected code begins partway through the document.
+
 ### Multi-line JavaScript
 
 Write normal multi-line JavaScript. You do not need to add `return` before the final query:
