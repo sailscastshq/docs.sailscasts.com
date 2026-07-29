@@ -114,6 +114,12 @@ Only the selected source is sent for execution. Definitions elsewhere in the edi
 
 Syntax and runtime errors still point to the original line and column in the editor, even when the selected code begins partway through the document.
 
+When Helm can map a failure to submitted source, it underlines the relevant token and
+places a concise message on that line. The result pane repeats the error and its original
+line and column. Runtime and VM frames remain inside a closed **Stack trace** disclosure,
+so they are available for deeper debugging without obscuring the source-level failure.
+Editing the source or completing a successful run clears the stale diagnostic.
+
 ### Multi-line JavaScript
 
 Write normal multi-line JavaScript. You do not need to add `return` before the final query:
