@@ -28,6 +28,7 @@ Helm gives you a live REPL connected to your running Sails application:
 - Inspect configuration
 - Debug issues in real-time
 - Inspect returned values as tables, expandable trees, or raw text
+- Keep independent named scratchpads for different investigations
 - Find and reuse your source-only execution history
 - Save personal or project snippets without running them
 - Bind executions to the exact app, container, and deployment target
@@ -210,6 +211,28 @@ values, and query error messages are never included in the trace.
 
 Query tracing is diagnostic visibility, not permission to write. Project Helm still
 applies the production mutation classifier and write-arm flow before executing source.
+
+### Named scratchpads
+
+Use the tab strip above the editor to keep several investigations open without
+replacing the source already in Helm. Each scratchpad remembers its name, source, and
+selected result view. The ellipsis menu lets you rename, duplicate, reorder, close, or
+save the active scratchpad as a snippet. You can also double-click a tab to rename it
+and use <kbd>←</kbd> and <kbd>→</kbd> while a tab is focused to move between tabs.
+
+The breadcrumb identifies the app and environment for current-target tabs, so Helm does
+not repeat that context on every tab. A tab from another target displays its app and
+environment directly. Opening it navigates Helm to that target before the source can
+run. Slipway asks for confirmation first when the destination is production, so a
+scratchpad cannot silently change where an execution will happen.
+
+Scratchpad source and view preference are stored in the current browser and restored
+after reload. Returned values, console output, logs, and errors stay in memory only and
+are discarded on reload. A dot on a tab means its source has changed since its last
+successful whole-editor run or since it was saved as a snippet.
+
+Helm keeps at most 20 scratchpads in the browser. Use snippets for durable commands that
+need to be shared with a team or reused beyond the current browser.
 
 ### Durable history
 
