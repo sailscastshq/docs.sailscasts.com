@@ -154,6 +154,63 @@ the result bar displays **Truncated** beside the execution time.
 Returned strings are always treated as data. HTML inside a result is escaped and shown
 as text; Helm never inserts it as executable page markup.
 
+### Inspect intermediate values
+
+Add `// @inspect` after a complete expression when you want to see its value without
+changing the final result:
+
+```javascript
+const creators = await Creator.find({
+  subscriptionStatus: 'active'
+}) // @inspect
+
+creators.map((creator) => creator.publicId)
+```
+
+Helm parses the marker as JavaScript syntax and shows the captured value on the same
+editor line. It also works after a single variable initializer and inside a loop. A
+string containing `// @inspect`, a partial expression, or a marker on its own line does
+not activate inspection.
+
+An expression is evaluated once. Inspection returns that exact value to the surrounding
+program, so adding the marker does not repeat a query or change what the snippet
+returns. A loop keeps at most 20 values for one marker and reports how many additional
+values were omitted. Editing the source or starting another run clears the old inline
+values.
+
+Inline values are bounded with the rest of the Helm result and exist only in the
+current execution response. They are not copied into Helm history or audit events.
+
+### Trace Waterline and native queries
+
+Add the exact opt-in directive `// @trace queries` anywhere in the submitted source to
+record database work started by that execution:
+
+```javascript
+// @trace queries
+
+await Creator.find({
+  subscriptionStatus: 'active'
+}).limit(10)
+```
+
+The **Queries** disclosure appears above the result controls and shows:
+
+- Waterline model and method, such as `creator.find`;
+- datastore, duration, and success or error status;
+- the shape of Waterline criteria with every value replaced by `[value]`; and
+- `sendNativeQuery` statements with comments, quoted literals, and numeric literals
+  removed.
+
+Tracing is off by default, so ordinary Helm executions do not install query
+instrumentation. When enabled, it is scoped to the isolated execution's asynchronous
+context; unrelated application startup or background work is not included. Helm keeps
+at most 100 trace entries and reports any omitted remainder. Bind values, criteria
+values, and query error messages are never included in the trace.
+
+Query tracing is diagnostic visibility, not permission to write. Project Helm still
+applies the production mutation classifier and write-arm flow before executing source.
+
 ### Durable history
 
 Use the **History** icon beside Run to open your history for the current project
