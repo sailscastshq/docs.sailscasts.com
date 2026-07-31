@@ -74,6 +74,13 @@ if (useNewCheckout) {
 }
 ```
 
+`flags.enabled` is a regular Sails helper machine. The hook waits for the
+built-in helpers hook and furnishes the helper through the same Sails API used
+by hooks such as `sails-hook-mail`. Sails therefore validates the declared
+`key`, `req`, `context`, and `defaultValue` inputs before flag evaluation runs.
+If the application already defines `sails.helpers.flags.enabled`, Slipway keeps
+the application-owned helper and logs a warning instead of replacing it.
+
 Always choose the default explicitly. Slipway returns that value when the flag
 is unknown or the control plane has never been reachable. Flag evaluation does
 not make the application request fail.
