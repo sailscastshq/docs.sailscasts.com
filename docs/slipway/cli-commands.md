@@ -113,8 +113,10 @@ Shows name, slug, type (production/staging), domain, app status, and created dat
 Create a new environment.
 
 ```bash
-slipway environment:create <name> [--production] [--domain <domain>]
+slipway environment:create <name> [--production] [--domain <domain>] [--from <environment>]
 ```
+
+`--from` copies configuration through each variable's preview policy: inherit, omit, or generate a new value. Secrets default to omit.
 
 ### environment:update
 

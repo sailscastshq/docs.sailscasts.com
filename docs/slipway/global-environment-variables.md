@@ -5,279 +5,96 @@ head:
       content: https://docs.sailscasts.com/slipway-social.png
 title: Global Environment Variables
 titleTemplate: Slipway
-description: Configure instance-wide environment variables that are shared across all your deployed applications.
+description: Configure encrypted instance-wide runtime values shared by deployed applications.
 prev:
   text: Environment Variables
   link: /slipway/environment-variables
 next:
-  text: File Uploads
-  link: /slipway/file-uploads
+  text: Config & Secrets
+  link: /slipway/secrets
 editLink: true
 ---
 
 # Global Environment Variables
 
-Global environment variables are instance-wide settings that are automatically injected into all your deployed applications. This is useful for shared credentials like S3-compatible storage, email services, or API keys.
+Global environment variables are the lowest, instance-wide layer of configuration injected into applications deployed by Slipway. They are useful for values deliberately shared across projects, such as storage settings, email provider credentials, or a common public region.
 
-## Why Global Variables?
+## Add a global value
 
-Instead of setting the same R2/S3 credentials on every project:
+1. Open **Settings → Global Environment**.
+2. Enter the key and value.
+3. Click **Add**.
+
+New values default to **Secret** and are omitted when an environment is copied. Open **•••** beside a variable to set:
+
+- **Value type** — Secret or Plain config.
+- **Preview environments** — Omit, Inherit, or Generate a new value.
+- **Description** — an optional note explaining what consumes the value.
+
+The row also shows who last changed the value and when. Use the bulk editor for `KEY=value` input; metadata remains attached to keys that already exist.
+
+There is no separate `config:set` CLI command. Manage global values in the dashboard so their type and preview policy are explicit.
+
+## Precedence
+
+Global values are resolved first:
+
+```text
+global < environment < app < Slipway-managed runtime values
+```
+
+An environment value with the same key overrides the global value for every app in that environment. An app value then overrides both for that app. Slipway-managed runtime values take final precedence.
+
+Use global scope only when broad inheritance is intentional. A payment credential needed by one app is safer at app scope; shared R2 settings used by backups and Bridge may belong globally.
+
+## Storage settings
+
+The **Settings → File Uploads** form writes its selected provider settings into this encrypted global configuration layer. It also creates value metadata and audit events automatically.
+
+For Cloudflare R2, the conventional values are:
+
+```text
+R2_ACCESS_KEY
+R2_SECRET_KEY
+R2_BUCKET
+R2_ENDPOINT
+R2_PUBLIC_URL
+```
+
+Credentials are marked as secrets and omitted from copied environments. Bucket, endpoint, region, and public URL values are plain config and inheritable unless you later choose another policy.
+
+Bridge can reuse conventional `R2_` or `S3_` values. App- or environment-scoped values override global storage values; within a scope, explicit `BRIDGE_` values override the conventional names. See [File Uploads](/slipway/file-uploads) and [Bridge](/slipway/bridge).
+
+## Encryption and audit history
+
+The complete global value map is encrypted at rest with Slipway's `DATA_ENCRYPTION_KEY`. Metadata remains value-free so it can explain ownership and policy without exposing credentials.
+
+Creating, updating, rotating, or deleting a key writes a configuration audit event containing the key, operation, actor, scope, type, and policy—never the value. Review these events in **Settings → Audit Log** or run:
 
 ```bash
-# Without global variables - repetitive
-slipway env:set app1 R2_ACCESS_KEY=abc123...
-slipway env:set app1 R2_SECRET_KEY=xyz789...
-slipway env:set app2 R2_ACCESS_KEY=abc123...
-slipway env:set app2 R2_SECRET_KEY=xyz789...
-# ... for every app
+slipway audit-log
 ```
 
-Set them once globally:
+## Apply changes
+
+Global configuration is resolved at deployment time. Redeploy each affected app after a change:
 
 ```bash
-# With global variables - set once, use everywhere
-slipway config:set R2_ACCESS_KEY=abc123...
-slipway config:set R2_SECRET_KEY=xyz789...
+slipway slide
 ```
 
-## Setting Global Variables
+The deployment's config fingerprint changes when its effective key/value set changes, even if the Git commit is the same.
 
-### Via Dashboard
+## Operational guidance
 
-1. Go to **Settings**
-2. Click **Global Environment**
-3. Add variables
-4. Click **Save**
+- Prefer environment or app scope unless every deployed application truly needs the value.
+- Treat access keys, secret keys, passwords, tokens, private connection URLs, and signing material as secrets.
+- Keep public URLs, regions, bucket names, and non-sensitive feature modes as plain config only when they contain no credentials.
+- Rotate a provider credential at the provider, update it in Slipway, then redeploy affected apps.
+- Removing a global key may expose an environment or app value with the same name; review the cascade before deleting it.
 
-### Via CLI
+## What's next?
 
-```bash
-# Set a global variable
-slipway config:set VAR_NAME=value
-
-# Set multiple at once
-slipway config:set \
-  R2_ACCESS_KEY=abc123 \
-  R2_SECRET_KEY=xyz789 \
-  R2_BUCKET=my-uploads \
-  R2_ENDPOINT=https://xxx.r2.cloudflarestorage.com
-```
-
-## Common Global Variables
-
-### S3-Compatible Storage (R2, Spaces, S3)
-
-For file uploads and backups:
-
-```bash
-# Cloudflare R2
-slipway config:set \
-  R2_ACCESS_KEY=your-access-key \
-  R2_SECRET_KEY=your-secret-key \
-  R2_BUCKET=your-bucket \
-  R2_ENDPOINT=https://account-id.r2.cloudflarestorage.com
-
-# DigitalOcean Spaces
-slipway config:set \
-  SPACES_ACCESS_KEY=your-access-key \
-  SPACES_SECRET_KEY=your-secret-key \
-  SPACES_BUCKET=your-bucket \
-  SPACES_ENDPOINT=https://nyc3.digitaloceanspaces.com
-
-# Amazon S3
-slipway config:set \
-  S3_ACCESS_KEY=your-access-key \
-  S3_SECRET_KEY=your-secret-key \
-  S3_BUCKET=your-bucket \
-  S3_REGION=us-east-1
-```
-
-### Email Services
-
-```bash
-# Mailgun
-slipway config:set \
-  MAILGUN_API_KEY=key-xxx \
-  MAILGUN_DOMAIN=mail.example.com
-
-# SendGrid
-slipway config:set \
-  SENDGRID_API_KEY=SG.xxx
-
-# Resend
-slipway config:set \
-  RESEND_API_KEY=re_xxx
-```
-
-### Monitoring & Error Tracking
-
-```bash
-# Sentry
-slipway config:set \
-  SENTRY_DSN=https://xxx@sentry.io/123
-```
-
-## Viewing Global Variables
-
-### Via CLI
-
-```bash
-slipway config:list
-```
-
-Output:
-
-```
-Global Environment Variables
-
-NAME              VALUE                    SET
-R2_ACCESS_KEY     abc1...                  2 days ago
-R2_SECRET_KEY     ********                 2 days ago
-R2_BUCKET         my-uploads               2 days ago
-R2_ENDPOINT       https://xxx.r2...        2 days ago
-SENTRY_DSN        https://xxx@se...        1 week ago
-```
-
-### Via Dashboard
-
-Go to **Settings → Global Environment** to see all variables.
-
-## Variable Inheritance
-
-Global variables are inherited by all environments and apps, but can be overridden at each level:
-
-```
-┌─────────────────────────────────────────────────────────┐
-│  Global Variables (instance-wide)                        │
-│  R2_ACCESS_KEY=abc123                                   │
-│  R2_BUCKET=default-bucket                               │
-│  LOG_LEVEL=info                                         │
-└─────────────────────────────────────────────────────────┘
-                           │
-                           ▼
-┌─────────────────────────────────────────────────────────┐
-│  Environment: production                                 │
-│  Inherited: R2_ACCESS_KEY=abc123                        │
-│  Override:  R2_BUCKET=my-app-bucket  ← env-specific     │
-│  Override:  LOG_LEVEL=debug          ← env-specific     │
-└─────────────────────────────────────────────────────────┘
-                           │
-                           ▼
-┌─────────────────────────────────────────────────────────┐
-│  App: worker (multi-app only)                            │
-│  Inherited: R2_ACCESS_KEY=abc123 (from global)          │
-│  Inherited: R2_BUCKET=my-app-bucket (from environment)  │
-│  Override:  LOG_LEVEL=warn           ← app-specific     │
-└─────────────────────────────────────────────────────────┘
-```
-
-### Override Priority
-
-1. **App-specific variables** (highest priority, [multi-app](/slipway/multi-app) only)
-2. **Environment variables**
-3. **Global environment variables**
-4. **Slipway defaults** (PORT, NODE_ENV, etc.)
-
-For single-app environments, the app level doesn't apply — environment variables are the highest priority override.
-
-## Removing Global Variables
-
-```bash
-# Remove a global variable
-slipway config:unset R2_ACCESS_KEY
-
-# Remove multiple
-slipway config:unset R2_ACCESS_KEY R2_SECRET_KEY R2_BUCKET
-```
-
-## Using in Your Sails App
-
-Global variables are available like any environment variable:
-
-```javascript
-// config/uploads.js
-module.exports.uploads = {
-  adapter: require('skipper-s3'),
-  key: process.env.R2_ACCESS_KEY,
-  secret: process.env.R2_SECRET_KEY,
-  bucket: process.env.R2_BUCKET,
-  endpoint: process.env.R2_ENDPOINT
-}
-```
-
-```javascript
-// config/email.js
-module.exports.email = {
-  adapter: 'sails-hook-mail',
-  apiKey: process.env.SENDGRID_API_KEY
-}
-```
-
-## Security
-
-::: warning Sensitive Values
-Global variables are encrypted at rest. However, they are decrypted and injected into containers at runtime. Ensure your Slipway server is properly secured.
-:::
-
-### Who Can See Global Variables?
-
-| Role      | Can View | Can Edit |
-| --------- | -------- | -------- |
-| Owner     | Yes      | Yes      |
-| Admin     | Yes      | Yes      |
-| Developer | Masked   | No       |
-| Viewer    | No       | No       |
-
-## Database Backups to S3
-
-When global S3 variables are configured, database backups can be sent to S3-compatible storage:
-
-```bash
-# Enable S3 backups (uses global R2/S3 variables)
-slipway db:backup mydb --to-s3
-
-# Or configure automatic backups
-slipway db:update mydb --backup-to-s3=true --backup-schedule="0 3 * * *"
-```
-
-See [Database Services](/slipway/database-services#backups) for more details.
-
-## Best Practices
-
-### 1. Use Descriptive Names
-
-```bash
-# Good - clear purpose
-slipway config:set UPLOADS_S3_BUCKET=my-uploads
-slipway config:set BACKUPS_S3_BUCKET=my-backups
-
-# Avoid - ambiguous
-slipway config:set BUCKET=something
-```
-
-### 2. Separate by Concern
-
-Consider using different buckets/credentials for different purposes:
-
-- `UPLOADS_*` - User-uploaded files
-- `BACKUPS_*` - Database backups
-- `ASSETS_*` - Static assets
-
-### 3. Rotate Credentials
-
-Periodically rotate your API keys:
-
-```bash
-# Update global variable (takes effect on next deploy)
-slipway config:set R2_ACCESS_KEY=new-key
-
-# Redeploy apps to pick up new credentials
-slipway deploy app1
-slipway deploy app2
-```
-
-## What's Next?
-
-- Learn about [File Uploads](/slipway/file-uploads) with S3-compatible storage
-- Configure [Database Services](/slipway/database-services) with S3 backups
-- Set up [Environment Variables](/slipway/environment-variables) for project-specific config
+- Learn the complete [environment variable cascade](/slipway/environment-variables)
+- Understand [Config & Secrets](/slipway/secrets)
+- Configure [File Uploads](/slipway/file-uploads)

@@ -5,7 +5,7 @@ head:
       content: https://docs.sailscasts.com/slipway-social.png
 title: Environment Variables
 titleTemplate: Slipway
-description: Manage environment variables and secrets for your Slipway applications.
+description: Manage environment and app runtime configuration in Slipway.
 prev:
   text: Rollbacks
   link: /slipway/rollbacks
@@ -17,123 +17,101 @@ editLink: true
 
 # Environment Variables
 
-Environment variables configure your application without changing code. Slipway makes it easy to manage variables across environments.
+Environment variables configure an application without putting credentials or deployment-specific settings in its source code. Slipway stores them as deployment-native configuration and injects the resolved values when it starts a container.
 
-## Setting Variables
+## Set environment variables
 
-### Via CLI
+### Dashboard
 
-```bash
-# Set a single variable
-slipway env:set myapp DATABASE_URL=postgres://...
+1. Open a project and select the environment.
+2. Expand **Environment variables**.
+3. Enter a key and value, then click **Add**.
 
-# Set multiple variables
-slipway env:set myapp \
-  NODE_ENV=production \
-  SESSION_SECRET=your-secret-key \
-  STRIPE_KEY=sk_live_xxx
-```
+For an app-only override, open the app from the environment's Apps list and use its **Environment variables** section.
 
-### Via Dashboard
+Each new variable starts as a secret with an **Omit** preview policy. Open **•••** beside it to change its type, preview policy, or optional description.
 
-1. Go to your project and select an environment
-2. Expand the **Environment variables** section
-3. Enter a key and value in the input row at the bottom
-4. Click **Add**
+Use the bulk editor when you already have `KEY=value` lines. Existing metadata is retained for keys that remain in the list; new keys receive the safe secret defaults.
 
-For app-specific variables, click the app name from the Apps list to go to the app detail page, then expand the **Environment variables** accordion.
+### CLI
 
-## Viewing Variables
-
-### List All Variables
+The CLI manages environment-scoped values for the linked project:
 
 ```bash
-slipway env:list myapp
+# Production is the default environment
+slipway env:set SESSION_SECRET=replace-me LOG_LEVEL=info
+
+# Target another environment
+slipway env:set LOG_LEVEL=debug --env staging
+
+# Remove values
+slipway env:unset OLD_TOKEN
+
+# List values; secrets are masked
+slipway env
 ```
 
-Output (values masked by default):
+Use the dashboard to configure app-level overrides and metadata.
 
+## Configuration cascade
+
+Slipway resolves configuration in this order; later scopes win:
+
+```text
+global < environment < app < Slipway-managed runtime values
 ```
-KEY              VALUE
-NODE_ENV         production
-DATABASE_URL     ••••••••••••
-SESSION_SECRET   ••••••••••••
-STRIPE_KEY       ••••••••••••
-LOG_LEVEL        debug
-```
 
-### Show Values
+| Scope           | Use it for                                                         |
+| --------------- | ------------------------------------------------------------------ |
+| **Global**      | Values shared by every application on the Slipway instance         |
+| **Environment** | Values shared by apps in one production, staging, or other context |
+| **App**         | Values required by only one app, such as a worker                  |
+| **Managed**     | Service and runtime values owned by Slipway                        |
 
-To reveal actual values:
+For example, an environment `LOG_LEVEL=debug` overrides a global `LOG_LEVEL=info`. An app can then use `LOG_LEVEL=warn` without changing its sibling apps.
+
+Service connection variables such as `DATABASE_URL` and `REDIS_URL` are Slipway-managed. They are visible at environment scope but cannot be edited, removed, or shadowed by an app override. Change or remove the service that owns them.
+
+## Secret and plain values
+
+- **Secret** values are masked in the UI and CLI and default to **Omit** for copied environments. This is the default type.
+- **Plain config** is intended for non-sensitive values such as public URLs, regions, feature modes, and log levels.
+
+All global, environment, and app values are encrypted at rest. The type classification controls display and the safe default for copied environments: secrets default to **Omit**, while plain config defaults to **Inherit**.
+
+See [Config & Secrets](/slipway/secrets) for audit history, managed values, preview policy, and deployment fingerprints.
+
+## Preview policy
+
+When an environment is explicitly created from another environment, every value follows its own policy:
+
+| Policy                 | Result                                                        |
+| ---------------------- | ------------------------------------------------------------- |
+| **Omit**               | Do not copy the value                                         |
+| **Inherit**            | Copy the current value                                        |
+| **Generate new value** | Create a new cryptographically random value for the new scope |
+
+Generated values are attributed to Slipway. Existing environments keep their values until you change them.
+
+Use `--from` to create an environment through that policy boundary:
 
 ```bash
-slipway env:list myapp --show
+slipway environment:create preview-42 --from production
 ```
 
-::: warning Security
-Only use `--show` in secure environments. Values will be visible in terminal history.
-:::
+## When changes take effect
 
-### Get Single Variable
+Changing configuration does not mutate a running container. Redeploy the app to apply the new effective values:
 
 ```bash
-slipway env:get myapp DATABASE_URL
-```
-
-## Removing Variables
-
-```bash
-slipway env:unset myapp UNUSED_VAR
-```
-
-## Variable Cascade
-
-When a container starts, Slipway merges variables from three levels. Later levels override earlier ones:
-
-```
-┌─────────────────────────────────────────────────────────┐
-│  1. Global Variables (instance-wide)                     │
-│     R2_ACCESS_KEY=abc123                                │
-│     LOG_LEVEL=info                                      │
-├─────────────────────────────────────────────────────────┤
-│  2. Environment Variables (per environment)              │
-│     DATABASE_URL=postgres://...                         │
-│     LOG_LEVEL=debug          ← overrides global         │
-├─────────────────────────────────────────────────────────┤
-│  3. App Variables (per app, multi-app only)              │
-│     WORKER_CONCURRENCY=5                                │
-│     LOG_LEVEL=warn           ← overrides environment    │
-└─────────────────────────────────────────────────────────┘
-```
-
-**Override priority** (highest wins):
-
-1. **App-specific variables** (set per app in [multi-app environments](/slipway/multi-app))
-2. **Environment variables** (set via `slipway env:set` or dashboard)
-3. **Global variables** (set in Settings → Global Environment)
-4. **Slipway defaults** (`PORT`, `NODE_ENV`, etc.)
-
-For single-app environments, levels 1 and 2 are all you need. App-specific variables only matter when running [multiple apps](/slipway/multi-app) in the same environment.
-
-## When Changes Take Effect
-
-Environment variable changes require a **redeploy** to take effect:
-
-```bash
-# Set variables
-slipway env:set myapp NEW_VAR=value
-
-# Redeploy to apply
 slipway slide
 ```
 
-::: tip Automatic Restart Coming Soon
-Future versions will support automatic container restarts when variables change.
-:::
+The deployment page shows a keyed config fingerprint and variable count. This helps distinguish a code-only redeploy from a release whose effective configuration changed, without storing secret values in deployment logs.
 
-## Referencing other variables
+## Variable references
 
-Values may reference another effective environment variable with `$NAME` or `${NAME}`:
+Values may reference another effective variable with `$NAME` or `${NAME}`:
 
 ```bash
 HOST=app.internal
@@ -141,7 +119,7 @@ ORIGIN=http://$HOST:${PORT}
 HEALTH_URL=${ORIGIN}/health
 ```
 
-When the container starts, Slipway resolves the merged global, environment, app, and Slipway-owned runtime values:
+At container start this becomes:
 
 ```text
 HOST=app.internal
@@ -149,314 +127,67 @@ ORIGIN=http://app.internal:1337
 HEALTH_URL=http://app.internal:1337/health
 ```
 
-`PORT` is the internal port assigned to the running application, not the public host port.
-
-Use `$$` for a literal dollar sign:
+`PORT` is the internal application port assigned by Slipway. Use `$$` for a literal dollar sign:
 
 ```bash
 TEMPLATE=literal=$$PORT resolved=$PORT
 ```
 
-This becomes:
+Expansion is performed without a shell. Command substitutions, backticks, and shell-like text are treated as literal data. Unknown and cyclic references remain unchanged. Expanded values are limited to 1 MiB, so keep reference chains short and legible.
 
-```text
-TEMPLATE=literal=$PORT resolved=1337
-```
+## Common Sails values
 
-::: info Safe expansion
-Expansion is performed without a shell. Command substitutions, backticks, and other shell-like text are passed to Docker as literal data and are never executed. Unknown references and cyclic references remain unchanged instead of being guessed.
-:::
+### Application
 
-Expanded values are limited to 1 MiB, and deeply recursive reference graphs stop safely. Keep reference chains short enough that another operator can understand the effective value.
+| Variable         | Purpose                              |
+| ---------------- | ------------------------------------ |
+| `NODE_ENV`       | Select production behavior           |
+| `SESSION_SECRET` | Sign or encrypt application sessions |
+| `LOG_LEVEL`      | Configure application logging        |
+| `PORT`           | Internal port; injected by Slipway   |
 
-## Environment-Specific Variables
+### Services
 
-### Multiple Environments
+| Variable       | Purpose                                      |
+| -------------- | -------------------------------------------- |
+| `DATABASE_URL` | Primary database connection, usually managed |
+| `REDIS_URL`    | Redis connection, usually managed            |
 
-Each environment (production, staging, etc.) has its own variables:
+Creating a service with `slipway db:create` or the dashboard injects its managed connection URL automatically.
 
-```bash
-# Production
-slipway env:set myapp --env=production \
-  DATABASE_URL=postgres://prod-db/myapp \
-  LOG_LEVEL=warn
+### External providers
 
-# Staging
-slipway env:set myapp --env=staging \
-  DATABASE_URL=postgres://staging-db/myapp \
-  LOG_LEVEL=debug
-```
+Values such as `RESEND_API_KEY`, `SENTRY_DSN`, storage credentials, payment keys, and webhook secrets should normally be marked as secrets. Public endpoints, bucket names, regions, and feature modes can be plain config when they contain no credential material.
 
-### Copying Between Environments
+## Operational guidance
 
-Copy variables from one environment to another:
-
-```bash
-slipway env:copy myapp --from=production --to=staging
-```
-
-This copies all variables. You'll typically want to update database URLs and API keys afterward.
-
-## Common Variables for Sails Apps
-
-### Required Variables
-
-| Variable   | Description                  | Example      |
-| ---------- | ---------------------------- | ------------ |
-| `NODE_ENV` | Environment mode             | `production` |
-| `PORT`     | Server port (set by Slipway) | `1337`       |
-
-### Database
-
-| Variable       | Description      | Example                             |
-| -------------- | ---------------- | ----------------------------------- |
-| `DATABASE_URL` | Primary database | `postgres://user:pass@host:5432/db` |
-| `REDIS_URL`    | Redis connection | `redis://host:6379`                 |
-
-::: tip Automatic Database URLs
-When you link a database with `slipway db:link`, these are set automatically.
-:::
-
-### Security
-
-| Variable         | Description            | Example                 |
-| ---------------- | ---------------------- | ----------------------- |
-| `SESSION_SECRET` | Session encryption key | `random-32-char-string` |
-| `CSRF_SECRET`    | CSRF token secret      | `another-random-string` |
-
-### Email (sails-hook-mail)
-
-| Variable         | Description    | Example            |
-| ---------------- | -------------- | ------------------ |
-| `MAIL_TRANSPORT` | Email provider | `resend`, `smtp`   |
-| `RESEND_API_KEY` | Resend API key | `re_xxx`           |
-| `SMTP_HOST`      | SMTP server    | `smtp.gmail.com`   |
-| `SMTP_PORT`      | SMTP port      | `587`              |
-| `SMTP_USER`      | SMTP username  | `user@example.com` |
-| `SMTP_PASS`      | SMTP password  | `app-password`     |
-
-### Third-Party Services
-
-| Variable                | Description            | Example                     |
-| ----------------------- | ---------------------- | --------------------------- |
-| `STRIPE_KEY`            | Stripe secret key      | `sk_live_xxx`               |
-| `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing | `whsec_xxx`                 |
-| `SENTRY_DSN`            | Sentry error tracking  | `https://xxx@sentry.io/xxx` |
-| `AWS_ACCESS_KEY_ID`     | AWS credentials        | `AKIA...`                   |
-| `AWS_SECRET_ACCESS_KEY` | AWS credentials        | `xxx`                       |
-| `S3_BUCKET`             | S3 bucket name         | `myapp-uploads`             |
-
-## Best Practices
-
-### 1. Never Commit Secrets
-
-Add `.env` to `.gitignore`:
-
-```
-# .gitignore
-.env
-.env.local
-.env.*.local
-```
-
-### 2. Use Descriptive Names
-
-```bash
-# Good
-DATABASE_URL=...
-STRIPE_SECRET_KEY=...
-MAIL_FROM_ADDRESS=...
-
-# Avoid
-DB=...
-KEY=...
-EMAIL=...
-```
-
-### 3. Use Different Values per Environment
-
-```bash
-# Production
-STRIPE_KEY=sk_live_xxx   # Live key
-
-# Staging
-STRIPE_KEY=sk_test_xxx   # Test key
-```
-
-### 4. Generate Strong Secrets
-
-Use cryptographically secure random strings:
-
-```bash
-# Generate a 32-character secret
-openssl rand -hex 32
-```
-
-Or in Node.js:
-
-```javascript
-require('crypto').randomBytes(32).toString('hex')
-```
-
-### 5. Document Required Variables
-
-Create a `.env.example` file in your repo:
-
-```bash
-# .env.example - Copy to .env and fill in values
-
-# Required
-NODE_ENV=development
-DATABASE_URL=
-SESSION_SECRET=
-
-# Email (optional)
-MAIL_TRANSPORT=log
-RESEND_API_KEY=
-
-# Payments (optional)
-STRIPE_KEY=
-STRIPE_WEBHOOK_SECRET=
-```
-
-### 6. Validate Variables on Startup
-
-In your Sails app, validate required variables:
-
-```javascript
-// config/bootstrap.js
-module.exports.bootstrap = async function () {
-  const required = ['DATABASE_URL', 'SESSION_SECRET']
-
-  for (const key of required) {
-    if (!process.env[key]) {
-      throw new Error(`Missing required environment variable: ${key}`)
-    }
-  }
-}
-```
-
-## Secrets Management
-
-For highly sensitive values like API keys and passwords, Slipway provides additional security:
-
-### Encrypted Storage
-
-All environment variables are encrypted at rest in Slipway's database.
-
-### Audit Logging
-
-Changes to environment variables are logged:
-
-```bash
-slipway env:audit myapp
-```
-
-Output:
-
-```
-TIMESTAMP            USER              ACTION         KEY
-2024-01-20 14:30     admin@example.com SET           STRIPE_KEY
-2024-01-20 14:25     admin@example.com SET           DATABASE_URL
-2024-01-19 10:00     admin@example.com UNSET         OLD_VAR
-```
-
-### Access Control
-
-Environment variable access can be restricted by role:
-
-- **Owners/Admins**: Full access (view, set, unset)
-- **Developers**: Set and unset (values hidden)
-- **Viewers**: No access
-
-## Importing and Exporting
-
-### Export to File
-
-```bash
-slipway env:export myapp > .env.production
-```
-
-### Import from File
-
-```bash
-slipway env:import myapp .env.production
-```
-
-::: warning Review Before Import
-Always review the file contents before importing to avoid overwriting critical variables.
-:::
-
-### Format
-
-The export format is standard `.env`:
-
-```bash
-NODE_ENV=production
-DATABASE_URL=postgres://user:pass@host:5432/db
-SESSION_SECRET=abc123
-```
-
-## Built-in Variables
-
-Slipway automatically sets these variables:
-
-| Variable                | Description                   | Example      |
-| ----------------------- | ----------------------------- | ------------ |
-| `PORT`                  | Port the app should listen on | `1337`       |
-| `NODE_ENV`              | Environment name              | `production` |
-| `SLIPWAY_APP`           | App name in Slipway           | `myapp`      |
-| `SLIPWAY_ENV`           | Environment name              | `production` |
-| `SLIPWAY_DEPLOYMENT_ID` | Current deployment ID         | `abc123`     |
+- Never commit `.env`, credentials, private keys, or production URLs containing passwords.
+- Use a separate value for production and non-production providers.
+- Put a value at the narrowest scope that needs it.
+- Leave production secrets on **Omit** unless copying is explicitly safe.
+- Generate secrets with a cryptographically secure source such as `openssl rand -hex 32`.
+- Keep an accurate `.env.example` with keys but no real values.
+- Never log `process.env` from the application.
 
 ## Troubleshooting
 
-### Variable Not Available
+### A new value is not visible in the app
 
-1. **Did you redeploy?** Changes require a redeploy:
+1. Redeploy with `slipway slide`.
+2. Confirm you edited the intended environment and app.
+3. Check whether a narrower scope overrides the key.
+4. Verify the application reads the same key name.
 
-   ```bash
-   slipway slide
-   ```
+### A managed value cannot be edited
 
-2. **Check the variable exists:**
+This is intentional. Change, repair, or remove the database or Redis service that owns the value. Slipway prevents direct edits so its service state and runtime configuration cannot diverge.
 
-   ```bash
-   slipway env:list myapp
-   ```
+### A copied environment is missing a secret
 
-3. **Check for typos** in the variable name
+Secret values default to **Omit**. Open the source variable's **•••** menu and deliberately choose **Inherit** or **Generate new value**, then create the environment again.
 
-### Value Looks Wrong
+## What's next?
 
-1. **Check escaping** — Special characters may need escaping:
-
-   ```bash
-   # Correct
-   slipway env:set myapp 'PASSWORD=p@ss$word!'
-
-   # May have issues
-   slipway env:set myapp PASSWORD=p@ss$word!
-   ```
-
-2. **Check for trailing whitespace** — Values are trimmed, but check your source
-
-### Variables from Database Link Missing
-
-1. **Verify the link exists:**
-
-   ```bash
-   slipway db:list
-   ```
-
-2. **Re-link the database:**
-   ```bash
-   slipway db:unlink mydb myapp
-   slipway db:link mydb myapp
-   ```
-
-## What's Next?
-
-- Set up [Database Services](/slipway/database-services) with automatic URL injection
-- Configure [Auto-Deploy](/slipway/auto-deploy) for CI/CD
-- Learn about [Rollbacks](/slipway/rollbacks) if something goes wrong
+- Read [Config & Secrets](/slipway/secrets)
+- Configure [Global Environment Variables](/slipway/global-environment-variables)
+- Add [Database Services](/slipway/database-services)
