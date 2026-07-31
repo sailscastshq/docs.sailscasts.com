@@ -7,8 +7,8 @@ title: Custom Domain & SSL
 titleTemplate: Slipway
 description: Configure custom domains and automatic SSL certificates for your Slipway applications.
 prev:
-  text: Instance URL
-  link: /slipway/instance-url
+  text: Ingress and Firewall
+  link: /slipway/ingress-and-firewall
 next:
   text: Settings
   link: /slipway/settings
@@ -27,6 +27,11 @@ Slipway uses **Caddy** as its reverse proxy, which provides:
 - **Automatic certificate renewal**
 - **HTTP/2 and HTTP/3 support**
 - **WebSocket proxying** (critical for Sails real-time features)
+
+These certificate steps describe the default public VPS mode. In optional
+Cloudflare Tunnel mode, Cloudflare terminates browser TLS and Caddy serves
+plain HTTP on the loopback origin. See
+[Ingress and Firewall](/slipway/ingress-and-firewall).
 
 When you add a domain, Caddy automatically:
 

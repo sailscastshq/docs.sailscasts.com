@@ -116,18 +116,22 @@ $ slipway slide
   URL: https://my-sails-app.example.com
 ```
 
-## Verify Direct Access
+## Verify the public route
 
-Slipway assigns the deployment a direct URL using a port from `1338–1500`. Test it from your computer or another network so the request crosses the provider firewall:
+Open the URL reported by the successful deployment or request its health path:
 
 ```bash
-curl -I --connect-timeout 5 http://YOUR_SERVER_IP:ALLOCATED_PORT/health
+curl -I https://YOUR_APP_DOMAIN/health
 ```
 
-A successful health response confirms that the app is running and the allocated port is reachable publicly. If the deployment log confirms a healthy container and a live Docker mapping but this request times out, allow the allocated port in both the VPS provider firewall and any active host firewall.
+Fresh installations keep the allocated container port on loopback and route
+public traffic through Caddy. If you deliberately need a raw
+`http://SERVER_IP:PORT` diagnostic URL, enable the documented direct-access
+mode first.
 
-::: tip Custom Domains
-Direct URLs are useful during setup and troubleshooting. Applications with a [custom domain](/slipway/custom-domain) receive traffic through ports `80` and `443` instead.
+::: tip Ingress modes
+See [Ingress and Firewall](/slipway/ingress-and-firewall) for Caddy defaults,
+explicit raw-port access, and optional Cloudflare Tunnel mode.
 :::
 
 ## Set Environment Variables

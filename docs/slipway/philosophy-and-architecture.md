@@ -123,15 +123,18 @@ Both sit on the `slipway` Docker network. When you deploy apps or create service
 
 Slipway uses [caddy-docker-proxy](https://github.com/lucaslorentz/caddy-docker-proxy) which reads Docker labels to auto-configure routes. When you deploy an app and assign a domain:
 
-1. Slipway allocates a port (from the 1338–1500 range)
-2. Your app container starts on that port
+1. Slipway allocates a host port (from the 1338–1500 range)
+2. Your app container publishes that port on the server's loopback interface
 3. Slipway updates Caddy's routes via its admin API (`localhost:2019`)
 4. Caddy provisions an SSL certificate automatically (via Let's Encrypt)
 5. Traffic flows: `yourdomain.com → Caddy → your-app:port`
 
 No Nginx config files. No manual cert renewal. No `certbot` cron jobs.
 
-The allocated port also provides a direct `http://SERVER_IP:PORT` endpoint. That endpoint must be allowed through both the server's host firewall and any firewall managed by the VPS provider. Domain traffic only requires public access to ports `80` and `443`.
+The allocated port is private by default. Caddy is the single public HTTP/S
+entry point and reaches the app over Docker's private network. A direct
+`http://SERVER_IP:PORT` endpoint is available only when an operator explicitly
+enables it and opens the matching host and provider firewall rules.
 
 ### How Deployments Work
 

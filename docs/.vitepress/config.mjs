@@ -951,6 +951,10 @@ function slipwayGuide() {
       items: [
         { text: 'Configuration', link: '/slipway/configuration' },
         { text: 'Instance URL', link: '/slipway/instance-url' },
+        {
+          text: 'Ingress & Firewall',
+          link: '/slipway/ingress-and-firewall'
+        },
         { text: 'Custom Domain & SSL', link: '/slipway/custom-domain' },
         { text: 'Settings', link: '/slipway/settings' },
         { text: 'Notifications', link: '/slipway/notifications' },
