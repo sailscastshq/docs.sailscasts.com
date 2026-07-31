@@ -989,6 +989,7 @@ function slipwayGuide() {
         { text: 'How Deployments Work', link: '/slipway/how-deployments-work' },
         { text: 'Deploy Command', link: '/slipway/deploy-command' },
         { text: 'Deployment Logs', link: '/slipway/deployment-logs' },
+        { text: 'Release Flags', link: '/slipway/release-flags' },
         { text: 'Rollbacks', link: '/slipway/rollbacks' },
         { text: 'Auto-Deploy', link: '/slipway/auto-deploy' }
       ]

@@ -82,6 +82,11 @@ The **Requests** tab shows HTTP traffic from the last hour:
 
 A table of recent requests shows method, URL, status code, duration, and time.
 
+When an application evaluates [release flags](/slipway/release-flags), the
+Requests tab also compares request count, average latency, and 5xx error rate
+for each flag's on and off cohorts. Expand a request to see the flag values that
+were used for it. The comparison stays hidden until a request evaluates a flag.
+
 ## Exceptions
 
 The **Exceptions** tab groups errors by type and message:
