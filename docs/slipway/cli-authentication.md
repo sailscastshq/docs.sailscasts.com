@@ -36,7 +36,7 @@ $ slipway login
 
   Slipway CLI
 
-  Server URL: http://203.0.113.50:1337
+  Server URL: https://slipway.example.com
 ```
 
 The CLI looks for the server URL in this order:
@@ -54,7 +54,7 @@ After entering the server URL, your browser will open to complete authentication
   Opening browser for authentication...
 
   If the browser doesn't open, visit:
-  http://203.0.113.50:1337/cli/authorize?code=abc123
+  https://slipway.example.com/cli/authorize?code=abc123
 
   Waiting for authorization...
 ```
@@ -175,7 +175,7 @@ If the browser doesn't open automatically, copy the authorization URL and open i
 
 ```
 If the browser doesn't open, visit:
-http://203.0.113.50:1337/cli/authorize?code=abc123
+https://slipway.example.com/cli/authorize?code=abc123
 ```
 
 ### Authorization Timeout

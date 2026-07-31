@@ -10,8 +10,8 @@ prev:
   text: Configuration
   link: /slipway/configuration
 next:
-  text: Custom Domain & SSL
-  link: /slipway/custom-domain
+  text: Ingress and Firewall
+  link: /slipway/ingress-and-firewall
 editLink: true
 ---
 
@@ -28,13 +28,12 @@ The instance URL is the public address of your Slipway server. It's used for:
 
 ### During Installation
 
-The install script prompts for the URL, or you can set it via environment variable:
+The installer detects the server IP by default. Set a domain explicitly when
+you already have one:
 
 ```bash
-docker run -d \
-  --name slipway \
-  -e SLIPWAY_URL="https://slipway.yourdomain.com" \
-  ...
+curl -fsSL https://raw.githubusercontent.com/sailscastshq/slipway/main/install.sh -o /tmp/install-slipway.sh
+sudo env SLIPWAY_URL=https://slipway.yourdomain.com bash /tmp/install-slipway.sh
 ```
 
 ### After Installation
@@ -58,25 +57,15 @@ docker run -d \
 
 ## URL Formats
 
-### IP Address (Development)
+### IP Address through Caddy
 
 ```
-http://203.0.113.50:1337
-```
-
-- No SSL
-- Uses port number
-- Fine for testing
-
-### Domain with Port (Not Recommended)
-
-```
-http://slipway.example.com:1337
+http://203.0.113.50
 ```
 
 - No SSL
-- Requires port in URL
-- Not recommended for production
+- Uses standard HTTP port 80
+- Useful until a domain is configured
 
 ### Domain with SSL (Recommended)
 
@@ -128,7 +117,9 @@ Expected response:
 2. **Check firewall** allows traffic:
    - Port 80 (HTTP)
    - Port 443 (HTTPS)
-   - Port 1337 (if using IP)
+
+   Port `1337` should remain private. IP-based setup traffic enters through
+   Caddy on port `80`.
 
 3. **Check Slipway is running**:
    ```bash

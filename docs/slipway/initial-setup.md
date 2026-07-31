@@ -24,7 +24,7 @@ After installing Slipway, you'll need to complete the initial setup to create yo
 Open your browser and navigate to:
 
 ```
-http://YOUR_SERVER_IP:1337
+http://YOUR_SERVER_IP
 ```
 
 You'll see the Slipway welcome screen.
@@ -76,7 +76,7 @@ slipway login
 
 You'll be prompted for:
 
-1. **Server URL** — Your Slipway instance URL (e.g., `http://203.0.113.50:1337`)
+1. **Server URL** — Your Slipway instance URL (e.g., `http://203.0.113.50`)
 2. **Browser Authentication** — Opens a browser window to authenticate
 
 After authenticating in the browser, the CLI will save your credentials locally.
@@ -85,7 +85,7 @@ After authenticating in the browser, the CLI will save your credentials locally.
 You can also set the `SLIPWAY_SERVER` environment variable to avoid entering the URL each time:
 
 ```bash
-export SLIPWAY_SERVER=http://203.0.113.50:1337
+export SLIPWAY_SERVER=http://203.0.113.50
 slipway login
 ```
 

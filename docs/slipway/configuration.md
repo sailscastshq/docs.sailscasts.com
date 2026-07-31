@@ -23,41 +23,33 @@ Slipway can be configured through environment variables and the dashboard settin
 
 ### Environment Variables
 
-Configure Slipway via environment variables when starting the Docker container:
+The installer persists server settings in `/etc/slipway/.env`. Prefer
+rerunning the installer with explicit environment overrides because it also
+keeps Docker bindings and active firewall rules consistent.
 
-| Variable         | Description                         | Default                |
-| ---------------- | ----------------------------------- | ---------------------- |
-| `PORT`           | Port Slipway listens on             | `1337`                 |
-| `NODE_ENV`       | Environment mode                    | `production`           |
-| `SLIPWAY_URL`    | Public URL of your Slipway instance | Required               |
-| `SLIPWAY_SECRET` | Secret key for encryption           | Required               |
-| `DATABASE_PATH`  | Path to SQLite database             | `/app/data/slipway.db` |
+| Variable                 | Description                            | Default        |
+| ------------------------ | -------------------------------------- | -------------- |
+| `PORT`                   | Internal Slipway application port      | `1337`         |
+| `NODE_ENV`               | Environment mode                       | `production`   |
+| `SLIPWAY_URL`            | Public URL of your Slipway instance    | Detected       |
+| `SLIPWAY_INGRESS`        | `public` or `cloudflare-tunnel`        | `public`       |
+| `SLIPWAY_PROXY_HOST`     | Host interface for Caddy               | Mode-dependent |
+| `SLIPWAY_DASHBOARD_HOST` | Host interface for the dashboard port  | `127.0.0.1`    |
+| `SLIPWAY_APP_PORT_HOST`  | Host interface for allocated app ports | `127.0.0.1`    |
+| `SESSION_SECRET`         | Session-signing secret                 | Generated      |
+| `DATA_ENCRYPTION_KEY`    | Encryption key for stored credentials  | Generated      |
 
-### Example Docker Run
-
-```bash
-docker run -d \
-  --name slipway \
-  --network slipway \
-  --restart unless-stopped \
-  -p 1337:1337 \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  -v slipway-data:/app/data \
-  -e NODE_ENV=production \
-  -e PORT=1337 \
-  -e SLIPWAY_URL="https://slipway.yourdomain.com" \
-  -e SLIPWAY_SECRET="your-32-character-secret" \
-  ghcr.io/sailscastshq/slipway:latest
-```
-
-### Generate a Secret
+### Explicit direct app access
 
 ```bash
-openssl rand -hex 32
+curl -fsSL https://raw.githubusercontent.com/sailscastshq/slipway/main/install.sh -o /tmp/install-slipway.sh
+sudo env SLIPWAY_APP_PORT_HOST=0.0.0.0 bash /tmp/install-slipway.sh
 ```
 
-::: warning Keep It Secret
-Never commit your `SLIPWAY_SECRET` to version control or share it publicly.
+::: warning Public boundary
+`0.0.0.0` means every server interface. It is an explicit opt-in, not a safer
+replacement for Caddy. Read [Ingress and Firewall](/slipway/ingress-and-firewall)
+before opening the app port range at your VPS provider.
 :::
 
 ## Dashboard Settings

@@ -50,20 +50,25 @@ Slipway's install script will automatically install Docker if it's not already p
 
 ## Network Requirements
 
-| Port      | Purpose                                   | Required                          |
-| --------- | ----------------------------------------- | --------------------------------- |
-| 80        | HTTP traffic and certificate provisioning | Yes                               |
-| 443       | HTTPS traffic                             | Yes                               |
-| 1337      | Slipway dashboard before adding a domain  | Yes during initial setup          |
-| 1338–1500 | Direct application URLs using `IP:port`   | Only when direct access is needed |
-| 22        | SSH access                                | Recommended                       |
+| Port      | Purpose                                    | Required                      |
+| --------- | ------------------------------------------ | ----------------------------- |
+| 80        | HTTP traffic and certificate provisioning  | Yes in the default mode       |
+| 443       | HTTPS traffic                              | Yes in the default mode       |
+| 1337      | Slipway dashboard loopback binding         | No public access              |
+| 1338–1500 | Optional direct application `IP:port` URLs | Only after explicitly enabled |
+| 22        | SSH access                                 | Recommended                   |
 
-These ports may need to be allowed at two separate network boundaries:
+Public bindings may need to be allowed at two separate network boundaries:
 
-1. **The host firewall** running on the server, such as UFW or firewalld. The installer adds the Slipway ports when either firewall is already active. It does not enable a firewall or change SSH rules.
+1. **The host firewall** running on the server, such as UFW or firewalld. The installer aligns Slipway's public bindings when either firewall is already active. It does not enable a firewall or change SSH rules.
 2. **The provider firewall or security group** managed by Hetzner, DigitalOcean, AWS, or your VPS provider. Slipway cannot change these rules, so you must configure them in your provider's control panel.
 
-Applications served through a configured domain only need public access to ports `80` and `443`. Open `1338–1500` when you want Slipway's direct application URLs to be reachable from outside the server.
+Fresh installations expose only Caddy on ports `80` and `443`. The dashboard
+and deployed applications bind to `127.0.0.1`, which means they are reachable
+from the server itself but not directly from the internet. Open `1338–1500`
+only after explicitly enabling raw `IP:port` access. Cloudflare Tunnel mode can
+keep every Slipway origin port private. See [Ingress and Firewall](/slipway/ingress-and-firewall)
+for each supported mode.
 
 ## CLI Requirements
 
