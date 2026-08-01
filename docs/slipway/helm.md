@@ -36,6 +36,21 @@ Helm gives you a live REPL connected to your running Sails application:
 - Record privacy-safe production execution audits for owners and admins
 - All without SSH or direct database access
 
+Helm is application-aware: it boots the selected Sails app and exposes that
+app's models, helpers, and configuration. Use the other operational surfaces
+when you do not need the application runtime:
+
+| Need                                            | Surface                     |
+| ----------------------------------------------- | --------------------------- |
+| Run Sails-aware JavaScript in one deployed app  | Helm                        |
+| Query a database or Redis service directly      | [Dock](/slipway/dock)       |
+| Operate Slipway's own runtime and SQLite stores | [Bosun](/slipway/bosun)     |
+| Inspect requests, failures, and resources       | [Lookout](/slipway/lookout) |
+
+Helm is not a persistent Node console. Every run gets a fresh isolated process,
+so variables, monkey patches, and in-memory state do not carry into the next
+execution. Scratchpads preserve source, not a live JavaScript context.
+
 ## Accessing Helm
 
 ### Via Dashboard
@@ -69,6 +84,29 @@ Each Helm execution has a **30-second wall-clock timeout**. This covers synchron
 ::: info Bounded output
 Helm accepts up to **64 KB of source**, captures up to **64 KB of console logs**, and bounds the serialized result. If output is too large, Helm returns the safe portion and marks the result as truncated instead of buffering without limit.
 :::
+
+### Execution and storage limits
+
+| Boundary                                           |    Default |
+| -------------------------------------------------- | ---------: |
+| Source per execution or snippet                    |      64 KB |
+| Wall-clock execution                               | 30 seconds |
+| Captured console logs                              |      64 KB |
+| Serialized final result                            |     128 KB |
+| Isolated process output                            |     256 KB |
+| Isolated process stderr                            |      64 KB |
+| Inline inspect values per loop marker              |         20 |
+| Query trace entries                                |        100 |
+| Browser scratchpads                                |         20 |
+| Production write-arm lifetime                      | 60 seconds |
+| Unpinned history retention                         |    30 days |
+| History entries per user, project, and environment |        200 |
+| Team audit retention                               |    90 days |
+| Audit entries per team                             |      5,000 |
+
+These are safety and operability bounds, not pagination promises. Use a bounded
+Waterline query, return a summary, and export through the system that owns the
+data when an investigation exceeds them.
 
 ### Stopping and reading execution status
 

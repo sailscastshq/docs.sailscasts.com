@@ -22,6 +22,24 @@ Content is Slipway's Git-backed editor for
 an editor manage Markdown, frontmatter, images, and JSON without leaving the
 dashboard while keeping the repository as the source of truth.
 
+Content edits files in the selected application's source tree. It does not
+create a second content database or synchronize a proprietary schema. The same
+files remain readable by Git, a local editor, CI, and the running Sails app.
+
+## How Content maps to an application
+
+| Content concept   | Source representation                                         |
+| ----------------- | ------------------------------------------------------------- |
+| Workspace         | The selected Slipway application                              |
+| Content root      | Detected `sails-content` directory, normally `content/`       |
+| Collection        | An immediate child directory of the content root              |
+| Record            | A direct `.md` or `.json` file in a collection                |
+| Markdown metadata | Simple frontmatter at the start of a `.md` file               |
+| Revision          | Git blob and commit SHA when a GitHub repository is connected |
+
+Content currently scans one collection level. Nested folders and file types
+other than `.md` and `.json` are not listed in the visual manager.
+
 ## Requirements
 
 Install `sails-content` in the application:
@@ -34,6 +52,10 @@ Slipway detects the hook during deployment and enables Content for that
 application. A connected Git repository is recommended: it gives every change
 a durable commit and lets **Save & Deploy** deploy the exact revision that was
 just saved.
+
+The detected feature can provide a custom `contentDir`; otherwise Slipway uses
+`content`. Deploy after installing or reconfiguring the hook so Slipway can
+refresh the application's feature metadata and source tree.
 
 ## Open Content
 
@@ -67,8 +89,8 @@ content/
     └── site.json
 ```
 
-Each directory is shown as a collection. Markdown and JSON files appear as
-records inside it.
+Each immediate, non-hidden directory is shown as a collection. Direct Markdown
+and JSON files appear as records inside it.
 
 ## Create a document
 
@@ -76,11 +98,20 @@ Choose **New content** from a collection, then enter a slug and optional title.
 The slug becomes the filename. For example, `getting-started` creates
 `getting-started.md`.
 
+The slug is required, uses lowercase letters and numbers separated by single
+hyphens, and can be at most 120 characters. A title is optional and can be at
+most 200 characters. The create action is enabled only when current validation
+passes, and the server repeats the same validation before writing.
+
 Slipway creates a Markdown document with initial frontmatter and commits it as:
 
 ```text
 chore(content): create blog/getting-started
 ```
+
+The initial file contains `createdAt`, the optional title, an H1, and a short
+writing prompt. Creating JSON records from the manager is not currently
+supported; existing JSON files remain editable.
 
 Use meaningful, URL-safe slugs because applications commonly use them in public
 routes.
@@ -120,21 +151,29 @@ set.
 ## Metadata
 
 Frontmatter appears in a collapsed **Metadata** section above the document.
-Open it to edit values such as title, description, author, publication date, or
-tags.
+Open it to edit simple `key: value` fields such as title, description, author,
+or publication date.
 
 ```markdown
 ---
 title: Getting Started with Sails
 description: Build and deploy your first Sails application.
 published: true
-tags: ['sails', 'deployment']
 ---
 ```
 
-String, number, boolean, array, and object values are serialized back to valid
-frontmatter. Use Markdown mode when a document needs advanced YAML formatting
-that the form cannot represent safely.
+The metadata form intentionally uses text inputs. It reads simple, top-level
+YAML-style pairs and writes their values back safely. It is not a complete YAML
+editor: nested objects, arrays, multiline blocks, comments, anchors, and other
+advanced YAML constructs can lose their original structure if edited through
+the form.
+
+Use **Markdown** source mode for complex frontmatter. Source mode preserves the
+complete file as written. Metadata keys must start with a letter or underscore,
+may contain letters, numbers, underscores, dots, and hyphens, and the form
+accepts at most 100 keys.
+
+Both the Markdown body and raw source are limited to 5 MB.
 
 ## Images
 
@@ -150,6 +189,17 @@ If uploads are not configured, paste a public image URL instead. Storage
 credentials stay in Slipway settings and are never written into the content
 file.
 
+Uploaded images are assigned a UUID filename below:
+
+```text
+teams/:teamId/projects/:projectId/content/:imageId.:extension
+```
+
+Slipway saves the configured public storage URL in Markdown, not the provider
+credential or a private filesystem path. The upload route verifies the signed-in
+team, project, environment, detected Content feature, MIME type, and size again
+on the server.
+
 ## Save and deploy
 
 The main **Save** action records the change without deploying. Its menu also
@@ -162,6 +212,10 @@ With a connected GitHub repository, saving:
 3. refreshes Slipway's local build context only after the repository write
    succeeds.
 
+Slipway uses the branch mapped to the current environment. If there is no
+mapping, it uses the repository's default branch and finally falls back to
+`main`.
+
 Updates use a conventional commit such as:
 
 ```text
@@ -171,9 +225,15 @@ chore(content): update blog/getting-started
 **Save & Deploy** then queues a deployment pinned to that commit SHA. A later
 push to the branch cannot change what that deployment builds.
 
-For applications without a writable repository source, Slipway can keep the
-local content source in sync, but durable repository history and exact Git
-revisions require a connected repository.
+For applications without a repository, Slipway writes the local pushed source
+tree. That is useful for editing and testing, but it is not durable Git history
+and can be replaced by a later source push. Exact revision pinning requires a
+writable connected GitHub repository.
+
+**Save & Deploy** first verifies that the app has a deployable source. It then
+queues a deployment with the commit SHA and branch returned by the successful
+content write. If source is unavailable, Content rejects the deploy action
+instead of pretending the save can be released.
 
 ::: tip Static content
 Applications that compile content at build time need **Save & Deploy** before
@@ -216,15 +276,32 @@ JSON records use a source editor rather than the visual Markdown surface:
 ```
 
 Slipway preserves the raw JSON file and applies the same Git conflict protection
-when saving it.
+when saving it. The server parses the complete value and refuses invalid JSON
+or source larger than 5 MB.
+
+## Production workflow
+
+1. Connect the app's GitHub repository with write access.
+2. Map the production and non-production branches intentionally.
+3. Edit and preview content in a non-production environment when the app builds
+   content into its assets.
+4. Use **Save** when another release process will deploy the commit.
+5. Use **Save & Deploy** when this edit should become an exact pinned release.
+6. Treat Git history as the audit and recovery path for content changes.
+
+Content prevents stale overwrites, but it is not a multi-user collaborative
+cursor editor. Two editors can work concurrently; the second stale save must
+reload and reconcile the newer Git revision.
 
 ## Troubleshooting
 
 ### Content is not available
 
 1. Confirm `sails-content` is installed in the application.
-2. Deploy the application so Slipway can detect its features.
-3. Confirm you are viewing the correct application and environment.
+2. Confirm the configured content directory contains immediate collection
+   directories with `.md` or `.json` files.
+3. Deploy the application so Slipway can detect its features.
+4. Confirm you are viewing the correct application and environment.
 
 ### Visual mode is unavailable
 
@@ -242,6 +319,12 @@ another save so the newer change is not overwritten.
 Use **Save & Deploy** and wait for the pinned deployment to become healthy.
 Saving alone does not rebuild an application that compiles content at build
 time.
+
+### GitHub rejects a save
+
+Reconnect the repository with content write access and confirm the environment
+maps to a branch the integration can update. Slipway does not fall back to a
+local write when a connected repository rejects the operation.
 
 ## What's next?
 
