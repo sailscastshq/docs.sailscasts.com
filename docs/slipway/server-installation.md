@@ -106,6 +106,29 @@ The request enters through Caddy on port 80. The Slipway dashboard listens on
 production, [configure a custom domain](/slipway/custom-domain) to enable HTTPS.
 :::
 
+### Headless or private-network server
+
+A headless server does not require a different installation. From another
+machine on the same trusted network, open `http://SERVER_IP`. That request uses
+Caddy on port `80`, so the dashboard can remain private on `127.0.0.1:1337`.
+
+If you deliberately need direct `http://SERVER_IP:1337` access instead, publish
+only the dashboard port:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/sailscastshq/slipway/main/install.sh -o /tmp/install-slipway.sh
+sudo env SLIPWAY_DASHBOARD_HOST=0.0.0.0 bash /tmp/install-slipway.sh
+```
+
+Binding to `0.0.0.0` listens on every server interface and bypasses Caddy's
+TLS. Restrict TCP `1337` to your trusted LAN or VPN in both the host firewall
+and your provider firewall. Do not also publish the app port range unless you
+need raw app `IP:port` access; see
+[Ingress and Firewall](/slipway/ingress-and-firewall#explicit-raw-ip-and-port-access).
+
+The installer saves the selected binding in `/etc/slipway/.env`, so later
+installer runs preserve it until you explicitly change it.
+
 ::: warning Provider Firewall
 The installer can configure an active firewall on the server, but it cannot change a firewall or security group managed by your VPS provider. Allow the required ports in the provider's control panel too. See [Network Requirements](/slipway/requirements#network-requirements) for the complete port list.
 :::

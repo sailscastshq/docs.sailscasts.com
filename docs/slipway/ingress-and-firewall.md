@@ -61,6 +61,40 @@ sudo ss -lntp
 `slipway-proxy` should show public `80` and `443`. The `slipway` dashboard and
 deployed apps should show `127.0.0.1` bindings.
 
+## Headless or private-network dashboard access
+
+Headless describes how the server is operated, not how its ports must be
+published. From another machine on the same network, first open:
+
+```text
+http://SERVER_IP
+```
+
+This is the recommended path. The browser reaches Caddy on port `80`, and
+Caddy reaches the private dashboard over Docker. Dashboard port `1337` does not
+need to be public.
+
+If your network design specifically requires direct `http://SERVER_IP:1337`
+access, opt in to publishing only that port:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/sailscastshq/slipway/main/install.sh -o /tmp/install-slipway.sh
+sudo env SLIPWAY_DASHBOARD_HOST=0.0.0.0 bash /tmp/install-slipway.sh
+```
+
+This does not publish deployed-app ports. The installer persists the setting
+in `/etc/slipway/.env`, and future installer runs keep it until changed.
+
+Direct port `1337` bypasses Caddy and its TLS termination. Limit inbound TCP
+`1337` to the trusted LAN or VPN CIDR in both the host firewall and the VPS
+provider firewall. Avoid exposing it to the public internet.
+
+To return the dashboard to the Caddy-only path:
+
+```bash
+sudo env SLIPWAY_DASHBOARD_HOST=127.0.0.1 bash /tmp/install-slipway.sh
+```
+
 ## Explicit raw IP and port access
 
 Direct `http://SERVER_IP:PORT` URLs can help when diagnosing a deployment
@@ -71,6 +105,9 @@ Enable them deliberately:
 curl -fsSL https://raw.githubusercontent.com/sailscastshq/slipway/main/install.sh -o /tmp/install-slipway.sh
 sudo env SLIPWAY_APP_PORT_HOST=0.0.0.0 bash /tmp/install-slipway.sh
 ```
+
+`SLIPWAY_APP_PORT_HOST` controls the deployed-app range independently from
+`SLIPWAY_DASHBOARD_HOST`. Do not set it merely to reach the Slipway dashboard.
 
 Redeploy the app so Docker recreates its binding, then allow TCP `1338–1500`
 in the provider firewall. Verify from another network:
