@@ -537,6 +537,25 @@ deployments. Bridge uses them to match configuration with the server result.
 Cards are displayed in their configured order. A contract may contain up to 12
 dashboards and 24 cards per dashboard.
 
+### Dashboard contract
+
+`dashboard` is shorthand for a single dashboard named `overview`. Use either
+`dashboard` or `dashboards`, never both. A dashboard must contain at least one
+card.
+
+| Option        | Required           | Default                      | Contract                                                    |
+| ------------- | ------------------ | ---------------------------- | ----------------------------------------------------------- |
+| `label`       | No                 | Humanized dashboard key      | String, at most 80 characters                               |
+| `description` | No                 | None                         | String, at most 240 characters                              |
+| `default`     | No                 | First dashboard in its scope | Boolean; only one default per scope and resource            |
+| `scope`       | No                 | `environment`                | `global`, `project`, `environment`, or `resource`           |
+| `resource`    | For resource scope | None                         | Visible Bridge resource identity; rejected for other scopes |
+| `cards`       | Yes                | —                            | Non-empty object with at most 24 cards                      |
+
+Dashboard and card keys must begin with a letter and contain only letters and
+numbers. Use stable camelCase keys such as `contentHealth` and `recentLessons`.
+Unknown configuration keys fail validation instead of being silently ignored.
+
 ### Multiple dashboards and scope
 
 Use `dashboards` instead of `dashboard` when the app needs multiple views:
@@ -578,6 +597,42 @@ resource dashboard appears above that resource's records and must declare its
 uses the first configured dashboard for that scope. When a scope has multiple
 dashboards, Bridge shows a compact selector.
 
+Defaults are grouped by scope and, for resource dashboards, by resource. A
+course dashboard and a lesson dashboard can therefore each be their own
+default. Two course dashboards cannot both be marked default.
+
+### Card contract
+
+Every card has a `type` and can use these common options:
+
+| Option        | Required        | Contract                                                                 |
+| ------------- | --------------- | ------------------------------------------------------------------------ |
+| `type`        | Yes             | `metric`, `recent`, `action`, `trend`, `partition`, or `custom`          |
+| `label`       | No              | String up to 80 characters; otherwise derived from the card key and type |
+| `description` | No              | String up to 240 characters                                              |
+| `resource`    | Depends on type | Must name a visible resource in the same Bridge contract                 |
+
+`metric`, `recent`, and `action` require a resource. On a resource-scoped
+dashboard they inherit the dashboard resource when the card omits it. Helper
+cards may declare a resource to participate in normal resource authorization,
+or omit it and make their domain authorization decision inside the helper.
+
+The six card types are intentionally narrow:
+
+| Type        | Data source            | Required options                       | Result                              |
+| ----------- | ---------------------- | -------------------------------------- | ----------------------------------- |
+| `metric`    | Waterline aggregate    | `resource`; `field` except for `count` | One finite number                   |
+| `recent`    | Bounded Waterline find | `resource`                             | Up to 10 redacted records           |
+| `action`    | Built-in Bridge route  | `resource`                             | Link to the create form             |
+| `trend`     | Target-app helper      | `helper`                               | Up to 31 labelled numeric points    |
+| `partition` | Target-app helper      | `helper`                               | Up to 12 labelled numeric segments  |
+| `custom`    | Target-app helper      | `helper`                               | Primitive value and optional detail |
+
+Bridge normalizes the complete contract when it loads the target application.
+An unknown resource, hidden resource, unavailable field, unsupported option, or
+unsafe helper identity rejects the invalid contract instead of becoming a
+partially trusted browser configuration.
+
 ### Metrics
 
 Metric cards use Waterline directly:
@@ -608,6 +663,17 @@ revenue: {
 `percent` follows `Intl.NumberFormat` semantics, so store `0.42` to display
 `42%`.
 
+`aggregate` defaults to `count`, and `format` defaults to `number`. A count card
+must not provide `field`; every other aggregate requires a readable numeric
+field. Currency codes are normalized to uppercase. Prefixes and suffixes can
+be at most 20 characters.
+
+`where` accepts serializable Waterline criteria using only fields on the
+resource's list or filter surface. Nested `and` and `or` branches are supported.
+Functions, dates, class instances, prototype keys, non-finite numbers, and
+unbounded structures are rejected. Configuration is limited to eight nested
+levels, 50 keys per object, and 100 items per array.
+
 ### Recent records and quick actions
 
 A `recent` card performs one bounded Waterline query. `limit` defaults to `5`
@@ -628,6 +694,16 @@ recentLessons: {
 }
 ```
 
+When `fields` is omitted, Bridge starts with the resource primary key, title,
+and list fields and keeps the first four unique fields. The real primary key is
+always selected even when it was not requested explicitly.
+
+`sort` defaults to the resource's configured sort. A custom sort must contain a
+readable `field`; `direction` defaults to `DESC` and accepts `ASC` or `DESC`.
+Recent cards do not accept arbitrary criteria. Use the resource contract to
+define the intended record surface or a helper-backed card for a domain-specific
+selection.
+
 An `action` card currently supports the built-in `create` action. Bridge
 derives the route from the project, environment, and resource:
 
@@ -639,6 +715,9 @@ newLesson: {
   action: 'create'
 }
 ```
+
+`action` defaults to `create`; no other action value is accepted. The card is
+removed when the resource's server-normalized `create` action is disabled.
 
 ### Helper-backed cards
 
@@ -665,8 +744,10 @@ releaseHealth: {
 }
 ```
 
-The helper receives the authenticated `actor`, the selected `dashboard`, and a
-small serializable `card` description:
+Helper identities use normal Sails dot notation such as
+`bridge.dashboard.signups`. The helper must exist in the running target app.
+It receives the authenticated `actor`, the selected `dashboard`, and a small
+serializable `card` description:
 
 ```js
 // api/helpers/bridge/dashboard/signups.js
@@ -702,6 +783,29 @@ segments. Custom helpers return `{ value, detail }`; `value` must be a string,
 finite number, or boolean. Slipway truncates labels and detail text,
 re-normalizes all helper results, and never accepts helper-provided HTML.
 
+The exact helper inputs are:
+
+| Input       | Shape                                                                                             |
+| ----------- | ------------------------------------------------------------------------------------------------- |
+| `actor`     | Verified Bridge identity and role context for the current request                                 |
+| `dashboard` | `{ id, label, scope, resource }`                                                                  |
+| `card`      | `{ id, type, label, resource }`, where `resource` is a safe summary rather than the full contract |
+
+For a helper card with a resource, the summary contains its identity, primary
+key, title, labels, and attribute type metadata. It does not contain database
+records or credentials.
+
+Helper output is normalized twice: once inside the target app execution and
+again by Slipway before it becomes an Inertia prop. Trend and partition labels
+are limited to 80 characters. Custom string values are limited to 160
+characters and detail to 240. Non-finite numbers and malformed points are
+dropped.
+
+All visible cards for a dashboard are resolved in one isolated target-app
+execution. Each card has its own error boundary. A failed helper or query
+produces a generic unavailable state for that card while the remaining cards
+continue to render; internal exception details remain in Slipway logs.
+
 ### Dashboard authorization
 
 Dashboard cards use the same server-enforced resource authorization as CRUD:
@@ -716,6 +820,11 @@ Dashboard cards use the same server-enforced resource authorization as CRUD:
 
 The browser never receives a denied card, count, or record. A helper or query
 failure affects only that card; the rest of the dashboard remains usable.
+
+For sensitive business metrics, prefer both layers: associate the card with a
+resource so Bridge applies `viewAny`, then recheck the host application's
+domain role inside the helper. Do not treat a hidden UI card as an authorization
+rule—the helper is the final authority for resource-free domain data.
 
 ## Actions
 

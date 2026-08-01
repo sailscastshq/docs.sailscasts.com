@@ -5,7 +5,7 @@ head:
       content: https://docs.sailscasts.com/slipway-social.png
 title: Dock
 titleTemplate: Slipway
-description: Database management for production. SQL console, schema diff, migrations, and table browser—all from the Slipway dashboard.
+description: Inspect, query, export, import, and migrate PostgreSQL, MySQL, MongoDB, and Redis services attached to a Slipway environment.
 prev:
   text: Quest
   link: /slipway/quest
@@ -17,407 +17,316 @@ editLink: true
 
 # Dock
 
-Dock is Slipway's database management interface for production. Run SQL queries, compare schemas, apply migrations, and browse data without external tools or SSH access.
+Dock is Slipway's database and cache workbench. It connects to a running
+service attached to the selected environment and uses that service's real
+credentials inside the private Docker network.
 
-## What is Dock?
+Dock is not an ORM abstraction. SQL, MongoDB expressions, Redis commands,
+imports, and generated migrations execute against the selected live service.
 
-Dock provides a web-based interface for managing your PostgreSQL or MySQL database:
+## Supported services
 
-- **SQL Console** - Run queries directly against your database
-- **Table Browser** - View and navigate your data
-- **Schema Viewer** - Inspect table structures and columns
-- **Schema Diff** - Compare Waterline models with database schema
-- **One-Click Migrations** - Generate and apply schema changes
+| Service    | Console              | Browse                    | Schema              | Model diff                 | Import and export                   |
+| ---------- | -------------------- | ------------------------- | ------------------- | -------------------------- | ----------------------------------- |
+| PostgreSQL | SQL                  | tables and rows           | columns and indexes | full Waterline schema diff | SQL text and PostgreSQL custom dump |
+| MySQL      | SQL                  | tables and rows           | columns and indexes | full Waterline schema diff | SQL text                            |
+| MongoDB    | `mongosh` expression | collections and documents | collection metadata | missing collections        | JSON or compressed archive          |
+| Redis      | `redis-cli` command  | —                         | —                   | —                          | —                                   |
 
-Dock lets you manage the production database from Slipway.
+Dock appears when the environment has at least one running service of these
+types. If several services are running, the first screen is a service picker
+and the selected service ID becomes part of the Dock URL.
 
-## Requirements
+## Open Dock
 
-Dock is automatically available when your environment has a **PostgreSQL** or **MySQL** service attached:
+Choose **Dock** from an environment or from a database service action. The
+production picker uses:
 
-```bash
-slipway db:create main-db --type=postgresql
+```text
+/projects/:projectSlug/dock
 ```
 
-Once the service is running, the Dock icon appears in your environment's toolbar.
+Other environments include the environment slug:
 
-## Accessing Dock
-
-### Via Dashboard
-
-1. Go to your project in Slipway
-2. Select an environment and click the app name from the Apps list
-3. In the **Services** section, click the **Dock** icon next to a database service
-4. Start managing your database
-
-### Via Direct URL
-
-```
-https://your-slipway-instance.com/projects/myapp/dock
+```text
+/projects/:projectSlug/environments/:environmentSlug/dock
 ```
 
-Or with a specific environment:
+After selecting a service, Slipway appends its ID. Every server request
+rechecks that the service belongs to the environment, belongs to the signed-in
+user's team, and is still running.
 
-```
-https://your-slipway-instance.com/projects/myapp/environments/staging/dock
-```
+## Console
 
-## SQL Console
+### PostgreSQL and MySQL
 
-The SQL Console lets you run queries directly against your production database.
-
-### Running Queries
-
-1. Enter your SQL in the query editor
-2. Press **Cmd/Ctrl + Enter** or click **Run Query**
-3. View results in the table below
+Write SQL and use **Run** or <kbd>Cmd/Ctrl Enter</kbd>. Dock executes the query
+inside the service container with `psql` or `mysql`; it does not open the
+database port to the public internet.
 
 ```sql
-SELECT * FROM users WHERE "createdAt" > '2024-01-01' LIMIT 50;
+SELECT id, email, created_at
+FROM users
+ORDER BY created_at DESC
+LIMIT 50;
 ```
 
-### Query Results
-
-Results display in a formatted table with:
-
-- Column headers
-- Row count
-- Query execution time
-- Scrollable data view
-
-When the editor contains more than one SQL statement, Dock keeps a separate,
-labeled result for every statement. Select the result tabs to move between
-rowsets, command summaries, and errors. The tabs support the left and right
-arrow keys, and each rowset can be copied as CSV independently.
-
-```sql
-SELECT count(*) AS creators FROM creators;
-SELECT count(*) AS teams FROM teams;
-```
-
-The results remain in statement order. If a later statement fails outside an
-explicit transaction, Dock preserves the earlier results so you can see exactly
-what ran before the failure. If you need all-or-nothing behavior, wrap the
-statements in `BEGIN` and `COMMIT`.
-
-### Safety Features
-
-Dock blocks dangerous queries that could harm your database:
-
-- `DROP DATABASE` statements
-- `DROP SCHEMA` statements
-- System table modifications
-
-For destructive operations, use a dedicated migration or backup first.
-
-## Importing SQL and database dumps
-
-Use **Import** to paste SQL or upload a database dump. Slipway streams uploaded
-data through a temporary file rather than loading the complete backup into
-application memory.
-
-The default maximum import size is 500 MB. Operators can change it with the
-database operation limits in Slipway's server configuration. An oversized
-upload is rejected before it reaches the database, and the temporary file is
-removed after either success or failure.
-
-PostgreSQL custom-format dumps and MySQL/SQL text imports use their native
-database clients. Import errors are returned in Dock so a failed restore does
-not look successful.
-
-## Table Browser
-
-Browse your database tables without writing SQL.
-
-### Viewing Tables
-
-1. Click the **Tables** tab
-2. Select a table from the list
-3. View data with automatic pagination
-
-Each table shows:
-
-- Table name
-- Row count
-- Columns and their types
-
-### Pagination
-
-Large tables are paginated automatically:
-
-- Default limit: 50 rows
-- Navigate through pages
-- Sort by any column
-
-## Schema Viewer
-
-Inspect your database schema at a glance.
-
-### Table Structure
-
-For each table, Dock shows:
-
-| Column       | Info                       |
-| ------------ | -------------------------- |
-| **Name**     | Column identifier          |
-| **Type**     | PostgreSQL/MySQL data type |
-| **Nullable** | Whether NULL is allowed    |
-| **Default**  | Default value, if set      |
-| **PK**       | Primary key indicator      |
-
-### Example
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│ users                                                           │
-├─────────────────────────────────────────────────────────────────┤
-│ Column         Type                Nullable    Default     PK   │
-│ id             integer             NO          auto        ✓    │
-│ email          character varying   NO          -                │
-│ fullName       character varying   YES         -                │
-│ createdAt      timestamp           NO          now()            │
-│ updatedAt      timestamp           NO          now()            │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-## Schema Diff & Migrations
-
-The most powerful Dock feature: compare your Waterline models with the actual database schema.
-
-### How It Works
-
-1. Dock reads your Waterline model definitions from the running app
-2. Queries the database's `information_schema`
-3. Compares them and generates SQL to sync
-
-### Viewing the Diff
-
-1. Click the **Migrate** tab
-2. Dock analyzes models vs database
-3. See what changes are needed
-
-### Status Indicators
-
-| Status                   | Meaning                 |
-| ------------------------ | ----------------------- |
-| **Schema is up to date** | Database matches models |
-| **X change(s) needed**   | Migration required      |
-
-### Generated SQL
-
-For each difference, Dock generates the appropriate SQL:
-
-```sql
--- New table
-CREATE TABLE "posts" (
-  "id" SERIAL PRIMARY KEY,
-  "title" character varying(255) NOT NULL,
-  "body" text,
-  "createdAt" timestamp NOT NULL DEFAULT now()
-);
-
--- New column
-ALTER TABLE "users" ADD COLUMN "avatarUrl" character varying(255);
-```
-
-### Applying Migrations
-
-1. Review the generated SQL
-2. Click **Apply Migration**
-3. Confirm the action
-4. SQL executes against your database
-
-::: warning
-Migrations modify your production database. Always backup first and review the generated SQL carefully.
-:::
-
-## First-Time Schema Setup
-
-When deploying a new Sails app, your database starts empty. Use Dock to initialize it:
-
-1. Deploy your app (it will fail to connect to empty database)
-2. Open Dock → Migrate tab
-3. See all tables that need to be created
-4. Click **Apply Migration**
-5. Redeploy or restart your app
-
-This is much easier than manually running `sails lift` with `migrate: alter` in production.
-
-## Waterline Type Mapping
-
-Dock uses the same type mappings as the actual Sails database adapters:
-
-### PostgreSQL
-
-| Waterline | PostgreSQL         | Notes                                 |
-| --------- | ------------------ | ------------------------------------- |
-| `string`  | `TEXT`             | Not VARCHAR - PostgreSQL prefers TEXT |
-| `text`    | `TEXT`             | Long text content                     |
-| `number`  | `REAL` / `INTEGER` | REAL for floats, INTEGER for PKs      |
-| `boolean` | `BOOLEAN`          | Native PostgreSQL boolean             |
-| `json`    | `JSON`             | Native JSON type                      |
-| `ref`     | `TEXT`             | Arbitrary references                  |
-
-Auto-increment columns use `SERIAL` type.
-
-### MySQL
-
-| Waterline | MySQL              | Notes                              |
-| --------- | ------------------ | ---------------------------------- |
-| `string`  | `VARCHAR(255)`     | Length-limited strings             |
-| `text`    | `TEXT`             | Long text content                  |
-| `number`  | `REAL` / `INTEGER` | REAL for floats, INTEGER for PKs   |
-| `boolean` | `TINYINT(1)`       | MySQL boolean representation       |
-| `json`    | `LONGTEXT`         | For compatibility with older MySQL |
-| `ref`     | `LONGTEXT`         | Arbitrary references               |
-
-Auto-increment columns use `AUTO_INCREMENT` flag.
-
-### Custom Column Types
-
-If you specify `columnType` in your model, Dock uses it directly:
-
-```javascript
-attributes: {
-  uuid: {
-    type: 'string',
-    columnType: 'UUID DEFAULT uuid_generate_v4()'
-  },
-  metadata: {
-    type: 'json',
-    columnType: 'JSONB'  // Use JSONB instead of JSON
-  }
-}
-```
-
-## API Endpoints
-
-Dock provides REST API endpoints for automation:
-
-### Execute SQL
-
-```bash
-POST /api/v1/projects/:projectSlug/dock/sql
-
-{
-  "query": "SELECT * FROM users LIMIT 10"
-}
-```
-
-### Get Schema
-
-```bash
-GET /api/v1/projects/:projectSlug/dock/schema
-```
-
-### Get Schema Diff
-
-```bash
-GET /api/v1/projects/:projectSlug/dock/diff
-```
-
-### Apply Migration
-
-```bash
-POST /api/v1/projects/:projectSlug/dock/migrate
-
-{
-  "statements": [
-    {"sql": "ALTER TABLE users ADD COLUMN bio TEXT;"}
-  ]
-}
-```
-
-### List Tables
-
-```bash
-GET /api/v1/projects/:projectSlug/dock/tables
-```
-
-### Browse Table Data
-
-```bash
-GET /api/v1/projects/:projectSlug/dock/tables/:table/data?limit=50&offset=0
-```
-
-## Best Practices
-
-### 1. Backup Before Migrations
-
-Always create a backup before applying schema changes:
-
-```bash
-slipway backup:create myapp postgresql
-```
-
-### 2. Test in Staging First
-
-Use a staging environment to test migrations. Apply via the Dock UI in your staging environment first, verify it works, then apply to production.
-
-### 3. Review Generated SQL
-
-Always review the SQL that Dock generates. While it handles most cases correctly, complex migrations may need manual adjustment.
-
-### 4. Use Transactions for Multiple Changes
-
-When applying multiple related changes, consider wrapping them in a transaction via the SQL Console:
+Multi-statement SQL is split and presented as one ordered result per statement.
+Each result identifies the command, status, duration, row count, affected-row
+summary, rows, or error. When a later statement fails outside an explicit
+transaction, earlier successful statements remain visible and may already be
+committed.
 
 ```sql
 BEGIN;
-ALTER TABLE orders ADD COLUMN discount DECIMAL(10,2);
-ALTER TABLE orders ADD COLUMN discountCode VARCHAR(50);
+ALTER TABLE orders ADD COLUMN discount DECIMAL(10, 2);
+ALTER TABLE orders ADD COLUMN discount_code VARCHAR(50);
 COMMIT;
 ```
 
-### 5. Keep Models and Database in Sync
+The server gives console execution 30 seconds and bounds captured process
+output to 10 MB. Query history is kept only in the current browser page and is
+capped at 20 deduplicated entries.
 
-Run schema diff regularly to catch drift between your models and database. Ideally, your CI/CD pipeline should verify this.
+### MongoDB
+
+MongoDB console input is a JavaScript expression evaluated by `mongosh`:
+
+```javascript
+db.users.find({ emailVerified: true }).limit(10).toArray()
+```
+
+Dock serializes the returned value into the same table or JSON result surface.
+Use collection operations deliberately: this is a live shell, not a read-only
+query builder.
+
+### Redis
+
+The Redis console sends one command to `redis-cli` and displays its raw output,
+error, and duration:
+
+```text
+INFO memory
+```
+
+Quick actions are provided for common inspection commands such as `PING`,
+`INFO server`, `DBSIZE`, and `CONFIG GET maxmemory`. Use the up and down arrow
+keys to navigate the current-page history. The browser keeps at most 200
+entries and trims older output after that bound.
+
+::: danger Consoles can mutate data
+Dock permits ordinary writes. It blocks only a narrow class of catastrophic
+commands: dropping a PostgreSQL/MySQL database or schema, selected system-table
+truncation, and MongoDB database/collection drop or shutdown expressions. This
+is not a general read-only policy. `UPDATE`, `DELETE`, `FLUSHALL`, and many other
+destructive operations can execute. Back up first and prefer a scoped,
+reviewable statement.
+:::
+
+## Read results
+
+Rowsets open as tables and can be viewed as JSON. A multi-statement query adds
+keyboard-accessible result tabs. Dock keeps command summaries separate from
+rowsets so an `ALTER TABLE` or `UPDATE` result does not look like an empty
+`SELECT`.
+
+Copy and export act on the selected result. CSV output quotes commas, quotes,
+and newlines. Returned values are shown as data and do not execute as page HTML.
+
+## Browse tables and collections
+
+The **Tables** or **Collections** tab lists objects with an estimated or exact
+row/document count. Select one to load a page of data.
+
+The browse endpoint defaults to 50 rows, accepts 1–1,000, and supports offset,
+order field, and ascending or descending order. SQL table and order identifiers
+must be simple identifiers; Dock rejects names that could inject SQL. MongoDB
+uses `_id` as its default order field, while SQL uses `id`.
+
+Counts can be expensive on very large collections or tables. Use the console
+with a purpose-built indexed query when the generic browser is not the right
+tool.
+
+## Inspect schema
+
+PostgreSQL and MySQL schema views show the physical table definition, including
+columns, database types, nullability, defaults, primary keys, and indexes. The
+table filter is reflected in `?schemaTables=` so a focused schema view can be
+bookmarked.
+
+MongoDB is schemaless. Dock can list collections and compare whether the
+collections expected by Waterline exist, but it does not infer a field schema
+from sample documents. Redis has no schema tab.
+
+## Compare Waterline models
+
+The **Migrate** tab compares the selected service with the application's model
+metadata.
+
+1. When the app is running, Dock first introspects its loaded Waterline models.
+2. If runtime introspection is unavailable, Dock falls back to statically
+   reading model source from the pushed build context.
+3. Dock reads the service's current schema.
+4. It maps Waterline attributes to the physical types used by the selected
+   adapter.
+5. It presents grouped, selectable statements for review.
+
+The response says whether model metadata came from `runtime` or `static`.
+Runtime is preferable because it includes the application's effective loaded
+model definitions. Static fallback allows first-time schema creation when the
+app cannot lift against an empty database.
+
+### What migrations generate
+
+For PostgreSQL and MySQL, Dock can generate:
+
+- table creation;
+- column rename when an attribute name maps to a different column name;
+- missing column creation;
+- compatible column type or nullability changes; and
+- missing indexes.
+
+For MongoDB, it creates missing collections only. The generated diff does not
+drop extra tables, collections, or columns automatically.
+
+An explicit Waterline `columnType` is used as the desired physical type. Review
+it carefully because it bypasses the normal logical type mapping.
+
+### Apply a migration
+
+Select the model groups, read every generated statement, choose **Apply
+Migration**, and confirm the count. Dock executes statements sequentially and
+stops on the first failure. The response reports each successful statement and
+the failing one.
+
+Dock does not automatically wrap the whole generated list in a transaction.
+Earlier statements can remain applied if a later statement fails. Recompute
+the diff before retrying.
+
+::: warning Back up and stage schema changes
+Generated SQL is a useful translation of model metadata, not a proof that the
+data can satisfy a new constraint. Test the same change in staging, inspect
+existing nulls and duplicates, and create a backup before production.
+:::
+
+## Initialize an empty database
+
+An application can fail to lift when its production datastore has no tables.
+Dock can still build a diff from pushed source:
+
+1. push or deploy the application source;
+2. create and start the database service;
+3. open **Dock → Migrate** for that service;
+4. verify that model source was loaded and review the generated tables;
+5. apply the migration; and
+6. redeploy or restart the application.
+
+If Dock reports `modelsSourceNotFound`, push source before trying again.
+
+## Export
+
+The export action can include the full database, schema only, data only, or a
+selected set of tables.
+
+| Service    | Implementation                                                                      | Notes                                                |
+| ---------- | ----------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| PostgreSQL | `pg_dump --no-owner --no-acl`                                                       | supports table selection, schema-only, and data-only |
+| MySQL      | `mysqldump --single-transaction --routines --triggers`                              | supports table selection, schema-only, and data-only |
+| MongoDB    | `mongoexport` for one selected collection, otherwise compressed `mongodump` archive | schema-only does not apply                           |
+
+The current export process has a five-minute timeout and a 100 MB captured
+output buffer. Large production backups should use Slipway's backup workflow
+instead of a browser download.
+
+## Import
+
+Paste text or upload a supported file, review the destructive confirmation,
+and then import into the selected service.
+
+| Service    | Text                                              | Binary/archive                                              |
+| ---------- | ------------------------------------------------- | ----------------------------------------------------------- |
+| PostgreSQL | `.sql` through `psql` with `ON_ERROR_STOP=1`      | `.dmp` custom dump through `pg_restore --clean --if-exists` |
+| MySQL      | `.sql` through `mysql`                            | not supported                                               |
+| MongoDB    | JSON array, optionally with `// collection: name` | gzip archive through `mongorestore --drop`                  |
+
+Uploaded PostgreSQL custom dumps must begin with the `PGDMP` signature.
+MongoDB archives must be gzip. Slipway rejects a mismatched file before calling
+the native restore client.
+
+Imports stream through a temporary file or process input so Slipway does not
+buffer a 500 MB upload in application memory. Defaults are:
+
+| Limit           | Default    |
+| --------------- | ---------- |
+| Maximum import  | 500 MB     |
+| Import timeout  | 30 minutes |
+| Captured stdout | 64 KB      |
+| Captured stderr | 64 KB      |
+
+The temporary upload is deleted after success or failure. Streaming controls
+memory use, but the host still needs enough free disk for the temporary file
+and database growth.
+
+## Authenticated endpoints
+
+The Dock UI uses the following session-authenticated routes. Add
+`/environments/:environmentSlug` after the project slug for a non-production
+environment, and pass `?service=:serviceId` when selecting a particular
+service.
+
+| Method | Path suffix                | Purpose                             |
+| ------ | -------------------------- | ----------------------------------- |
+| `POST` | `/dock/sql`                | execute SQL or a MongoDB expression |
+| `GET`  | `/dock/tables`             | list tables or collections          |
+| `GET`  | `/dock/tables/:table/data` | browse a page of data               |
+| `GET`  | `/dock/schema`             | read physical schema                |
+| `GET`  | `/dock/models`             | inspect application models          |
+| `GET`  | `/dock/diff`               | generate the model/schema diff      |
+| `POST` | `/dock/migrate`            | apply selected statements           |
+| `POST` | `/dock/export`             | export data or schema               |
+| `POST` | `/dock/import`             | import text or an uploaded dump     |
+
+The common prefix is `/api/v1/projects/:projectSlug`. These endpoints use the
+same team and environment authorization as the page; they are not public
+database APIs.
 
 ## Troubleshooting
 
-### Dock Not Appearing
+### No services appear
 
-If the Dock icon doesn't show:
+Confirm the service is PostgreSQL, MySQL, MongoDB, or Redis; belongs to the
+selected environment; and has `running` status. A stopped service is removed
+from the picker.
 
-1. Verify you have a PostgreSQL or MySQL service attached
-2. Check the service is running (`status: running`)
-3. The icon only appears when service is active
+### A query times out
 
-### Query Timeout
+Console SQL and MongoDB execution has a 30-second timeout. Add a limit, inspect
+the query plan, add an index, or use a dedicated reporting path for long work.
 
-For long-running queries:
+### The diff is empty or wrong
 
-1. Default timeout is 30 seconds
-2. Optimize your query (add indexes, limit results)
-3. For complex reports, consider using a read replica
+Check the reported model source. Restart the app after model changes so runtime
+metadata is current, or push the new source so static fallback can read it.
+Then verify `tableName`, `columnName`, `columnType`, and datastore assignment in
+the model.
 
-### Import Rejected
+### An import is rejected
 
-If a dump is rejected before it begins:
+Check the service, file signature, 500 MB default bound, and available host
+disk. A PostgreSQL plain SQL file belongs in text mode; `.dmp` expects the
+custom `pg_dump` format.
 
-1. Check its size against the configured import limit.
-2. Confirm that its format matches the selected database service.
-3. Check available host disk space; streaming avoids a memory spike but the
-   temporary upload still needs disk capacity.
+### A migration partially applies
 
-### Migration Fails
+Do not resubmit the old statement list blindly. Reload the diff against the
+current database, inspect which changes remain, and restore from backup if the
+partial state is unsafe.
 
-If migration fails:
+## What's next?
 
-1. Check the error message in the result
-2. The database may have constraints preventing the change
-3. Try running individual statements via SQL Console
-4. Check for dependent objects (foreign keys, views)
-
-### Schema Diff Shows Incorrect Results
-
-If diff seems wrong:
-
-1. Ensure your app is running (models are read from running container)
-2. Check that model file syntax is correct
-3. Custom `columnType` may not match expected patterns
-
-## What's Next?
-
-- Use [Helm](/slipway/helm) for debugging app issues
-- Configure [Auto-Deploy](/slipway/auto-deploy) for continuous deployment
+- Use [Backups](/slipway/database-services#backups) before destructive database
+  work.
+- Use [Helm](/slipway/helm) when the repair is clearer through application
+  models and helpers.
+- Use [Lookout](/slipway/lookout) to correlate database work with application
+  latency and errors.

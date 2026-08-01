@@ -5,7 +5,7 @@ head:
       content: https://docs.sailscasts.com/slipway-social.png
 title: Quest
 titleTemplate: Slipway
-description: Manage scheduled jobs in your Sails applications. View, run, pause, and resume jobs from the Slipway dashboard.
+description: Operate sails-hook-quest jobs from Slipway, including live state, manual runs, pause and resume controls, and bounded run history.
 prev:
   text: Content
   link: /slipway/content
@@ -17,142 +17,78 @@ editLink: true
 
 # Quest
 
-Quest is a **job scheduler dashboard** for your [sails-hook-quest](https://docs.sailscasts.com/sails-quest) powered applications. View scheduled jobs, trigger manual runs, and control job execution—all from the Slipway dashboard.
+Quest is Slipway's operational view of the jobs defined by
+[sails-hook-quest](https://docs.sailscasts.com/sails-quest). The job definition
+stays in the application repository; Slipway discovers it from the deployed
+application and provides live status, manual execution, pause and resume
+controls, and recent run history.
 
-## What is Quest?
+Use the `sails-hook-quest` documentation to design schedules and job code. Use
+this page to understand how Slipway operates those jobs after deployment.
 
-Quest provides a web-based interface for managing your scheduled jobs:
+## How the pieces connect
 
-- **View all jobs** - See every scheduled job with its schedule and status
-- **Run jobs manually** - Trigger immediate execution of any job
-- **Pause/Resume** - Control which jobs are running
-- **Monitor status** - See if jobs are currently executing
+```text
+scripts/*.js + quest config
+          │
+          ▼
+  deployed Sails app ── runtime state ──► Quest dashboard
+          │                                  │
+          └── job telemetry ────────────────► run history
+```
 
-No SSH access needed—manage your background jobs from the dashboard.
+Slipway does not copy the scheduler into its own process. It loads the target
+application in its running container to read `sails.quest`, and it executes a
+manual run with the application's normal `sails run <job>` command. Models,
+helpers, environment variables, and datastore connections are therefore the
+ones belonging to that deployment.
 
 ## Requirements
 
-Quest is available when your app uses [sails-hook-quest](https://docs.sailscasts.com/sails-quest):
+Install the hook in the target Sails application:
 
 ```bash
 npm install sails-hook-quest
 ```
 
-Slipway automatically detects `sails-hook-quest` during deployment and enables the Quest feature.
+Then deploy the application. Feature detection happens from the deployed
+source, so adding the dependency without deploying it does not enable Quest in
+an existing environment.
 
-## Accessing Quest
+For run history, also install `sails-hook-slipway`. Slipway injects its
+telemetry URL and token during deployment, and the hook reports Quest lifecycle
+events when `captureQuestEvents` is enabled. Manual runs triggered from the
+dashboard are recorded by Slipway even when no scheduled event has arrived yet.
 
-### Via Dashboard
+## Open Quest
 
-1. Go to your project in Slipway
-2. Select an environment and click the app name from the Apps list
-3. Click the ellipsis dropdown menu and select **Quest**
-4. View and manage your jobs
+Choose **Quest** from the application actions in the selected environment.
+Production uses:
 
-### Via Direct URL
-
-```
-https://your-slipway-instance.com/projects/myapp/quest
-```
-
-Or with a specific environment:
-
-```
-https://your-slipway-instance.com/projects/myapp/environments/staging/quest
+```text
+/projects/:projectSlug/quest
 ```
 
-## Job Dashboard
+Other environments include the environment slug:
 
-The Quest dashboard shows all scheduled jobs:
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│ Quest                                      sails-hook-quest     │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│ cleanup-sessions                           Active    no overlap │
-│ Remove expired sessions from the database                       │
-│ ⏱ every 1 hour                                                  │
-│                                        [Run now]  [Pause]       │
-│                                                                 │
-│ send-newsletter                            Paused               │
-│ Send weekly newsletter to subscribers                           │
-│ ⏱ cron: 0 9 * * MON                                             │
-│                                        [Run now]  [Resume]      │
-│                                                                 │
-│ process-uploads                            Running              │
-│ Process pending file uploads                                    │
-│ ⏱ every 2 minutes                                               │
-│                                        [Running...]             │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
+```text
+/projects/:projectSlug/environments/:environmentSlug/quest
 ```
 
-### Job Information
+The target application must be running. When it is stopped, still deploying,
+or missing `sails-hook-quest`, the page explains which prerequisite is absent
+instead of presenting stale controls.
 
-Each job displays:
+## Define a job
 
-| Field           | Description                                  |
-| --------------- | -------------------------------------------- |
-| **Name**        | The job's friendly name or script name       |
-| **Description** | What the job does                            |
-| **Schedule**    | Cron expression or interval                  |
-| **Status**      | Active, Paused, or Running                   |
-| **No overlap**  | Badge shown if concurrent runs are prevented |
-
-### Job Status
-
-| Status      | Description                                              |
-| ----------- | -------------------------------------------------------- |
-| **Active**  | Job is scheduled and will run at its next scheduled time |
-| **Paused**  | Job won't run until resumed                              |
-| **Running** | Job is currently executing                               |
-
-## Actions
-
-### Run Now
-
-Trigger immediate execution of a job:
-
-1. Click **Run now** on any job
-2. The job starts executing in your app
-3. Status updates to "Running" while executing
-
-::: tip
-Running a job manually doesn't affect its regular schedule. The job will still run at its next scheduled time.
-:::
-
-### Pause
-
-Stop a job from running on schedule:
-
-1. Click **Pause** on an active job
-2. Status changes to "Paused"
-3. Job won't run until resumed
-
-Pausing is useful for:
-
-- Temporarily stopping resource-intensive jobs
-- Debugging job-related issues
-- Maintenance windows
-
-### Resume
-
-Re-enable a paused job:
-
-1. Click **Resume** on a paused job
-2. Status changes to "Active"
-3. Job resumes normal scheduling
-
-## Creating Jobs
-
-Jobs are defined in your Sails app's `scripts/` directory with a `quest` property:
+Jobs live in the application's `scripts/` directory. A normal Sails script
+becomes scheduled when it includes a `quest` definition:
 
 ```javascript
 // scripts/cleanup-sessions.js
 module.exports = {
-  friendlyName: 'Cleanup old sessions',
-  description: 'Remove expired sessions from the database',
+  friendlyName: 'Clean up sessions',
+  description: 'Remove sessions that have expired.',
 
   quest: {
     interval: '1 hour',
@@ -160,211 +96,156 @@ module.exports = {
   },
 
   fn: async function () {
-    const deleted = await Session.destroy({
-      lastActive: {
-        '<': new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
-      }
+    const expiredBefore = Date.now() - 30 * 24 * 60 * 60 * 1000
+    const removed = await Session.destroy({
+      lastActiveAt: { '<': expiredBefore }
     }).fetch()
 
-    sails.log.info(`Cleaned up ${deleted.length} sessions`)
-    return { deletedCount: deleted.length }
+    sails.log.info(`Removed ${removed.length} expired sessions.`)
+    return { removed: removed.length }
   }
 }
 ```
 
-### Schedule Options
-
-#### Intervals (Human-Readable)
+Common schedule forms are:
 
 ```javascript
 quest: {
-  interval: '30 seconds'
   interval: '5 minutes'
-  interval: '2 hours'
-  interval: '7 days'
 }
-```
-
-#### Cron Expressions
-
-```javascript
 quest: {
-  cron: '0 2 * * *' // Daily at 2 AM
-  cron: '*/5 * * * *' // Every 5 minutes
-  cron: '0 9 * * MON' // Every Monday at 9 AM
+  cron: '0 2 * * *'
 }
-```
-
-#### One-Time Execution
-
-```javascript
 quest: {
-  timeout: '10 minutes' // Run once after 10 minutes
+  timeout: '10 minutes'
 }
 ```
 
-### Overlap Prevention
+The configured Quest timezone controls cron interpretation. Schedule parsing,
+overlap locks, retries, and startup behavior belong to `sails-hook-quest`; the
+Slipway dashboard reports the resulting runtime state without redefining those
+rules.
 
-Prevent concurrent runs of the same job:
+Scripts without a `quest` definition can still appear as manual jobs when they
+were detected in the deployment. Their schedule is shown as `manual`.
 
-```javascript
-quest: {
-  interval: '5 minutes',
-  withoutOverlapping: true  // Skip if already running
-}
-```
+## Read the dashboard
 
-## API Endpoints
+The page combines configuration, live runtime state, and recent telemetry.
 
-Quest provides REST API endpoints for programmatic control:
+| Information                        | Source                         | Meaning                                                      |
+| ---------------------------------- | ------------------------------ | ------------------------------------------------------------ |
+| Name and description               | `scripts/*.js`                 | The script identity and its human-facing metadata            |
+| Schedule and no-overlap state      | `script.quest`                 | The configured cron, interval, timeout, and overlap behavior |
+| Paused or running                  | `sails.quest` in the container | Current state of this running deployment                     |
+| Next and last run                  | Quest runtime                  | Scheduler timestamps when the hook exposes them              |
+| Success, failure, duration, output | telemetry                      | Recent completed runs retained by Slipway                    |
 
-### List Jobs
+The summary cards show completed and failed runs from the last 24 hours. An
+expanded job shows up to 20 of its most recent completed or failed runs from
+the loaded history. Slipway queries at most 500 Quest telemetry records from the
+last seven days for the environment.
 
-```bash
-GET /api/v1/projects/:projectSlug/quest/jobs
-```
+### Live refresh
 
-Response:
+The **Live** indicator means the browser has an authenticated Server-Sent
+Events connection to Slipway. Slipway sends an initial snapshot and refreshes
+the target application's job state and history every 30 seconds. The stream is
+scoped to the signed-in user's team, project, and environment.
 
-```json
-{
-  "jobs": [
-    {
-      "name": "cleanup-sessions",
-      "friendlyName": "Cleanup old sessions",
-      "description": "Remove expired sessions",
-      "schedule": "1 hour",
-      "scheduleType": "interval",
-      "paused": false,
-      "withoutOverlapping": true,
-      "isRunning": false
-    }
-  ]
-}
-```
+If the stream disconnects, the page keeps the last snapshot visible and marks
+it offline. Reconnect or use **Try again** after fixing a container or
+introspection error.
 
-### Run a Job
+When runtime introspection fails, Slipway can fall back to the scripts detected
+during deployment. Those fallback rows are intentionally conservative: they
+show the script as manual and do not pretend to know live paused or running
+state.
 
-```bash
+## Run a job now
+
+Choose **Run now** to execute the script immediately in the running app
+container. Slipway:
+
+1. resolves the current project, environment, application, and container;
+2. runs `npx sails run <job-name>` inside that container;
+3. waits for the process to exit, with a five-minute execution timeout;
+4. strips terminal color codes from captured output;
+5. returns stdout, stderr, exit code, and success state; and
+6. records a manual Quest telemetry event for history.
+
+The output panel belongs to that manual run. Closing it does not delete the
+telemetry record. A manual run also does not change the configured schedule.
+
+::: warning A manual run is real application work
+The script has the same models, helpers, credentials, and side effects it has
+when Quest runs it on schedule. There is no dry-run sandbox. Make destructive
+jobs idempotent and use `withoutOverlapping` where concurrent work would be
+unsafe.
+:::
+
+### Inputs and automation
+
+The dashboard currently runs the job without an input form. An authenticated
+client can call the run endpoint and pass `jobInputs`; each key becomes a Sails
+script argument such as `--daysOld=7`:
+
+```http
 POST /api/v1/projects/:projectSlug/quest/jobs/:name/run
-```
+Content-Type: application/json
 
-Optional body:
-
-```json
 {
-  "inputs": {
-    "daysOld": 7
+  "jobInputs": {
+    "daysOld": 7,
+    "dryRun": true
   }
 }
 ```
 
-### Pause a Job
+For a non-production environment, use:
 
-```bash
-POST /api/v1/projects/:projectSlug/quest/jobs/:name/pause
+```text
+/api/v1/projects/:projectSlug/environments/:environmentSlug/quest/jobs/:name/run
 ```
 
-### Resume a Job
+This endpoint uses the same Slipway session and team authorization as the
+dashboard. It is not an unauthenticated webhook or a substitute for a queue.
 
-```bash
-POST /api/v1/projects/:projectSlug/quest/jobs/:name/resume
-```
+## Pause and resume
 
-## Job Examples
+**Pause** and **Resume** call `sails.quest.pause(name)` and
+`sails.quest.resume(name)` against the selected running deployment. They change
+the scheduler state exposed by that application; they do not edit the script or
+commit configuration to Git.
 
-### Database Cleanup
+Treat pausing as an operational control for maintenance or diagnosis. A
+container replacement, restart, or redeployment can rebuild scheduler state
+from the application's committed Quest configuration. If a job must stay
+disabled across releases, change its application configuration and deploy that
+change.
 
-```javascript
-// scripts/cleanup-old-data.js
-module.exports = {
-  friendlyName: 'Cleanup old data',
-  description: 'Remove records older than 90 days',
+Pause and resume are dashboard form actions, not the `/api/v1/.../jobs` REST
+endpoints previously described by these docs.
 
-  quest: {
-    cron: '0 3 * * *', // Daily at 3 AM
-    withoutOverlapping: true
-  },
+## History and retention
 
-  fn: async function () {
-    const cutoff = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000)
+Quest history is application telemetry, not a second job database. A history
+entry can contain:
 
-    await AuditLog.destroy({ createdAt: { '<': cutoff } })
-    await TempFile.destroy({ createdAt: { '<': cutoff } })
+- job name and lifecycle event;
+- manual or scheduled trigger;
+- duration and recorded time;
+- bounded stdout and stderr from a manual run; and
+- a bounded error message for failed work.
 
-    sails.log.info('Old data cleanup complete')
-  }
-}
-```
+Application telemetry is retained for seven days by default and pruned by
+Lookout maintenance. See [Lookout](/slipway/lookout) for the retention controls
+and collector health. Container logs remain useful when a failure occurred
+outside the captured run envelope.
 
-### Email Digest
+## Production job design
 
-```javascript
-// scripts/send-daily-digest.js
-module.exports = {
-  friendlyName: 'Send daily digest',
-  description: 'Send summary email to active users',
-
-  quest: {
-    cron: '0 8 * * *', // Daily at 8 AM
-    withoutOverlapping: true
-  },
-
-  fn: async function () {
-    const users = await User.find({
-      digestEnabled: true,
-      emailVerified: true
-    })
-
-    for (const user of users) {
-      await sails.helpers.mail.sendDigest(user)
-    }
-
-    return { sent: users.length }
-  }
-}
-```
-
-### Queue Processing
-
-```javascript
-// scripts/process-queue.js
-module.exports = {
-  friendlyName: 'Process job queue',
-  description: 'Process pending background jobs',
-
-  quest: {
-    interval: '30 seconds',
-    withoutOverlapping: true
-  },
-
-  fn: async function () {
-    const pending = await Job.find({
-      status: 'pending'
-    }).limit(10)
-
-    for (const job of pending) {
-      try {
-        await sails.helpers.jobs.process(job)
-        await Job.updateOne({ id: job.id }).set({ status: 'completed' })
-      } catch (err) {
-        await Job.updateOne({ id: job.id }).set({
-          status: 'failed',
-          error: err.message
-        })
-      }
-    }
-
-    return { processed: pending.length }
-  }
-}
-```
-
-## Best Practices
-
-### 1. Always Use `withoutOverlapping`
-
-For jobs that shouldn't run concurrently:
+### Prevent overlap intentionally
 
 ```javascript
 quest: {
@@ -373,90 +254,66 @@ quest: {
 }
 ```
 
-### 2. Keep Jobs Idempotent
+Use overlap protection when a second run could charge twice, send duplicate
+mail, process the same queue item, or compete for the same external resource.
 
-Jobs should be safe to run multiple times:
+### Make work idempotent
 
-```javascript
-// Good - checks before acting
-const unprocessed = await Order.find({ processed: false })
-for (const order of unprocessed) {
-  await processOrder(order)
-  await Order.updateOne({ id: order.id }).set({ processed: true })
-}
+Select a bounded set of pending records, claim or mark them atomically, and make
+retries safe. A process can stop after performing an external side effect but
+before updating the database.
 
-// Bad - might double-process
-const orders = await Order.find()
-for (const order of orders) {
-  await processOrder(order) // Might run twice!
-}
-```
+### Bound each run
 
-### 3. Add Logging
+Use query limits, batches, and checkpoints. The dashboard's five-minute wait
+for a manual invocation is not a replacement for application-level timeouts on
+HTTP calls or database operations.
 
-Log job progress for debugging:
+### Return and log useful summaries
 
-```javascript
-fn: async function () {
-  sails.log.info('Starting cleanup job')
-
-  const count = await Record.destroy({ old: true }).fetch()
-
-  sails.log.info(`Cleanup complete: ${count.length} records removed`)
-  return { removed: count.length }
-}
-```
-
-### 4. Handle Errors Gracefully
-
-Jobs should catch and log errors:
-
-```javascript
-fn: async function () {
-  try {
-    await riskyOperation()
-  } catch (err) {
-    sails.log.error('Job failed:', err)
-    // Optionally notify admins
-    await sails.helpers.mail.sendAlert({
-      subject: 'Job failed: cleanup',
-      error: err.message
-    })
-    throw err // Re-throw to mark job as failed
-  }
-}
-```
+Return counts or identifiers that help an operator understand the run, and log
+progress without emitting secrets or whole customer records.
 
 ## Troubleshooting
 
-### Jobs Not Appearing
+### Quest is unavailable
 
-If jobs don't show in the dashboard:
+1. Confirm `sails-hook-quest` is in the deployed application's dependencies.
+2. Deploy the revision that added it.
+3. Confirm you opened the correct app and environment.
+4. Confirm the application is running.
 
-1. Verify `sails-hook-quest` is in `package.json`
-2. Deploy your app (detection happens during deployment)
-3. Ensure the app is running
-4. Check that scripts have a `quest` property
+### A job is missing or shown as manual
 
-### Jobs Not Running
+Confirm the script is a top-level `.js` file in `scripts/` and can be required
+without throwing. Then inspect the app logs for errors while loading the script
+or `sails.quest`. A manual fallback row means deployment detection found the
+script but Slipway could not confirm its live schedule.
 
-If scheduled jobs aren't executing:
+### Live state is stale
 
-1. Check if the job is paused
-2. Verify the schedule syntax
-3. Check container logs for errors
-4. Ensure `autoStart: true` in quest config
+Check the **Live** indicator. If it is offline, reload after confirming that the
+Slipway instance and target container are reachable. A connected stream still
+refreshes full job state every 30 seconds, so a scheduler transition is not
+instantaneous in the browser.
 
-### Manual Run Fails
+### A manual run fails
 
-If "Run now" fails:
+Expand its output first. Then inspect the target app's logs and run the same
+script locally with `npx sails run <job-name>`. Verify required inputs and
+environment variables, and remember that Slipway stops waiting after five
+minutes.
 
-1. Check the app is running
-2. Look at container logs for errors
-3. Verify the script exists and has no syntax errors
+### History is empty
 
-## What's Next?
+Install `sails-hook-slipway`, redeploy so telemetry credentials are injected,
+and confirm `captureQuestEvents` is enabled. Scheduled history appears after a
+job emits its first lifecycle event; manual runs from Slipway are recorded
+directly.
 
-- Learn about [sails-hook-quest](https://docs.sailscasts.com/sails-quest) for setting up jobs
-- Use [Helm](/slipway/helm) for debugging
-- Set up [Auto-Deploy](/slipway/auto-deploy) for continuous deployment
+## What's next?
+
+- Configure job behavior with
+  [sails-hook-quest](https://docs.sailscasts.com/sails-quest).
+- Use [Lookout](/slipway/lookout) to inspect telemetry health and retention.
+- Use [Helm](/slipway/helm) for bounded application-aware diagnosis.
