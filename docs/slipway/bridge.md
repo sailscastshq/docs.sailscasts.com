@@ -25,9 +25,23 @@ Use the zero-configuration interface for internal tools and early applications. 
 
 - The target Sails app must be running.
 - The models you want to manage must be available through `sails.models`.
-- The signed-in Slipway user must have access to the project and environment.
+- The operator must have Slipway project access, or the host-app user must have
+  an active app-local Bridge invitation.
 
 Open an app in Slipway, use its ellipsis menu, and select **Bridge**.
+
+Bridge has two deliberate URL modes:
+
+```text
+https://your-app.example.com/bridge
+https://slipway.example.com/projects/<project>/environments/<environment>/apps/<app>/bridge
+```
+
+The public flow keeps navigation, search, actions, and assets on the app's
+origin under `/bridge`. The Slipway flow is the operator entry point. If an app
+is mounted below a route prefix, that prefix comes before `/bridge`; a root app
+such as Sailscasts uses exactly `https://sailscasts.com/bridge`. There is no
+resource-derived route such as `/course/bridge`.
 
 ## App-local access
 
@@ -72,6 +86,13 @@ The Boring JavaScript Stack works without application code. The hook uses:
 - `req.session.userId` as the authenticated ID;
 - `email` and `fullName` as identity attributes; and
 - `emailStatus` equal to `verified` or `confirmed` as proof of verification.
+
+Persist that provider-neutral verification state when Wish, a redeemed magic
+link, or another authentication flow proves ownership of the exact email
+stored on the user. If a provider verifies a different candidate address, it
+must not confirm the current stored email. Opening `/bridge` should perform one
+local model lookup; it must not call GitHub, Google, or another provider, and
+Bridge does not require a stored OAuth access token.
 
 For a conventional model-backed session with different names, map the
 attributes:
@@ -146,10 +167,10 @@ App-local roles form a platform ceiling:
 | `Editor`        | Viewer access plus create, update, upload, and actions |
 | `Administrator` | Editor access plus single and bulk deletion            |
 
-The resource `authorization.helper` described below still runs inside the
-target app. Its decision can narrow a role but never widen it. For example, an
-`Editor` can be denied one course by the application's policy, and cannot gain
-delete permission even if a custom helper mistakenly allows it.
+The declarative host-role policy described below narrows that ceiling and can
+never widen it. For example, a host `editor` can be denied one resource and
+cannot gain delete permission from configuration when the Bridge invitation
+is only `Editor`.
 
 ### Security lifecycle
 
@@ -163,6 +184,8 @@ delete permission even if a custom helper mistakenly allows it.
 - Dedicated Bridge sessions expire after eight hours.
 - Disabling Bridge, revoking a grant, or rotating the app credential
   invalidates authorization server-side.
+- OAuth provider tokens remain inside authentication and are not needed by
+  Bridge.
 
 ## Zero-configuration discovery
 
@@ -188,6 +211,14 @@ Create `config/slipway.js` in the application repository:
 module.exports.slipway = {
   bridge: {
     schemaVersion: 1,
+    authorization: {
+      roleAttribute: 'role',
+      roles: {
+        admin: ['*'],
+        editor: ['viewAny', 'view', 'create']
+      },
+      default: []
+    },
     resources: {
       course: {
         label: 'Courses',
@@ -252,9 +283,6 @@ module.exports.slipway = {
         },
         actions: {
           bulkDelete: false
-        },
-        authorization: {
-          helper: 'bridge.authorize'
         },
         relationships: {
           chapters: {
@@ -845,24 +873,64 @@ Disabled actions are removed from the interface and rejected by the server. Hidi
 
 ### Actor-aware authorization
 
-Use a target app helper when permissions depend on the person using Bridge:
+For ordinary application roles, use a declarative deny-by-default matrix:
 
 ```js
-course: {
+bridge: {
   authorization: {
-    helper: 'bridge.authorize'
+    roleAttribute: 'role',
+    roles: {
+      admin: ['*'],
+      editor: ['viewAny', 'view', 'create']
+    },
+    default: []
+  },
+  resources: {
+    coursepurchase: {
+      authorization: {
+        roles: {
+          admin: ['viewAny', 'view'],
+          editor: []
+        }
+      }
+    }
   }
 }
 ```
 
-Slipway calls the helper inside the running target application for `viewAny`, `view`, `create`, `update`, `delete`, `bulkDelete`, and configured custom action names. The helper receives:
+The authorization model defaults to the Bridge identity model (`User`).
+Slipway resolves the user by the stable host ID established during the
+app-local exchange and reads the role once per authorization pass. It does not
+trust an actor email to find the user. `'*'` applies only to enabled actions on
+configured resources. A resource-level `roles` object replaces the global
+matrix for that resource.
 
-- `actor`: the signed-in Slipway user's ID, email, full name, team role, and current project/environment identifiers;
+Unknown users, roles, and operations deny access. Misspelled model attributes,
+known role values, and action names reject the contract instead of silently
+widening it. `default` may only be `[]`.
+
+Use a target helper only for a genuinely record-specific domain decision that
+cannot be expressed by the role matrix:
+
+```js
+course: {
+  authorization: {
+    helper: 'course.authorizeBridgeRecord'
+  }
+}
+```
+
+Slipway calls that helper inside the running target application for
+`viewAny`, `view`, `create`, `update`, `delete`, `bulkDelete`, and configured
+custom action names. The helper receives:
+
+- `actor`: the server-established host user ID, email, full name, Bridge role, and current project/environment identifiers;
 - `action`: the operation being checked;
 - `resource`: the resource identity, primary key, and labels; and
 - `recordId`: the normalized primary key when a record is in scope.
 
-The target application should map `actor.email` or another stable identifier to its own user record and make the domain-specific decision:
+The target application should use `actor.id` as its stable host identity and
+make the domain-specific decision:
 
 ```js
 // api/helpers/bridge/authorize.js
@@ -883,7 +951,7 @@ module.exports = {
   },
 
   fn: async function ({ actor, action }) {
-    const user = await User.findOne({ email: actor.email })
+    const user = await User.findOne({ id: actor.id })
     if (!user) return false
 
     const requiredLevel = ['update', 'delete', 'bulkDelete'].includes(action)
@@ -897,23 +965,27 @@ module.exports = {
 
 This gives the same split as the existing Sailscasts Nexus clearance: editors can discover, read, and create; admins can also update and delete. Return `true` or `{ allowed: true }` to permit the action. A falsey result, missing helper, thrown error, or malformed result fails closed.
 
-The existing Slipway team/project check remains the outer gate. The target helper is the application-specific gate; receiving an actor object is not authorization by itself.
+The Bridge invitation role remains the outer ceiling. The target role matrix or
+helper is the application-specific gate; receiving an actor object is not
+authorization by itself.
 
 ### Custom actions
 
-Custom actions connect a small, declarative Bridge UI contract to a Sails
-helper in the target application. They use the same authorization helper as
-the built-in actions.
+Custom actions connect a small, declarative Bridge UI contract to an explicitly
+allowlisted Sails domain helper. They use the same role matrix or authorization
+helper as the built-in actions.
 
 ```js
 course: {
-  authorization: 'bridge.authorize',
   actions: {
     bulkDelete: false,
 
     syncCatalog: {
       scope: 'resource',
-      helper: 'bridge.syncCatalog',
+      helper: {
+        identity: 'catalog.sync',
+        inputs: 'values'
+      },
       label: 'Sync catalog',
       success: 'Catalog synchronized.'
     },
@@ -964,6 +1036,40 @@ course: {
 }
 ```
 
+The object helper form passes the validated action fields as named inputs, so
+Sails enforces the domain helper's own input contract. No actor or resource
+envelope is passed implicitly. Add only the context the helper declares:
+
+```js
+helper: {
+  identity: 'course.publish',
+  inputs: 'values',
+  context: ['actor', 'recordId']
+}
+```
+
+The helper identity comes only from trusted `config/slipway.js`; the client
+cannot select or override it.
+
+Map structured domain output into a bounded, one-time message when an action
+returns a secret that must be shown once:
+
+```js
+helper: {
+  identity: 'license.createLicense',
+  inputs: 'values',
+  result: {
+    message: 'License issued for {{email}}. Copy this key now: {{key}}'
+  }
+}
+```
+
+The result template is rendered inside the target app. Only the normalized
+message crosses into a one-time Bridge flash and it is limited to 500
+characters. Raw structured output, submitted values, and plaintext secrets are
+not persisted in the resource contract or audit log. Direct-helper errors are
+replaced with a generic action failure so exception text cannot leak a secret.
+
 The scope controls where an action appears and which identifiers its helper
 receives:
 
@@ -993,7 +1099,7 @@ contract. Rich text supports the explicit Markdown format and repeats the
 raw-HTML check on the server. Relationship and upload fields remain record-form
 workflows rather than action inputs.
 
-The target helper declares the context it needs:
+The legacy string helper form remains supported for Bridge-envelope adapters:
 
 ```js
 // api/helpers/bridge/publish-course.js
