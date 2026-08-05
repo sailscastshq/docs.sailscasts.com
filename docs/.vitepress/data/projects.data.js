@@ -27,7 +27,7 @@ export default {
         {
           name: 'Durable UI',
           description:
-            'State-placement utilities for progress drafts, shareable URL state, and cleanup rules that survive real users.',
+            'State-placement utilities and a CLI scanner for finding UI contracts that break under refresh, Back, sign-in, and remounts.',
           link: '/durable-ui/',
           github: 'https://github.com/sailscastshq/durable-ui',
           popular: true

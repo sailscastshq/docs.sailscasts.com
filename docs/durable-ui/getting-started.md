@@ -7,6 +7,18 @@ description: Start using Durable UI progress and URL primitives with Vue composa
 
 Durable UI organizes client state by durability category. Use Progress when private work should survive refreshes until the user submits. Use URL when the view itself should be shareable and bookmarkable.
 
+## Scan An Existing Project
+
+You can inspect a JavaScript or TypeScript web application without installing anything into it. From the project root, run:
+
+```sh
+npx durable-ui scan .
+```
+
+Scan reports source evidence, user impact, a browser test, and a recommended direction for every match. It does not change your files or fail the command because it found something. Read the [Scan overview](/durable-ui/scan) before automating it in CI.
+
+## Install The Runtime Primitives
+
 Install the package for the app you are building.
 
 ::: code-group
