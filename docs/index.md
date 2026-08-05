@@ -6,8 +6,8 @@ hero:
   tagline: Documentation for Sails.js, The Boring JavaScript Stack, and related tools.
   actions:
     - theme: brand
-      text: Watch a Course
-      link: https://sailscasts.com
+      text: Watch the Durable UI Course
+      link: https://sailscasts.com/courses/durable-ui
     - theme: alt
       text: The Boring Stack
       link: /boring-stack/
@@ -23,7 +23,7 @@ features:
     details: Server-centric full-stack guides built around Sails, Inertia, Tailwind CSS, and Vue, React, or Svelte.
   - icon: 🛠️
     title: Developer Tools
-    details: Hooks, CLI tools, and supporting packages for Sails applications.
+    details: Hooks, CLI tools like Durable UI Scan, and supporting packages for resilient Sails applications.
   - icon: 🖖
     title: Open Source
     details: Documentation for the open-source libraries published through Sailscasts.

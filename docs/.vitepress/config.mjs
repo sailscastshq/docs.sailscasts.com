@@ -820,6 +820,23 @@ function durableUiGuide() {
       ]
     },
     {
+      text: 'Scan',
+      collapsed: false,
+      items: [
+        { text: 'Overview', link: '/durable-ui/scan' },
+        { text: 'Checks', link: '/durable-ui/scan/checks' },
+        {
+          text: 'CLI Reference',
+          link: '/durable-ui/scan/cli-reference'
+        },
+        {
+          text: 'Output and JSON',
+          link: '/durable-ui/scan/output'
+        },
+        { text: 'CI and Limitations', link: '/durable-ui/scan/ci' }
+      ]
+    },
+    {
       text: 'Progress',
       collapsed: false,
       items: [
