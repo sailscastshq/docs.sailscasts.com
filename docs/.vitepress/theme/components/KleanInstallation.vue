@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick, ref } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 import CopyCode from './CopyCode.vue'
 
 const props = defineProps({
@@ -11,6 +11,10 @@ const props = defineProps({
     type: String,
     required: true
   },
+  component: {
+    type: String,
+    default: 'button'
+  },
   filename: {
     type: String,
     default: 'Button.vue'
@@ -18,6 +22,10 @@ const props = defineProps({
   destination: {
     type: String,
     default: 'assets/js/components/ui/button/Button.vue'
+  },
+  files: {
+    type: Array,
+    default: undefined
   }
 })
 
@@ -26,12 +34,40 @@ const methods = [
   { id: 'manual', label: 'Manual' }
 ]
 
-const packageManagers = [
-  { id: 'npm', label: 'npm', command: 'npx klean-ui add button' },
-  { id: 'pnpm', label: 'pnpm', command: 'pnpm dlx klean-ui add button' },
-  { id: 'yarn', label: 'yarn', command: 'yarn dlx klean-ui add button' },
-  { id: 'bun', label: 'bun', command: 'bunx klean-ui add button' }
-]
+const packageManagers = computed(() => [
+  {
+    id: 'npm',
+    label: 'npm',
+    command: `npx klean-ui add ${props.component}`
+  },
+  {
+    id: 'pnpm',
+    label: 'pnpm',
+    command: `pnpm dlx klean-ui add ${props.component}`
+  },
+  {
+    id: 'yarn',
+    label: 'yarn',
+    command: `yarn dlx klean-ui add ${props.component}`
+  },
+  {
+    id: 'bun',
+    label: 'bun',
+    command: `bunx klean-ui add ${props.component}`
+  }
+])
+
+const sourceFiles = computed(() =>
+  props.files?.length
+    ? props.files
+    : [
+        {
+          filename: props.filename,
+          destination: props.destination,
+          source: props.source
+        }
+      ]
+)
 
 const activeMethod = ref('command')
 const activePackageManager = ref('npm')
@@ -82,7 +118,7 @@ function selectMethod(method, focusTab = false) {
 
 function selectPackageManager(packageManager, focusTab = false) {
   activePackageManager.value = packageManager
-  selectTab(packageManager, packageManagerRefs, packageManagers, focusTab)
+  selectTab(packageManager, packageManagerRefs, packageManagers.value, focusTab)
 }
 </script>
 
@@ -185,13 +221,10 @@ function selectPackageManager(packageManager, focusTab = false) {
           <h3>Install the direct dependency</h3>
           <CopyCode code="npm install tailwind-merge" label="Terminal" />
         </li>
-        <li>
-          <h3>Copy the component source</h3>
-          <CopyCode :code="source" :label="filename" />
-        </li>
-        <li>
-          <h3>Save it at the conventional path</h3>
-          <CopyCode :code="destination" label="Destination" />
+        <li v-for="file in sourceFiles" :key="file.destination">
+          <h3>Copy {{ file.filename }}</h3>
+          <CopyCode :code="file.source" :label="file.filename" />
+          <CopyCode :code="file.destination" label="Destination" />
         </li>
       </ol>
     </section>
