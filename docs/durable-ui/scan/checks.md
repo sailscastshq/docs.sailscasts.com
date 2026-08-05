@@ -21,7 +21,8 @@ Visible uses of Durable UI draft primitives, browser storage, or common save, pe
 
 `view-state-outside-url` looks for React, Vue, or Svelte state with common names such as `activeTab`, `filter`, `sort`, `page`, `query`, or `searchTerm` when no URL-state signal is visible.
 
-- `MEDIUM`
+- `MEDIUM` for tabs, filters, sorting, and pagination
+- `REVIEW` for generic `query` or `searchTerm` state, which may be a transient lookup or command-palette interaction
 - Verify by changing the view, copying the URL into a new tab, and using Back and Forward.
 
 This is intended for navigational state. Private edits and brief interaction state usually should not go in the URL.
@@ -75,6 +76,8 @@ Storage access, quota, and JSON parsing can fail. The screen should remain usabl
 
 - `MEDIUM`
 - Verify by navigating away and back repeatedly, then confirming the handler or timer acts only once and stops after unmount.
+
+Recognized application bootstrap and service-worker modules live for the browser process rather than a component mount, so Scan excludes them from this cleanup rule.
 
 ## Debounced Request Without Cancellation
 
