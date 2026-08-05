@@ -11,6 +11,7 @@ The Klean CLI is a source installer for conventional Boring Stack applications:
 
 ```bash
 npx klean-ui add button
+npx klean-ui add field
 ```
 
 It has one job: place the right framework-native source in the right application path safely.
@@ -24,13 +25,15 @@ The CLI performs a deterministic pipeline:
 1. **Locate the application root.** Walk upward to the Sails `package.json`.
 2. **Detect the framework.** Inspect dependencies and the conventional frontend entry for reliable Vue, React, or Svelte evidence.
 3. **Resolve conventions.** Use `assets/js/components/ui` and, when needed, `assets/css/app.css`.
-4. **Resolve the registry item.** Read Button's manifest from the registry bundled with that CLI version.
-5. **Build a mutation plan.** Select only the detected framework's file and any direct dependencies it imports.
-6. **Check safety.** Compare an existing destination before any write.
-7. **Apply atomically where practical.** Create missing directories, copy source, add missing dependencies, and avoid partial state.
+4. **Resolve the registry item.** Read the requested manifest and its prerequisites from the registry bundled with that CLI version.
+5. **Build a mutation plan.** Select only the detected framework's files and any direct dependencies they import.
+6. **Check safety.** Compare every existing destination before any write.
+7. **Apply atomically where practical.** Create missing directories, copy all planned source, add missing dependencies, and avoid partial state.
 8. **Report the result.** Print the detected framework, resolved paths, added files, dependencies, skips, or conflicts.
 
 Bundling versioned registry metadata with the CLI keeps one invocation deterministic: the executable and the source it installs come from the same package version.
+
+Button contains one source file. Field expands to its complete native form foundation in dependency order. One conflicting target blocks that complete transaction before mutation.
 
 ## Detection
 

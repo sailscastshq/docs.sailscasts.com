@@ -30,6 +30,8 @@ Klean installs readable component source into your application. There is no setu
 
 The CLI is a delivery tool. The installed component does not import a Klean runtime, and the application owns the copied file.
 
+Registry items may include prerequisites and more than one source file. For example, `npx klean-ui add field` installs Field, Label, Input, Textarea, and their small framework-native context as one transaction.
+
 ## Conventional paths
 
 For a Boring Stack application, the framework determines the file—not a prompt:
