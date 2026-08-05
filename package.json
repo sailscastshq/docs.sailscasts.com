@@ -14,9 +14,13 @@
   "devDependencies": {
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
+    "@tailwindcss/postcss": "^4.3.3",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.3",
+    "postcss": "^8.5.25",
     "prettier": "^3.6.2",
+    "tailwind-merge": "^3.6.0",
+    "tailwindcss": "^4.3.3",
     "vitepress": "^1.6.4",
     "vue": "^3.4.27"
   },

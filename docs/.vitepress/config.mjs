@@ -54,6 +54,7 @@ export default {
       '/sentry-sails/': SentrySailsGuide(),
       '/pellicule/': pelliculeGuide(),
       '/durable-ui/': durableUiGuide(),
+      '/klean-ui/': kleanUiGuide(),
       '/sails-ai/': sailsAiGuide(),
       '/sails-flare/': sailsFlareGuide()
     },
@@ -85,6 +86,41 @@ function nav() {
     { text: 'Open Source', link: '/open-source' },
     { text: 'Courses', link: 'https://sailscasts.com/courses' },
     { text: 'Blog', link: 'https://blog.sailscasts.com' }
+  ]
+}
+
+function kleanUiGuide() {
+  return [
+    {
+      text: 'Getting Started',
+      collapsed: false,
+      items: [
+        { text: 'Introduction', link: '/klean-ui/' },
+        { text: 'Installation', link: '/klean-ui/installation' }
+      ]
+    },
+    {
+      text: 'Foundations',
+      collapsed: false,
+      items: [
+        { text: 'Doctrine', link: '/klean-ui/doctrine' },
+        { text: 'Durable UI', link: '/klean-ui/durable-ui' },
+        { text: 'Theming', link: '/klean-ui/theming' }
+      ]
+    },
+    {
+      text: 'Components',
+      collapsed: false,
+      items: [
+        { text: 'Overview', link: '/klean-ui/components/' },
+        { text: 'Button', link: '/klean-ui/components/button' }
+      ]
+    },
+    {
+      text: 'Reference',
+      collapsed: false,
+      items: [{ text: 'CLI', link: '/klean-ui/cli' }]
+    }
   ]
 }
 
