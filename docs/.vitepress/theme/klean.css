@@ -1,0 +1,6 @@
+@import 'tailwindcss';
+
+@source './components/klean';
+@source '../../klean-ui';
+
+@custom-variant dark (&:where(.dark, .dark *));

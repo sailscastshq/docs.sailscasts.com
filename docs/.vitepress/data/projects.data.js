@@ -33,6 +33,14 @@ export default {
           popular: true
         },
         {
+          name: 'Klean UI',
+          description:
+            "Kelvin's Lean UI: accessible, durable, source-owned components for Vue, React, and Svelte with Tailwind as the visual API.",
+          link: '/klean-ui/',
+          github: 'https://github.com/sailscastshq/klean-ui',
+          popular: true
+        },
+        {
           name: 'Sails AI',
           description:
             'Multi-provider AI hook for Sails.js with a clean adapter pattern. Chat, stream, and reason with any LLM.',
