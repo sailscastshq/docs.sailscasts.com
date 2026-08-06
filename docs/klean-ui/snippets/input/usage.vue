@@ -12,13 +12,11 @@ import Input from '@/components/ui/input/Input.vue'
       type="email"
       autocomplete="email"
       required
-      :aria-invalid="!!form.errors.email"
-      :aria-describedby="
-        form.errors.email ? 'email-help email-error' : 'email-help'
-      "
+      :aria-invalid="Boolean(form.errors.email)"
+      aria-describedby="email-help email-error"
     />
     <p id="email-help">We only use this for account messages.</p>
-    <p v-if="form.errors.email" id="email-error">
+    <p id="email-error" class="empty:hidden text-sm text-red-700">
       {{ form.errors.email }}
     </p>
   </div>

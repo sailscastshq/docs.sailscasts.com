@@ -46,22 +46,17 @@ Klean deliberately does not supply Field, Label, description, or error component
           type="email"
           autocomplete="email"
           required
-          :aria-invalid="emailInvalid || undefined"
-          :aria-describedby="
-            emailInvalid
-              ? 'input-demo-help input-demo-error'
-              : 'input-demo-help'
-          "
+          :aria-invalid="emailInvalid"
+          aria-describedby="input-demo-help input-demo-error"
         />
         <p id="input-demo-help" class="text-sm text-gray-600 dark:text-gray-400">
           We only use this for account messages.
         </p>
         <p
-          v-if="emailInvalid"
           id="input-demo-error"
-          class="text-sm text-red-700 dark:text-red-400"
+          class="empty:hidden text-sm text-red-700 dark:text-red-400"
         >
-          Enter a complete email address.
+          {{ emailInvalid ? 'Enter a complete email address.' : '' }}
         </p>
       </div>
       <KleanButton type="submit">Check form</KleanButton>
@@ -94,9 +89,9 @@ One command installs one framework-native source file. There is no initializer, 
 
 <CopyCode :code="usageSource" label="usage.vue" />
 
-The application owns the visible label, deterministic IDs, help and error elements, validation timing, and submitted value. When both help and error are visible, `aria-describedby` names both IDs. Removing the error removes its stale ID at the same time.
+The application owns the visible label, deterministic IDs, help and error elements, validation timing, and submitted value. Help and error nodes keep stable IDs, so `aria-describedby` never needs conditional string building. `aria-invalid="false"` is valid, and `empty:hidden` collapses an empty error. When an error appears, the existing relationship becomes useful automatically.
 
-This explicit repetition is smaller and clearer than a Field configuration language. Extract an application-owned form composition only when your product repeats the same complete markup and policy.
+This explicit repetition is smaller and clearer than a Field configuration language or accessibility helper. Extract an application-owned form composition only when your product repeats the same complete markup and policy.
 
 ## API
 
@@ -119,7 +114,8 @@ If that dense treatment is a recurring product concept, create an application-ow
 - Every input needs a visible associated label unless the application has a justified accessible-name alternative.
 - Help and error text connect through `aria-describedby`.
 - Invalid state uses `aria-invalid`; color is never the only signal.
+- Stable empty errors remain unannounced until they contain useful text.
 - Native required and disabled behavior stays native.
 - Focus remains visible in light, dark, and high-contrast contexts.
 - Validation waits for blur or submission instead of punishing untouched input.
-- A failed submission that needs announcement uses one application-owned error summary and focus recovery.
+- A failed submission that needs announcement uses one application-owned error summary and focus recovery, not `role="alert"` on every inline error.
