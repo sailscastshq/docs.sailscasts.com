@@ -11,7 +11,8 @@ The Klean CLI is a source installer for conventional Boring Stack applications:
 
 ```bash
 npx klean-ui add button
-npx klean-ui add field
+npx klean-ui add input
+npx klean-ui add textarea
 ```
 
 It has one job: place the right framework-native source in the right application path safely.
@@ -33,7 +34,7 @@ The CLI performs a deterministic pipeline:
 
 Bundling versioned registry metadata with the CLI keeps one invocation deterministic: the executable and the source it installs come from the same package version.
 
-Button contains one source file. Field expands to its complete native form foundation in dependency order. One conflicting target blocks that complete transaction before mutation.
+Button, Input, and Textarea each contain one source file. Registry items can still describe prerequisite and multi-file transactions when a future compound interaction genuinely needs them. One conflicting target blocks the complete transaction before mutation.
 
 ## Detection
 

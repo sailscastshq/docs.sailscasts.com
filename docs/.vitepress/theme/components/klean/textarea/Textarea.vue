@@ -9,46 +9,24 @@ import {
   watch
 } from 'vue'
 import { twMerge } from 'tailwind-merge'
-import { mergeDescribedBy, useFieldContext } from '../field/field-context.js'
 
 defineOptions({ inheritAttrs: false })
 
 const props = defineProps({
-  modelValue: { type: [String, Number], default: undefined },
-  id: { type: String, default: undefined },
-  name: { type: String, default: undefined },
-  disabled: { type: Boolean, default: undefined },
-  required: { type: Boolean, default: undefined }
+  modelValue: { type: [String, Number], default: undefined }
 })
 const emit = defineEmits(['update:modelValue'])
 const attrs = useAttrs()
-const field = useFieldContext()
 const element = ref()
 let composing = false
 let resizeObserver
 
-const resolvedId = computed(() => field?.controlId.value ?? props.id)
-const resolvedName = computed(() => props.name ?? field?.name.value)
-const resolvedDisabled = computed(
-  () => props.disabled ?? field?.disabled.value ?? false
-)
-const resolvedRequired = computed(
-  () => props.required ?? field?.required.value ?? false
-)
-const resolvedInvalid = computed(
-  () => attrs['aria-invalid'] ?? (field?.invalid.value ? 'true' : undefined)
-)
-const resolvedDescribedBy = computed(() =>
-  mergeDescribedBy(attrs['aria-describedby'], field?.describedBy.value)
-)
 const resolvedValue = computed(() => props.modelValue ?? attrs.value)
 
 const forwardedAttrs = computed(() => {
   const {
     class: _class,
     value: _value,
-    'aria-invalid': _ariaInvalid,
-    'aria-describedby': _ariaDescribedBy,
     'data-slot': _dataSlot,
     ...rest
   } = attrs
@@ -106,17 +84,7 @@ defineExpose({
   <textarea
     ref="element"
     v-bind="forwardedAttrs"
-    :id="resolvedId"
-    :name="resolvedName"
     :value="resolvedValue"
-    :disabled="resolvedDisabled"
-    :required="resolvedRequired"
-    :aria-invalid="resolvedInvalid"
-    :aria-describedby="resolvedDescribedBy"
-    :data-invalid="
-      resolvedInvalid === 'true' || resolvedInvalid === true ? '' : undefined
-    "
-    :data-disabled="resolvedDisabled ? '' : undefined"
     data-slot="textarea"
     :class="
       twMerge(
