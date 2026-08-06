@@ -26,6 +26,10 @@ const props = defineProps({
   files: {
     type: Array,
     default: undefined
+  },
+  dependencies: {
+    type: Array,
+    default: () => ['tailwind-merge']
   }
 })
 
@@ -67,6 +71,10 @@ const sourceFiles = computed(() =>
           source: props.source
         }
       ]
+)
+
+const dependencyCommand = computed(
+  () => `npm install ${props.dependencies.join(' ')}`
 )
 
 const activeMethod = ref('command')
@@ -218,8 +226,8 @@ function selectPackageManager(packageManager, focusTab = false) {
     >
       <ol class="klean-installation__steps">
         <li>
-          <h3>Install the direct dependency</h3>
-          <CopyCode code="npm install tailwind-merge" label="Terminal" />
+          <h3>Install direct dependencies</h3>
+          <CopyCode :code="dependencyCommand" label="Terminal" />
         </li>
         <li v-for="file in sourceFiles" :key="file.destination">
           <h3>Copy {{ file.filename }}</h3>
