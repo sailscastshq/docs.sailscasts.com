@@ -9,7 +9,7 @@ import Menu from '~/components/ui/menu/Menu.vue'
   <Menu id="project-actions" aria-label="Project actions" class="w-56">
     <button
       type="button"
-      class="flex w-full rounded px-3 py-2 text-left text-sm outline-none hover:bg-gray-100 focus:bg-gray-100"
+      class="flex w-full cursor-pointer rounded px-3 py-2 text-left text-sm outline-none hover:bg-gray-100 focus:bg-gray-100"
     >
       Redeploy
     </button>

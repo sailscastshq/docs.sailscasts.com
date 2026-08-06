@@ -46,11 +46,15 @@ const menuAttrs = computed(() => {
   return rest
 })
 const menuClasses = computed(() => twMerge('min-w-40 p-1', attrs.class))
+const TABBABLE_SELECTOR =
+  'a[href], button, input, select, textarea, [tabindex], [contenteditable="true"]'
 
 let interactionRoot
 let itemObserver
 let pendingFocus = 'first'
 let restoreOnClose = false
+let tabExitPending = false
+let tabExitTarget
 let typeahead = ''
 let typeaheadTimer
 
@@ -95,6 +99,60 @@ function restoreInvokerFocus() {
     ? activeInvoker.value
     : invokers()[0]
   invoker?.focus?.({ preventScroll: true })
+}
+
+function tabStopsOutsideMenu(root, content) {
+  return [...(root.querySelectorAll?.(TABBABLE_SELECTOR) ?? [])].filter(
+    (element) =>
+      !content?.contains(element) &&
+      element.tabIndex >= 0 &&
+      !element.matches(':disabled') &&
+      !element.closest('[hidden], [inert]')
+  )
+}
+
+function adjacentTabStop(backward) {
+  const content = contentElement()
+  const invoker = activeInvoker.value?.isConnected
+    ? activeInvoker.value
+    : invokers()[0]
+  let anchor = invoker
+  let root = content?.getRootNode?.() ?? document
+
+  while (anchor && root) {
+    const stops = tabStopsOutsideMenu(root, content)
+    const current = stops.indexOf(anchor)
+    let target
+
+    if (current >= 0) {
+      target = stops[current + (backward ? -1 : 1)]
+    } else {
+      const candidates = stops.filter((element) => {
+        const relation = anchor.compareDocumentPosition(element)
+        return backward ? Boolean(relation & 2) : Boolean(relation & 4)
+      })
+      target = backward ? candidates.at(-1) : candidates[0]
+    }
+
+    if (target) return target
+    if (!root.host) return undefined
+    anchor = root.host
+    root = anchor.getRootNode?.()
+  }
+
+  return undefined
+}
+
+function completeTabExit() {
+  if (tabExitTarget?.isConnected) {
+    tabExitTarget.focus({ preventScroll: true })
+  } else {
+    const root = contentElement()?.getRootNode?.() ?? document
+    root.activeElement?.blur?.()
+  }
+
+  tabExitTarget = undefined
+  tabExitPending = false
 }
 
 function itemRole(element) {
@@ -269,7 +327,11 @@ function handleKeydown(event) {
   }
 
   if (event.key === 'Tab') {
+    event.preventDefault()
     clearTypeahead()
+    restoreOnClose = false
+    tabExitTarget = adjacentTabStop(event.shiftKey)
+    tabExitPending = true
     closeMenu()
     return
   }
@@ -310,7 +372,8 @@ watch(
 
     clearTypeahead()
     menuItems()
-    if (restoreOnClose) restoreInvokerFocus()
+    if (tabExitPending) completeTabExit()
+    else if (restoreOnClose) restoreInvokerFocus()
     restoreOnClose = false
   },
   { flush: 'post' }
