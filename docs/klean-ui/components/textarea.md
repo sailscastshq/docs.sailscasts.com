@@ -17,6 +17,7 @@ import usageSource from '../snippets/textarea/usage.vue?raw'
 const note = ref(
   'This value represents a draft restored by the application.\n\nTextarea derives its height from the value already rendered.'
 )
+const noteError = ref('')
 </script>
 
 # Textarea
@@ -34,10 +35,17 @@ Textarea is a styled native control with one durable behavior: its presentation 
         v-model="note"
         name="note"
         rows="3"
-        aria-describedby="textarea-demo-help"
+        :aria-invalid="Boolean(noteError)"
+        aria-describedby="textarea-demo-help textarea-demo-error"
       />
       <p id="textarea-demo-help" class="text-sm text-gray-600 dark:text-gray-400">
         Edit the restored draft and watch the control follow its content.
+      </p>
+      <p
+        id="textarea-demo-error"
+        class="empty:hidden text-sm text-red-700 dark:text-red-400"
+      >
+        {{ noteError }}
       </p>
     </div>
   </template>
@@ -66,7 +74,7 @@ Textarea is a styled native control with one durable behavior: its presentation 
 
 <CopyCode :code="usageSource" label="usage.vue" />
 
-The surrounding label, help, error, IDs, validation, and value source remain ordinary application markup. There is no Field context or `autoGrow` switch.
+The surrounding label, help, error, IDs, validation, and value source remain ordinary application markup. Keep help and error nodes stable, bind `aria-invalid` to the boolean error state, and hide an empty error with `empty:hidden`. There is no Field context, accessibility helper, or `autoGrow` switch.
 
 ## Durable resizing
 
@@ -87,6 +95,7 @@ Textarea accepts native textarea attributes, framework-native value binding, and
 ## Accessibility contract
 
 - Use a real associated label and connect help or error text explicitly.
+- Keep description IDs stable instead of rebuilding them when an error changes.
 - Keep the native `name`, `required`, `disabled`, and form behavior.
 - Apply `aria-invalid` with useful visible error text.
 - Do not use placeholder text as the label.
