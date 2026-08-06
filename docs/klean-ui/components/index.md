@@ -29,6 +29,10 @@ A styled native textarea whose durable presentation grows from its current value
 
 A native-first non-modal floating surface with light dismissal, focus return, collision-aware positioning, and ordinary semantic content. A real button invokes it through the browser's `popovertarget` relationship.
 
+### [Menu](/klean-ui/components/menu)
+
+An accessible list of truthful button actions and link destinations built on Klean Popover. It adds roving focus, Arrow keys, Home/End, typeahead, disabled-item behavior, selection, and durable focus return while caller Tailwind owns the product treatment.
+
 ## What belongs in the catalog
 
 A component graduates when it has:
