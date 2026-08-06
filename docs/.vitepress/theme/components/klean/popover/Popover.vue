@@ -90,6 +90,7 @@ const contentClasses = computed(() =>
     attrs.class
   )
 )
+const dataSlot = computed(() => attrs['data-slot'] ?? 'popover-content')
 
 function invokers() {
   const root = content.value?.getRootNode?.() ?? document
@@ -313,7 +314,7 @@ defineExpose({ content, close, open })
     :id="contentId"
     popover="auto"
     :hidden="!nativePopover && !isOpen"
-    data-slot="popover-content"
+    :data-slot="dataSlot"
     :data-state="isOpen ? 'open' : 'closed'"
     :data-placement="resolvedPlacement"
     :class="contentClasses"

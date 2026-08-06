@@ -30,7 +30,7 @@ Klean installs readable component source into your application. There is no setu
 
 The CLI is a delivery tool. The installed component does not import a Klean runtime, and the application owns the copied file.
 
-Registry items may include prerequisites and more than one source file for future compound interactions. Button, Input, and Textarea are deliberately self-contained today: adding one installs one component source file.
+Registry items may include prerequisites and more than one source file. Button, Input, and Textarea are deliberately self-contained. Popover installs its focused geometry dependencies, and `npx klean-ui add menu` resolves Popover first before writing Menu. The full plan stays visible with `--dry-run`; prerequisite handling adds no configuration step.
 
 ## Conventional paths
 

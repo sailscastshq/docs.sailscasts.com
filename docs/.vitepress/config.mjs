@@ -116,7 +116,8 @@ function kleanUiGuide() {
         { text: 'Button', link: '/klean-ui/components/button' },
         { text: 'Input', link: '/klean-ui/components/input' },
         { text: 'Textarea', link: '/klean-ui/components/textarea' },
-        { text: 'Popover', link: '/klean-ui/components/popover' }
+        { text: 'Popover', link: '/klean-ui/components/popover' },
+        { text: 'Menu', link: '/klean-ui/components/menu' }
       ]
     },
     {
