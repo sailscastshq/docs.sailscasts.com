@@ -114,7 +114,8 @@ function kleanUiGuide() {
       items: [
         { text: 'Overview', link: '/klean-ui/components/' },
         { text: 'Button', link: '/klean-ui/components/button' },
-        { text: 'Field', link: '/klean-ui/components/field' }
+        { text: 'Input', link: '/klean-ui/components/input' },
+        { text: 'Textarea', link: '/klean-ui/components/textarea' }
       ]
     },
     {

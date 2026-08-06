@@ -17,9 +17,13 @@ Components do not share a visual variant API. Each page shows the behavioral con
 
 A native-first action primitive that can render a truthful button, anchor, or Boring Stack Link. It handles safe type defaults, disabled semantics, attribute forwarding, and caller-owned Tailwind classes.
 
-### [Field](/klean-ui/components/field)
+### [Input](/klean-ui/components/input)
 
-The native form foundation: Field, Label, Input, and Textarea. Field renders the common label and messages itself, generating accessible relationships by convention while validation, values, and every visual recipe remain application-owned.
+A styled native input that forwards native attributes and framework-native value binding. Labels, help, errors, IDs, validation, and layout remain visible application markup.
+
+### [Textarea](/klean-ui/components/textarea)
+
+A styled native textarea whose durable presentation grows from its current value and responsive width. Caller Tailwind can take ownership of height and resizing without a component prop.
 
 ## What belongs in the catalog
 
