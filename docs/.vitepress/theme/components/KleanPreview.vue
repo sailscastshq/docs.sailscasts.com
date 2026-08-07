@@ -173,37 +173,33 @@ function handleTabKeydown(event, index) {
       <span v-else class="klean-preview__filename">{{ filename }}</span>
     </header>
 
-    <Transition name="klean-panel" mode="out-in">
-      <section
-        v-if="activePanel === 'preview'"
-        :id="panelId('preview')"
-        key="preview"
-        role="tabpanel"
-        :aria-labelledby="tabId('preview')"
-        tabindex="0"
-        class="klean-preview__panel"
-      >
-        <div ref="previewHost" class="klean-preview__canvas"></div>
-        <Teleport v-if="previewTarget" :to="previewTarget">
-          <slot name="preview" />
-        </Teleport>
-      </section>
-      <section
-        v-else
-        :id="panelId('source')"
-        key="source"
-        role="tabpanel"
-        :aria-labelledby="tabId('source')"
-        tabindex="0"
-        class="klean-preview__panel klean-preview__source"
-      >
-        <p>{{ filename }}</p>
-        <div v-if="$slots.source" class="klean-preview__highlighted">
-          <slot name="source" />
-        </div>
-        <pre v-else tabindex="0"><code>{{ source }}</code></pre>
-      </section>
-    </Transition>
+    <section
+      v-show="activePanel === 'preview'"
+      :id="panelId('preview')"
+      role="tabpanel"
+      :aria-labelledby="tabId('preview')"
+      tabindex="0"
+      class="klean-preview__panel"
+    >
+      <div ref="previewHost" class="klean-preview__canvas"></div>
+      <Teleport v-if="previewTarget" :to="previewTarget">
+        <slot name="preview" />
+      </Teleport>
+    </section>
+    <section
+      v-show="activePanel === 'source'"
+      :id="panelId('source')"
+      role="tabpanel"
+      :aria-labelledby="tabId('source')"
+      tabindex="0"
+      class="klean-preview__panel klean-preview__source"
+    >
+      <p>{{ filename }}</p>
+      <div v-if="$slots.source" class="klean-preview__highlighted">
+        <slot name="source" />
+      </div>
+      <pre v-else tabindex="0"><code>{{ source }}</code></pre>
+    </section>
 
     <figcaption v-if="$slots.caption">
       <slot name="caption" />
@@ -397,19 +393,6 @@ function handleTabKeydown(event, index) {
   white-space: nowrap;
 }
 
-.klean-panel-enter-active,
-.klean-panel-leave-active {
-  transition:
-    opacity 100ms ease,
-    transform 100ms ease;
-}
-
-.klean-panel-enter-from,
-.klean-panel-leave-to {
-  opacity: 0;
-  transform: translateY(2px);
-}
-
 @media (max-width: 480px) {
   .klean-preview__toolbar {
     gap: 0.25rem;
@@ -439,9 +422,7 @@ function handleTabKeydown(event, index) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .klean-preview__toolbar [role='tab']::after,
-  .klean-panel-enter-active,
-  .klean-panel-leave-active {
+  .klean-preview__toolbar [role='tab']::after {
     transition: none;
   }
 }

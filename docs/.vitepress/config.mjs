@@ -118,7 +118,8 @@ function kleanUiGuide() {
         { text: 'Textarea', link: '/klean-ui/components/textarea' },
         { text: 'Popover', link: '/klean-ui/components/popover' },
         { text: 'Menu', link: '/klean-ui/components/menu' },
-        { text: 'Toast', link: '/klean-ui/components/toast' }
+        { text: 'Toast', link: '/klean-ui/components/toast' },
+        { text: 'Slide', link: '/klean-ui/components/slide' }
       ]
     },
     {
