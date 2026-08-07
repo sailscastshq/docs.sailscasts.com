@@ -37,6 +37,10 @@ An accessible list of truthful button actions and link destinations built on Kle
 
 Accessible notifications with semantic actions, long-running updates, reduced motion, and caller-owned Tailwind.
 
+### [Slide](/klean-ui/components/slide)
+
+A native-button confirmation control with an optional pointer slide, truthful pending state, resilient cancellation, RTL geometry, and caller-owned progress styling.
+
 ## What belongs in the catalog
 
 A component graduates when it has:
