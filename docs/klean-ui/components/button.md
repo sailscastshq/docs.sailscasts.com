@@ -39,11 +39,6 @@ There are intentionally no `variant`, `size`, `color`, `tone`, `radius`, `elevat
 <<< ../../.vitepress/theme/components/klean/Button.vue
 
   </template>
-  <template #caption>
-    Switch to Source to inspect or copy the file rendered by this documentation
-    preview. The installer selects Vue, React, or Svelte source while preserving
-    the same contract.
-  </template>
 </KleanPreview>
 
 ## Installation
@@ -97,9 +92,7 @@ Do not wrap a Button inside an anchor. Render Button **as** the anchor or Link.
 
   </template>
   <template #caption>
-    The last preview uses a native anchor because this documentation site does
-    not run inside an Inertia application. In a Boring Stack app, pass its Link
-    component directly.
+    Pass the Boring Stack Link component for internal navigation.
   </template>
 </KleanPreview>
 

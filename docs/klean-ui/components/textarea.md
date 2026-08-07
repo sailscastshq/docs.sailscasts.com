@@ -54,10 +54,6 @@ Textarea is a styled native control with one durable behavior: its presentation 
 <<< ../../.vitepress/theme/components/klean/textarea/Textarea.vue
 
   </template>
-  <template #caption>
-    Source shows the complete component, including its Tailwind defaults and
-    content-derived resizing behavior.
-  </template>
 </KleanPreview>
 
 ## Installation

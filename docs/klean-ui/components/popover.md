@@ -66,11 +66,6 @@ The application owns the truthful content and every visual decision. There is no
 <<< ../../.vitepress/theme/components/klean/popover/Popover.vue
 
   </template>
-  <template #caption>
-    This preview runs inside an isolated Shadow DOM root. The native relationship,
-    Tailwind source, top-layer rendering, dismissal, and collision handling remain
-    intact.
-  </template>
 </KleanPreview>
 
 ## Installation

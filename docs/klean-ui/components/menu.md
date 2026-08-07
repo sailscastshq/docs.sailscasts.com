@@ -93,10 +93,7 @@ The application supplies real buttons and links plus ordinary Tailwind. There is
 
   </template>
   <template #caption>
-    This preview runs inside an isolated Shadow DOM root. Click Actions, then try
-    Arrow Up/Down, Home/End, typing “d”, Tab, and Escape. Arrow keys move inside;
-    Tab exits to the next page control. The children remain real buttons and an
-    anchor.
+    Open Actions, then try Arrow Up/Down, Home/End, typing “d”, Tab, and Escape.
   </template>
 </KleanPreview>
 
@@ -279,6 +276,6 @@ The preview Source tab contains the complete Vue component. The equivalent frame
 - Button and anchor children keep their truthful native activation while Menu supplies composite roles and roving focus.
 - Disabled items cannot activate and never become the active roving focus stop.
 - Escape and selection restore focus only when the invoker still exists; Tab exits forward or backward in composed document order; outside interaction does not steal focus.
-- Shadow DOM, RTL, dynamic items, listener cleanup, observer cleanup, and typeahead-timer cleanup are part of the tested contract.
+- Keyboard behavior remains correct in RTL layouts and as items change.
 - Menu open state is ephemeral and is never written to storage, cookies, server data, or the URL.
 - Meaningful state selected from a menu follows the [Durable UI contract](/klean-ui/durable-ui); appearance follows the application-owned [theming convention](/klean-ui/theming).
