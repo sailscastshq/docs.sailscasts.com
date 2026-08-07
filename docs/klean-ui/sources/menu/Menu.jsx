@@ -11,6 +11,8 @@ import Popover from '../popover/Popover.jsx'
 
 const ITEM_SELECTOR =
   '[role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"]'
+const TABBABLE_SELECTOR =
+  'a[href], button, input, select, textarea, [tabindex], [contenteditable="true"]'
 
 function eventPath(event) {
   return (
@@ -54,6 +56,7 @@ const Menu = forwardRef(function Menu(
   const activeInvoker = useRef(null)
   const pendingFocus = useRef('first')
   const restoreOnClose = useRef(false)
+  const tabExit = useRef({ pending: false, target: undefined })
   const typeahead = useRef('')
   const typeaheadTimer = useRef()
   const [internalOpen, setInternalOpen] = useState(defaultOpen)
@@ -95,6 +98,61 @@ const Menu = forwardRef(function Menu(
       : invokers()[0]
     invoker?.focus?.({ preventScroll: true })
   }, [invokers])
+
+  const adjacentTabStop = useCallback(
+    (backward) => {
+      const content = contentElement()
+      const invoker = activeInvoker.current?.isConnected
+        ? activeInvoker.current
+        : invokers()[0]
+      let anchor = invoker
+      let root = content?.getRootNode?.() ?? document
+
+      while (anchor && root) {
+        const stops = [
+          ...(root.querySelectorAll?.(TABBABLE_SELECTOR) ?? [])
+        ].filter(
+          (element) =>
+            !content?.contains(element) &&
+            element.tabIndex >= 0 &&
+            !element.matches(':disabled') &&
+            !element.closest('[hidden], [inert]')
+        )
+        const current = stops.indexOf(anchor)
+        let target
+
+        if (current >= 0) {
+          target = stops[current + (backward ? -1 : 1)]
+        } else {
+          const candidates = stops.filter((element) => {
+            const relation = anchor.compareDocumentPosition(element)
+            return backward ? Boolean(relation & 2) : Boolean(relation & 4)
+          })
+          target = backward ? candidates.at(-1) : candidates[0]
+        }
+
+        if (target) return target
+        if (!root.host) return undefined
+        anchor = root.host
+        root = anchor.getRootNode?.()
+      }
+
+      return undefined
+    },
+    [contentElement, invokers]
+  )
+
+  const completeTabExit = useCallback(() => {
+    const target = tabExit.current.target
+    if (target?.isConnected) {
+      target.focus({ preventScroll: true })
+    } else {
+      const root = contentElement()?.getRootNode?.() ?? document
+      root.activeElement?.blur?.()
+    }
+
+    tabExit.current = { pending: false, target: undefined }
+  }, [contentElement])
 
   const menuItems = useCallback(() => {
     const content = contentElement()
@@ -195,10 +253,12 @@ const Menu = forwardRef(function Menu(
 
     clearTypeahead()
     menuItems()
-    if (restoreOnClose.current) restoreInvokerFocus()
+    if (tabExit.current.pending) completeTabExit()
+    else if (restoreOnClose.current) restoreInvokerFocus()
     restoreOnClose.current = false
   }, [
     clearTypeahead,
+    completeTabExit,
     focusEdge,
     isOpen,
     menuItems,
@@ -331,7 +391,13 @@ const Menu = forwardRef(function Menu(
       event.stopPropagation()
       closeMenu({ restoreFocus: true })
     } else if (event.key === 'Tab') {
+      event.preventDefault()
       clearTypeahead()
+      restoreOnClose.current = false
+      tabExit.current = {
+        pending: true,
+        target: adjacentTabStop(event.shiftKey)
+      }
       closeMenu()
     } else if (event.key === 'ArrowDown') {
       nextIndex = currentIndex < 0 ? 0 : (currentIndex + 1) % items.length

@@ -27,7 +27,7 @@ import Menu from '~/components/ui/menu/Menu.vue'
       </a>
       <button
         type="button"
-        class="flex w-full border-2 border-transparent px-3 py-2 text-left text-sm font-medium text-red-700 outline-none hover:border-red-700 focus:border-red-700"
+        class="flex w-full cursor-pointer border-2 border-transparent px-3 py-2 text-left text-sm font-medium text-red-700 outline-none hover:border-red-700 focus:border-red-700"
       >
         Void invoice
       </button>
@@ -51,7 +51,7 @@ import Menu from '~/components/ui/menu/Menu.vue'
     >
       <button
         type="button"
-        class="flex w-full rounded px-2 py-2 text-left text-sm text-gray-200 outline-none hover:bg-white/10 focus:bg-white/10"
+        class="flex w-full cursor-pointer rounded px-2 py-2 text-left text-sm text-gray-200 outline-none hover:bg-white/10 focus:bg-white/10"
       >
         Redeploy
       </button>

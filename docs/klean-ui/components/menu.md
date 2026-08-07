@@ -62,7 +62,7 @@ The application supplies real buttons and links plus ordinary Tailwind. There is
     >
       <button
         type="button"
-        class="flex w-full rounded px-3 py-2 text-left text-sm text-gray-700 outline-none hover:bg-gray-100 focus:bg-gray-100 focus:text-gray-950 dark:text-gray-200 dark:hover:bg-white/10 dark:focus:bg-white/10"
+        class="flex w-full cursor-pointer rounded px-3 py-2 text-left text-sm text-gray-700 outline-none hover:bg-gray-100 focus:bg-gray-100 focus:text-gray-950 dark:text-gray-200 dark:hover:bg-white/10 dark:focus:bg-white/10"
       >
         Edit project
       </button>
@@ -81,7 +81,7 @@ The application supplies real buttons and links plus ordinary Tailwind. There is
       </button>
       <button
         type="button"
-        class="flex w-full rounded px-3 py-2 text-left text-sm text-red-700 outline-none hover:bg-red-50 focus:bg-red-50 focus:text-red-800 dark:text-red-400 dark:hover:bg-red-500/10 dark:focus:bg-red-500/10"
+        class="flex w-full cursor-pointer rounded px-3 py-2 text-left text-sm text-red-700 outline-none hover:bg-red-50 focus:bg-red-50 focus:text-red-800 dark:text-red-400 dark:hover:bg-red-500/10 dark:focus:bg-red-500/10"
       >
         Delete project
       </button>
@@ -94,8 +94,9 @@ The application supplies real buttons and links plus ordinary Tailwind. There is
   </template>
   <template #caption>
     This preview runs inside an isolated Shadow DOM root. Click Actions, then try
-    Arrow Up/Down, Home/End, typing “d”, and Escape. The children remain real
-    buttons and an anchor.
+    Arrow Up/Down, Home/End, typing “d”, Tab, and Escape. Arrow keys move inside;
+    Tab exits to the next page control. The children remain real buttons and an
+    anchor.
   </template>
 </KleanPreview>
 
@@ -136,7 +137,11 @@ The framework syntax changes; the HTML contract does not. A real button uses nat
 Use a native button when selection performs an action:
 
 ```vue
-<button type="button" class="..." @click="redeploy">Redeploy</button>
+<button
+  type="button"
+  class="cursor-pointer ..."
+  @click="redeploy"
+>Redeploy</button>
 ```
 
 Use an anchor for navigation. The Boring Stack Link renders an anchor too, so it works without an adapter:
@@ -146,6 +151,8 @@ Use an anchor for navigation. The Boring Stack Link renders an anchor too, so it
 ```
 
 Menu does not accept an item array because an array forces the component to guess whether each record is a button, anchor, download, or framework Link. Authorization, conditional visibility, event handlers, and destinations remain obvious in application markup.
+
+Native buttons keep the browser's default arrow cursor, so button-item recipes opt into `cursor-pointer` explicitly. That visible Tailwind class is part of the application-owned visual API; Menu does not mutate its children's appearance.
 
 ### Disabled items
 
@@ -185,7 +192,7 @@ Vue uses `v-model:open`, React uses `open` with `onOpenChange`, and Svelte uses 
 - Enter and Space activation remain native to the real button or anchor, avoiding double firing.
 - Escape closes and restores focus to the invoker.
 - Selection closes and restores focus; link navigation may then move to the destination.
-- Tab closes without pulling focus backward.
+- Tab or Shift+Tab closes and continues to the next or previous control outside the menu; neither key moves between menu items.
 - Outside interaction closes without stealing focus from the selected target.
 
 The vertical key contract is the same in right-to-left documents. Menu adds no animation, so reduced-motion users get a stable surface by default. Product motion, if useful, belongs in caller Tailwind and must use `motion-safe:` or an equivalent fallback.
@@ -223,7 +230,7 @@ Slipway needs compact operational actions; Hagfish needs a stronger border and o
           class="w-64 rounded-none border-2 border-black p-2 shadow-[6px_6px_0_0_#000]"
         >
           <a href="#product-recipes" class="flex w-full border-2 border-transparent px-3 py-2 text-sm font-medium text-black no-underline outline-none hover:border-black focus:border-black">Preview invoice</a>
-          <button type="button" class="flex w-full border-2 border-transparent px-3 py-2 text-left text-sm font-medium text-red-700 outline-none hover:border-red-700 focus:border-red-700">Void invoice</button>
+          <button type="button" class="flex w-full cursor-pointer border-2 border-transparent px-3 py-2 text-left text-sm font-medium text-red-700 outline-none hover:border-red-700 focus:border-red-700">Void invoice</button>
         </KleanMenu>
       </div>
       <div class="dark bg-gray-950 p-6 text-white">
@@ -241,7 +248,7 @@ Slipway needs compact operational actions; Hagfish needs a stronger border and o
           aria-label="Deployment actions"
           class="w-52 border-gray-700 bg-gray-900 p-1 text-white shadow-xl"
         >
-          <button type="button" class="flex w-full rounded px-2 py-2 text-left text-sm text-gray-200 outline-none hover:bg-white/10 focus:bg-white/10">Redeploy</button>
+          <button type="button" class="flex w-full cursor-pointer rounded px-2 py-2 text-left text-sm text-gray-200 outline-none hover:bg-white/10 focus:bg-white/10">Redeploy</button>
           <a href="#product-recipes" class="flex w-full rounded px-2 py-2 text-sm text-gray-200 no-underline outline-none hover:bg-white/10 focus:bg-white/10">View logs</a>
           <button type="button" disabled class="flex w-full cursor-not-allowed rounded px-2 py-2 text-left text-sm text-gray-500 outline-none">Stop provisioning</button>
         </KleanMenu>
@@ -271,7 +278,7 @@ The preview Source tab contains the complete Vue component. The equivalent frame
 - The invoker remains a real button and automatically receives `aria-haspopup="menu"`, `aria-controls`, and synchronized `aria-expanded`.
 - Button and anchor children keep their truthful native activation while Menu supplies composite roles and roving focus.
 - Disabled items cannot activate and never become the active roving focus stop.
-- Escape and selection restore focus only when the invoker still exists; Tab and outside interaction do not steal focus.
+- Escape and selection restore focus only when the invoker still exists; Tab exits forward or backward in composed document order; outside interaction does not steal focus.
 - Shadow DOM, RTL, dynamic items, listener cleanup, observer cleanup, and typeahead-timer cleanup are part of the tested contract.
 - Menu open state is ephemeral and is never written to storage, cookies, server data, or the URL.
 - Meaningful state selected from a menu follows the [Durable UI contract](/klean-ui/durable-ui); appearance follows the application-owned [theming convention](/klean-ui/theming).

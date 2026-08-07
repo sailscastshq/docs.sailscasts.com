@@ -17,7 +17,9 @@ import quickUsage from './snippets/introduction/usage.vue?raw'
 
 Klean UI means **Kelvin's Lean UI**. It is the source-owned component system for The Boring JavaScript Stack: accessible markup, Durable UI behavior, neutral defaults, and Tailwind left directly in your hands.
 
-Vue, React, and Svelte are equal product targets. Each implementation uses its framework's native conventions while preserving the same semantics, states, anatomy, accessibility outcomes, and source-ownership model.
+**Vue, React, and Svelte. Three framework-native sources, one Klean contract.**
+
+They are equal product targets. Each implementation uses its framework's native conventions while preserving the same semantics, states, anatomy, accessibility outcomes, and source-ownership model—without adding a Klean runtime to the application.
 
 <KleanPreview id="klean-introduction" :source="quickUsage" filename="usage.vue">
   <template #preview>

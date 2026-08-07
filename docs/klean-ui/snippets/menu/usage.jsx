@@ -9,7 +9,7 @@ export default function ProjectActions() {
       <Menu id="project-actions" aria-label="Project actions" className="w-56">
         <button
           type="button"
-          className="flex w-full rounded px-3 py-2 text-left text-sm outline-none hover:bg-gray-100 focus:bg-gray-100"
+          className="flex w-full cursor-pointer rounded px-3 py-2 text-left text-sm outline-none hover:bg-gray-100 focus:bg-gray-100"
         >
           Redeploy
         </button>
