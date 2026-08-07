@@ -33,6 +33,10 @@ A native-first non-modal floating surface with light dismissal, focus return, co
 
 An accessible list of truthful button actions and link destinations built on Klean Popover. It adds roving focus, Arrow keys, Home/End, typeahead, disabled-item behavior, selection, and durable focus return while caller Tailwind owns the product treatment.
 
+### [Toast](/klean-ui/components/toast)
+
+Accessible notifications with semantic actions, long-running updates, reduced motion, and caller-owned Tailwind.
+
 ## What belongs in the catalog
 
 A component graduates when it has:

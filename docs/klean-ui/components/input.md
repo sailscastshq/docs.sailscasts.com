@@ -68,8 +68,7 @@ Klean deliberately does not supply Field, Label, description, or error component
 
   </template>
   <template #caption>
-    Submit once to reveal an application-owned error. Source shows the complete
-    component, including every neutral Tailwind default rendered in the preview.
+    Submit once to reveal the application-owned error.
   </template>
 </KleanPreview>
 
