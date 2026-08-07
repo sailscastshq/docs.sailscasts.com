@@ -31,6 +31,13 @@ const { copied, copyFailed, copy } = useClipboard()
 
 let themeObserver
 
+function extractPreviewStyles(source) {
+  return [...source.matchAll(/<style(?:\s[^>]*)?>([\s\S]*?)<\/style>/gi)]
+    .map(([, styles]) => styles.trim())
+    .filter(Boolean)
+    .join('\n')
+}
+
 function syncPreviewTheme() {
   previewTarget.value?.classList.toggle(
     'dark',
@@ -43,7 +50,7 @@ onMounted(() => {
   const style = document.createElement('style')
   const stage = document.createElement('div')
 
-  style.textContent = `${previewStyles}\n
+  style.textContent = `${previewStyles}\n${extractPreviewStyles(props.source)}\n
     :host { display: block; }
 
     .klean-preview__stage {
