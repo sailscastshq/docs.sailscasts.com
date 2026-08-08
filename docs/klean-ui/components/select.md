@@ -11,6 +11,7 @@ import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanSelect from '../../.vitepress/theme/components/klean/select/Select.vue'
+import SlipwaySelectRecipe from '../../.vitepress/theme/components/klean/select/SlipwaySelectRecipe.vue'
 import selectSource from '../../.vitepress/theme/components/klean/select/Select.vue?raw'
 import popoverSource from '../../.vitepress/theme/components/klean/popover/Popover.vue?raw'
 import reactSource from '../sources/select/Select.jsx?raw'
@@ -26,8 +27,6 @@ const roleOptions = [
   { value: 'editor', label: 'Editor', disabled: true },
   { value: 'administrator', label: 'Administrator' }
 ]
-const invoiceStatus = ref('draft')
-const environment = ref('production')
 const vueFiles = [
   {
     filename: 'Popover.vue',
@@ -213,53 +212,16 @@ hatch.
 
 ### Product recipes
 
-Hagfish can retain its square border and offset shadow while Slipway keeps its
-compact operational treatment. They share behavior without selecting a Klean
-theme.
+This compact treatment comes directly from Slipway's Bearing feedback composer.
+Source-app recipes appear here only when they map to an interface that actually
+exists; Klean does not invent a product look to fill a comparison.
 
-<KleanPreview id="select-products" :source="productSource" filename="product-selects.vue">
+<KleanPreview id="select-products" :source="productSource" filename="slipway-select.vue">
   <template #preview>
-    <div class="grid w-full max-w-2xl gap-8 sm:grid-cols-2">
-      <section class="bg-[#f4f0e8] p-6 [&_[data-slot=select-content]]:rounded-none [&_[data-slot=select-content]]:border-2 [&_[data-slot=select-content]]:border-black [&_[data-slot=select-content]]:shadow-[6px_6px_0_0_#000]">
-        <p class="mb-5 font-mono text-xs uppercase tracking-[0.18em] text-gray-600">
-          Hagfish / invoice
-        </p>
-        <label for="docs-invoice-status" class="mb-2 block text-sm font-medium text-black">
-          Invoice status
-        </label>
-        <KleanSelect
-          id="docs-invoice-status"
-          v-model="invoiceStatus"
-          :options="[
-            { value: 'draft', label: 'Draft' },
-            { value: 'sent', label: 'Sent' },
-            { value: 'paid', label: 'Paid' }
-          ]"
-          class="rounded-none border-2 border-black bg-white text-black shadow-[4px_4px_0_0_#000] hover:border-black focus-visible:border-black focus-visible:outline-black"
-        />
-      </section>
-      <section class="dark bg-gray-950 p-6 text-white [&_[data-slot=select-content]]:border-gray-700 [&_[data-slot=select-content]]:bg-gray-900 [&_[data-slot=select-content]]:shadow-xl">
-        <p class="mb-5 font-mono text-xs uppercase tracking-[0.18em] text-gray-400">
-          Slipway / deploy
-        </p>
-        <label for="docs-environment" class="mb-2 block text-sm font-medium">
-          Environment
-        </label>
-        <KleanSelect
-          id="docs-environment"
-          v-model="environment"
-          :options="[
-            { value: 'preview', label: 'Preview' },
-            { value: 'staging', label: 'Staging' },
-            { value: 'production', label: 'Production' }
-          ]"
-          class="min-h-9 border-gray-700 bg-gray-900 px-3 py-1.5 text-sm text-white shadow-none hover:border-gray-600 focus-visible:border-white focus-visible:outline-white"
-        />
-      </section>
-    </div>
+    <SlipwaySelectRecipe />
   </template>
   <template #caption>
-    Every visual choice is ordinary caller Tailwind. Neither treatment needs a variant or theme selector.
+    Slipway's compact trigger and popup are ordinary caller Tailwind. They do not require a variant or theme selector.
   </template>
 </KleanPreview>
 
