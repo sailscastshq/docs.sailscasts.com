@@ -198,7 +198,7 @@ The vertical key contract is the same in right-to-left documents. Menu adds no a
 
 - **Menu** is a composite widget of actions and destinations with arrow navigation and typeahead.
 - **Popover** holds ordinary forms, filters, help, or previews and keeps normal Tab order.
-- **Select** chooses one value and has selected-option behavior.
+- [**Select**](/klean-ui/components/select) chooses one value and has selected-option behavior.
 - **Combobox** combines text input, filtering, and an option popup.
 - **Dialog** is modal, contains focus, and makes the background inert.
 
@@ -284,4 +284,5 @@ The preview Source tab contains the complete Vue component. The equivalent frame
 
 - [Popover](/klean-ui/components/popover) — a generic non-modal surface without menu semantics.
 - [Button](/klean-ui/components/button) — the truthful invoker and action element.
+- [Select](/klean-ui/components/select) — a fixed-list persistent value rather than an action.
 - [Dialog](/klean-ui/components/dialog) — modal content that makes the background inert.

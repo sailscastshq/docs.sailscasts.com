@@ -118,6 +118,7 @@ function kleanUiGuide() {
         { text: 'Textarea', link: '/klean-ui/components/textarea' },
         { text: 'Popover', link: '/klean-ui/components/popover' },
         { text: 'Menu', link: '/klean-ui/components/menu' },
+        { text: 'Select', link: '/klean-ui/components/select' },
         { text: 'Dialog', link: '/klean-ui/components/dialog' },
         { text: 'Calendar', link: '/klean-ui/components/calendar' },
         { text: 'Date Picker', link: '/klean-ui/components/date-picker' },
