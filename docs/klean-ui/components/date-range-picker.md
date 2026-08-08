@@ -23,6 +23,7 @@ import reactUsage from '../snippets/date-range-picker/usage.jsx?raw'
 import svelteUsage from '../snippets/date-range-picker/usage.svelte?raw'
 
 const period = ref({ start: '2026-08-08', end: '2026-08-12' })
+const unavailable = (date) => date >= '2026-08-14' && date <= '2026-08-16'
 const vueFiles = [
   {
     filename: 'Input.vue',
@@ -67,11 +68,15 @@ visible in Calendar.
         label="Reporting period"
         start-label="From"
         end-label="To"
+        :unavailable="unavailable"
         required
       />
       <output class="font-mono text-sm text-gray-600 dark:text-gray-300">
         {{ period.start }} → {{ period.end }}
       </output>
+      <p class="text-sm text-gray-600 dark:text-gray-400">
+        August 14–16 is unavailable, so a contiguous range cannot cross it.
+      </p>
     </div>
   </template>
   <template #source>
@@ -126,8 +131,9 @@ when the date surface should remain visible.
 ## Value and form contract
 
 The value is `{ start, end }`. A picker named `period` submits two native form
-entries: `period[start]` and `period[end]`. An unfinished boundary stays an
-empty string rather than becoming a partial date or a timezone-dependent Date.
+entries: `period[start]` and `period[end]`. Committed state is always empty,
+start-only, or a complete ordered range. It never contains a partial date, an
+end without a start, or a timezone-dependent Date.
 
 Ranges are inclusive: the start and end may be the same day. That is useful for
 one-day reports and stays. If a product requires at least one day between the
@@ -136,6 +142,24 @@ Pickers with derived `min` and `max` values.
 
 Choosing a second date earlier than the first orders the result. The component
 does not leave the application with an inverted range.
+
+## Range rules
+
+- The calendar anchors to the field that opened it. It flips or shifts before
+  leaving the viewport and follows the field through scroll, resize, and layout
+  changes.
+- Start and end are inclusive; selecting the same date twice creates a valid
+  one-day range.
+- Reverse calendar selection is ordered automatically. An inverted typed draft
+  is reported as invalid without changing committed application state.
+- Clearing the start clears both boundaries. Typing an end without a start
+  remains an invalid draft.
+- `min` and `max` constrain both boundaries. An `unavailable` date cannot be
+  selected or crossed, so the result remains one contiguous range.
+- Arrow Down opens from either field. Escape and explicit dismissal return
+  focus to that field; outside dismissal leaves focus at the new target.
+- Required, disabled, readonly, controlled, uncontrolled, locale, direction,
+  and native form behavior need no additional configuration.
 
 ## API
 

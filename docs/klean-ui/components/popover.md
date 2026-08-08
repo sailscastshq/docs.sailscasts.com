@@ -129,6 +129,11 @@ Use the framework-native `close` value when an application action already runs c
 
 Escape and explicit dismissal return focus to the connected invoker. Outside pointer dismissal leaves focus with the element the person selected instead of moving it unexpectedly.
 
+Composed controls may pass their active element when opening programmatically.
+Vue and React expose `open(source)`; Svelte exposes `show(source)`. That element
+becomes the placement and focus-return anchor, so Date Picker and Date Range
+Picker remain attached to the field currently in use.
+
 ## Observable, never persisted
 
 Most Popovers need no application state. Observe visibility only when another part of the interface truly responds to it.

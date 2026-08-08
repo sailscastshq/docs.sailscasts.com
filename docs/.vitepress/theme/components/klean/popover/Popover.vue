@@ -105,7 +105,7 @@ function eventPath(event) {
 }
 
 function resolveInvoker(candidate) {
-  if (candidate?.getAttribute?.('popovertarget') === contentId.value) {
+  if (candidate?.isConnected) {
     activeInvoker.value = candidate
   }
 
@@ -168,7 +168,8 @@ function close({ restoreFocus = isOpen.value } = {}) {
   setOpen(false, { restoreFocus })
 }
 
-function open() {
+function open(source) {
+  resolveInvoker(source)
   setOpen(true)
 }
 
@@ -216,9 +217,12 @@ function handleFallbackInvokerClick(event) {
 
 function handleOutsidePointer(event) {
   const path = eventPath(event)
+  const reference = resolveInvoker()
 
   if (
     path.includes(content.value) ||
+    (reference &&
+      (path.includes(reference) || reference.contains?.(event.target))) ||
     invokers().some(
       (invoker) => path.includes(invoker) || invoker.contains(event.target)
     )
@@ -281,9 +285,11 @@ async function syncOpenEffects() {
   document.addEventListener('pointerdown', handleOutsidePointer, true)
 }
 
-watch(() => [isOpen.value, props.placement, props.offset], syncOpenEffects, {
-  flush: 'post'
-})
+watch(
+  () => [isOpen.value, props.placement, props.offset, activeInvoker.value],
+  syncOpenEffects,
+  { flush: 'post' }
+)
 
 onMounted(() => {
   nativePopover.value =

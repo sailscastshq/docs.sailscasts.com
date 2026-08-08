@@ -9,6 +9,7 @@ import {
 import { twMerge } from 'tailwind-merge'
 import Calendar from '../calendar/Calendar.jsx'
 import {
+  addDays,
   compareDates,
   dateIsUnavailable,
   dateLabel,
@@ -23,6 +24,22 @@ function normalizeRange(value) {
     start: parseIsoDate(value?.start) ? value.start : '',
     end: parseIsoDate(value?.end) ? value.end : ''
   }
+}
+
+function rangeContainsUnavailable(start, end, unavailable) {
+  if (!unavailable || !parseIsoDate(start) || !parseIsoDate(end)) return false
+  const [first, last] =
+    compareDates(start, end) <= 0 ? [start, end] : [end, start]
+
+  for (
+    let date = first;
+    date && compareDates(date, last) <= 0;
+    date = addDays(date, 1)
+  ) {
+    if (unavailable(date)) return true
+  }
+
+  return false
 }
 
 const DateRangePicker = forwardRef(function DateRangePicker(
@@ -65,6 +82,7 @@ const DateRangePicker = forwardRef(function DateRangePicker(
   const [endDraft, setEndDraft] = useState(range.end)
   const [activePart, setActivePart] = useState('start')
   const [preview, setPreview] = useState('')
+  const [internalPopoverOpen, setInternalPopoverOpen] = useState(defaultOpen)
   const startInput = useRef(null)
   const endInput = useRef(null)
   const popoverRef = useRef(null)
@@ -77,16 +95,25 @@ const DateRangePicker = forwardRef(function DateRangePicker(
   const endInvalid = Boolean(
     endDraft && (!parseIsoDate(endDraft) || dateIsUnavailable(endDraft, limits))
   )
+  const endWithoutStartInvalid = Boolean(endDraft && !startDraft)
   const orderInvalid = Boolean(
     parseIsoDate(startDraft) &&
       parseIsoDate(endDraft) &&
       compareDates(endDraft, startDraft) < 0
   )
+  const rangeUnavailable = Boolean(
+    !orderInvalid && rangeContainsUnavailable(startDraft, endDraft, unavailable)
+  )
+  const popoverOpen = open === undefined ? internalPopoverOpen : open
   let statusText
-  if (orderInvalid)
+  if (endWithoutStartInvalid)
+    statusText = 'Choose a start date before the end date.'
+  else if (orderInvalid)
     statusText = 'The end date must be on or after the start date.'
   else if (startInvalid || endInvalid)
     statusText = 'Enter available dates as YYYY-MM-DD.'
+  else if (rangeUnavailable)
+    statusText = 'The range cannot include an unavailable date.'
   else if (range.start && range.end)
     statusText = `${dateLabel(range.start, locale)} through ${dateLabel(range.end, locale)}.`
   else if (range.start) statusText = 'Choose an end date.'
@@ -105,16 +132,34 @@ const DateRangePicker = forwardRef(function DateRangePicker(
     onValueChange?.(normalized)
   }
 
-  function openPart(part) {
+  function calendarUnavailable(date) {
+    return (
+      dateIsUnavailable(date, limits) ||
+      (activePart === 'end' &&
+        range.start &&
+        rangeContainsUnavailable(range.start, date, unavailable))
+    )
+  }
+
+  function openPart(part, source) {
+    if (disabled || readOnly) return
     setActivePart(part)
     setPreview('')
-    popoverRef.current?.open()
+    const input = part === 'end' ? endInput.current : startInput.current
+    popoverRef.current?.open(source ?? input)
   }
 
   function handleDraft(part, event) {
     const next = event.target.value.trim()
     if (part === 'start') setStartDraft(next)
     else setEndDraft(next)
+
+    if (part === 'start' && !next) {
+      setEndDraft('')
+      updateRange({ start: '', end: '' })
+      return
+    }
+    if (part === 'end' && next && !range.start) return
     if (next && (!parseIsoDate(next) || dateIsUnavailable(next, limits))) return
     const nextRange = {
       start: part === 'start' ? next : range.start,
@@ -127,10 +172,19 @@ const DateRangePicker = forwardRef(function DateRangePicker(
     ) {
       return
     }
+    if (
+      nextRange.start &&
+      nextRange.end &&
+      rangeContainsUnavailable(nextRange.start, nextRange.end, unavailable)
+    ) {
+      return
+    }
     updateRange(nextRange)
   }
 
   function chooseDate(date) {
+    if (disabled || readOnly || calendarUnavailable(date)) return
+
     if (activePart === 'start' || !range.start) {
       updateRange({ start: date, end: '' })
       setStartDraft(date)
@@ -150,6 +204,11 @@ const DateRangePicker = forwardRef(function DateRangePicker(
     popoverRef.current?.close()
   }
 
+  function handleOpenChange(nextOpen) {
+    if (open === undefined) setInternalPopoverOpen(nextOpen)
+    onOpenChange?.(nextOpen)
+  }
+
   useEffect(() => {
     setStartDraft(range.start)
     setEndDraft(range.end)
@@ -158,7 +217,7 @@ const DateRangePicker = forwardRef(function DateRangePicker(
   useEffect(() => {
     if (startInput.current) {
       startInput.current.setCustomValidity(
-        startInvalid || orderInvalid
+        startInvalid || orderInvalid || rangeUnavailable
           ? statusText
           : required && !range.start
             ? 'Choose a start date.'
@@ -167,7 +226,7 @@ const DateRangePicker = forwardRef(function DateRangePicker(
     }
     if (endInput.current) {
       endInput.current.setCustomValidity(
-        endInvalid || orderInvalid
+        endInvalid || endWithoutStartInvalid || orderInvalid || rangeUnavailable
           ? statusText
           : required && !range.end
             ? 'Choose an end date.'
@@ -176,7 +235,9 @@ const DateRangePicker = forwardRef(function DateRangePicker(
     }
   }, [
     endInvalid,
+    endWithoutStartInvalid,
     orderInvalid,
+    rangeUnavailable,
     range.end,
     range.start,
     required,
@@ -227,15 +288,20 @@ const DateRangePicker = forwardRef(function DateRangePicker(
               placeholder="YYYY-MM-DD"
               required={required}
               readOnly={readOnly}
-              aria-invalid={startInvalid || orderInvalid || undefined}
+              aria-invalid={
+                startInvalid || orderInvalid || rangeUnavailable || undefined
+              }
               aria-describedby={statusId}
+              aria-controls={popoverId}
+              aria-expanded={popoverOpen && activePart === 'start'}
+              aria-haspopup="grid"
               data-slot="date-range-start"
               onChange={(event) => handleDraft('start', event)}
-              onClick={() => openPart('start')}
+              onClick={(event) => openPart('start', event.currentTarget)}
               onKeyDown={(event) => {
                 if (event.key === 'ArrowDown' && !disabled && !readOnly) {
                   event.preventDefault()
-                  openPart('start')
+                  openPart('start', event.currentTarget)
                 }
               }}
             />
@@ -247,6 +313,7 @@ const DateRangePicker = forwardRef(function DateRangePicker(
               className={calendarButtonClasses}
               disabled={disabled || readOnly}
               aria-label={`Choose ${startLabel.toLowerCase()}`}
+              aria-haspopup="grid"
               onClick={() => setActivePart('start')}
             >
               <svg
@@ -281,15 +348,24 @@ const DateRangePicker = forwardRef(function DateRangePicker(
               placeholder="YYYY-MM-DD"
               required={required}
               readOnly={readOnly}
-              aria-invalid={endInvalid || orderInvalid || undefined}
+              aria-invalid={
+                endInvalid ||
+                endWithoutStartInvalid ||
+                orderInvalid ||
+                rangeUnavailable ||
+                undefined
+              }
               aria-describedby={statusId}
+              aria-controls={popoverId}
+              aria-expanded={popoverOpen && activePart === 'end'}
+              aria-haspopup="grid"
               data-slot="date-range-end"
               onChange={(event) => handleDraft('end', event)}
-              onClick={() => openPart('end')}
+              onClick={(event) => openPart('end', event.currentTarget)}
               onKeyDown={(event) => {
                 if (event.key === 'ArrowDown' && !disabled && !readOnly) {
                   event.preventDefault()
-                  openPart('end')
+                  openPart('end', event.currentTarget)
                 }
               }}
             />
@@ -301,6 +377,7 @@ const DateRangePicker = forwardRef(function DateRangePicker(
               className={calendarButtonClasses}
               disabled={disabled || readOnly}
               aria-label={`Choose ${endLabel.toLowerCase()}`}
+              aria-haspopup="grid"
               onClick={() => setActivePart('end')}
             >
               <svg
@@ -322,7 +399,11 @@ const DateRangePicker = forwardRef(function DateRangePicker(
         data-slot="date-range-status"
         className={twMerge(
           'text-sm text-gray-600 dark:text-gray-400',
-          (startInvalid || endInvalid || orderInvalid) &&
+          (startInvalid ||
+            endInvalid ||
+            endWithoutStartInvalid ||
+            orderInvalid ||
+            rangeUnavailable) &&
             'text-red-700 dark:text-red-400'
         )}
         aria-live="polite"
@@ -334,7 +415,7 @@ const DateRangePicker = forwardRef(function DateRangePicker(
         id={popoverId}
         open={open}
         defaultOpen={defaultOpen}
-        onOpenChange={onOpenChange}
+        onOpenChange={handleOpenChange}
         placement="bottom-start"
         data-slot="date-range-popover"
         className="w-[min(22rem,calc(100vw-1rem))] p-0"
@@ -344,7 +425,7 @@ const DateRangePicker = forwardRef(function DateRangePicker(
           defaultValue={range.start}
           min={min}
           max={max}
-          unavailable={unavailable}
+          unavailable={calendarUnavailable}
           rangeStart={decoration.start}
           rangeEnd={range.end ? decoration.end : undefined}
           rangePreview={!range.end ? decoration.end : undefined}
@@ -353,7 +434,13 @@ const DateRangePicker = forwardRef(function DateRangePicker(
           disabled={disabled}
           readOnly={readOnly}
           onFocusChange={(date) => {
-            if (activePart === 'end' && range.start) setPreview(date)
+            if (
+              activePart === 'end' &&
+              range.start &&
+              !calendarUnavailable(date)
+            ) {
+              setPreview(date)
+            }
           }}
           onValueChange={chooseDate}
         />

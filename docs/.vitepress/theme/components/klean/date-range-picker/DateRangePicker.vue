@@ -3,6 +3,7 @@ import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 import { twMerge } from 'tailwind-merge'
 import Calendar from '../calendar/Calendar.vue'
 import {
+  addDays,
   compareDates,
   dateIsUnavailable,
   dateLabel,
@@ -19,6 +20,22 @@ function normalizeRange(value) {
     start: parseIsoDate(value?.start) ? value.start : '',
     end: parseIsoDate(value?.end) ? value.end : ''
   }
+}
+
+function rangeContainsUnavailable(start, end, unavailable) {
+  if (!unavailable || !parseIsoDate(start) || !parseIsoDate(end)) return false
+  const [first, last] =
+    compareDates(start, end) <= 0 ? [start, end] : [end, start]
+
+  for (
+    let date = first;
+    date && compareDates(date, last) <= 0;
+    date = addDays(date, 1)
+  ) {
+    if (unavailable(date)) return true
+  }
+
+  return false
 }
 
 const props = defineProps({
@@ -61,6 +78,7 @@ const startDraft = ref(value.value.start)
 const endDraft = ref(value.value.end)
 const activePart = ref('start')
 const preview = ref('')
+const internalPopoverOpen = ref(props.defaultOpen)
 const startInput = ref()
 const endInput = ref()
 const popover = ref()
@@ -82,17 +100,44 @@ const endInvalid = computed(
     (!parseIsoDate(endDraft.value) ||
       dateIsUnavailable(endDraft.value, limits.value))
 )
+const endWithoutStartInvalid = computed(
+  () => Boolean(endDraft.value) && !Boolean(startDraft.value)
+)
 const orderInvalid = computed(
   () =>
     parseIsoDate(startDraft.value) &&
     parseIsoDate(endDraft.value) &&
     compareDates(endDraft.value, startDraft.value) < 0
 )
+const rangeUnavailable = computed(
+  () =>
+    !orderInvalid.value &&
+    rangeContainsUnavailable(
+      startDraft.value,
+      endDraft.value,
+      props.unavailable
+    )
+)
+const popoverOpen = computed(() =>
+  props.open === undefined ? internalPopoverOpen.value : props.open
+)
+const calendarUnavailable = computed(
+  () => (date) =>
+    dateIsUnavailable(date, limits.value) ||
+    (activePart.value === 'end' &&
+      value.value.start &&
+      rangeContainsUnavailable(value.value.start, date, props.unavailable))
+)
 const statusText = computed(() => {
+  if (endWithoutStartInvalid.value)
+    return 'Choose a start date before the end date.'
   if (orderInvalid.value)
     return 'The end date must be on or after the start date.'
   if (startInvalid.value || endInvalid.value) {
     return 'Enter available dates as YYYY-MM-DD.'
+  }
+  if (rangeUnavailable.value) {
+    return 'The range cannot include an unavailable date.'
   }
   if (value.value.start && value.value.end) {
     return `${dateLabel(value.value.start, locale.value)} through ${dateLabel(value.value.end, locale.value)}.`
@@ -131,16 +176,26 @@ function updateRange(nextRange) {
   emit('change', normalized)
 }
 
-function openPart(part) {
+function openPart(part, source) {
+  if (props.disabled || props.readonly) return
   activePart.value = part
   preview.value = ''
-  popover.value?.open()
+  const input =
+    part === 'end' ? endInput.value?.element : startInput.value?.element
+  popover.value?.open(source ?? input)
 }
 
 function handleDraft(part, event) {
   const next = event.target.value.trim()
   if (part === 'start') startDraft.value = next
   else endDraft.value = next
+
+  if (part === 'start' && !next) {
+    endDraft.value = ''
+    updateRange({ start: '', end: '' })
+    return
+  }
+  if (part === 'end' && next && !value.value.start) return
   if (next && (!parseIsoDate(next) || dateIsUnavailable(next, limits.value)))
     return
 
@@ -155,10 +210,20 @@ function handleDraft(part, event) {
   ) {
     return
   }
+  if (
+    nextRange.start &&
+    nextRange.end &&
+    rangeContainsUnavailable(nextRange.start, nextRange.end, props.unavailable)
+  ) {
+    return
+  }
   updateRange(nextRange)
 }
 
 function chooseDate(date) {
+  if (props.disabled || props.readonly || calendarUnavailable.value(date))
+    return
+
   if (activePart.value === 'start' || !value.value.start) {
     updateRange({ start: date, end: '' })
     startDraft.value = date
@@ -180,13 +245,24 @@ function chooseDate(date) {
 }
 
 function handleCalendarFocus(date) {
-  if (activePart.value === 'end' && value.value.start) preview.value = date
+  if (
+    activePart.value === 'end' &&
+    value.value.start &&
+    !calendarUnavailable.value(date)
+  ) {
+    preview.value = date
+  }
 }
 
 function handleInputKeydown(event, part) {
   if (event.key !== 'ArrowDown' || props.disabled || props.readonly) return
   event.preventDefault()
-  openPart(part)
+  openPart(part, event.currentTarget)
+}
+
+function handleOpenChange(nextOpen) {
+  if (props.open === undefined) internalPopoverOpen.value = nextOpen
+  emit('update:open', nextOpen)
 }
 
 watch(value, (nextValue) => {
@@ -198,7 +274,9 @@ watch(
   () => [
     startInvalid.value,
     endInvalid.value,
+    endWithoutStartInvalid.value,
     orderInvalid.value,
+    rangeUnavailable.value,
     props.required,
     value.value.start,
     value.value.end
@@ -209,7 +287,7 @@ watch(
     const endElement = endInput.value?.element
     if (startElement) {
       startElement.setCustomValidity(
-        startInvalid.value || orderInvalid.value
+        startInvalid.value || orderInvalid.value || rangeUnavailable.value
           ? statusText.value
           : props.required && !value.value.start
             ? 'Choose a start date.'
@@ -218,7 +296,10 @@ watch(
     }
     if (endElement) {
       endElement.setCustomValidity(
-        endInvalid.value || orderInvalid.value
+        endInvalid.value ||
+          endWithoutStartInvalid.value ||
+          orderInvalid.value ||
+          rangeUnavailable.value
           ? statusText.value
           : props.required && !value.value.end
             ? 'Choose an end date.'
@@ -265,11 +346,16 @@ defineExpose({
             placeholder="YYYY-MM-DD"
             :required="required"
             :readonly="readonly"
-            :aria-invalid="startInvalid || orderInvalid || undefined"
+            :aria-invalid="
+              startInvalid || orderInvalid || rangeUnavailable || undefined
+            "
             :aria-describedby="statusId"
+            :aria-controls="popoverId"
+            :aria-expanded="popoverOpen && activePart === 'start'"
+            aria-haspopup="grid"
             data-slot="date-range-start"
             @input="handleDraft('start', $event)"
-            @click="openPart('start')"
+            @click="openPart('start', $event.currentTarget)"
             @keydown="handleInputKeydown($event, 'start')"
           />
           <button
@@ -280,6 +366,7 @@ defineExpose({
             class="absolute inset-y-0 end-0 grid min-w-11 place-items-center rounded-e-md text-gray-500 hover:bg-gray-100 hover:text-gray-950 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950 disabled:cursor-not-allowed disabled:opacity-40 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white dark:focus-visible:outline-white"
             :disabled="disabled || readonly"
             :aria-label="`Choose ${startLabel.toLowerCase()}`"
+            aria-haspopup="grid"
             @click="activePart = 'start'"
           >
             <svg
@@ -314,11 +401,20 @@ defineExpose({
             placeholder="YYYY-MM-DD"
             :required="required"
             :readonly="readonly"
-            :aria-invalid="endInvalid || orderInvalid || undefined"
+            :aria-invalid="
+              endWithoutStartInvalid ||
+              endInvalid ||
+              orderInvalid ||
+              rangeUnavailable ||
+              undefined
+            "
             :aria-describedby="statusId"
+            :aria-controls="popoverId"
+            :aria-expanded="popoverOpen && activePart === 'end'"
+            aria-haspopup="grid"
             data-slot="date-range-end"
             @input="handleDraft('end', $event)"
-            @click="openPart('end')"
+            @click="openPart('end', $event.currentTarget)"
             @keydown="handleInputKeydown($event, 'end')"
           />
           <button
@@ -329,6 +425,7 @@ defineExpose({
             class="absolute inset-y-0 end-0 grid min-w-11 place-items-center rounded-e-md text-gray-500 hover:bg-gray-100 hover:text-gray-950 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950 disabled:cursor-not-allowed disabled:opacity-40 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white dark:focus-visible:outline-white"
             :disabled="disabled || readonly"
             :aria-label="`Choose ${endLabel.toLowerCase()}`"
+            aria-haspopup="grid"
             @click="activePart = 'end'"
           >
             <svg
@@ -354,7 +451,11 @@ defineExpose({
       class="text-sm text-gray-600 dark:text-gray-400"
       :class="{
         'text-red-700 dark:text-red-400':
-          startInvalid || endInvalid || orderInvalid
+          startInvalid ||
+          endInvalid ||
+          endWithoutStartInvalid ||
+          orderInvalid ||
+          rangeUnavailable
       }"
       aria-live="polite"
     >
@@ -369,14 +470,14 @@ defineExpose({
       placement="bottom-start"
       data-slot="date-range-popover"
       class="w-[min(22rem,calc(100vw-1rem))] p-0"
-      @update:open="emit('update:open', $event)"
+      @update:open="handleOpenChange"
     >
       <Calendar
         :model-value="calendarValue"
         :default-value="value.start"
         :min="min"
         :max="max"
-        :unavailable="unavailable"
+        :unavailable="calendarUnavailable"
         :range-start="orderedDecoration.start"
         :range-end="value.end ? orderedDecoration.end : undefined"
         :range-preview="!value.end ? orderedDecoration.end : undefined"
