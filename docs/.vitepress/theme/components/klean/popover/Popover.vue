@@ -165,7 +165,7 @@ function setOpen(nextOpen, { restoreFocus = false } = {}) {
 }
 
 function close() {
-  setOpen(false, { restoreFocus: true })
+  setOpen(false, { restoreFocus: isOpen.value })
 }
 
 function open() {

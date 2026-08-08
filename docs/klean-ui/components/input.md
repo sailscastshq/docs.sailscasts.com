@@ -118,3 +118,10 @@ If that dense treatment is a recurring product concept, create an application-ow
 - Focus remains visible in light, dark, and high-contrast contexts.
 - Validation waits for blur or submission instead of punishing untouched input.
 - A failed submission that needs announcement uses one application-owned error summary and focus recovery, not `role="alert"` on every inline error.
+
+## Related components
+
+- [Textarea](/klean-ui/components/textarea) — growing multi-line input.
+- [Date Picker](/klean-ui/components/date-picker) — an editable date-only field with Calendar.
+- [Schedule Picker](/klean-ui/components/schedule-picker) — natural date-and-time scheduling.
+- [Button](/klean-ui/components/button) — native form submission and actions.

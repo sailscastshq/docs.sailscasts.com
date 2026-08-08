@@ -131,3 +131,10 @@ Klean's neutral default stays motionless and uses tonal feedback. Hagfish delibe
 - Disabled links leave the tab order and cannot activate.
 - Processing indicators are decorative when the visible label already describes the state.
 - Base interaction is motionless, and transitions are removed for reduced-motion preferences.
+
+## Related components
+
+- [Slide](/klean-ui/components/slide) — higher-friction confirmation for consequential actions.
+- [Menu](/klean-ui/components/menu) — a compact list of actions and destinations.
+- [Popover](/klean-ui/components/popover) — a non-modal surface invoked by a button.
+- [Input](/klean-ui/components/input) — native form input with caller-owned labels and errors.

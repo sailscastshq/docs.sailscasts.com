@@ -237,3 +237,10 @@ Hagfish's share surface and Slipway's operational filters need the same interact
 - Popover assigns no Menu or Dialog role; the application's semantic content remains visible in its markup.
 - Open state is ephemeral. Meaningful state inside the surface follows the [Durable UI contract](/klean-ui/durable-ui).
 - Visual treatment follows the application-owned [theming convention](/klean-ui/theming).
+
+## Related components
+
+- [Menu](/klean-ui/components/menu) — action and navigation semantics with roving focus.
+- [Date Picker](/klean-ui/components/date-picker) — an editable date field composed with Popover.
+- [Date Range Picker](/klean-ui/components/date-range-picker) — a two-boundary date composition.
+- Dialog — a modal surface when background interaction must stop.

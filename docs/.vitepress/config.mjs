@@ -118,6 +118,16 @@ function kleanUiGuide() {
         { text: 'Textarea', link: '/klean-ui/components/textarea' },
         { text: 'Popover', link: '/klean-ui/components/popover' },
         { text: 'Menu', link: '/klean-ui/components/menu' },
+        { text: 'Calendar', link: '/klean-ui/components/calendar' },
+        { text: 'Date Picker', link: '/klean-ui/components/date-picker' },
+        {
+          text: 'Date Range Picker',
+          link: '/klean-ui/components/date-range-picker'
+        },
+        {
+          text: 'Schedule Picker',
+          link: '/klean-ui/components/schedule-picker'
+        },
         { text: 'Toast', link: '/klean-ui/components/toast' },
         { text: 'Slide', link: '/klean-ui/components/slide' }
       ]

@@ -279,3 +279,9 @@ The preview Source tab contains the complete Vue component. The equivalent frame
 - Keyboard behavior remains correct in RTL layouts and as items change.
 - Menu open state is ephemeral and is never written to storage, cookies, server data, or the URL.
 - Meaningful state selected from a menu follows the [Durable UI contract](/klean-ui/durable-ui); appearance follows the application-owned [theming convention](/klean-ui/theming).
+
+## Related components
+
+- [Popover](/klean-ui/components/popover) — a generic non-modal surface without menu semantics.
+- [Button](/klean-ui/components/button) — the truthful invoker and action element.
+- Dialog — modal content that makes the background inert.

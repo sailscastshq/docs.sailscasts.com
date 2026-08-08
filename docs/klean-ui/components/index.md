@@ -33,6 +33,22 @@ A native-first non-modal floating surface with light dismissal, focus return, co
 
 An accessible list of truthful button actions and link destinations built on Klean Popover. It adds roving focus, Arrow keys, Home/End, typeahead, disabled-item behavior, selection, and durable focus return while caller Tailwind owns the product treatment.
 
+### [Calendar](/klean-ui/components/calendar)
+
+An always-visible, locale-aware date-only surface with complete keyboard navigation, caller-owned availability, and stable `YYYY-MM-DD` values.
+
+### [Date Picker](/klean-ui/components/date-picker)
+
+An editable date-only form field composed with Calendar and native-first Popover. Use ordinary `min`, `max`, and availability rules for product constraints.
+
+### [Date Range Picker](/klean-ui/components/date-range-picker)
+
+One related start-and-end decision with inclusive date boundaries, native form names, and a contiguous Calendar selection.
+
+### [Schedule Picker](/klean-ui/components/schedule-picker)
+
+Natural-language future scheduling with Calendar, time choices, IANA timezone safety, exact relative durations, and explicit confirmation before an ISO instant changes.
+
 ### [Toast](/klean-ui/components/toast)
 
 Accessible notifications with semantic actions, long-running updates, reduced motion, and caller-owned Tailwind.

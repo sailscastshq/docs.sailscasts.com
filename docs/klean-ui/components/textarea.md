@@ -97,3 +97,9 @@ Textarea accepts native textarea attributes, framework-native value binding, and
 - Do not use placeholder text as the label.
 - Caller-owned fixed sizing must preserve usable content access and keyboard operation.
 - Focus remains visible and decorative transitions respect reduced motion.
+
+## Related components
+
+- [Input](/klean-ui/components/input) — single-line native input.
+- [Button](/klean-ui/components/button) — submit or act on form data.
+- [Toast](/klean-ui/components/toast) — announce the result after a draft is saved.
