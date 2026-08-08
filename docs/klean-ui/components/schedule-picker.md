@@ -209,9 +209,12 @@ Durable UI policy. Klean does not guess that persistence scope.
 
 ## Related components
 
-- [Date Picker](/klean-ui/components/date-picker) — a date without time or timezone.
-- [Calendar](/klean-ui/components/calendar) — the always-visible date-selection surface.
-- [Date Range Picker](/klean-ui/components/date-range-picker) — date-only periods.
+Schedule Picker combines date, time, and IANA timezone as an exact ISO instant.
+Choose the date-only components below when wall-clock time must not exist.
+
+- [Date Picker](/klean-ui/components/date-picker) — one date-only `YYYY-MM-DD` value without time or timezone.
+- [Calendar](/klean-ui/components/calendar) — an always-visible date-only `YYYY-MM-DD` surface.
+- [Date Range Picker](/klean-ui/components/date-range-picker) — ordered date-only `YYYY-MM-DD` periods.
 - [Popover](/klean-ui/components/popover) — the non-modal floating behavior.
 - [Toast](/klean-ui/components/toast) — announce the server result after a schedule is saved.
 

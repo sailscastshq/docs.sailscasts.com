@@ -518,4 +518,4 @@ Copy, inspect, and change the complete source for your framework.
 - [Button](/klean-ui/components/button) — a truthful toast action or dismissal control.
 - [Slide](/klean-ui/components/slide) — confirm consequential work before announcing its result.
 - [Schedule Picker](/klean-ui/components/schedule-picker) — choose an instant, then announce the server outcome.
-- Dialog — blocking decisions that cannot be reduced to a temporary notification.
+- [Dialog](/klean-ui/components/dialog) — blocking decisions that cannot be reduced to a temporary notification.

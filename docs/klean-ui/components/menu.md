@@ -284,4 +284,4 @@ The preview Source tab contains the complete Vue component. The equivalent frame
 
 - [Popover](/klean-ui/components/popover) — a generic non-modal surface without menu semantics.
 - [Button](/klean-ui/components/button) — the truthful invoker and action element.
-- Dialog — modal content that makes the background inert.
+- [Dialog](/klean-ui/components/dialog) — modal content that makes the background inert.

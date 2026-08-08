@@ -122,6 +122,6 @@ If that dense treatment is a recurring product concept, create an application-ow
 ## Related components
 
 - [Textarea](/klean-ui/components/textarea) — growing multi-line input.
-- [Date Picker](/klean-ui/components/date-picker) — an editable date-only field with Calendar.
-- [Schedule Picker](/klean-ui/components/schedule-picker) — natural date-and-time scheduling.
+- [Date Picker](/klean-ui/components/date-picker) — one date-only `YYYY-MM-DD` value with Calendar.
+- [Schedule Picker](/klean-ui/components/schedule-picker) — date, time, and IANA timezone stored as an exact ISO instant.
 - [Button](/klean-ui/components/button) — native form submission and actions.

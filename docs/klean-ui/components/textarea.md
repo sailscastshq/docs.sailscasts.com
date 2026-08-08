@@ -103,3 +103,4 @@ Textarea accepts native textarea attributes, framework-native value binding, and
 - [Input](/klean-ui/components/input) — single-line native input.
 - [Button](/klean-ui/components/button) — submit or act on form data.
 - [Toast](/klean-ui/components/toast) — announce the result after a draft is saved.
+- [Dialog](/klean-ui/components/dialog) — compose a focused modal editing task when inline space is inappropriate.
