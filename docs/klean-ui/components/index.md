@@ -37,6 +37,10 @@ An accessible list of truthful button actions and link destinations built on Kle
 
 A one-component fixed-list value picker with typed values, grouped and disabled options, full keyboard behavior, ordinary form participation, and caller-owned Tailwind. Editable search remains a separate Combobox contract.
 
+### [Combobox](/klean-ui/components/combobox)
+
+An editable search-and-choose input for long or remotely loaded lists, with typed values, local filtering, stable loading and error states, full keyboard behavior, and application-owned request policy.
+
 ### [Dialog](/klean-ui/components/dialog)
 
 A native modal surface with platform focus containment, inert background behavior, native commands and dialog forms, durable dismissal policy, and application-owned semantic content.

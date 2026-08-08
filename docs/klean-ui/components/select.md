@@ -126,7 +126,7 @@ indicator, or a constrained long list.
 ## When not to use
 
 - Use [Menu](/klean-ui/components/menu) for actions or navigation. A Menu item does something; a Select option becomes the current value.
-- Use a future **Combobox** when the person types a query, filters a long list, or waits for remote suggestions. Search will not become a `searchable` Select mode.
+- Use [Combobox](/klean-ui/components/combobox) when the person types a query, filters a long list, or waits for remote suggestions. Search will not become a `searchable` Select mode.
 - Use radio buttons when a small set should remain visible for immediate comparison.
 - Use checkboxes or a purpose-built multiple-choice pattern when more than one value may be chosen.
 - Use [Date Picker](/klean-ui/components/date-picker) or [Schedule Picker](/klean-ui/components/schedule-picker) for date and time decisions with their own input rules.
@@ -237,7 +237,7 @@ interaction state and are not written to storage or the URL by Klean.
 - [Menu](/klean-ui/components/menu) — actions and navigation rather than a persistent value.
 - [Popover](/klean-ui/components/popover) — ordinary floating content in normal Tab order.
 - [Dialog](/klean-ui/components/dialog) — a modal task that makes the background inert.
-- **Combobox** — the separate upcoming component for editable search and async suggestions.
+- [Combobox](/klean-ui/components/combobox) — editable search and application-owned remote suggestions.
 
 ## Complete framework source
 
