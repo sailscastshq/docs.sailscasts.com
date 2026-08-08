@@ -1,7 +1,7 @@
 ---
 title: Schedule Picker
 titleTemplate: Klean UI
-description: Natural-language future scheduling with Calendar, time choices, timezone safety, and explicit confirmation.
+description: Natural-language future scheduling with Calendar, time choices, timezone safety, and automatic Enter or blur commit.
 outline: [2, 3]
 ---
 
@@ -64,7 +64,8 @@ const vueFiles = [
 
 Schedule Picker turns a future wall-clock intention into an exact ISO instant.
 Natural language, Calendar, and time choices share one field, while a visible
-confirmation prevents an interpretation from silently changing a schedule.
+interpretation keeps the exact instant honest before Enter or composite blur
+commits it.
 
 <KleanPreview id="schedule-picker-source" :source="scheduleSource" filename="SchedulePicker.vue">
   <template #preview>
@@ -80,6 +81,12 @@ confirmation prevents an interpretation from silently changing a schedule.
       <output class="break-all font-mono text-sm text-gray-600 dark:text-gray-300">
         {{ publishAt || 'No committed instant yet' }}
       </output>
+      <button
+        type="button"
+        class="min-h-11 justify-self-start rounded-md border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950 dark:border-gray-700 dark:hover:bg-gray-900 dark:focus-visible:outline-white"
+      >
+        Continue
+      </button>
     </div>
   </template>
   <template #source>
@@ -136,7 +143,7 @@ is the workspace.
 
 <CopyCode :code="svelteUsage" label="PublishSchedule.svelte" />
 
-## Natural input and confirmation
+## Natural input and commit
 
 The following all create a proposal:
 
@@ -145,10 +152,12 @@ The following all create a proposal:
 - `in 5 minutes`
 - `in one hour`
 
-The interpreted date, time, and IANA timezone remain visible. Press Enter or
-choose **Use this time** to commit. Until then, the named hidden form value
-retains the last confirmed ISO instant. An incomplete phrase, parser mistake,
-or abandoned edit cannot silently reschedule server work.
+The interpreted date, time, and IANA timezone remain visible. Press Enter,
+leave the complete picker, or choose **Use this time** to commit. Moving focus
+between the text field, Calendar, time list, and footer action does not commit
+prematurely. Until a valid commit point, the named hidden form value retains
+the last valid ISO instant. An incomplete phrase, parser mistake, or abandoned
+invalid edit cannot silently reschedule server work.
 
 Relative durations retain exact seconds. If the reference instant is 13:07:30
 in Lagos, `in 5 minutes` proposes 13:12:30 and stores the matching UTC instant.
@@ -185,15 +194,17 @@ may remain more precise.
 
 ## Durable behavior
 
-- Draft text and the last committed instant are separate truths.
-- Focus remains in the field after keyboard confirmation.
+- Draft text and the last committed instant are separate truths until Enter or
+  a true composite blur.
+- Enter commits without moving focus from the field.
+- Internal focus movement does not commit; leaving the complete picker does.
 - Calendar and time-list choices are keyboard navigable.
 - Opening the time list brings the selected time into view.
 - Past proposals are invalid and cannot be committed.
-- Escape and outside dismissal abandon only ephemeral open state.
+- Escape dismisses only ephemeral open state and returns focus predictably.
 - Klean never writes the draft, open state, or selected instant to storage or the URL.
 
-The application may persist the confirmed value or a form draft using its own
+The application may persist the committed value or a form draft using its own
 Durable UI policy. Klean does not guess that persistence scope.
 
 ## Related components

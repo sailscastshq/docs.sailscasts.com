@@ -47,7 +47,7 @@ One related start-and-end decision with inclusive date boundaries, native form n
 
 ### [Schedule Picker](/klean-ui/components/schedule-picker)
 
-Natural-language future scheduling with Calendar, time choices, IANA timezone safety, exact relative durations, and explicit confirmation before an ISO instant changes.
+Natural-language future scheduling with Calendar, time choices, IANA timezone safety, exact relative durations, and predictable Enter or composite-blur commit.
 
 ### [Toast](/klean-ui/components/toast)
 
