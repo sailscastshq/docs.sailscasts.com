@@ -137,4 +137,5 @@ Klean's neutral default stays motionless and uses tonal feedback. Hagfish delibe
 - [Slide](/klean-ui/components/slide) — higher-friction confirmation for consequential actions.
 - [Menu](/klean-ui/components/menu) — a compact list of actions and destinations.
 - [Popover](/klean-ui/components/popover) — a non-modal surface invoked by a button.
+- [Dialog](/klean-ui/components/dialog) — a modal task or confirmation invoked by a native command.
 - [Input](/klean-ui/components/input) — native form input with caller-owned labels and errors.

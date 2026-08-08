@@ -157,9 +157,12 @@ returns focus reliably.
 
 ## Related components
 
-- [Calendar](/klean-ui/components/calendar) — one always-visible date surface.
-- [Date Picker](/klean-ui/components/date-picker) — independent dates and asymmetric business rules.
-- [Schedule Picker](/klean-ui/components/schedule-picker) — an exact future date and time.
+Calendar, Date Picker, and Date Range Picker use date-only `YYYY-MM-DD` values.
+Choose Schedule Picker when time and timezone must resolve to an exact ISO instant.
+
+- [Calendar](/klean-ui/components/calendar) — one always-visible date-only `YYYY-MM-DD` surface.
+- [Date Picker](/klean-ui/components/date-picker) — independent date-only `YYYY-MM-DD` values and asymmetric rules.
+- [Schedule Picker](/klean-ui/components/schedule-picker) — date, time, and IANA timezone stored as an exact ISO instant.
 - [Popover](/klean-ui/components/popover) — the floating surface used by the compact range.
 
 ## Complete framework source

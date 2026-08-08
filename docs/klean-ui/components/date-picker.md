@@ -206,9 +206,12 @@ relationship.
 
 ## Related components
 
-- [Calendar](/klean-ui/components/calendar) — an always-visible date surface.
-- [Date Range Picker](/klean-ui/components/date-range-picker) — a start and end date that form one period.
-- [Schedule Picker](/klean-ui/components/schedule-picker) — date, time, timezone, and natural language.
+Calendar, Date Picker, and Date Range Picker use date-only `YYYY-MM-DD` values.
+Choose Schedule Picker when time and timezone must resolve to an exact ISO instant.
+
+- [Calendar](/klean-ui/components/calendar) — an always-visible date-only `YYYY-MM-DD` surface.
+- [Date Range Picker](/klean-ui/components/date-range-picker) — ordered date-only `YYYY-MM-DD` start and end values.
+- [Schedule Picker](/klean-ui/components/schedule-picker) — date, time, and IANA timezone stored as an exact ISO instant.
 - [Input](/klean-ui/components/input) — a plain field when a calendar adds no value.
 
 ## Complete framework source

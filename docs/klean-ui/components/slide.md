@@ -176,4 +176,4 @@ Copy, inspect, and change the complete source for your framework.
 
 - [Button](/klean-ui/components/button) — the ordinary choice for actions that do not need extra friction.
 - [Toast](/klean-ui/components/toast) — announce the result after confirmation.
-- Dialog — gather context or explicit choices before a consequential action.
+- [Dialog](/klean-ui/components/dialog) — gather context or explicit choices before a consequential action.

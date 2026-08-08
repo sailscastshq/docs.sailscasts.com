@@ -33,6 +33,10 @@ A native-first non-modal floating surface with light dismissal, focus return, co
 
 An accessible list of truthful button actions and link destinations built on Klean Popover. It adds roving focus, Arrow keys, Home/End, typeahead, disabled-item behavior, selection, and durable focus return while caller Tailwind owns the product treatment.
 
+### [Dialog](/klean-ui/components/dialog)
+
+A native modal surface with platform focus containment, inert background behavior, native commands and dialog forms, durable dismissal policy, and application-owned semantic content.
+
 ### [Calendar](/klean-ui/components/calendar)
 
 An always-visible, locale-aware date-only surface with complete keyboard navigation, caller-owned availability, and stable `YYYY-MM-DD` values.

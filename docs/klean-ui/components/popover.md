@@ -241,6 +241,6 @@ Hagfish's share surface and Slipway's operational filters need the same interact
 ## Related components
 
 - [Menu](/klean-ui/components/menu) — action and navigation semantics with roving focus.
-- [Date Picker](/klean-ui/components/date-picker) — an editable date field composed with Popover.
-- [Date Range Picker](/klean-ui/components/date-range-picker) — a two-boundary date composition.
-- Dialog — a modal surface when background interaction must stop.
+- [Date Picker](/klean-ui/components/date-picker) — a date-only `YYYY-MM-DD` field composed with Popover.
+- [Date Range Picker](/klean-ui/components/date-range-picker) — two ordered date-only `YYYY-MM-DD` boundaries.
+- [Dialog](/klean-ui/components/dialog) — a modal surface when background interaction must stop.
