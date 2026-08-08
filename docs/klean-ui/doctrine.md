@@ -130,7 +130,7 @@ Klean chooses the smallest layer that can prove the complete behavior:
 2. small, readable framework behavior;
 3. a focused unstyled primitive when keyboard navigation, focus management, dismissal, or positioning becomes substantial.
 
-Button needs no headless interaction dependency. A future Combobox, Menu, Select, Tooltip, or Dialog may justify one. Dependencies are selected per component, remain visible in the installed source and registry metadata, and never become an automatic platform beneath everything.
+Button needs no headless interaction dependency. Popover and the components composed with it use only their focused geometry dependency; a future Combobox or Tooltip must prove any additional need independently. Dependencies are selected per component, remain visible in the installed source and registry metadata, and never become an automatic platform beneath everything.
 
 ## The test
 

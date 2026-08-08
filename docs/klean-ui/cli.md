@@ -13,6 +13,7 @@ The Klean CLI is a source installer for conventional Boring Stack applications:
 npx klean-ui add button
 npx klean-ui add input
 npx klean-ui add textarea
+npx klean-ui add select
 ```
 
 It has one job: place the right framework-native source in the right application path safely.
