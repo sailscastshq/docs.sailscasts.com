@@ -81,6 +81,7 @@ const SchedulePicker = forwardRef(function SchedulePicker(
   const inputRef = useRef(null)
   const popoverRef = useRef(null)
   const panelRef = useRef(null)
+  const rootRef = useRef(null)
   const configuredMinimum = new Date(min).getTime()
   const minimumTimestamp = Math.max(
     Date.now(),
@@ -108,7 +109,7 @@ const SchedulePicker = forwardRef(function SchedulePicker(
     statusText = interpretation.message
   else if (proposalIsPast) statusText = 'Choose a time in the future.'
   else if (interpretation.state === 'proposal')
-    statusText = `Use ${interpretation.label} in ${zone}?`
+    statusText = `Will schedule for ${interpretation.label} in ${zone}. Press Enter or leave the picker to use it.`
   else statusText = `Scheduled for ${interpretation.label} in ${zone}.`
   const describedBy = [externalDescribedBy, statusId].filter(Boolean).join(' ')
 
@@ -147,12 +148,22 @@ const SchedulePicker = forwardRef(function SchedulePicker(
     setInterpretation({ state: 'proposal', iso, date, time, label })
   }
 
-  function commitProposal() {
+  function commitProposal({ restoreFocus = true } = {}) {
     if (!committable || disabled || readOnly) return
     updateValue(interpretation.iso)
     setDraft(interpretation.label)
     setInterpretation({ ...interpretation, state: 'committed' })
-    popoverRef.current?.close()
+    popoverRef.current?.close({ restoreFocus })
+  }
+
+  function handleBlur(event) {
+    if (
+      event.relatedTarget &&
+      event.currentTarget.contains(event.relatedTarget)
+    )
+      return
+    setTouched(true)
+    commitProposal({ restoreFocus: false })
   }
 
   function handleOpenChange(nextOpen) {
@@ -221,10 +232,8 @@ const SchedulePicker = forwardRef(function SchedulePicker(
   useEffect(() => {
     if (!inputRef.current) return
     if (required && !committedValue)
-      inputRef.current.setCustomValidity('Choose and confirm a schedule.')
+      inputRef.current.setCustomValidity('Choose a schedule.')
     else if (invalid) inputRef.current.setCustomValidity(statusText)
-    else if (committable)
-      inputRef.current.setCustomValidity('Confirm the interpreted schedule.')
     else inputRef.current.setCustomValidity('')
   }, [committable, committedValue, invalid, required, statusText])
 
@@ -237,8 +246,10 @@ const SchedulePicker = forwardRef(function SchedulePicker(
 
   return (
     <div
+      ref={rootRef}
       data-slot="schedule-picker"
       data-state={interpretation.state}
+      onBlur={handleBlur}
       className={twMerge(
         'grid w-full gap-2 [&_[data-slot=schedule-picker-field]]:relative [&_[data-slot=schedule-picker-field]]:flex [&_[data-slot=schedule-picker-field]]:items-stretch [&_[data-slot=input]]:pe-12',
         className
@@ -266,7 +277,6 @@ const SchedulePicker = forwardRef(function SchedulePicker(
               readDraft(event.target.value)
             }
           }}
-          onBlur={() => setTouched(true)}
           onClick={() => !disabled && !readOnly && popoverRef.current?.open()}
           onKeyDown={(event) => {
             inputProps.onKeyDown?.(event)
@@ -276,7 +286,7 @@ const SchedulePicker = forwardRef(function SchedulePicker(
               popoverRef.current?.open()
             } else if (event.key === 'Enter' && committable) {
               event.preventDefault()
-              commitProposal()
+              commitProposal({ restoreFocus: false })
             }
           }}
         />
@@ -382,7 +392,7 @@ const SchedulePicker = forwardRef(function SchedulePicker(
               data-slot="schedule-picker-confirm"
               className="min-h-11 shrink-0 rounded-md bg-gray-950 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-200 dark:focus-visible:outline-white"
               disabled={!committable || disabled || readOnly}
-              onClick={commitProposal}
+              onClick={() => commitProposal()}
             >
               Use this time
             </button>

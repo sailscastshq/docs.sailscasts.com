@@ -82,6 +82,7 @@
   let input;
   let popover;
   let panel;
+  let root;
   let minimumTimestamp = $derived.by(() => {
     const configured = new Date(min).getTime();
     return Math.max(Date.now(), Number.isNaN(configured) ? -Infinity : configured);
@@ -113,7 +114,7 @@
     if (interpretation.state === "incomplete") return interpretation.message;
     if (proposalIsPast) return "Choose a time in the future.";
     if (interpretation.state === "proposal")
-      return `Use ${interpretation.label} in ${zone}?`;
+      return `Will schedule for ${interpretation.label} in ${zone}. Press Enter or leave the picker to use it.`;
     return `Scheduled for ${interpretation.label} in ${zone}.`;
   });
   let describedBy = $derived(
@@ -155,12 +156,18 @@
     interpretation = { state: "proposal", iso, date, time, label };
   }
 
-  function commitProposal() {
+  function commitProposal({ restoreFocus = true } = {}) {
     if (!committable || disabled || readonly) return;
     updateValue(interpretation.iso);
     draft = interpretation.label;
     interpretation = { ...interpretation, state: "committed" };
-    popover?.close();
+    popover?.close({ restoreFocus });
+  }
+
+  function handleFocusOut(event) {
+    if (event.relatedTarget && root?.contains(event.relatedTarget)) return;
+    touched = true;
+    commitProposal({ restoreFocus: false });
   }
 
   function handleOpenChange(nextOpen) {
@@ -227,10 +234,8 @@
     const element = input?.getElement();
     if (!element) return;
     if (required && !value)
-      element.setCustomValidity("Choose and confirm a schedule.");
+      element.setCustomValidity("Choose a schedule.");
     else if (invalid) element.setCustomValidity(statusText);
-    else if (committable)
-      element.setCustomValidity("Confirm the interpreted schedule.");
     else element.setCustomValidity("");
   });
 
@@ -248,8 +253,10 @@
 </script>
 
 <div
+  bind:this={root}
   data-slot="schedule-picker"
   data-state={interpretation.state}
+  onfocusout={handleFocusOut}
   class={twMerge(
     "grid w-full gap-2 [&_[data-slot=schedule-picker-field]]:relative [&_[data-slot=schedule-picker-field]]:flex [&_[data-slot=schedule-picker-field]]:items-stretch [&_[data-slot=input]]:pe-12",
     className,
@@ -274,7 +281,6 @@
         touched = false;
         readDraft(event.target.value);
       }}
-      onblur={() => (touched = true)}
       onclick={() => !disabled && !readonly && popover?.show()}
       onkeydown={(event) => {
         inputProps.onkeydown?.(event);
@@ -284,7 +290,7 @@
           popover?.show();
         } else if (event.key === "Enter" && committable) {
           event.preventDefault();
-          commitProposal();
+          commitProposal({ restoreFocus: false });
         }
       }}
     />
@@ -385,7 +391,7 @@
           data-slot="schedule-picker-confirm"
           class="min-h-11 shrink-0 rounded-md bg-gray-950 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-200 dark:focus-visible:outline-white"
           disabled={!committable || disabled || readonly}
-          onclick={commitProposal}
+          onclick={() => commitProposal()}
         >
           Use this time
         </button>

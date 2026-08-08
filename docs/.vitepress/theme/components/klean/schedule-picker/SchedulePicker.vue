@@ -79,6 +79,7 @@ const interpretation = ref(
 const input = ref()
 const popover = ref()
 const panel = ref()
+const root = ref()
 const touched = ref(false)
 const minimumTimestamp = computed(() => {
   const configured = new Date(props.min).getTime()
@@ -115,7 +116,7 @@ const statusText = computed(() => {
   }
   if (proposalIsPast.value) return 'Choose a time in the future.'
   if (interpretation.value.state === 'proposal') {
-    return `Use ${interpretation.value.label} in ${zone.value}?`
+    return `Will schedule for ${interpretation.value.label} in ${zone.value}. Press Enter or leave the picker to use it.`
   }
   return `Scheduled for ${interpretation.value.label} in ${zone.value}.`
 })
@@ -191,13 +192,19 @@ function stage(date = selectedDate.value, time = selectedTime.value) {
   draft.value = label
 }
 
-function commitProposal() {
+function commitProposal({ restoreFocus = true } = {}) {
   if (!committable.value || props.disabled || props.readonly) return
   const next = interpretation.value
   setInternalValue(next.iso)
   draft.value = next.label
   interpretation.value = { ...next, state: 'committed' }
-  popover.value?.close()
+  popover.value?.close({ restoreFocus })
+}
+
+function handleFocusOut(event) {
+  if (event.relatedTarget && root.value?.contains(event.relatedTarget)) return
+  touched.value = true
+  commitProposal({ restoreFocus: false })
 }
 
 function handleInputKeydown(event) {
@@ -206,7 +213,7 @@ function handleInputKeydown(event) {
     popover.value?.open()
   } else if (event.key === 'Enter' && committable.value) {
     event.preventDefault()
-    commitProposal()
+    commitProposal({ restoreFocus: false })
   }
 }
 
@@ -299,11 +306,9 @@ watch(
     const element = input.value?.element
     if (!element) return
     if (props.required && !value.value) {
-      element.setCustomValidity('Choose and confirm a schedule.')
+      element.setCustomValidity('Choose a schedule.')
     } else if (invalid.value) {
       element.setCustomValidity(statusText.value)
-    } else if (committable.value) {
-      element.setCustomValidity('Confirm the interpreted schedule.')
     } else {
       element.setCustomValidity('')
     }
@@ -321,9 +326,11 @@ defineExpose({
 
 <template>
   <div
+    ref="root"
     data-slot="schedule-picker"
     :data-state="interpretation.state"
     :class="rootClasses"
+    @focusout="handleFocusOut"
   >
     <div data-slot="schedule-picker-field">
       <Input
@@ -341,7 +348,6 @@ defineExpose({
         :aria-describedby="describedBy"
         data-slot="schedule-picker-input"
         @input="handleInput"
-        @blur="touched = true"
         @click="!disabled && !readonly && popover?.open()"
         @keydown="handleInputKeydown"
       />
@@ -446,7 +452,7 @@ defineExpose({
             data-slot="schedule-picker-confirm"
             class="min-h-11 shrink-0 rounded-md bg-gray-950 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-200 dark:focus-visible:outline-white"
             :disabled="!committable || disabled || readonly"
-            @click="commitProposal"
+            @click="commitProposal()"
           >
             Use this time
           </button>
