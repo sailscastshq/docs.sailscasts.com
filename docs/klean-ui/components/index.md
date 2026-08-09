@@ -29,6 +29,10 @@ A styled native textarea whose durable presentation grows from its current value
 
 A native-first checked value for booleans, collection membership, and real indeterminate selection. Browser form and accessibility behavior stay intact while labels, groups, validation, and product styling remain visible application markup.
 
+### [Switch](/klean-ui/components/switch)
+
+A native-first boolean setting that takes effect immediately, with real checked state, browser keyboard and form behavior, honest optimistic rollback recipes, and caller-owned Tailwind styling.
+
 ### [Popover](/klean-ui/components/popover)
 
 A native-first non-modal floating surface with light dismissal, focus return, collision-aware positioning, and ordinary semantic content. A real button invokes it through the browser's `popovertarget` relationship.
