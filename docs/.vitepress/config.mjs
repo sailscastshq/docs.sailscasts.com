@@ -1094,6 +1094,7 @@ function slipwayGuide() {
       items: [
         { text: 'Helm', link: '/slipway/helm' },
         { text: 'Bridge', link: '/slipway/bridge' },
+        { text: 'Bearing', link: '/slipway/bearing' },
         { text: 'Content', link: '/slipway/content' },
         { text: 'Quest', link: '/slipway/quest' },
         { text: 'Dock', link: '/slipway/dock' },

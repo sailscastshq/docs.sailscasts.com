@@ -17,7 +17,7 @@ editLink: true
 
 # What is Slipway?
 
-Slipway is an open-source, self-hosted deployment platform for **Sails.js** and **The Boring JavaScript Stack** applications. It combines deployment, database management, admin access, REPL access, and Quest monitoring in one platform.
+Slipway is an open-source, self-hosted deployment platform for **Sails.js** and **The Boring JavaScript Stack** applications. It combines deployment, database management, admin access, customer feedback, REPL access, and Quest monitoring in one platform.
 
 ## The Goal
 
@@ -30,6 +30,7 @@ Slipway provides:
 - **Admin panel** — Auto-generated CRUD for your Sails models (Bridge)
 - **Production REPL** — Query your production data safely (Helm)
 - **Queue monitoring** — Sails Quest integration (Quest Dashboard)
+- **Customer feedback** — App-owned feedback, roadmap, updates, and widget (Bearing)
 
 ## The Slipway Suite
 
@@ -40,6 +41,7 @@ Slipway includes these tools:
 | **Slipway Deploy**  | Forge/Coolify   | Deployment & infrastructure      |
 | **Slipway Helm**    | Tinkerwell      | Production REPL for Sails        |
 | **Slipway Bridge**  | Nova/AdminJS    | Auto-generated data management   |
+| **Slipway Bearing** | UserJot/Canny   | Feedback, roadmap, and updates   |
 | **Quest Dashboard** | Laravel Horizon | Queue monitoring for Sails Quest |
 
 ### Helm
@@ -70,6 +72,15 @@ Bridge auto-generates an admin panel from your Sails models:
 - File upload handling
 - Role-based access control
 
+### Bearing
+
+Bearing gives every app a feedback loop on its own domain:
+
+- Public Feedback, Roadmap, and Updates pages
+- Host-app identity without another customer account
+- Server-enforced identified or anonymous participation
+- A Slipway-controlled in-app updates widget
+
 ### Quest Dashboard
 
 If your app uses [Sails Quest](https://docs.sailscasts.com/sails-quest) for job queues, Slipway automatically provides a queue dashboard:
@@ -85,7 +96,7 @@ If your app uses [Sails Quest](https://docs.sailscasts.com/sails-quest) for job 
 2. **Connect your Sails app** — Via Git or CLI deploy
 3. **Slipway detects your app** — Reads your models, config, and hooks
 4. **Deploy with one command** — `slipway slide` deploys your app
-5. **Manage everything from the dashboard** — Bridge, Helm, logs, domains
+5. **Manage everything from the dashboard** — Bridge, Bearing, Helm, logs, domains
 
 ## Architecture
 
