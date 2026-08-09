@@ -40,6 +40,11 @@ features:
   - icon: 🔧
     title: Production REPL
     details: Debug and inspect your running app with Helm. Execute Sails helpers and queries in a production console.
+    link: /slipway/helm
+  - icon: 🧭
+    title: Customer Feedback
+    details: Turn feedback into a public roadmap and useful product updates with Bearing, all on your application's own domain.
+    link: /slipway/bearing
   - icon: 🔄
     title: Push-to-Deploy
     details: Connect your GitHub repo and deploy automatically on every push via webhooks.

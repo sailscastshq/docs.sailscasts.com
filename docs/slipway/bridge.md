@@ -10,8 +10,8 @@ prev:
   text: Helm
   link: /slipway/helm
 next:
-  text: Content
-  link: /slipway/content
+  text: Bearing
+  link: /slipway/bearing
 editLink: true
 ---
 

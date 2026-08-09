@@ -7,8 +7,8 @@ title: Content
 titleTemplate: Slipway
 description: Manage sails-content Markdown and JSON files from a visual, Git-backed editor in Slipway.
 prev:
-  text: Bridge
-  link: /slipway/bridge
+  text: Bearing
+  link: /slipway/bearing
 next:
   text: Quest
   link: /slipway/quest
