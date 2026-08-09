@@ -242,7 +242,7 @@ standard `checked:*` and `after:*` utilities:
 ```vue
 <!-- Compact operational setting -->
 <Switch
-  class="h-5 w-9 p-0.5 after:size-4 checked:after:[transform:translateX(1rem)]"
+  class="h-5 w-9 after:size-4 checked:after:[transform:translate(1rem,-50%)]"
 />
 
 <!-- Product colour without a component prop -->
@@ -252,8 +252,8 @@ standard `checked:*` and `after:*` utilities:
 ```
 
 When changing track height or width, adjust the thumb size and checked
-translation in the same caller-owned recipe. Motion is brief by default and is
-removed when the user prefers reduced motion.
+translation in the same caller-owned recipe. Motion is brief by default and
+becomes quicker when the user prefers reduced motion.
 
 ## Durable state
 
