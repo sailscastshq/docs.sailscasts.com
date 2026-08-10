@@ -245,6 +245,7 @@ Hagfish's share surface and Slipway's operational filters need the same interact
 
 ## Related components
 
+- [Tooltip](/klean-ui/components/tooltip) — short supplementary text for one semantic control, never interactive content.
 - [Menu](/klean-ui/components/menu) — action and navigation semantics with roving focus.
 - [Select](/klean-ui/components/select) — a fixed-list value picker composed with Popover.
 - [Date Picker](/klean-ui/components/date-picker) — a date-only `YYYY-MM-DD` field composed with Popover.

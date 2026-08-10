@@ -41,6 +41,10 @@ A native-first boolean setting that takes effect immediately, with real checked 
 
 A calm decorative mark for indeterminate work, with caller-owned Tailwind styling and truthful busy and status semantics left in visible application markup.
 
+### [Tooltip](/klean-ui/components/tooltip)
+
+Short supplementary text for one semantic button or link, with accessible hover, focus, dismissal, collision handling, and caller-owned Tailwind styling.
+
 ### [Popover](/klean-ui/components/popover)
 
 A native-first non-modal floating surface with light dismissal, focus return, collision-aware positioning, and ordinary semantic content. A real button invokes it through the browser's `popovertarget` relationship.

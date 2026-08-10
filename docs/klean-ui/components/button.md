@@ -157,6 +157,7 @@ Klean's neutral default stays motionless and uses tonal feedback. Hagfish delibe
 
 ## Related components
 
+- [Tooltip](/klean-ui/components/tooltip) — adds short supplementary text without changing the button or link semantics.
 - [Spinner](/klean-ui/components/spinner) — a decorative pending mark inside a truthfully labelled busy button.
 - [Slide](/klean-ui/components/slide) — higher-friction confirmation for consequential actions.
 - [Menu](/klean-ui/components/menu) — a compact list of actions and destinations.
