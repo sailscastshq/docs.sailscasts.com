@@ -515,6 +515,7 @@ Copy, inspect, and change the complete source for your framework.
 
 ## Related components
 
+- [Spinner](/klean-ui/components/spinner) — represents work in progress; Toast reports a useful outcome.
 - [Button](/klean-ui/components/button) — a truthful toast action or dismissal control.
 - [Slide](/klean-ui/components/slide) — confirm consequential work before announcing its result.
 - [Schedule Picker](/klean-ui/components/schedule-picker) — choose an instant, then announce the server outcome.

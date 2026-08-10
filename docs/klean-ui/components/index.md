@@ -37,6 +37,10 @@ A native-first mutually exclusive choice for short visible lists. Shared names, 
 
 A native-first boolean setting that takes effect immediately, with real checked state, browser keyboard and form behavior, honest optimistic rollback recipes, and caller-owned Tailwind styling.
 
+### [Spinner](/klean-ui/components/spinner)
+
+A calm decorative mark for indeterminate work, with caller-owned Tailwind styling and truthful busy and status semantics left in visible application markup.
+
 ### [Popover](/klean-ui/components/popover)
 
 A native-first non-modal floating surface with light dismissal, focus return, collision-aware positioning, and ordinary semantic content. A real button invokes it through the browser's `popovertarget` relationship.
