@@ -121,6 +121,7 @@ function kleanUiGuide() {
         { text: 'Switch', link: '/klean-ui/components/switch' },
         { text: 'Spinner', link: '/klean-ui/components/spinner' },
         { text: 'Tooltip', link: '/klean-ui/components/tooltip' },
+        { text: 'Tabs', link: '/klean-ui/components/tabs' },
         { text: 'Popover', link: '/klean-ui/components/popover' },
         { text: 'Menu', link: '/klean-ui/components/menu' },
         { text: 'Select', link: '/klean-ui/components/select' },

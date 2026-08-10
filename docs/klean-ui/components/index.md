@@ -45,6 +45,10 @@ A calm decorative mark for indeterminate work, with caller-owned Tailwind stylin
 
 Short supplementary text for one semantic button or link, with accessible hover, focus, dismissal, collision handling, and caller-owned Tailwind styling.
 
+### [Tabs](/klean-ui/components/tabs)
+
+Accessible peer panels with roving focus, automatic or manual activation, dynamic removal, overflow reveal, and caller-owned native buttons and Tailwind styling.
+
 ### [Popover](/klean-ui/components/popover)
 
 A native-first non-modal floating surface with light dismissal, focus return, collision-aware positioning, and ordinary semantic content. A real button invokes it through the browser's `popovertarget` relationship.

@@ -1,0 +1,300 @@
+<script setup>
+import {
+  computed,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  useAttrs,
+  useId,
+  watch
+} from 'vue'
+import { twMerge } from 'tailwind-merge'
+
+defineOptions({ inheritAttrs: false })
+
+const props = defineProps({
+  /** Framework-native controlled value. Omit for uncontrolled use. */
+  modelValue: { type: String, default: undefined },
+  /** Initial value when `modelValue` is not controlled. */
+  defaultValue: { type: String, default: undefined },
+  /** Arrow-key direction. */
+  orientation: {
+    type: String,
+    default: 'horizontal',
+    validator: (value) => ['horizontal', 'vertical'].includes(value)
+  },
+  /** Whether moving focus also selects a tab. */
+  activation: {
+    type: String,
+    default: 'automatic',
+    validator: (value) => ['automatic', 'manual'].includes(value)
+  }
+})
+
+const emit = defineEmits(['update:modelValue', 'change'])
+const attrs = useAttrs()
+const componentId = useId().replace(/[^a-zA-Z0-9_-]/g, '')
+const root = ref()
+const internalValue = ref(props.defaultValue)
+const isControlled = computed(() => props.modelValue !== undefined)
+const value = computed(() =>
+  isControlled.value ? props.modelValue : internalValue.value
+)
+const rootAttrs = computed(() => {
+  const {
+    class: _class,
+    'aria-label': _ariaLabel,
+    'aria-labelledby': _ariaLabelledby,
+    role: _role,
+    ...rest
+  } = attrs
+  return rest
+})
+const rootClasses = computed(() => twMerge(attrs.class))
+
+let observer
+let previousValues = []
+let lastFocusedValue
+let syncing = false
+
+function listElement() {
+  return root.value?.firstElementChild
+}
+
+function tabValue(element) {
+  return element?.getAttribute('data-value') ?? ''
+}
+
+function tabs() {
+  const list = listElement()
+  if (!list) return []
+  return [...list.querySelectorAll('button[data-value]')].filter(
+    (tab) =>
+      tab.closest('[role="tablist"]') === list ||
+      !tab.closest('[role="tablist"]')
+  )
+}
+
+function panels() {
+  const list = listElement()
+  if (!root.value || !list) return []
+  return [...root.value.children]
+    .slice(1)
+    .filter((element) => element.hasAttribute('data-value'))
+}
+
+function disabled(tab) {
+  return tab.disabled || tab.getAttribute('aria-disabled') === 'true'
+}
+
+function enabledTabs() {
+  return tabs().filter((tab) => !disabled(tab))
+}
+
+function tabFor(candidate) {
+  return tabs().find((tab) => tabValue(tab) === candidate)
+}
+
+function panelFor(candidate) {
+  return panels().find((panel) => tabValue(panel) === candidate)
+}
+
+function fallbackValue(current) {
+  const available = enabledTabs()
+  if (!available.length) return undefined
+
+  const oldIndex = previousValues.indexOf(current)
+  const index = oldIndex < 0 ? 0 : Math.min(oldIndex, available.length - 1)
+  return tabValue(available[index])
+}
+
+function requestValue(nextValue, { user = false } = {}) {
+  if (!nextValue || nextValue === value.value) return
+  if (!isControlled.value) internalValue.value = nextValue
+  emit('update:modelValue', nextValue)
+  if (user) emit('change', nextValue)
+  nextTick(sync)
+}
+
+function generatedPairId(candidate, index) {
+  const slug = candidate.replace(/[^a-zA-Z0-9_-]/g, '-') || String(index)
+  return `klean-tabs-${componentId}-${slug}-${index}`
+}
+
+function sync() {
+  if (!root.value || syncing) return
+  syncing = true
+
+  const list = listElement()
+  const allTabs = tabs()
+  const allPanels = panels()
+  const current = value.value
+  const currentTab = tabFor(current)
+  const resolved =
+    currentTab && !disabled(currentTab) ? current : fallbackValue(current)
+
+  if (resolved && resolved !== current) {
+    if (!isControlled.value) internalValue.value = resolved
+    else emit('update:modelValue', resolved)
+  }
+
+  if (list) {
+    list.setAttribute('role', 'tablist')
+    list.setAttribute('data-slot', 'tabs-list')
+    list.setAttribute('data-orientation', props.orientation)
+    list.setAttribute('aria-orientation', props.orientation)
+    if (attrs['aria-label'])
+      list.setAttribute('aria-label', attrs['aria-label'])
+    else list.removeAttribute('aria-label')
+    if (attrs['aria-labelledby'])
+      list.setAttribute('aria-labelledby', attrs['aria-labelledby'])
+    else list.removeAttribute('aria-labelledby')
+  }
+
+  allTabs.forEach((tab, index) => {
+    const candidate = tabValue(tab)
+    const panel = panelFor(candidate)
+    const pairId = generatedPairId(candidate, index)
+    const selected = candidate === resolved
+
+    if (!tab.hasAttribute('type')) tab.setAttribute('type', 'button')
+    tab.setAttribute('role', 'tab')
+    tab.setAttribute('data-slot', 'tab')
+    tab.setAttribute('data-state', selected ? 'active' : 'inactive')
+    tab.setAttribute('data-orientation', props.orientation)
+    tab.setAttribute('aria-selected', String(selected))
+    tab.tabIndex = selected ? 0 : -1
+    if (!tab.id) tab.id = `${pairId}-tab`
+
+    if (panel) {
+      if (!panel.id) panel.id = `${pairId}-panel`
+      tab.setAttribute('aria-controls', panel.id)
+      panel.setAttribute('role', 'tabpanel')
+      panel.setAttribute('data-slot', 'tab-panel')
+      panel.setAttribute('data-state', selected ? 'active' : 'inactive')
+      panel.setAttribute('data-orientation', props.orientation)
+      panel.setAttribute('aria-labelledby', tab.id)
+      panel.hidden = !selected
+      if (!panel.hasAttribute('tabindex')) panel.tabIndex = 0
+    } else {
+      tab.removeAttribute('aria-controls')
+    }
+  })
+
+  allPanels.forEach((panel) => {
+    if (tabFor(tabValue(panel))) return
+    panel.hidden = true
+  })
+
+  const shouldRestoreFocus =
+    lastFocusedValue === current && current && !tabFor(current) && resolved
+  previousValues = allTabs.map(tabValue)
+  syncing = false
+
+  if (shouldRestoreFocus) {
+    nextTick(() => tabFor(resolved)?.focus({ preventScroll: true }))
+  }
+}
+
+function reveal(tab) {
+  tab.scrollIntoView?.({ block: 'nearest', inline: 'nearest' })
+}
+
+function focusTab(tab) {
+  if (!tab) return
+  tab.focus({ preventScroll: true })
+  reveal(tab)
+  if (props.activation === 'automatic') {
+    requestValue(tabValue(tab), { user: true })
+  }
+}
+
+function eventTab(event) {
+  const candidate = event.target.closest?.('button[data-value]')
+  return candidate && listElement()?.contains(candidate) ? candidate : undefined
+}
+
+function handleClick(event) {
+  const tab = eventTab(event)
+  if (!tab || disabled(tab)) return
+  lastFocusedValue = tabValue(tab)
+  requestValue(tabValue(tab), { user: true })
+}
+
+function handleFocusIn(event) {
+  const tab = eventTab(event)
+  if (!tab || disabled(tab)) return
+  lastFocusedValue = tabValue(tab)
+}
+
+function handleKeydown(event) {
+  const tab = eventTab(event)
+  if (!tab || disabled(tab)) return
+  const available = enabledTabs()
+  const index = available.indexOf(tab)
+  let next
+
+  if (
+    (props.orientation === 'horizontal' && event.key === 'ArrowRight') ||
+    (props.orientation === 'vertical' && event.key === 'ArrowDown')
+  ) {
+    next = available[(index + 1) % available.length]
+  } else if (
+    (props.orientation === 'horizontal' && event.key === 'ArrowLeft') ||
+    (props.orientation === 'vertical' && event.key === 'ArrowUp')
+  ) {
+    next = available[(index - 1 + available.length) % available.length]
+  } else if (event.key === 'Home') {
+    next = available[0]
+  } else if (event.key === 'End') {
+    next = available.at(-1)
+  } else if (
+    props.activation === 'manual' &&
+    ['Enter', ' '].includes(event.key)
+  ) {
+    event.preventDefault()
+    requestValue(tabValue(tab), { user: true })
+    return
+  } else {
+    return
+  }
+
+  event.preventDefault()
+  focusTab(next)
+}
+
+onMounted(async () => {
+  await nextTick()
+  sync()
+  observer = new MutationObserver(sync)
+  observer.observe(root.value, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['data-value', 'disabled', 'aria-disabled']
+  })
+})
+
+watch(
+  () => [props.modelValue, props.orientation, props.activation],
+  () => nextTick(sync)
+)
+
+onBeforeUnmount(() => observer?.disconnect())
+</script>
+
+<template>
+  <div
+    v-bind="rootAttrs"
+    ref="root"
+    data-slot="tabs"
+    :data-orientation="orientation"
+    :class="rootClasses"
+    @click="handleClick"
+    @focusin="handleFocusIn"
+    @keydown="handleKeydown"
+  >
+    <slot />
+  </div>
+</template>
