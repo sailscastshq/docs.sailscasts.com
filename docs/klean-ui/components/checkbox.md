@@ -127,7 +127,7 @@ retained data, subscribe to an event, or select a row. A set of checkboxes can
 have zero, one, or many selected values.
 
 Use a Switch for an immediate on/off setting whose new state takes effect as
-soon as it changes. Use Radio Group when exactly one of a small visible set may
+soon as it changes. Use [Radio](/klean-ui/components/radio) when exactly one of a small visible set may
 be chosen. Use [Select](/klean-ui/components/select) when one choice comes from
 a longer fixed list. Use [Button](/klean-ui/components/button) for an action
 rather than persistent form state.
@@ -253,6 +253,7 @@ than stored separately.
 
 ## Related components
 
+- [Radio](/klean-ui/components/radio) — one mutually exclusive choice from a short visible list.
 - [Input](/klean-ui/components/input) — arbitrary free-form text.
 - [Select](/klean-ui/components/select) — one persistent value from a fixed list.
 - [Button](/klean-ui/components/button) — an action rather than checked form state.

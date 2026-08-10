@@ -125,7 +125,7 @@ on. The new state is the action and should be saved as soon as it changes.
 
 Use [Checkbox](/klean-ui/components/checkbox) when the value belongs to a form
 that is submitted later, when zero or many items may be selected, or when a
-parent needs an indeterminate state. Use a Radio Group for exactly one choice
+parent needs an indeterminate state. Use [Radio](/klean-ui/components/radio) for exactly one choice
 from a small visible set when it becomes available.
 
 Switch is deliberately not a Checkbox variant. The two controls share a native
@@ -270,6 +270,7 @@ change with rollback and visible error feedback.
 
 ## Related components
 
+- [Radio](/klean-ui/components/radio) — one mutually exclusive choice rather than an immediate boolean setting.
 - [Checkbox](/klean-ui/components/checkbox) — submitted choices, collections, and indeterminate selection.
 - [Input](/klean-ui/components/input) — a value the user must enter rather than turn on or off.
 - [Button](/klean-ui/components/button) — a command rather than persistent boolean state.

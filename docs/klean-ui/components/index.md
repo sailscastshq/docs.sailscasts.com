@@ -29,6 +29,10 @@ A styled native textarea whose durable presentation grows from its current value
 
 A native-first checked value for booleans, collection membership, and real indeterminate selection. Browser form and accessibility behavior stay intact while labels, groups, validation, and product styling remain visible application markup.
 
+### [Radio](/klean-ui/components/radio)
+
+A native-first mutually exclusive choice for short visible lists. Shared names, fieldsets, legends, labels, keyboard behavior, validation, and form submission remain browser semantics while caller Tailwind owns the presentation.
+
 ### [Switch](/klean-ui/components/switch)
 
 A native-first boolean setting that takes effect immediately, with real checked state, browser keyboard and form behavior, honest optimistic rollback recipes, and caller-owned Tailwind styling.
