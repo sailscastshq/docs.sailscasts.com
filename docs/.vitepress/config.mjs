@@ -119,6 +119,7 @@ function kleanUiGuide() {
         { text: 'Checkbox', link: '/klean-ui/components/checkbox' },
         { text: 'Radio', link: '/klean-ui/components/radio' },
         { text: 'Switch', link: '/klean-ui/components/switch' },
+        { text: 'Spinner', link: '/klean-ui/components/spinner' },
         { text: 'Popover', link: '/klean-ui/components/popover' },
         { text: 'Menu', link: '/klean-ui/components/menu' },
         { text: 'Select', link: '/klean-ui/components/select' },

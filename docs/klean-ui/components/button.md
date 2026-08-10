@@ -10,8 +10,11 @@ import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanButton from '../../.vitepress/theme/components/klean/Button.vue'
+import ProductLoader from '../../.vitepress/theme/components/klean/spinner/ProductLoader.vue'
+import KleanSpinner from '../../.vitepress/theme/components/klean/spinner/Spinner.vue'
 import buttonSource from '../../.vitepress/theme/components/klean/Button.vue?raw'
 import basicUsage from '../snippets/button/usage.vue?raw'
+import pendingUsage from '../snippets/button/pending.vue?raw'
 import semanticUsage from '../snippets/button/semantics.vue?raw'
 import productRecipes from '../snippets/button/products.vue?raw'
 </script>
@@ -52,6 +55,26 @@ The standard Boring Stack path requires no `init`, `klean-ui.json`, alias prompt
 <CopyCode :code="basicUsage" label="usage.vue" />
 
 Visual styling stays in the framework's ordinary class API. If the same product treatment repeats, create an application-owned component such as `PrimaryButton.vue` using Button as its semantic base.
+
+## Pending actions
+
+Button intentionally has no `loading` prop. The real request state owns `disabled` and `aria-busy`, the visible label says what is happening, and Spinner supplies a decorative mark. A product such as Slipway can pass its own animated mascot through Spinner without changing Button's API.
+
+<KleanPreview id="button-pending" :source="pendingUsage" filename="pending-button.vue">
+  <template #preview>
+    <KleanButton type="button" disabled aria-busy="true">
+      <KleanSpinner class="size-4">
+        <ProductLoader />
+      </KleanSpinner>
+      Deploying service…
+    </KleanButton>
+  </template>
+  <template #source>
+
+<<< ../snippets/button/pending.vue
+
+  </template>
+</KleanPreview>
 
 ## API
 
@@ -134,6 +157,7 @@ Klean's neutral default stays motionless and uses tonal feedback. Hagfish delibe
 
 ## Related components
 
+- [Spinner](/klean-ui/components/spinner) — a decorative pending mark inside a truthfully labelled busy button.
 - [Slide](/klean-ui/components/slide) — higher-friction confirmation for consequential actions.
 - [Menu](/klean-ui/components/menu) — a compact list of actions and destinations.
 - [Popover](/klean-ui/components/popover) — a non-modal surface invoked by a button.
