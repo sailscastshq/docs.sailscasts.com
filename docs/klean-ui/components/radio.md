@@ -297,7 +297,32 @@ label, or part-class props.
 ## Styling
 
 The default intentionally retains native radio rendering. Its accent follows
-the current text colour, and caller Tailwind merges last:
+the current text colour, and caller Tailwind merges last.
+
+### Control and label styling
+
+`Radio` renders only the native input. Its `class` or `className` styles the
+control without styling the label text, so typography and layout remain
+independent application markup:
+
+```vue
+<div class="flex items-center gap-3">
+  <Radio
+    id="region-lagos"
+    v-model="region"
+    name="region"
+    value="lagos"
+    class="size-5 text-emerald-700 focus-visible:outline-emerald-700"
+  />
+  <label for="region-lagos" class="text-sm text-gray-600">Lagos</label>
+</div>
+```
+
+Keep the `id` and `for` association: it gives the Radio its accessible name and
+makes the text a larger click target. Styling the label or an entire selected
+card with `peer-checked:*` or `has-[:checked]:*` is optional caller markup.
+
+For example:
 
 ```vue
 <!-- Larger operational control -->
