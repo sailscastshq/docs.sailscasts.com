@@ -48,7 +48,7 @@ HTML has no native tabs element, so Klean supplies the missing interaction contr
           :key="item"
           type="button"
           :data-value="item"
-          class="min-h-11 shrink-0 border-b-2 border-transparent px-1 py-2 text-sm font-medium text-gray-500 outline-none hover:text-gray-950 focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 data-[state=active]:border-gray-950 data-[state=active]:text-gray-950 dark:text-gray-400 dark:hover:text-white dark:focus-visible:ring-white dark:data-[state=active]:border-white dark:data-[state=active]:text-white"
+          class="min-h-11 shrink-0 cursor-pointer border-b-2 border-transparent px-1 py-2 text-sm font-medium text-gray-500 outline-none hover:text-gray-950 focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2 data-[state=active]:border-gray-950 data-[state=active]:text-gray-950 dark:text-gray-400 dark:hover:text-white dark:focus-visible:ring-white dark:data-[state=active]:border-white dark:data-[state=active]:text-white"
         >
           {{ item[0].toUpperCase() + item.slice(1) }}
         </button>
@@ -148,7 +148,7 @@ Tabs forwards other non-conflicting attributes to its root. Individual button an
           :key="section.value"
           type="button"
           :data-value="section.value"
-          class="min-h-11 rounded-md border-l-2 border-transparent px-3 py-2 text-left text-sm font-medium text-gray-500 outline-none hover:bg-gray-50 hover:text-gray-950 focus-visible:ring-2 focus-visible:ring-gray-950 data-[state=active]:border-gray-950 data-[state=active]:bg-gray-100 data-[state=active]:text-gray-950 dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white dark:focus-visible:ring-white dark:data-[state=active]:border-white dark:data-[state=active]:bg-gray-900 dark:data-[state=active]:text-white"
+          class="min-h-11 cursor-pointer rounded-md border-l-2 border-transparent px-3 py-2 text-left text-sm font-medium text-gray-500 outline-none hover:bg-gray-50 hover:text-gray-950 focus-visible:ring-2 focus-visible:ring-gray-950 data-[state=active]:border-gray-950 data-[state=active]:bg-gray-100 data-[state=active]:text-gray-950 dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white dark:focus-visible:ring-white dark:data-[state=active]:border-white dark:data-[state=active]:bg-gray-900 dark:data-[state=active]:text-white"
         >
           {{ section.label }}
         </button>
@@ -227,7 +227,7 @@ Style the real button and panel elements directly. Klean adds stable state hooks
 <button
   type="button"
   data-value="activity"
-  class="border-b-2 border-transparent px-3 py-2 text-gray-500
+  class="cursor-pointer border-b-2 border-transparent px-3 py-2 text-gray-500
          data-[state=active]:border-black data-[state=active]:text-black"
 >
   Activity
@@ -248,7 +248,7 @@ Slipway workspaces add, rename, reorder, overflow, and close result tabs. Keep a
       :key="item.value"
       type="button"
       :data-value="item.value"
-      class="w-36 pr-10"
+      class="w-36 cursor-pointer pr-10"
     >
       {{ item.label }}
     </button>
@@ -258,7 +258,7 @@ Slipway workspaces add, rename, reorder, overflow, and close result tabs. Keep a
     <span v-for="item in openTabs" :key="item.value" class="flex w-36 justify-end">
       <button
         type="button"
-        class="pointer-events-auto"
+        class="pointer-events-auto cursor-pointer"
         :aria-label="`Close ${item.label}`"
         @click="close(item.value)"
       >

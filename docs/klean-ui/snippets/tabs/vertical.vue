@@ -23,7 +23,7 @@ const sections = [
         :key="section.value"
         type="button"
         :data-value="section.value"
-        class="min-h-11 rounded-md border-l-2 border-transparent px-3 py-2 text-left text-sm font-medium text-gray-500 outline-none hover:bg-gray-50 hover:text-gray-950 focus-visible:ring-2 focus-visible:ring-gray-950 data-[state=active]:border-gray-950 data-[state=active]:bg-gray-100 data-[state=active]:text-gray-950"
+        class="min-h-11 cursor-pointer rounded-md border-l-2 border-transparent px-3 py-2 text-left text-sm font-medium text-gray-500 outline-none hover:bg-gray-50 hover:text-gray-950 focus-visible:ring-2 focus-visible:ring-gray-950 data-[state=active]:border-gray-950 data-[state=active]:bg-gray-100 data-[state=active]:text-gray-950"
       >
         {{ section.label }}
       </button>
