@@ -12,13 +12,13 @@
   ];
 
   const FILL_CLASSES = [
-    "pointer-events-none absolute inset-y-0 start-0 bg-gray-200",
+    "pointer-events-none absolute inset-y-0 inset-s-0 bg-gray-200",
     "transition-[width,background-color] duration-200 ease-out group-data-[state=dragging]/slide:transition-none motion-reduce:transition-none",
     "dark:bg-gray-800",
   ];
 
   const THUMB_CLASSES = [
-    "pointer-events-none absolute top-1 start-1 z-20 flex size-9 items-center justify-center rounded-full bg-gray-950 text-white shadow-sm",
+    "pointer-events-none absolute top-1 inset-s-1 z-20 flex size-9 items-center justify-center rounded-full bg-gray-950 text-white shadow-sm",
     "transition-[transform,background-color,color] duration-200 ease-out group-data-[state=dragging]/slide:transition-none motion-reduce:transition-none",
     "dark:bg-white dark:text-gray-950",
   ];

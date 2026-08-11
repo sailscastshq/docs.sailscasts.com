@@ -175,7 +175,7 @@ Try the failure path below. It intentionally restores the previous setting so
 the interface never claims a value the server rejected.
 
 <div class="my-6 overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950">
-  <label class="flex min-h-20 cursor-pointer items-center justify-between gap-6 px-5 py-4 has-[:disabled]:cursor-not-allowed">
+  <label class="flex min-h-20 cursor-pointer items-center justify-between gap-6 px-5 py-4 has-disabled:cursor-not-allowed">
     <span>
       <span class="block text-sm font-medium">Automatic deploys</span>
       <span class="mt-1 block text-sm leading-5 text-gray-500 dark:text-gray-400">
@@ -242,7 +242,7 @@ standard `checked:*` and `after:*` utilities:
 ```vue
 <!-- Compact operational setting -->
 <Switch
-  class="h-5 w-9 after:size-4 checked:after:[transform:translate(1rem,-50%)]"
+  class="h-5 w-9 after:size-4 checked:after:transform-[translate(1rem,-50%)]"
 />
 
 <!-- Product colour without a component prop -->

@@ -22,7 +22,7 @@ const Spinner = forwardRef(function Spinner(
       aria-hidden="true"
       className={twMerge(
         [
-          'inline-flex size-4 shrink-0 items-center justify-center motion-reduce:animate-none! motion-reduce:[&_*]:animate-none! [&>*]:size-full',
+          'inline-flex size-4 shrink-0 items-center justify-center motion-reduce:animate-none! motion-reduce:**:animate-none! *:size-full',
           children ? '' : 'animate-spin'
         ],
         className

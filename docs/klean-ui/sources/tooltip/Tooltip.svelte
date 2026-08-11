@@ -15,12 +15,19 @@
   import { twMerge } from "tailwind-merge";
 
   const BASE_CLASSES = [
-    "z-50 m-0 w-max max-w-[calc(100vw-1rem)] rounded-md border border-gray-950 bg-gray-950 px-2.5 py-1.5 text-xs font-medium leading-none text-white shadow-md outline-none",
+    "z-50 m-0 w-max max-w-[calc(100vw-1rem)] overflow-visible rounded-md border border-gray-950 bg-gray-950 px-2.5 py-1.5 text-xs font-medium leading-none text-white shadow-md outline-none",
     "transition-opacity duration-100 starting:opacity-0 motion-reduce:transition-none",
     "forced-colors:border forced-colors:border-[CanvasText] forced-colors:bg-[Canvas] forced-colors:text-[CanvasText]",
   ];
   const OPEN_DELAY = 400;
   const CLOSE_DELAY = 80;
+  const ARROW_OVERHANG = 8;
+  const ARROW_CLIP_PATHS = {
+    top: "polygon(0 0, 100% 0, 50% 100%)",
+    right: "polygon(100% 0, 0 50%, 100% 100%)",
+    bottom: "polygon(50% 0, 100% 100%, 0 100%)",
+    left: "polygon(0 0, 100% 50%, 0 100%)",
+  };
 
   let {
     text,
@@ -138,7 +145,8 @@
       top: arrowData.y == null ? "" : `${arrowData.y}px`,
       right: "",
       bottom: "",
-      [staticSide]: "-4px",
+      clipPath: ARROW_CLIP_PATHS[side],
+      [staticSide]: `-${ARROW_OVERHANG}px`,
     };
   }
 
@@ -314,7 +322,7 @@
       bind:this={arrowElement}
       aria-hidden="true"
       data-slot="tooltip-arrow"
-      class="absolute -z-10 size-2 rotate-45 border border-inherit bg-inherit forced-colors:hidden"
+      class="pointer-events-none absolute size-3 bg-inherit forced-colors:hidden"
       style={styleString(arrowStyle)}
     ></span>
   </div>

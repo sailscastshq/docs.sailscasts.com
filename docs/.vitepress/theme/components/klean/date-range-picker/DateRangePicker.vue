@@ -164,7 +164,7 @@ const fieldsetAttrs = computed(() => {
 })
 const rootClasses = computed(() =>
   twMerge(
-    'grid w-full gap-3 [&_[data-slot=date-range-field]]:relative [&_[data-slot=date-range-field]]:flex [&_[data-slot=date-range-field]]:items-stretch [&_[data-slot=input]]:pe-12',
+    'grid w-full gap-3 **:data-[slot=date-range-field]:relative **:data-[slot=date-range-field]:flex **:data-[slot=date-range-field]:items-stretch **:data-[slot=input]:pe-12',
     attrs.class
   )
 )
@@ -363,7 +363,7 @@ defineExpose({
             :popovertarget="popoverId"
             popovertargetaction="show"
             data-slot="date-range-start-button"
-            class="absolute inset-y-0 end-0 grid min-w-11 place-items-center rounded-e-md text-gray-500 hover:bg-gray-100 hover:text-gray-950 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950 disabled:cursor-not-allowed disabled:opacity-40 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white dark:focus-visible:outline-white"
+            class="absolute inset-y-0 inset-e-0 grid min-w-11 place-items-center rounded-e-md text-gray-500 hover:bg-gray-100 hover:text-gray-950 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950 disabled:cursor-not-allowed disabled:opacity-40 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white dark:focus-visible:outline-white"
             :disabled="disabled || readonly"
             :aria-label="`Choose ${startLabel.toLowerCase()}`"
             aria-haspopup="grid"
@@ -422,7 +422,7 @@ defineExpose({
             :popovertarget="popoverId"
             popovertargetaction="show"
             data-slot="date-range-end-button"
-            class="absolute inset-y-0 end-0 grid min-w-11 place-items-center rounded-e-md text-gray-500 hover:bg-gray-100 hover:text-gray-950 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950 disabled:cursor-not-allowed disabled:opacity-40 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white dark:focus-visible:outline-white"
+            class="absolute inset-y-0 inset-e-0 grid min-w-11 place-items-center rounded-e-md text-gray-500 hover:bg-gray-100 hover:text-gray-950 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950 disabled:cursor-not-allowed disabled:opacity-40 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white dark:focus-visible:outline-white"
             :disabled="disabled || readonly"
             :aria-label="`Choose ${endLabel.toLowerCase()}`"
             aria-haspopup="grid"

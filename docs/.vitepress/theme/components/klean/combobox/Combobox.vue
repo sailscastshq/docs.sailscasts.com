@@ -456,7 +456,7 @@ defineExpose({
         "
         :aria-busy="loading || undefined"
         data-slot="combobox-listbox"
-        class="max-h-[19rem] overflow-y-auto overscroll-contain outline-none"
+        class="max-h-76 overflow-y-auto overscroll-contain outline-none"
       >
         <div
           v-if="error"
@@ -495,7 +495,7 @@ defineExpose({
               :data-highlighted="index === highlightedIndex ? '' : undefined"
               :data-selected="index === selectedIndex ? '' : undefined"
               :data-disabled="option.disabled ? '' : undefined"
-              class="flex min-h-11 cursor-pointer items-center justify-between gap-3 rounded px-3 py-2 text-sm text-gray-700 outline-none data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-950 data-[disabled]:cursor-not-allowed data-[disabled]:opacity-40 dark:text-gray-200 dark:data-[highlighted]:bg-white/10 dark:data-[highlighted]:text-white"
+              class="flex min-h-11 cursor-pointer items-center justify-between gap-3 rounded px-3 py-2 text-sm text-gray-700 outline-none data-highlighted:bg-gray-100 data-highlighted:text-gray-950 data-disabled:cursor-not-allowed data-disabled:opacity-40 dark:text-gray-200 dark:data-highlighted:bg-white/10 dark:data-highlighted:text-white"
               @pointermove="!option.disabled && (highlightedIndex = index)"
               @pointerdown.prevent
               @click="choose(index)"

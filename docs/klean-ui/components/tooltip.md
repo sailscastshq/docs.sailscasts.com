@@ -128,7 +128,9 @@ Style the trigger on the trigger. Style the floating surface through Tooltip's o
 
 <CopyCode :code="stylingUsage" label="invoice-tooltip.vue" />
 
-`data-slot="tooltip"` and `data-slot="tooltip-arrow"` are stable nearby styling hooks. The example hides the arrow with an ordinary Tailwind selector; there is no `arrow`, `tone`, `size`, `radius`, `elevation`, or `variant` prop.
+The arrow belongs to Tooltip. It inherits the surface colour and follows the collision-resolved side, so it still points to the trigger when the preferred placement flips or shifts near a viewport edge. `data-slot="tooltip"` and `data-slot="tooltip-arrow"` remain stable nearby styling hooks; there is no `arrow`, `tone`, `size`, `radius`, `elevation`, or `variant` prop.
+
+Keep the arrow visible. It communicates which control the supplementary text describes while ordinary Tailwind classes remain free to restyle the surface.
 
 Repeated product treatment can become a small application-owned wrapper. Hagfish and Slipway can therefore share the accessible behavior without sharing a visual identity.
 
@@ -139,7 +141,7 @@ Repeated product treatment can become a small application-owned wrapper. Hagfish
 - Moving between the trigger and Tooltip does not dismiss it prematurely.
 - Only one Tooltip is open at a time.
 - Touch activation does not create a sticky synthetic hover surface.
-- Placement flips or shifts when the preferred side would leave the viewport.
+- Placement flips or shifts when the preferred side would leave the viewport, and the arrow follows the resolved side and clamped cross-axis position.
 - Reduced-motion and forced-colors preferences retain a useful, readable result.
 - The trigger remains the actual focusable element; Tooltip does not add a styled trigger wrapper.
 

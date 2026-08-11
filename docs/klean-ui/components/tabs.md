@@ -1,7 +1,7 @@
 ---
 title: Tabs
 titleTemplate: Klean UI
-description: Accessible peer panels with roving focus, dynamic values, and caller-owned native buttons and Tailwind styling across Vue, React, and Svelte.
+description: Durable tabs for caller-owned buttons, anchors, and framework Links across Vue, React, and Svelte.
 outline: [2, 3]
 ---
 
@@ -19,21 +19,29 @@ import reactUsage from '../snippets/tabs/usage.jsx?raw'
 import svelteUsage from '../snippets/tabs/usage.svelte?raw'
 import verticalUsage from '../snippets/tabs/vertical.vue?raw'
 import settingsNavigation from '../snippets/tabs/settings-navigation.vue?raw'
+import reactNavigation from '../snippets/tabs/navigation.jsx?raw'
+import svelteNavigation from '../snippets/tabs/navigation.svelte?raw'
 
 const active = ref('overview')
 const verticalActive = ref('profile')
+const navigationActive = ref('profile')
 const verticalSections = [
   { value: 'profile', label: 'Profile' },
   { value: 'notifications', label: 'Notifications' },
   { value: 'billing', label: 'Billing' }
 ]
+const navigationSections = [
+  { value: 'profile', label: 'Profile', href: '#profile' },
+  { value: 'billing', label: 'Billing', href: '#billing' },
+  { value: 'schedule', label: 'Schedule', href: '#schedule' }
+]
 </script>
 
 # Tabs
 
-Tabs switches among peer sections without leaving the current context. The caller writes the real buttons and panels; one shared `data-value` pairs each button with its panel.
+Tabs gives one durable contract to two things applications routinely need: buttons that switch mounted peer panels, and links that navigate among related pages. The caller writes the real elements; Klean reads their semantics instead of asking for a mode, item schema, or router adapter.
 
-HTML has no native tabs element, so Klean supplies the missing interaction contract: relationships, selected and hidden state, roving focus, Arrow keys, Home/End, disabled skipping, overflow reveal, and safe fallback when a dynamic tab disappears. Tailwind, routing, persistence, loading, and close policy remain application code.
+With `button[data-value]`, Klean supplies the missing ARIA tab contract: relationships, selected and hidden state, roving focus, Arrow keys, Home/End, disabled skipping, overflow reveal, and safe fallback when a dynamic tab disappears. With `as="nav"` and direct `a[href][data-value]` children—including a framework Link that renders an anchor—Tabs becomes the navigation landmark, preserves native navigation, and adds only active-state and styling hooks. Tailwind, routing, persistence, loading, and close policy remain application code.
 
 <KleanPreview id="tabs-source" :source="tabsSource" filename="Tabs.vue">
   <template #preview>
@@ -100,7 +108,12 @@ There is no initializer, provider, item schema, `klean-ui.json`, generated class
 
 ## Usage
 
-The first child is the tab list. Its descendant `button[data-value]` elements are tabs. Each later direct child with the same `data-value` is that tab's panel.
+Klean infers the contract from the real elements you provide:
+
+- With the default `as="div"`, make the first child a list of `button[data-value]`. Each later direct child with the same `data-value` is that button's panel.
+- With `as="nav"`, put `a[href][data-value]` or framework Links directly inside Tabs. Tabs itself becomes the navigation landmark; no extra wrapper or panels are required.
+
+Keep a group all buttons or all links. A mixed group is ambiguous, so Klean deliberately leaves it unenhanced.
 
 ### Vue
 
@@ -118,17 +131,18 @@ The binding syntax changes, but the visible HTML and `data-value` relationship s
 
 ## API
 
-| Input                                            | Default           | Purpose                                                          |
-| ------------------------------------------------ | ----------------- | ---------------------------------------------------------------- |
-| Vue `v-model`                                    | first enabled tab | Controlled or uncontrolled selected value.                       |
-| React `value` / `defaultValue` / `onValueChange` | first enabled tab | React-native controlled or initial selected value.               |
-| Svelte `bind:value`                              | first enabled tab | Svelte-native selected value.                                    |
-| `orientation`                                    | `horizontal`      | `horizontal` uses Left/Right; `vertical` uses Up/Down.           |
-| `activation`                                     | `automatic`       | `automatic` selects on focus; `manual` waits for Enter or Space. |
-| `aria-label` / `aria-labelledby`                 | required          | Accessible name forwarded to the tab list.                       |
-| `class` / `className`                            | —                 | Ordinary Tailwind classes merged on the root.                    |
+| Input                                            | Default      | Purpose                                                              |
+| ------------------------------------------------ | ------------ | -------------------------------------------------------------------- |
+| Vue `v-model`                                    | inferred     | Controlled or uncontrolled selected value.                           |
+| React `value` / `defaultValue` / `onValueChange` | inferred     | React-native controlled or initial selected value.                   |
+| Svelte `bind:value`                              | inferred     | Svelte-native selected value.                                        |
+| `as`                                             | `div`        | Use `nav` when the direct children are route destinations.           |
+| `orientation`                                    | `horizontal` | `horizontal` uses Left/Right; `vertical` uses Up/Down.               |
+| `activation`                                     | `automatic`  | `automatic` selects on focus; `manual` waits for Enter or Space.     |
+| `aria-label` / `aria-labelledby`                 | required     | Accessible name forwarded to the button list or navigation landmark. |
+| `class` / `className`                            | —            | Ordinary Tailwind classes merged on the root.                        |
 
-Tabs forwards other non-conflicting attributes to its root. Individual button and panel attributes stay on the caller's elements, where they remain easy to inspect and change.
+Panel mode falls back to the first enabled button. Navigation mode uses the controlled value or an existing `aria-current="page"`; it never guesses which URL shape means current. Tabs forwards other non-conflicting attributes to its root. Individual button, link, and panel attributes stay on the caller's elements, where they remain easy to inspect and change.
 
 ## Horizontal, vertical, and settings navigation
 
@@ -178,21 +192,69 @@ Tabs forwards other non-conflicting attributes to its root. Individual button an
   </template>
 </KleanPreview>
 
-The visual shape does not decide the semantics. If every settings item has its own URL or Inertia page, use a real navigation landmark and real links. The URL then supplies reload, sharing, Back/Forward, and open-in-new-tab behavior without making an anchor pretend to be an ARIA tab.
+The visual shape does not decide the semantics. If every settings item has its own URL or Inertia page, use `as="nav"` and put the real links directly inside Tabs. Klean skips the ARIA tab widget behavior and applies `aria-current="page"` plus `data-state="active"` to the selected destination. Reload, sharing, Back/Forward, prefetch, modified clicks, and open-in-new-tab remain native.
+
+<KleanPreview id="tabs-navigation" :source="settingsNavigation" filename="SettingsNavigation.vue">
+  <template #preview>
+    <div class="w-full max-w-xl border-2 border-black bg-white p-6 shadow-[5px_5px_0_#111] dark:border-white dark:bg-gray-950 dark:shadow-[5px_5px_0_#fff]">
+      <div class="flex items-center gap-3">
+        <div class="grid size-12 place-items-center rounded-xl bg-black text-sm font-bold text-white dark:bg-white dark:text-black">KU</div>
+        <div>
+          <h2 class="font-semibold text-gray-950 dark:text-white">Account settings</h2>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Durable route navigation</p>
+        </div>
+      </div>
+      <KleanTabs
+        as="nav"
+        :model-value="navigationActive"
+        orientation="vertical"
+        aria-label="Account settings"
+        class="mt-8 flex flex-col gap-1"
+      >
+        <a
+          v-for="section in navigationSections"
+          :key="section.value"
+          :href="section.href"
+          :data-value="section.value"
+          class="block min-h-11 cursor-pointer rounded-lg px-3 py-2 text-sm font-medium text-black/60 no-underline outline-none hover:bg-black/5 hover:text-black focus-visible:ring-2 focus-visible:ring-black data-[state=active]:bg-black data-[state=active]:text-white dark:text-white/65 dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:ring-white dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
+          @click="navigationActive = section.value"
+        >
+          {{ section.label }}
+        </a>
+      </KleanTabs>
+    </div>
+  </template>
+  <template #caption>
+    These are real links, not buttons wearing link styling. Try opening one in a new tab or using a modified click.
+  </template>
+</KleanPreview>
+
+### Vue Link navigation
 
 <CopyCode :code="settingsNavigation" label="SettingsNavigation.vue" />
 
-Use the Boring Stack `Link` for client-side navigation or replace it with a native `<a>` for ordinary document navigation. Keep `Tabs` for buttons that reveal already-mounted peer panels on the same page.
+### React Link navigation
+
+<CopyCode :code="reactNavigation" label="SettingsNavigation.jsx" />
+
+### SvelteKit navigation
+
+<CopyCode :code="svelteNavigation" label="SettingsNavigation.svelte" />
+
+Vue and React pass their Inertia Link directly. SvelteKit enhances ordinary anchors, so no Link wrapper is needed. A native `<a>` works in every framework.
 
 ## When to use
 
-Use Tabs when all sections are peers in one task and changing sections should preserve the surrounding page: workspace results, editor documents, dashboard views, or instant detail sections.
+Use Tabs for related sections that share one visual navigation treatment:
+
+- use buttons and panels for workspace results, editor documents, dashboard views, or instant detail sections;
+- use anchors or framework Links when each section has its own durable destination.
 
 Tabs work best when the labels are short, the active panel is clear, and every automatic panel is already mounted and fast.
 
 ## When not to use
 
-- Use real links or the Boring Stack Link when each destination is a page, should open in a new tab, or belongs in browser history as navigation.
+- Do not use button mode when each destination is a page. Put real links or the Boring Stack Link inside Tabs instead.
 - Use [Radio](/klean-ui/components/radio) when the choice changes a value rather than which panel is visible.
 - Use [Select](/klean-ui/components/select) or [Combobox](/klean-ui/components/combobox) for a long choice list where simultaneous labels are not useful.
 - Use disclosure or an accordion when several sections may be open together or the content is hierarchical rather than peer views.
@@ -216,11 +278,11 @@ Loading policy still belongs to the page. Tabs does not fetch, cache, suspend, o
 
 ## Styling with Tailwind
 
-Style the real button and panel elements directly. Klean adds stable state hooks:
+Style the real button, link, and panel elements directly. Klean adds stable state hooks:
 
-- root: `data-slot="tabs"` and `data-orientation`;
-- list: `data-slot="tabs-list"` and `data-orientation`;
-- tabs: `data-slot="tab"`, `data-state="active|inactive"`, and `data-orientation`;
+- root: `data-slot="tabs"`, `data-mode="panels|navigation"`, and `data-orientation`;
+- panel list: `data-slot="tabs-list"`, `data-mode`, and `data-orientation`;
+- buttons or links: `data-slot="tab"`, `data-mode`, `data-state="active|inactive"`, and `data-orientation`;
 - panels: `data-slot="tab-panel"`, `data-state="active|inactive"`, and `data-orientation`.
 
 ```html
@@ -235,6 +297,21 @@ Style the real button and panel elements directly. Klean adds stable state hooks
 ```
 
 These are ordinary Tailwind selectors, not Klean color, size, tone, elevation, or variant APIs. A product-owned wrapper may repeat a house treatment without hiding the semantic buttons.
+
+With `as="nav"`, the root is also the navigation list, so it keeps `data-slot="tabs"`; there is intentionally no extra `tabs-list` wrapper.
+
+The same state selector styles navigation without a second styling API:
+
+```html
+<a
+  href="/settings/billing"
+  data-value="billing"
+  class="rounded-lg px-3 py-2 text-gray-500
+         data-[state=active]:bg-black data-[state=active]:text-white"
+>
+  Billing
+</a>
+```
 
 ## Dynamic workspace tabs
 
@@ -281,7 +358,7 @@ The application still decides whether a tab may close, whether unsaved work need
 
 ## Durable state
 
-Selection durability depends on what the tabs mean:
+Selection durability depends on what the sections mean:
 
 - bind a same-page operational view to a URL query parameter such as `?tab=activity`;
 - use route links for settings pages where each section already has its own URL;
@@ -289,9 +366,13 @@ Selection durability depends on what the tabs mean:
 - use Durable UI storage for a local editor preference that should survive reloads but should not be shared;
 - keep disposable result tabs in local component state.
 
-Tabs never writes local storage, cookies, the URL, or server state. Bind it to the application's chosen source of truth. For query-backed panels, preserve unrelated query parameters, push a history entry when a tab change should be reversible with Back, listen for Back/Forward changes, and let Tabs report a valid fallback when restored state names a tab that no longer exists.
+Tabs never writes local storage, cookies, the URL, or server state. Bind panel mode to the application's chosen source of truth. For query-backed panels, preserve unrelated query parameters, push a history entry when a tab change should be reversible with Back, listen for Back/Forward changes, and let Tabs report a valid fallback when restored state names a tab that no longer exists.
+
+In navigation mode, the router already owns durability. Pass the current route-derived value—or render one link with `aria-current="page"` during SSR—and let the anchor or framework Link perform navigation. Klean does not intercept clicks, so browser history, prefetch, reload, middle-click, and modifier keys continue to work.
 
 ## Accessible behavior
+
+Button mode:
 
 - The list, tabs, and panels receive the complete `tablist`, `tab`, and `tabpanel` relationship.
 - Generated IDs connect `aria-controls` and `aria-labelledby` without caller coordination.
@@ -305,7 +386,14 @@ Tabs never writes local storage, cookies, the URL, or server state. Bind it to t
 - Disabled tabs are skipped and cannot be selected.
 - Observers and generated behavior are removed with the component.
 
-Use a concise visible heading near the widget when possible. Otherwise provide `aria-label`; use `aria-labelledby` when an existing heading should name the tab list.
+Navigation mode:
+
+- `<Tabs as="nav">` renders the navigation landmark itself, and every destination remains an anchor.
+- The selected destination receives `aria-current="page"`; links never receive `role="tab"`, `aria-selected`, or roving `tabindex`.
+- Native Tab visits links normally. Klean does not replace native link keyboard behavior with Arrow-key handling.
+- Ordinary and modified clicks are not cancelled, so the browser or framework Link remains in control.
+
+Use a concise visible heading near the component when possible. Otherwise provide `aria-label`; use `aria-labelledby` when an existing heading should name the panel list or navigation landmark. In navigation mode the name is rendered on the `<nav>` immediately, including during server rendering.
 
 ## Complete framework source
 
@@ -325,7 +413,7 @@ Copy, inspect, and change the complete source for your framework.
 
 ## Related components
 
-- [Button](/klean-ui/components/button) — gives each tab or adjacent close action truthful button semantics.
+- [Button](/klean-ui/components/button) — gives panel tabs or adjacent close actions truthful button semantics and can render a destination as an anchor or framework Link.
 - [Radio](/klean-ui/components/radio) — represents one selected value rather than one visible peer panel.
 - [Menu](/klean-ui/components/menu) — presents a temporary collection of actions or destinations.
 - [Select](/klean-ui/components/select) — chooses one value from a longer fixed list in less space.

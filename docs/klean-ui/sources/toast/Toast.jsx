@@ -251,7 +251,7 @@ export default function Toast({
       aria-atomic="false"
       aria-relevant="additions text"
       className={twMerge(
-        'pointer-events-none fixed z-[100] m-0 flex w-[min(24rem,calc(100vw-2rem))] flex-col',
+        'pointer-events-none fixed z-100 m-0 flex w-[min(24rem,calc(100vw-2rem))] flex-col',
         POSITIONS[position],
         className
       )}

@@ -197,7 +197,7 @@ const Calendar = forwardRef(function Calendar(
       data-slot="calendar"
       aria-label={label}
       className={twMerge(
-        'w-full max-w-[22rem] rounded-lg bg-white p-3 text-gray-950 dark:bg-gray-950 dark:text-white',
+        'w-full max-w-88 rounded-lg bg-white p-3 text-gray-950 dark:bg-gray-950 dark:text-white',
         className
       )}
     >
@@ -285,7 +285,7 @@ const Calendar = forwardRef(function Calendar(
                     aria-disabled={day.unavailable || undefined}
                     disabled={day.unavailable}
                     tabIndex={day.value === focusedDate ? 0 : -1}
-                    className="mx-auto grid min-h-11 min-w-11 place-items-center rounded-md text-sm tabular-nums hover:bg-gray-100 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950 disabled:cursor-not-allowed data-[in-range]:bg-gray-100 data-[outside-month]:text-gray-400 data-[range-end]:bg-gray-950 data-[range-end]:font-semibold data-[range-end]:text-white data-[range-start]:bg-gray-950 data-[range-start]:font-semibold data-[range-start]:text-white data-[selected]:bg-gray-950 data-[selected]:font-semibold data-[selected]:text-white data-[today]:ring-1 data-[today]:ring-inset data-[today]:ring-gray-400 data-[unavailable]:text-gray-300 dark:hover:bg-gray-800 dark:focus-visible:outline-white dark:data-[in-range]:bg-gray-800 dark:data-[outside-month]:text-gray-600 dark:data-[range-end]:bg-white dark:data-[range-end]:text-gray-950 dark:data-[range-start]:bg-white dark:data-[range-start]:text-gray-950 dark:data-[selected]:bg-white dark:data-[selected]:text-gray-950 dark:data-[today]:ring-gray-600 dark:data-[unavailable]:text-gray-700"
+                    className="mx-auto grid min-h-11 min-w-11 place-items-center rounded-md text-sm tabular-nums hover:bg-gray-100 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950 disabled:cursor-not-allowed data-in-range:bg-gray-100 data-outside-month:text-gray-400 data-range-end:bg-gray-950 data-range-end:font-semibold data-range-end:text-white data-range-start:bg-gray-950 data-range-start:font-semibold data-range-start:text-white data-selected:bg-gray-950 data-selected:font-semibold data-selected:text-white data-today:ring-1 data-today:ring-inset data-today:ring-gray-400 data-unavailable:text-gray-300 dark:hover:bg-gray-800 dark:focus-visible:outline-white dark:data-in-range:bg-gray-800 dark:data-outside-month:text-gray-600 dark:data-range-end:bg-white dark:data-range-end:text-gray-950 dark:data-range-start:bg-white dark:data-range-start:text-gray-950 dark:data-selected:bg-white dark:data-selected:text-gray-950 dark:data-today:ring-gray-600 dark:data-unavailable:text-gray-700"
                     onFocus={() => {
                       setFocusedDate(day.value)
                       onFocusChange?.(day.value)

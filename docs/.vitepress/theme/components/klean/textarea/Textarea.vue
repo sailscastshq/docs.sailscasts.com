@@ -89,7 +89,7 @@ defineExpose({
     :class="
       twMerge(
         [
-          'block h-[var(--klean-textarea-height)] min-h-28 w-full resize-none overflow-y-hidden rounded-md border border-gray-300 bg-white px-3 py-2 text-base text-gray-950 shadow-sm outline-none transition-colors duration-150',
+          'block h-(--klean-textarea-height) min-h-28 w-full resize-none overflow-y-hidden rounded-md border border-gray-300 bg-white px-3 py-2 text-base text-gray-950 shadow-sm outline-none transition-colors duration-150',
           'placeholder:text-gray-500 hover:border-gray-400',
           'focus-visible:border-gray-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950',
           'disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500',
