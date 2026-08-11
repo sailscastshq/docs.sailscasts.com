@@ -53,6 +53,24 @@ onMounted(() => {
   style.textContent = `${previewStyles}\n${extractPreviewStyles(props.source)}\n
     :host { display: block; }
 
+    /*
+     * Tailwind registers its border style custom property outside this shadow
+     * tree. Seed the same baseline on every preview element so border width
+     * utilities behave here exactly as they do in an application document.
+     * Keeping this in the base layer still lets border-dashed, border-dotted,
+     * and other caller utilities win normally.
+     */
+    @layer base {
+      .klean-preview__stage,
+      .klean-preview__stage *,
+      .klean-preview__stage::before,
+      .klean-preview__stage::after,
+      .klean-preview__stage *::before,
+      .klean-preview__stage *::after {
+        --tw-border-style: solid;
+      }
+    }
+
     .klean-preview__stage {
       box-sizing: border-box;
       display: flex;

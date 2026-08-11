@@ -17,8 +17,16 @@ import svelteSource from '../sources/tabs/Tabs.svelte?raw'
 import vueUsage from '../snippets/tabs/usage.vue?raw'
 import reactUsage from '../snippets/tabs/usage.jsx?raw'
 import svelteUsage from '../snippets/tabs/usage.svelte?raw'
+import verticalUsage from '../snippets/tabs/vertical.vue?raw'
+import settingsNavigation from '../snippets/tabs/settings-navigation.vue?raw'
 
 const active = ref('overview')
+const verticalActive = ref('profile')
+const verticalSections = [
+  { value: 'profile', label: 'Profile' },
+  { value: 'notifications', label: 'Notifications' },
+  { value: 'billing', label: 'Billing' }
+]
 </script>
 
 # Tabs
@@ -122,6 +130,60 @@ The binding syntax changes, but the visible HTML and `data-value` relationship s
 
 Tabs forwards other non-conflicting attributes to its root. Individual button and panel attributes stay on the caller's elements, where they remain easy to inspect and change.
 
+## Horizontal, vertical, and settings navigation
+
+`orientation="horizontal"` is the default. It uses Left/Right Arrow keys and is appropriate for a short row of peer panels. `orientation="vertical"` uses Up/Down Arrow keys and works well when the peer panels belong beside a settings-style rail.
+
+<KleanPreview id="tabs-vertical" :source="verticalUsage" filename="vertical-tabs.vue">
+  <template #preview>
+    <KleanTabs
+      v-model="verticalActive"
+      orientation="vertical"
+      aria-label="Project settings"
+      class="grid w-full max-w-xl gap-8 text-gray-950 sm:grid-cols-[11rem_1fr] dark:text-white"
+    >
+      <div class="flex flex-col gap-1">
+        <button
+          v-for="section in verticalSections"
+          :key="section.value"
+          type="button"
+          :data-value="section.value"
+          class="min-h-11 rounded-md border-l-2 border-transparent px-3 py-2 text-left text-sm font-medium text-gray-500 outline-none hover:bg-gray-50 hover:text-gray-950 focus-visible:ring-2 focus-visible:ring-gray-950 data-[state=active]:border-gray-950 data-[state=active]:bg-gray-100 data-[state=active]:text-gray-950 dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white dark:focus-visible:ring-white dark:data-[state=active]:border-white dark:data-[state=active]:bg-gray-900 dark:data-[state=active]:text-white"
+        >
+          {{ section.label }}
+        </button>
+      </div>
+      <section data-value="profile" class="outline-none focus-visible:ring-2">
+        <h2 class="text-lg font-semibold">Profile</h2>
+        <p class="mt-2 text-sm leading-6 text-gray-500 dark:text-gray-400">
+          Change the name and contact details shown to your team.
+        </p>
+      </section>
+      <section data-value="notifications" class="outline-none focus-visible:ring-2">
+        <h2 class="text-lg font-semibold">Notifications</h2>
+        <p class="mt-2 text-sm leading-6 text-gray-500 dark:text-gray-400">
+          Decide which project events should reach you.
+        </p>
+      </section>
+      <section data-value="billing" class="outline-none focus-visible:ring-2">
+        <h2 class="text-lg font-semibold">Billing</h2>
+        <p class="mt-2 text-sm leading-6 text-gray-500 dark:text-gray-400">
+          Review invoices and the payment method for this project.
+        </p>
+      </section>
+    </KleanTabs>
+  </template>
+  <template #caption>
+    Focus the rail and use Up/Down, Home, or End. The caller owns the rail and panel layout.
+  </template>
+</KleanPreview>
+
+The visual shape does not decide the semantics. If every settings item has its own URL or Inertia page, use a real navigation landmark and real links. The URL then supplies reload, sharing, Back/Forward, and open-in-new-tab behavior without making an anchor pretend to be an ARIA tab.
+
+<CopyCode :code="settingsNavigation" label="SettingsNavigation.vue" />
+
+Use the Boring Stack `Link` for client-side navigation or replace it with a native `<a>` for ordinary document navigation. Keep `Tabs` for buttons that reveal already-mounted peer panels on the same page.
+
 ## When to use
 
 Use Tabs when all sections are peers in one task and changing sections should preserve the surrounding page: workspace results, editor documents, dashboard views, or instant detail sections.
@@ -221,12 +283,13 @@ The application still decides whether a tab may close, whether unsaved work need
 
 Selection durability depends on what the tabs mean:
 
-- put a shareable operational view in a URL query parameter;
+- bind a same-page operational view to a URL query parameter such as `?tab=activity`;
+- use route links for settings pages where each section already has its own URL;
 - keep browser history meaningful when Back should restore an earlier view;
 - use Durable UI storage for a local editor preference that should survive reloads but should not be shared;
 - keep disposable result tabs in local component state.
 
-Tabs never writes local storage, cookies, the URL, or server state. Bind it to the application's chosen source of truth. Preserve unrelated query parameters, respond to Back/Forward changes, and let Tabs report a valid fallback when restored state names a tab that no longer exists.
+Tabs never writes local storage, cookies, the URL, or server state. Bind it to the application's chosen source of truth. For query-backed panels, preserve unrelated query parameters, push a history entry when a tab change should be reversible with Back, listen for Back/Forward changes, and let Tabs report a valid fallback when restored state names a tab that no longer exists.
 
 ## Accessible behavior
 
