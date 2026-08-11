@@ -56,8 +56,7 @@
 
   function available(candidate) {
     return (
-      !disabled &&
-      !dateIsUnavailable(candidate, { min, max, unavailable })
+      !disabled && !dateIsUnavailable(candidate, { min, max, unavailable })
     );
   }
 
@@ -148,7 +147,8 @@
   }
 
   function moveByMonth(amount) {
-    if ((amount < 0 && previousDisabled) || (amount > 0 && nextDisabled)) return;
+    if ((amount < 0 && previousDisabled) || (amount > 0 && nextDisabled))
+      return;
     focusDate(addMonths(focusedDate, amount));
   }
 
@@ -159,7 +159,8 @@
     else if (event.key === "ArrowRight") next = addDays(candidate, horizontal);
     else if (event.key === "ArrowUp") next = addDays(candidate, -7);
     else if (event.key === "ArrowDown") next = addDays(candidate, 7);
-    else if (event.key === "Home") next = weekEdge(candidate, weekStart, "start");
+    else if (event.key === "Home")
+      next = weekEdge(candidate, weekStart, "start");
     else if (event.key === "End") next = weekEdge(candidate, weekStart, "end");
     else if (event.key === "PageUp")
       next = addMonths(candidate, event.shiftKey ? -12 : -1);

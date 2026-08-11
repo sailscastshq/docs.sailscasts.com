@@ -1,6 +1,4 @@
-<Button commandfor="delete-project" command="show-modal">
-  Delete project
-</Button>
+<Button commandfor="delete-project" command="show-modal">Delete project</Button>
 
 <Dialog id="delete-project" aria-labelledby="delete-project-title">
   <h2 id="delete-project-title">Delete this project?</h2>

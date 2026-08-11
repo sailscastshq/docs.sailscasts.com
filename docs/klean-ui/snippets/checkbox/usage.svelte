@@ -8,8 +8,6 @@
   <Checkbox bind:checked={notifications} name="notifications" />
   <span>
     <span class="block font-medium">Deployment notifications</span>
-    <span class="text-sm text-gray-500">
-      Tell me when a deploy finishes.
-    </span>
+    <span class="text-sm text-gray-500"> Tell me when a deploy finishes. </span>
   </span>
 </label>

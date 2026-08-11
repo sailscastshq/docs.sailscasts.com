@@ -89,7 +89,9 @@
   }
 
   function handleToggle(event) {
-    observeNativeOpen(event.newState === "open" || dialogElement?.open === true);
+    observeNativeOpen(
+      event.newState === "open" || dialogElement?.open === true,
+    );
     ontoggle?.(event);
   }
 

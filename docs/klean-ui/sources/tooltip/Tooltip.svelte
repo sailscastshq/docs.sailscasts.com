@@ -61,7 +61,8 @@
     const tokens = descriptionTokens(element).filter(
       (token) => token !== tooltipId,
     );
-    if (tokens.length) element.setAttribute("aria-describedby", tokens.join(" "));
+    if (tokens.length)
+      element.setAttribute("aria-describedby", tokens.join(" "));
     else element.removeAttribute("aria-describedby");
   }
 
@@ -144,7 +145,11 @@
   function startPositioning() {
     cleanupPosition();
     if (!triggerElement || !contentElement) return;
-    cleanupPosition = autoUpdate(triggerElement, contentElement, updatePosition);
+    cleanupPosition = autoUpdate(
+      triggerElement,
+      contentElement,
+      updatePosition,
+    );
   }
 
   function openNow() {

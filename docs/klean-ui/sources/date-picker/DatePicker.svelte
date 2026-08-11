@@ -105,9 +105,7 @@
     if (!element) return;
     if (required && !draft) element.setCustomValidity("Choose a date.");
     else if (invalid)
-      element.setCustomValidity(
-        "Enter an available date as YYYY-MM-DD.",
-      );
+      element.setCustomValidity("Enter an available date as YYYY-MM-DD.");
     else element.setCustomValidity("");
   });
 

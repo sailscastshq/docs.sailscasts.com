@@ -21,7 +21,8 @@
   }
 
   function rangeContainsUnavailable(start, end, unavailable) {
-    if (!unavailable || !parseIsoDate(start) || !parseIsoDate(end)) return false;
+    if (!unavailable || !parseIsoDate(start) || !parseIsoDate(end))
+      return false;
     const [first, last] =
       compareDates(start, end) <= 0 ? [start, end] : [end, start];
 
@@ -130,9 +131,7 @@
       : { start: range.start, end: decoratedEnd };
   });
   let calendarValue = $derived(
-    activePart === "end"
-      ? range.end || preview || range.start
-      : range.start,
+    activePart === "end" ? range.end || preview || range.start : range.start,
   );
   const calendarButtonClasses =
     "absolute inset-y-0 end-0 grid min-w-11 place-items-center rounded-e-md text-gray-500 hover:bg-gray-100 hover:text-gray-950 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950 disabled:cursor-not-allowed disabled:opacity-40 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white dark:focus-visible:outline-white";
@@ -250,10 +249,7 @@
     }
     if (endElement) {
       endElement.setCustomValidity(
-        endInvalid ||
-        endWithoutStartInvalid ||
-        orderInvalid ||
-        rangeUnavailable
+        endInvalid || endWithoutStartInvalid || orderInvalid || rangeUnavailable
           ? statusText
           : required && !range.end
             ? "Choose an end date."
@@ -440,11 +436,7 @@
       {disabled}
       {readonly}
       onfocuschange={(date) => {
-        if (
-          activePart === "end" &&
-          range.start &&
-          !calendarUnavailable(date)
-        ) {
+        if (activePart === "end" && range.start && !calendarUnavailable(date)) {
           preview = date;
         }
       }}

@@ -98,7 +98,8 @@
 
     if (!initialized) {
       initialized = true;
-      if (value === undefined && defaultValue !== undefined) value = defaultValue;
+      if (value === undefined && defaultValue !== undefined)
+        value = defaultValue;
     }
 
     const list = listElement();
@@ -121,8 +122,7 @@
       list.setAttribute("aria-orientation", orientation);
       if (ariaLabel) list.setAttribute("aria-label", ariaLabel);
       else list.removeAttribute("aria-label");
-      if (ariaLabelledby)
-        list.setAttribute("aria-labelledby", ariaLabelledby);
+      if (ariaLabelledby) list.setAttribute("aria-labelledby", ariaLabelledby);
       else list.removeAttribute("aria-labelledby");
     }
 
@@ -161,10 +161,7 @@
     });
 
     const shouldRestoreFocus =
-      lastFocusedValue === current &&
-      current &&
-      !tabFor(current) &&
-      resolved;
+      lastFocusedValue === current && current && !tabFor(current) && resolved;
     previousValues = allTabs.map(tabValue);
     syncing = false;
 
@@ -233,10 +230,7 @@
       next = available[0];
     } else if (event.key === "End") {
       next = available.at(-1);
-    } else if (
-      activation === "manual" &&
-      ["Enter", " "].includes(event.key)
-    ) {
+    } else if (activation === "manual" && ["Enter", " "].includes(event.key)) {
       event.preventDefault();
       requestValue(tabValue(tab), { user: true });
       return;
