@@ -1,50 +1,41 @@
 import { useState } from 'react'
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandShortcut
-} from '@/components/ui/command/Command.jsx'
+import Command from '@/components/ui/command/Command'
 
 const commands = [
-  { value: 'Open projects', keywords: ['apps'], shortcut: 'G P' },
   {
-    value: 'Open Lookout',
-    keywords: ['metrics', 'monitoring'],
-    shortcut: 'G L'
+    id: 'projects',
+    title: 'Open projects',
+    subtitle: 'View every application and service',
+    keywords: ['apps'],
+    group: 'Navigation',
+    shortcut: 'G P',
+    href: '/projects'
   },
-  { value: 'Deploy application', keywords: ['ship', 'release'], shortcut: 'D' }
+  {
+    id: 'deploy',
+    title: 'Deploy application',
+    keywords: ['ship', 'release'],
+    group: 'Actions',
+    shortcut: 'D',
+    action: () => console.log('Choose an application')
+  }
 ]
 
 export default function ApplicationCommands() {
   const [query, setQuery] = useState('')
 
   function run(command) {
-    // Route, open a nested step, or begin application work.
-    console.log(command)
+    if (command.href) window.location.assign(command.href)
+    else command.action?.()
   }
 
   return (
-    <Command query={query} onQueryChange={setQuery} onSelect={run}>
-      <CommandInput aria-label="Application commands" />
-      <CommandList aria-label="Available commands">
-        <CommandEmpty>No matching command.</CommandEmpty>
-        <CommandGroup heading="Commands">
-          {commands.map((command) => (
-            <CommandItem
-              key={command.value}
-              value={command.value}
-              keywords={command.keywords}
-            >
-              <span>{command.value}</span>
-              <CommandShortcut>{command.shortcut}</CommandShortcut>
-            </CommandItem>
-          ))}
-        </CommandGroup>
-      </CommandList>
-    </Command>
+    <Command
+      query={query}
+      commands={commands}
+      label="Application commands"
+      onQueryChange={setQuery}
+      onSelect={run}
+    />
   )
 }

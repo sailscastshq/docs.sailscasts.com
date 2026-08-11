@@ -1,46 +1,39 @@
 <script setup>
 import { ref } from 'vue'
 import Command from '@/components/ui/command/Command.vue'
-import CommandEmpty from '@/components/ui/command/CommandEmpty.vue'
-import CommandGroup from '@/components/ui/command/CommandGroup.vue'
-import CommandInput from '@/components/ui/command/CommandInput.vue'
-import CommandItem from '@/components/ui/command/CommandItem.vue'
-import CommandList from '@/components/ui/command/CommandList.vue'
-import CommandShortcut from '@/components/ui/command/CommandShortcut.vue'
 
 const query = ref('')
 const commands = [
-  { value: 'Open projects', keywords: ['apps'], shortcut: 'G P' },
   {
-    value: 'Open Lookout',
-    keywords: ['metrics', 'monitoring'],
-    shortcut: 'G L'
+    id: 'projects',
+    title: 'Open projects',
+    subtitle: 'View every application and service',
+    keywords: ['apps'],
+    group: 'Navigation',
+    shortcut: 'G P',
+    href: '/projects'
   },
-  { value: 'Deploy application', keywords: ['ship', 'release'], shortcut: 'D' }
+  {
+    id: 'deploy',
+    title: 'Deploy application',
+    keywords: ['ship', 'release'],
+    group: 'Actions',
+    shortcut: 'D',
+    action: () => console.log('Choose an application')
+  }
 ]
 
 function run(command) {
-  // Route, open a nested step, or begin application work.
-  console.log(command)
+  if (command.href) window.location.assign(command.href)
+  else command.action?.()
 }
 </script>
 
 <template>
-  <Command v-model:query="query" @select="run">
-    <CommandInput aria-label="Application commands" />
-    <CommandList aria-label="Available commands">
-      <CommandEmpty>No matching command.</CommandEmpty>
-      <CommandGroup heading="Commands">
-        <CommandItem
-          v-for="command in commands"
-          :key="command.value"
-          :value="command.value"
-          :keywords="command.keywords"
-        >
-          <span>{{ command.value }}</span>
-          <CommandShortcut>{{ command.shortcut }}</CommandShortcut>
-        </CommandItem>
-      </CommandGroup>
-    </CommandList>
-  </Command>
+  <Command
+    v-model:query="query"
+    :commands="commands"
+    label="Application commands"
+    @select="run"
+  />
 </template>

@@ -1,56 +1,105 @@
 <script>
-  import { setContext, untrack } from "svelte";
+  import { untrack } from "svelte";
   import { twMerge } from "tailwind-merge";
-  import { COMMAND_CONTEXT, defaultCommandFilter } from "./context.js";
+
+  function normalize(value) {
+    return String(value ?? "")
+      .normalize("NFKD")
+      .toLocaleLowerCase()
+      .replace(/\p{Diacritic}/gu, "");
+  }
+
+  function defaultFilter(command, query) {
+    const needle = normalize(query).trim();
+    if (!needle) return true;
+    return normalize(
+      [command.title, ...(command.keywords ?? [])].filter(Boolean).join(" "),
+    ).includes(needle);
+  }
 
   const componentIdentity = $props.id();
   const generatedId = componentIdentity.replace(/[^a-zA-Z0-9_-]/g, "");
   let {
+    commands = [],
+    groups,
     query = $bindable(),
     defaultQuery = "",
-    filter = defaultCommandFilter,
+    label = "Search commands",
+    placeholder = "Type a command or search…",
+    filter = defaultFilter,
+    autofocus = false,
     id,
     class: className = "",
+    prefix,
+    suffix,
+    before,
+    item,
+    empty,
+    footer,
     onquerychange,
     onselect,
     onescape,
     onback,
     onkeydown,
-    children,
+    "data-slot": _dataSlot,
+    "data-state": _dataState,
+    children: _children,
     ...rootProps
   } = $props();
 
   let rootElement;
   let inputElement;
   let internalQuery = $state(untrack(() => defaultQuery));
-  let items = $state([]);
-  let activeId = $state();
+  let activeKey = $state();
   let currentQuery = $derived(query !== undefined ? query : internalQuery);
   let controlId = $derived(id ?? `klean-command-${generatedId}`);
   let inputId = $derived(`${controlId}-input`);
   let listId = $derived(`${controlId}-list`);
-  let visibleEntries = $derived.by(() =>
-    items.filter((item) => {
-      const result = filter(item.value, currentQuery, item.keywords);
-      return typeof result === "number" ? result > 0 : Boolean(result);
-    }),
-  );
-  let visibleIds = $derived(new Set(visibleEntries.map((item) => item.id)));
-  let enabledEntries = $derived(
-    visibleEntries.filter((item) => !item.disabled),
-  );
-  let activeDescendant = $derived(
-    enabledEntries.some((item) => item.id === activeId) ? activeId : undefined,
-  );
-  let state = $state({
-    currentQuery: "",
-    inputId: "",
-    listId: "",
-    activeId: undefined,
-    activeDescendant: undefined,
-    visibleEntries: [],
-    visibleIds: new Set(),
+  let sourceGroups = $derived.by(() => {
+    if (groups !== undefined) {
+      return Object.entries(groups).map(([heading, groupedCommands]) => ({
+        heading,
+        commands: Array.isArray(groupedCommands) ? groupedCommands : [],
+      }));
+    }
+
+    const collected = new Map();
+    for (const command of commands) {
+      if (!filter(command, currentQuery)) continue;
+      const heading = command.group || "Other";
+      if (!collected.has(heading)) collected.set(heading, []);
+      collected.get(heading).push(command);
+    }
+    return [...collected].map(([heading, groupedCommands]) => ({
+      heading,
+      commands: groupedCommands,
+    }));
   });
+  let commandGroups = $derived(
+    sourceGroups
+      .map((group, groupIndex) => ({
+        heading: group.heading,
+        headingId: `${controlId}-group-${groupIndex}`,
+        entries: group.commands.map((command, commandIndex) => {
+          const identity = String(command.id ?? command.title ?? commandIndex)
+            .replace(/[^a-zA-Z0-9_-]/g, "-")
+            .replace(/-+/g, "-");
+          return {
+            command,
+            key: `${groupIndex}:${commandIndex}:${identity}`,
+            optionId: `${controlId}-option-${groupIndex}-${commandIndex}-${identity}`,
+          };
+        }),
+      }))
+      .filter((group) => group.entries.length),
+  );
+  let entries = $derived(commandGroups.flatMap((group) => group.entries));
+  let enabledEntries = $derived(
+    entries.filter((entry) => !entry.command.disabled),
+  );
+  let activeEntry = $derived(
+    enabledEntries.find((entry) => entry.key === activeKey),
+  );
   let previousQuery = untrack(() => currentQuery);
 
   function setQuery(nextQuery) {
@@ -59,60 +108,44 @@
     onquerychange?.(nextQuery);
   }
 
-  function registerItem(item) {
-    items = [...untrack(() => items), item];
-    return () => {
-      items = untrack(() => items).filter(
-        (candidate) => candidate.id !== item.id,
-      );
-    };
-  }
-
-  function updateItem(itemId, item) {
-    items = untrack(() => items).map((candidate) =>
-      candidate.id === itemId ? { ...candidate, ...item } : candidate,
-    );
-  }
-
-  function revealActive(itemId = activeId) {
-    if (!itemId) return;
+  function revealActive(entry = activeEntry) {
+    if (!entry) return;
     queueMicrotask(() => {
       rootElement
-        ?.querySelector?.(`[data-command-id="${itemId}"]`)
+        ?.querySelector?.(`[data-command-key="${entry.key}"]`)
         ?.scrollIntoView?.({ block: "nearest" });
     });
   }
 
-  function setActive(itemId) {
-    if (!enabledEntries.some((item) => item.id === itemId)) return;
-    activeId = itemId;
-  }
-
   function move(step) {
     if (!enabledEntries.length) return;
-    const current = enabledEntries.findIndex((item) => item.id === activeId);
+    const current = enabledEntries.findIndex(
+      (entry) => entry.key === activeKey,
+    );
     const next =
       current < 0
         ? step > 0
           ? 0
           : enabledEntries.length - 1
         : (current + step + enabledEntries.length) % enabledEntries.length;
-    activeId = enabledEntries[next].id;
+    activeKey = enabledEntries[next].key;
     revealActive();
   }
 
   function moveTo(edge) {
     if (!enabledEntries.length) return;
-    activeId =
-      edge === "last" ? enabledEntries.at(-1).id : enabledEntries[0].id;
+    activeKey =
+      edge === "last" ? enabledEntries.at(-1).key : enabledEntries[0].key;
     revealActive();
   }
 
-  function activate(itemId = activeId) {
-    const item = enabledEntries.find((candidate) => candidate.id === itemId);
-    if (!item) return;
-    item.select();
-    onselect?.(item.value);
+  function select(entry = activeEntry) {
+    if (!entry || entry.command.disabled) return;
+    onselect?.(entry.command);
+  }
+
+  function handleInput(event) {
+    setQuery(event.currentTarget.value);
   }
 
   function handleKeydown(event) {
@@ -131,8 +164,9 @@
       event.preventDefault();
       moveTo("last");
     } else if (event.key === "Enter") {
+      if (!activeEntry) return;
       event.preventDefault();
-      activate();
+      select();
     } else if (event.key === "Escape") {
       if (currentQuery) {
         event.preventDefault();
@@ -146,48 +180,26 @@
     }
   }
 
-  function groupHasVisibleItems(groupId) {
-    return visibleEntries.some((item) => item.groupId === groupId);
+  function handlePointermove(event, entry) {
+    if (entry.command.disabled || event.pointerType === "touch") return;
+    activeKey = entry.key;
+  }
+
+  function handleOptionKeydown(event, entry) {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    select(entry);
   }
 
   $effect(() => {
-    enabledEntries;
-    if (!enabledEntries.some((item) => item.id === activeId)) {
-      activeId = enabledEntries[0]?.id;
+    const enabled = enabledEntries;
+    const nextQuery = currentQuery;
+    const queryChanged = nextQuery !== previousQuery;
+    previousQuery = nextQuery;
+    if (queryChanged || !enabled.some((entry) => entry.key === activeKey)) {
+      activeKey = enabled[0]?.key;
     }
     revealActive();
-  });
-
-  $effect(() => {
-    const nextQuery = currentQuery;
-    if (nextQuery === previousQuery) return;
-    previousQuery = nextQuery;
-    activeId = enabledEntries[0]?.id;
-    revealActive(activeId);
-  });
-
-  $effect(() => {
-    state.currentQuery = currentQuery;
-    state.inputId = inputId;
-    state.listId = listId;
-    state.activeId = activeId;
-    state.activeDescendant = activeDescendant;
-    state.visibleEntries = visibleEntries;
-    state.visibleIds = visibleIds;
-  });
-
-  setContext(COMMAND_CONTEXT, {
-    state,
-    setInput(element) {
-      inputElement = element;
-    },
-    registerItem,
-    updateItem,
-    setActive,
-    activate,
-    setQuery,
-    handleKeydown,
-    groupHasVisibleItems,
   });
 
   export function focus(options) {
@@ -203,11 +215,126 @@
   {...rootProps}
   bind:this={rootElement}
   data-slot="command"
-  data-state={visibleEntries.length ? "results" : "empty"}
+  data-state={entries.length ? "results" : "empty"}
   class={twMerge(
     "w-full overflow-hidden rounded-lg border border-gray-200 bg-white text-gray-950 shadow-lg dark:border-gray-700 dark:bg-gray-950 dark:text-white",
     className,
   )}
 >
-  {@render children?.()}
+  <div
+    data-slot="command-search"
+    class="flex items-center border-b border-gray-200 px-4 dark:border-gray-800"
+  >
+    {@render prefix?.()}
+    <!-- Autofocus is opt-in and appropriate when a Command opens as a palette. -->
+    <!-- svelte-ignore a11y_autofocus -->
+    <input
+      bind:this={inputElement}
+      id={inputId}
+      type="text"
+      role="combobox"
+      aria-autocomplete="list"
+      aria-expanded="true"
+      aria-label={label}
+      aria-controls={listId}
+      aria-activedescendant={activeEntry?.optionId}
+      autocomplete="off"
+      {autofocus}
+      {placeholder}
+      value={currentQuery}
+      data-slot="command-input"
+      class="min-h-11 w-full border-0 bg-transparent px-0 py-3 text-base text-gray-950 outline-none placeholder:text-gray-500 focus-visible:-outline-offset-2 focus-visible:outline-2 focus-visible:outline-gray-950 dark:text-white dark:placeholder:text-gray-400 dark:focus-visible:outline-white"
+      oninput={handleInput}
+      onkeydown={handleKeydown}
+    />
+    {@render suffix?.()}
+  </div>
+
+  <div
+    id={listId}
+    role="listbox"
+    aria-label={`${label} results`}
+    data-slot="command-list"
+    class="max-h-72 overflow-y-auto overscroll-contain p-1.5"
+  >
+    {@render before?.()}
+
+    {#each commandGroups as group (group.headingId)}
+      <div
+        role="group"
+        aria-labelledby={group.headingId}
+        data-slot="command-group"
+      >
+        <div
+          id={group.headingId}
+          data-slot="command-group-heading"
+          class="px-2 pb-1 pt-2 text-[11px] font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400"
+        >
+          {group.heading}
+        </div>
+
+        {#each group.entries as entry (entry.key)}
+          <div
+            id={entry.optionId}
+            role="option"
+            tabindex="-1"
+            aria-selected={entry.key === activeKey}
+            aria-disabled={entry.command.disabled || undefined}
+            data-slot="command-item"
+            data-command-key={entry.key}
+            data-state={entry.key === activeKey ? "active" : "inactive"}
+            data-highlighted={entry.key === activeKey ? "" : undefined}
+            data-destructive={entry.command.destructive ? "" : undefined}
+            class="flex min-h-11 cursor-pointer select-none items-center gap-3 rounded-md px-3 py-2 text-sm outline-none data-highlighted:bg-gray-100 data-highlighted:text-gray-950 aria-disabled:cursor-not-allowed aria-disabled:opacity-50 dark:data-highlighted:bg-gray-800 dark:data-highlighted:text-white"
+            onmousedown={(event) => event.preventDefault()}
+            onpointermove={(event) => handlePointermove(event, entry)}
+            onkeydown={(event) => handleOptionKeydown(event, entry)}
+            onclick={() => select(entry)}
+          >
+            {#if item}
+              {@render item({
+                command: entry.command,
+                active: entry.key === activeKey,
+              })}
+            {:else}
+              <span class="flex min-w-0 flex-1 flex-col">
+                <span class="truncate">{entry.command.title}</span>
+                {#if entry.command.subtitle}
+                  <span
+                    class="truncate text-xs text-gray-500 dark:text-gray-400"
+                  >
+                    {entry.command.subtitle}
+                  </span>
+                {/if}
+              </span>
+              {#if entry.command.shortcut}
+                <kbd
+                  aria-hidden="true"
+                  class="ml-auto shrink-0 font-mono text-xs text-gray-500 dark:text-gray-400"
+                >
+                  {entry.command.shortcut}
+                </kbd>
+              {/if}
+            {/if}
+          </div>
+        {/each}
+      </div>
+    {/each}
+
+    {#if !entries.length}
+      <div
+        data-slot="command-empty"
+        class="py-10 text-center text-sm text-gray-500 dark:text-gray-400"
+        aria-live="polite"
+      >
+        {#if empty}
+          {@render empty({ query: currentQuery })}
+        {:else}
+          No matching command.
+        {/if}
+      </div>
+    {/if}
+  </div>
+
+  {@render footer?.()}
 </div>

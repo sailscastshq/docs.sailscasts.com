@@ -1,7 +1,7 @@
 ---
 title: Command
 titleTemplate: Klean UI
-description: A pragmatic, accessible command-list composition for application actions across Vue, React, and Svelte.
+description: One pragmatic, accessible command surface for application actions across Vue, React, and Svelte.
 outline: [2, 3]
 ---
 
@@ -11,138 +11,98 @@ import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanCommand from '../../.vitepress/theme/components/klean/command/Command.vue'
-import KleanCommandEmpty from '../../.vitepress/theme/components/klean/command/CommandEmpty.vue'
-import KleanCommandGroup from '../../.vitepress/theme/components/klean/command/CommandGroup.vue'
-import KleanCommandInput from '../../.vitepress/theme/components/klean/command/CommandInput.vue'
-import KleanCommandItem from '../../.vitepress/theme/components/klean/command/CommandItem.vue'
-import KleanCommandList from '../../.vitepress/theme/components/klean/command/CommandList.vue'
-import KleanCommandSeparator from '../../.vitepress/theme/components/klean/command/CommandSeparator.vue'
-import KleanCommandShortcut from '../../.vitepress/theme/components/klean/command/CommandShortcut.vue'
 import commandSource from '../../.vitepress/theme/components/klean/command/Command.vue?raw'
-import commandInputSource from '../../.vitepress/theme/components/klean/command/CommandInput.vue?raw'
-import commandListSource from '../../.vitepress/theme/components/klean/command/CommandList.vue?raw'
-import commandEmptySource from '../../.vitepress/theme/components/klean/command/CommandEmpty.vue?raw'
-import commandGroupSource from '../../.vitepress/theme/components/klean/command/CommandGroup.vue?raw'
-import commandItemSource from '../../.vitepress/theme/components/klean/command/CommandItem.vue?raw'
-import commandSeparatorSource from '../../.vitepress/theme/components/klean/command/CommandSeparator.vue?raw'
-import commandShortcutSource from '../../.vitepress/theme/components/klean/command/CommandShortcut.vue?raw'
-import commandContextSource from '../../.vitepress/theme/components/klean/command/context.js?raw'
 import reactSource from '../sources/command/Command.jsx?raw'
-import svelteCommandSource from '../sources/command/Command.svelte?raw'
-import svelteInputSource from '../sources/command/CommandInput.svelte?raw'
-import svelteListSource from '../sources/command/CommandList.svelte?raw'
-import svelteEmptySource from '../sources/command/CommandEmpty.svelte?raw'
-import svelteGroupSource from '../sources/command/CommandGroup.svelte?raw'
-import svelteItemSource from '../sources/command/CommandItem.svelte?raw'
-import svelteSeparatorSource from '../sources/command/CommandSeparator.svelte?raw'
-import svelteShortcutSource from '../sources/command/CommandShortcut.svelte?raw'
-import svelteContextSource from '../sources/command/context.js?raw'
+import svelteSource from '../sources/command/Command.svelte?raw'
 import vueUsage from '../snippets/command/usage.vue?raw'
 import reactUsage from '../snippets/command/usage.jsx?raw'
 import svelteUsage from '../snippets/command/usage.svelte?raw'
+import rankedUsage from '../snippets/command/ranked.vue?raw'
 import paletteUsage from '../snippets/command/palette.vue?raw'
 import nestedUsage from '../snippets/command/nested.vue?raw'
 
 const query = ref('')
 const selected = ref('Nothing yet')
-const navigation = [
+const commands = [
   {
-    value: 'Open projects',
-    description: 'View every application and service',
+    id: 'projects',
+    title: 'Open projects',
+    subtitle: 'View every application and service',
     keywords: ['dashboard', 'apps'],
+    group: 'Navigation',
     shortcut: 'G P'
   },
   {
-    value: 'Open Lookout',
-    description: 'Inspect metrics and recent incidents',
+    id: 'lookout',
+    title: 'Open Lookout',
+    subtitle: 'Inspect metrics and recent incidents',
     keywords: ['monitoring', 'metrics'],
+    group: 'Navigation',
     shortcut: 'G L'
-  }
-]
-const actions = [
+  },
   {
-    value: 'Deploy application',
-    description: 'Choose an application to deploy',
+    id: 'deploy',
+    title: 'Deploy application',
+    subtitle: 'Choose an application to deploy',
     keywords: ['ship', 'release'],
+    group: 'Actions',
     shortcut: 'D'
   },
   {
-    value: 'Restart production',
-    description: 'Unavailable during the active deployment',
+    id: 'restart',
+    title: 'Restart production',
+    subtitle: 'Unavailable during the active deployment',
     keywords: ['reboot'],
+    group: 'Actions',
     disabled: true
   }
 ]
 
 const vueFiles = [
-  { filename: 'Command.vue', destination: 'assets/js/components/ui/command/Command.vue', source: commandSource },
-  { filename: 'CommandInput.vue', destination: 'assets/js/components/ui/command/CommandInput.vue', source: commandInputSource },
-  { filename: 'CommandList.vue', destination: 'assets/js/components/ui/command/CommandList.vue', source: commandListSource },
-  { filename: 'CommandEmpty.vue', destination: 'assets/js/components/ui/command/CommandEmpty.vue', source: commandEmptySource },
-  { filename: 'CommandGroup.vue', destination: 'assets/js/components/ui/command/CommandGroup.vue', source: commandGroupSource },
-  { filename: 'CommandItem.vue', destination: 'assets/js/components/ui/command/CommandItem.vue', source: commandItemSource },
-  { filename: 'CommandSeparator.vue', destination: 'assets/js/components/ui/command/CommandSeparator.vue', source: commandSeparatorSource },
-  { filename: 'CommandShortcut.vue', destination: 'assets/js/components/ui/command/CommandShortcut.vue', source: commandShortcutSource },
-  { filename: 'context.js', destination: 'assets/js/components/ui/command/context.js', source: commandContextSource }
-]
-
-const svelteFiles = [
-  { filename: 'Command.svelte', source: svelteCommandSource },
-  { filename: 'CommandInput.svelte', source: svelteInputSource },
-  { filename: 'CommandList.svelte', source: svelteListSource },
-  { filename: 'CommandEmpty.svelte', source: svelteEmptySource },
-  { filename: 'CommandGroup.svelte', source: svelteGroupSource },
-  { filename: 'CommandItem.svelte', source: svelteItemSource },
-  { filename: 'CommandSeparator.svelte', source: svelteSeparatorSource },
-  { filename: 'CommandShortcut.svelte', source: svelteShortcutSource },
-  { filename: 'context.js', source: svelteContextSource }
+  {
+    filename: 'Command.vue',
+    destination: 'assets/js/components/ui/command/Command.vue',
+    source: commandSource
+  }
 ]
 </script>
 
 # Command
 
-Command is the searchable list engine for actions and destinations inside an application. Klean keeps one real text input focused, exposes the active item through `aria-activedescendant`, filters explicit values and keywords, and handles the composite keyboard contract. The application keeps ownership of routes, permissions, icons, async work, and any nested flow.
+Command turns ordinary application records into one searchable, keyboard-complete command surface. Give it `commands`; it renders the real input, groups and options, keeps focus stable, filters titles and keywords, and gives the selected record back unchanged.
 
-It is deliberately a small composition, not a provider, command registry, router adapter, fuzzy-search package, or product schema.
+There is one component to install and use. Routes, icons, permissions, async work, nested flows, and product-specific fields remain on your records and in your application code.
 
 <KleanPreview id="command-source" :source="commandSource" filename="Command.vue">
   <template #preview>
     <div class="grid w-full max-w-lg gap-3">
-      <KleanCommand v-model:query="query" @select="selected = $event">
-        <KleanCommandInput aria-label="Application commands" />
-        <KleanCommandList aria-label="Available commands">
-          <KleanCommandEmpty>No matching command.</KleanCommandEmpty>
-          <KleanCommandGroup heading="Navigation">
-            <KleanCommandItem
-              v-for="item in navigation"
-              :key="item.value"
-              :value="item.value"
-              :keywords="item.keywords"
-            >
-              <span class="min-w-0 flex-1">
-                <span class="block font-medium">{{ item.value }}</span>
-                <span class="mt-0.5 block truncate text-xs text-gray-500 dark:text-gray-400">{{ item.description }}</span>
-              </span>
-              <KleanCommandShortcut>{{ item.shortcut }}</KleanCommandShortcut>
-            </KleanCommandItem>
-          </KleanCommandGroup>
-          <KleanCommandSeparator />
-          <KleanCommandGroup heading="Actions">
-            <KleanCommandItem
-              v-for="item in actions"
-              :key="item.value"
-              :value="item.value"
-              :keywords="item.keywords"
-              :disabled="item.disabled"
-            >
-              <span class="min-w-0 flex-1">
-                <span class="block font-medium">{{ item.value }}</span>
-                <span class="mt-0.5 block truncate text-xs text-gray-500 dark:text-gray-400">{{ item.description }}</span>
-              </span>
-              <KleanCommandShortcut v-if="item.shortcut">{{ item.shortcut }}</KleanCommandShortcut>
-            </KleanCommandItem>
-          </KleanCommandGroup>
-        </KleanCommandList>
+      <KleanCommand
+        v-model:query="query"
+        :commands="commands"
+        label="Application commands"
+        class="rounded-xl border-gray-200 bg-white shadow-xl dark:border-gray-700 dark:bg-gray-900"
+        @select="selected = $event.title"
+      >
+        <template #prefix>
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="mr-3 size-5 shrink-0 text-gray-400">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m20 20-4-4" />
+          </svg>
+        </template>
+        <template #item="{ command }">
+          <span class="flex min-w-0 flex-1 flex-col">
+            <span class="truncate font-medium">{{ command.title }}</span>
+            <span v-if="command.subtitle" class="truncate text-xs text-gray-500 dark:text-gray-400">
+              {{ command.subtitle }}
+            </span>
+          </span>
+          <kbd v-if="command.shortcut" aria-hidden="true" class="ml-auto font-mono text-xs text-gray-400">
+            {{ command.shortcut }}
+          </kbd>
+        </template>
+        <template #empty="{ query: emptyQuery }">
+          No command matches “{{ emptyQuery }}”.
+        </template>
       </KleanCommand>
       <output class="text-sm text-gray-500 dark:text-gray-400">Selected: {{ selected }}</output>
     </div>
@@ -153,13 +113,13 @@ It is deliberately a small composition, not a provider, command registry, router
 
   </template>
   <template #caption>
-    Search “metrics”, use Arrow Up/Down, Home/End, and Enter, or point directly at an enabled result. Input focus does not jump around the list.
+    Search “metrics”, use Arrow Up/Down, Home/End, and Enter, or point at an enabled result. The real input keeps focus throughout.
   </template>
 </KleanPreview>
 
 ## Installation
 
-Run one command in a Vue, React, or Svelte application. Klean detects the framework and conventional component directory, then copies the framework-native composition and its only direct dependency.
+One command detects Vue, React, or Svelte and copies the matching framework-native file:
 
 <KleanInstallation
   id="command-installation"
@@ -171,7 +131,7 @@ Run one command in a Vue, React, or Svelte application. Klean detects the framew
   :dependencies="['tailwind-merge']"
 />
 
-No initializer, config file, provider, alias questionnaire, generated class helper, runtime package, or interaction library is added.
+That is the whole component. There is no initializer, config file, provider, generated class helper, runtime package, or interaction library.
 
 ## Usage
 
@@ -187,123 +147,139 @@ No initializer, config file, provider, alias questionnaire, generated class help
 
 <CopyCode :code="svelteUsage" label="ApplicationCommands.svelte" />
 
-The framework binding changes; the command values, keywords, item markup, and keyboard outcome do not.
+The framework binding changes; the command record and selection outcome do not.
+
+## Command records
+
+`title` is the only field required for the default rendering and search. A stable `id` is strongly recommended.
+
+| Field         | Purpose                                                        |
+| ------------- | -------------------------------------------------------------- |
+| `id`          | Stable identity used for active-option relationships.          |
+| `title`       | Visible command name and default search text.                  |
+| `subtitle`    | Optional supporting text in the default item.                  |
+| `keywords`    | Additional strings searched by the default filter.             |
+| `group`       | Visible group heading. Missing groups become `Other`.          |
+| `shortcut`    | Presentational shortcut hint. It does not register a listener. |
+| `disabled`    | Keeps the command visible but prevents selection.              |
+| `destructive` | Exposes `data-destructive` for a caller-owned Tailwind recipe. |
+
+Add any application fields you need: `href`, `route`, `icon`, `action`, `children`, `context`, permission metadata, or something product-specific. Klean never reshapes or clones the record. Selection returns the same object you supplied.
+
+## Two data paths, one component
+
+Use `commands` by default. Klean filters `title` and `keywords`, groups records by `group`, preserves their order, and highlights the first enabled result.
+
+Use `groups` only when your application already owns ranking, recent history, permissions, remote results, or a domain-specific search. Pass an ordered object such as `{ Recent: [...], Projects: [...] }`. Klean renders those groups exactly as supplied and still owns the accessible input and keyboard interaction; it does not filter or reorder them.
+
+<CopyCode :code="rankedUsage" label="RankedCommands.vue" />
+
+This is not a second component or a mode to learn. It is the escape hatch that lets an existing search model keep doing its job.
+
+## API
+
+| Input                     | Default                     | Purpose                                                                                        |
+| ------------------------- | --------------------------- | ---------------------------------------------------------------------------------------------- |
+| `commands`                | `[]`                        | Flat records for the ordinary Klean filtering and grouping path.                               |
+| `groups`                  | —                           | Caller-filtered and ordered `{ heading: commands }` results. Takes precedence over `commands`. |
+| `query`                   | internal                    | Controlled query: Vue `v-model:query`, React `query`, or Svelte `bind:query`.                  |
+| `defaultQuery`            | `''`                        | Initial query for uncontrolled use.                                                            |
+| `label`                   | `Search commands`           | Accessible name for the real combobox input.                                                   |
+| `placeholder`             | `Type a command or search…` | Native input placeholder.                                                                      |
+| `filter`                  | normalized substring        | Boolean `(command, query) => visible` predicate for `commands`.                                |
+| `autofocus` / `autoFocus` | `false`                     | Focus the input when a newly opened palette needs it.                                          |
+| `id`                      | generated                   | Stable base ID when server and client markup require an explicit value.                        |
+| `class` / `className`     | —                           | Ordinary Tailwind merged onto the root.                                                        |
+
+| Outcome               | Vue             | React           | Svelte          |
+| --------------------- | --------------- | --------------- | --------------- |
+| Query changed         | `@update:query` | `onQueryChange` | `onquerychange` |
+| Record selected       | `@select`       | `onSelect`      | `onselect`      |
+| Empty-query Escape    | `@escape`       | `onEscape`      | `onescape`      |
+| Empty-query Backspace | `@back`         | `onBack`        | `onback`        |
+
+Escape clears a non-empty query first. Escape and Backspace delegate only when the query is already empty, making surrounding dialogs and nested flows easy to control without hidden navigation policy.
+
+## Custom rendering without component ceremony
+
+The default renderer covers a title, subtitle, shortcut, disabled state, groups, and an empty result. Customize only the seam your product owns:
+
+| Area          | Vue                           | React         | Svelte           |
+| ------------- | ----------------------------- | ------------- | ---------------- |
+| Before input  | `#prefix`                     | `prefix`      | `prefix` snippet |
+| After input   | `#suffix`                     | `suffix`      | `suffix` snippet |
+| Before groups | `#before`                     | `before`      | `before` snippet |
+| Each item     | `#item="{ command, active }"` | `renderItem`  | `item` snippet   |
+| Empty result  | `#empty="{ query }"`          | `renderEmpty` | `empty` snippet  |
+| After list    | `#footer`                     | `footer`      | `footer` snippet |
+
+Caller Tailwind remains the styling API. Stable `data-slot` hooks cover `command`, `command-search`, `command-input`, `command-list`, `command-empty`, `command-group`, `command-group-heading`, and `command-item`. Items also expose `data-state`, `data-highlighted`, and `data-destructive`.
+
+There are no `variant`, `tone`, `size`, theme, icon, or part-class props.
+
+## Native Dialog palette
+
+Command does not own a modal, global shortcut, or open state. Compose it inside [Dialog](/klean-ui/components/dialog), let native `<dialog>` provide focus containment and inert background behavior, and remove application listeners when their page unmounts:
+
+<CopyCode :code="paletteUsage" label="ApplicationPalette.vue" />
+
+The button uses native dialog commands. Native Dialog restores focus to its invoker. A keyboard shortcut has no invoker, so focus remains with the most sensible available target.
+
+## Nested application flows
+
+Some commands lead to another list, such as “Deploy application” followed by an application. Keep that small state machine in the application and replace the `commands` records:
+
+<CopyCode :code="nestedUsage" label="DeployCommands.vue" />
+
+The original record can carry `children`, `action`, or any other application field. Klean only reports selection.
+
+## Keyboard and accessibility
+
+- DOM focus stays on one real text input while `aria-activedescendant` identifies the highlighted option.
+- Arrow Down and Arrow Up wrap across enabled visible commands.
+- Home and End move to the enabled edges.
+- Enter selects the highlighted command once.
+- Disabled commands remain understandable but are skipped by keyboard and pointer selection.
+- Pointer movement may highlight an item without stealing input focus.
+- IME composition is never interpreted as command navigation.
+- Dynamic permission or data changes recover to a valid active descendant.
+- Long lists reveal the active command as it moves.
+- Tab is untouched and continues through the document normally.
+
+The built-in `label` names the input and groups label themselves. Visible item content should make the action or destination clear without relying on an icon or shortcut.
+
+## Async work and durability
+
+Command reports a record; the application decides what accepting it means. Navigate, enter a nested step, or begin async work. Show truthful pending state, disable only unsafe repeats, and close the surrounding surface when acceptance completes. Keep it open with a visible error when recovery belongs there.
+
+Query, active command, and palette visibility are ephemeral by default. Do not put them in local storage or the URL merely because they can be persisted. Preserve the resulting route, task, or form state when the product needs durability.
+
+There is no hidden promise queue, toast coupling, deploy API, router adapter, permission model, or persistence policy.
 
 ## When to use Command
 
-Use Command when a typed query narrows actions or destinations: an application palette, a quick-create surface, an operations launcher, or a searchable step in a task.
+Use Command when typed text narrows application actions or destinations: a command palette, quick-create surface, operations launcher, or searchable step in a task.
 
 - Use [Combobox](/klean-ui/components/combobox) when the result commits one form or relationship value.
 - Use [Menu](/klean-ui/components/menu) for a short action list that does not need a query.
 - Use [Dialog](/klean-ui/components/dialog) when the surface should be modal; Command composes inside it.
-- Use [Input](/klean-ui/components/input) when arbitrary text, rather than an item, is the result.
-- Use dedicated site search when results are documents ranked by a search index. Command does not become a search backend.
-
-This avoids a super-component with `mode="select|menu|palette|search"`. Those controls have different values, focus rules, and expectations even when they look similar.
-
-## Composition API
-
-| Part               | Purpose                                                                                       |
-| ------------------ | --------------------------------------------------------------------------------------------- |
-| `Command`          | Owns temporary query, item registration, filtering, active descendant, and keyboard movement. |
-| `CommandInput`     | The one focused `combobox` input. Accepts ordinary input attributes.                          |
-| `CommandList`      | The labelled `listbox` and scroll surface.                                                    |
-| `CommandEmpty`     | A polite empty result shown only when no item matches.                                        |
-| `CommandGroup`     | A visible and accessible labelled item group.                                                 |
-| `CommandItem`      | One `option` with a required string `value`, optional `keywords`, and optional `disabled`.    |
-| `CommandSeparator` | A visual separator between groups.                                                            |
-| `CommandShortcut`  | Presentational shortcut text hidden from the accessible name.                                 |
-
-### Root state and events
-
-| Purpose               | Vue             | React                    | Svelte         |
-| --------------------- | --------------- | ------------------------ | -------------- |
-| Controlled query      | `v-model:query` | `query`, `onQueryChange` | `bind:query`   |
-| Initial query         | `default-query` | `defaultQuery`           | `defaultQuery` |
-| Item accepted         | `@select`       | `onSelect`               | `onselect`     |
-| Empty-query Escape    | `@escape`       | `onEscape`               | `onescape`     |
-| Empty-query Backspace | `@back`         | `onBack`                 | `onback`       |
-| Custom visibility     | `:filter`       | `filter`                 | `filter`       |
-| Styling               | `class`         | `className`              | `class`        |
-
-The default filter performs normalized, case-insensitive substring matching across the item's `value` and `keywords`. A custom `filter(value, query, keywords)` may return a Boolean or a numeric score; `false` and scores at or below zero hide the item. Command does not reorder application records—sort them before rendering when ranking matters.
-
-Each item also has its framework-native select callback. Put authorization and conditional rendering where the items are rendered. Klean never receives a permission model or route table.
-
-## Native Dialog palette
-
-Command does not own a modal, global shortcut, or open state. Compose it inside [Dialog](/klean-ui/components/dialog), let native `<dialog>` provide focus containment and inert background behavior, and clean up the application shortcut when its page unmounts:
-
-<CopyCode :code="paletteUsage" label="ApplicationPalette.vue" />
-
-The button uses native dialog commands. The dialog returns focus to its invoker after a command closes it. A global <kbd>Cmd/Ctrl + K</kbd> invocation has no originating button, so the browser keeps the most sensible available focus target.
-
-## Nested application flows
-
-Some commands lead to a second choice, such as “Deploy application” followed by an application. The application owns that small state machine. Command only provides two useful cancellation seams: empty-query Backspace emits `back`, and empty-query Escape emits `escape`.
-
-<CopyCode :code="nestedUsage" label="DeployCommands.vue" />
-
-Escape clears a non-empty query first. Only a second Escape at the empty root should close the surrounding surface. This makes correction cheap without trapping an app inside Klean's idea of navigation.
-
-## Keyboard and accessibility
-
-- DOM focus stays on the real text input while `aria-activedescendant` identifies the highlighted option.
-- Arrow Down and Arrow Up wrap across enabled visible items.
-- Home and End move to the enabled edges.
-- Enter activates the highlighted item once.
-- Disabled items remain understandable but are skipped by keyboard and pointer activation.
-- Pointer movement may highlight an item without moving DOM focus; pointer selection completes before blur.
-- IME composition is never interpreted as command navigation.
-- Dynamic removal or filtering recovers to a valid active descendant.
-- Long lists scroll the active item into view.
-- Tab is untouched and continues through the document normally.
-
-Give `CommandInput` and `CommandList` useful accessible names. Group headings label their own groups. The visible item content should make the action or destination clear without relying on an icon or shortcut.
-
-## Async work
-
-Command reports a selection; the application decides what accepting it means. For a navigation command, navigate. For a synchronous nested step, replace the rendered items. For asynchronous work, start the operation, expose truthful pending state in application markup, disable only unsafe repeats, and close the palette when acceptance is complete. Keep it open with a visible error when the person can recover there.
-
-There is no hidden promise queue, toast coupling, deploy API, or router adapter.
-
-## Styling
-
-Every part merges its own `class` or `className` last, so ordinary Tailwind wins. There are no `variant`, `tone`, `size`, theme, icon, or part-class props.
-
-Stable hooks are available when a parent-owned recipe needs them: `data-slot="command"`, `command-input`, `command-list`, `command-empty`, `command-group`, `command-group-heading`, `command-item`, `command-separator`, and `command-shortcut`. Items expose `data-state` and `data-highlighted`; the root exposes `data-state="results|empty"`.
-
-Prefer mapping application records into visible `CommandItem` markup. That keeps descriptions, icons, links, permission checks, and product Tailwind close to the code that owns them.
-
-## Durable state
-
-Query, active item, and palette visibility are ephemeral by default. They should not appear in local storage or the URL merely because they can. Persist the underlying route, task, or form outcome when the product needs durability.
-
-Command preserves the interaction instead:
-
-- input focus remains stable while results change;
-- Escape makes correction cheap before dismissal;
-- empty-query Backspace gives nested flows a predictable way out;
-- dynamic permission or data changes cannot leave a dead active descendant;
-- native Dialog handles modal containment and focus return;
-- application listeners and requests remain application-owned and are cleaned up where they are created.
+- Use [Input](/klean-ui/components/input) when arbitrary text, rather than a record, is the result.
+- Use dedicated site search when results are documents ranked by a search index.
 
 ## Related components
 
 - [Combobox](/klean-ui/components/combobox) — searches and commits one data value.
-- [Menu](/klean-ui/components/menu) — a short list of actions and destinations without text search.
-- [Dialog](/klean-ui/components/dialog) — an optional native modal container for a command palette.
+- [Menu](/klean-ui/components/menu) — a short action list without text search.
+- [Dialog](/klean-ui/components/dialog) — an optional native modal container.
 - [Popover](/klean-ui/components/popover) — non-modal floating content with ordinary Tab order.
-- [Input](/klean-ui/components/input) — free-form text rather than a command selection.
-- [Toast](/klean-ui/components/toast) — feedback after an application command begins or completes work.
+- [Input](/klean-ui/components/input) — free-form text rather than command selection.
+- [Toast](/klean-ui/components/toast) — feedback after application work begins or completes.
 
 ## Complete framework source
 
 ### Vue
 
-<div v-for="file in vueFiles" :key="file.filename">
-  <CopyCode :code="file.source" :label="file.filename" />
-</div>
+<CopyCode :code="commandSource" label="Command.vue" />
 
 ### React
 
@@ -311,6 +287,4 @@ Command preserves the interaction instead:
 
 ### Svelte
 
-<div v-for="file in svelteFiles" :key="file.filename">
-  <CopyCode :code="file.source" :label="file.filename" />
-</div>
+<CopyCode :code="svelteSource" label="Command.svelte" />
