@@ -1,7 +1,7 @@
 <script>
-  import Radio from '$lib/components/ui/radio/Radio.svelte';
+  import Radio from '$lib/components/ui/radio/Radio.svelte'
 
-  let region = $state('lagos');
+  let region = $state('lagos')
 </script>
 
 <fieldset>

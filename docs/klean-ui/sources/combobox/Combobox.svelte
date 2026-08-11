@@ -64,13 +64,12 @@
     isOpen ? currentQuery : String(selectedOption?.label ?? ""),
   );
   let filteredEntries = $derived.by(() => {
-    const needle = currentQuery
-      .trim()
-      .normalize("NFKD")
-      .toLocaleLowerCase();
+    const needle = currentQuery.trim().normalize("NFKD").toLocaleLowerCase();
     return options
       .map((option, index) => ({ option, index }))
-      .filter(({ option }) => !needle || searchableText(option).includes(needle));
+      .filter(
+        ({ option }) => !needle || searchableText(option).includes(needle),
+      );
   });
   let groups = $derived.by(() => {
     const result = new Map();
@@ -138,10 +137,13 @@
     clearTimeout(searchTimer);
     searchTimer = undefined;
     if (!search) return;
-    searchTimer = setTimeout(() => {
-      onsearch?.(nextQuery);
-      searchTimer = undefined;
-    }, Math.max(0, searchDelay));
+    searchTimer = setTimeout(
+      () => {
+        onsearch?.(nextQuery);
+        searchTimer = undefined;
+      },
+      Math.max(0, searchDelay),
+    );
   }
 
   function requestOpen(nextOpen) {
@@ -337,12 +339,28 @@
       aria-hidden="true"
     >
       {#if loading}
-        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4 animate-spin motion-reduce:animate-none">
+        <svg
+          viewBox="0 0 20 20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          class="size-4 animate-spin motion-reduce:animate-none"
+        >
           <path d="M17 10a7 7 0 1 1-2.05-4.95" stroke-linecap="round" />
         </svg>
       {:else}
-        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4">
-          <path d="m6 8 4 4 4-4" stroke-linecap="round" stroke-linejoin="round" />
+        <svg
+          viewBox="0 0 20 20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          class="size-4"
+        >
+          <path
+            d="m6 8 4 4 4-4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
         </svg>
       {/if}
     </span>
@@ -381,15 +399,28 @@
       class="max-h-[19rem] overflow-y-auto overscroll-contain outline-none"
     >
       {#if error}
-        <div role="status" data-slot="combobox-error" class="px-3 py-2 text-sm text-red-700 dark:text-red-400">
+        <div
+          role="status"
+          data-slot="combobox-error"
+          class="px-3 py-2 text-sm text-red-700 dark:text-red-400"
+        >
           {#if errorContent}{@render errorContent(error)}{:else}{error}{/if}
         </div>
       {/if}
 
       {#each groups as group, groupIndex (group.label ?? `ungrouped-${groupIndex}`)}
-        <div role={group.label ? "group" : undefined} aria-label={group.label || undefined} data-slot="combobox-group">
+        <div
+          role={group.label ? "group" : undefined}
+          aria-label={group.label || undefined}
+          data-slot="combobox-group"
+        >
           {#if group.label}
-            <p data-slot="combobox-group-label" class="px-3 py-2 text-xs font-medium text-gray-500 dark:text-gray-400">{group.label}</p>
+            <p
+              data-slot="combobox-group-label"
+              class="px-3 py-2 text-xs font-medium text-gray-500 dark:text-gray-400"
+            >
+              {group.label}
+            </p>
           {/if}
           {#each group.entries as { option, index } (index)}
             <div
@@ -413,17 +444,35 @@
             >
               <span class="min-w-0 flex-1">
                 {#if optionContent}
-                  {@render optionContent(option, { selected: index === selectedIndex, highlighted: index === highlightedIndex })}
+                  {@render optionContent(option, {
+                    selected: index === selectedIndex,
+                    highlighted: index === highlightedIndex,
+                  })}
                 {:else}
                   <span class="block truncate">{option.label}</span>
                   {#if option.description}
-                    <span class="mt-0.5 block truncate text-xs text-gray-500 dark:text-gray-400">{option.description}</span>
+                    <span
+                      class="mt-0.5 block truncate text-xs text-gray-500 dark:text-gray-400"
+                      >{option.description}</span
+                    >
                   {/if}
                 {/if}
               </span>
               {#if index === selectedIndex}
-                <svg data-slot="combobox-indicator" aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" class="size-4 shrink-0">
-                  <path d="m5 10 3 3 7-7" stroke-linecap="round" stroke-linejoin="round" />
+                <svg
+                  data-slot="combobox-indicator"
+                  aria-hidden="true"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  class="size-4 shrink-0"
+                >
+                  <path
+                    d="m5 10 3 3 7-7"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
                 </svg>
               {/if}
             </div>
@@ -432,13 +481,20 @@
       {/each}
 
       {#if !filteredEntries.length && !loading}
-        <div data-slot="combobox-empty" class="px-3 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+        <div
+          data-slot="combobox-empty"
+          class="px-3 py-6 text-center text-sm text-gray-500 dark:text-gray-400"
+        >
           {#if empty}{@render empty(currentQuery)}{:else}{emptyText}{/if}
         </div>
       {/if}
 
       {#if loading}
-        <div role="status" data-slot="combobox-loading" class="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">
+        <div
+          role="status"
+          data-slot="combobox-loading"
+          class="px-3 py-2 text-sm text-gray-500 dark:text-gray-400"
+        >
           {#if loadingContent}{@render loadingContent()}{:else}{loadingText}{/if}
         </div>
       {/if}

@@ -66,7 +66,9 @@
   } = $props();
 
   let items = $state([]);
-  let defaultDirection = $derived(position.endsWith("-left") ? "left" : "right");
+  let defaultDirection = $derived(
+    position.endsWith("-left") ? "left" : "right",
+  );
   let resolvedFrom = $derived(from ?? defaultDirection);
   let resolvedTo = $derived(to ?? defaultDirection);
   let motionStyle = $derived.by(() => {
@@ -86,7 +88,9 @@
       `--klean-toast-collapse-delay:${collapseDelay}ms`,
       `--klean-toast-collapse-duration:${Math.max(0, leaveDuration - collapseDelay)}ms`,
       style,
-    ].filter(Boolean).join(";");
+    ]
+      .filter(Boolean)
+      .join(";");
   });
 
   function syncInstantMotion() {
@@ -200,11 +204,17 @@
           onanimationend={(event) => handleAnimationEnd(item, event)}
         >
           {#if children}
-            {@render children({ item, dismiss: () => controller.dismiss(item.id) })}
+            {@render children({
+              item,
+              dismiss: () => controller.dismiss(item.id),
+            })}
           {:else}
             <div class="min-w-0 pt-0.5">
               {#if item.title}
-                <p data-slot="toast-title" class="text-sm font-semibold leading-5">
+                <p
+                  data-slot="toast-title"
+                  class="text-sm font-semibold leading-5"
+                >
                   {item.title}
                 </p>
               {/if}
@@ -252,7 +262,8 @@
                 type="button"
                 data-slot="toast-dismiss"
                 class="-mr-2 -mt-1 grid size-9 cursor-pointer place-items-center rounded-lg text-lg leading-none text-gray-400 hover:bg-gray-100 hover:text-gray-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 dark:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-white dark:focus-visible:ring-white"
-                aria-label={item.dismissLabel ?? `Dismiss ${item.title || "notification"}`}
+                aria-label={item.dismissLabel ??
+                  `Dismiss ${item.title || "notification"}`}
                 onclick={() => controller.dismiss(item.id)}
               >
                 <span aria-hidden="true">×</span>
@@ -269,7 +280,12 @@
   @keyframes klean-toast-enter {
     0% {
       opacity: 0;
-      transform: translate3d(var(--klean-toast-enter-x), var(--klean-toast-enter-y), 0) scale(0.98);
+      transform: translate3d(
+          var(--klean-toast-enter-x),
+          var(--klean-toast-enter-y),
+          0
+        )
+        scale(0.98);
     }
     100% {
       opacity: 1;
@@ -284,7 +300,12 @@
     }
     100% {
       opacity: 0;
-      transform: translate3d(var(--klean-toast-leave-x), var(--klean-toast-leave-y), 0) scale(0.98);
+      transform: translate3d(
+          var(--klean-toast-leave-x),
+          var(--klean-toast-leave-y),
+          0
+        )
+        scale(0.98);
     }
   }
 
@@ -309,7 +330,8 @@
   }
 
   [data-klean-toast-row][data-state="closing"] {
-    animation: klean-toast-collapse var(--klean-toast-collapse-duration) ease-in var(--klean-toast-collapse-delay) both;
+    animation: klean-toast-collapse var(--klean-toast-collapse-duration) ease-in
+      var(--klean-toast-collapse-delay) both;
     overflow: hidden;
   }
 

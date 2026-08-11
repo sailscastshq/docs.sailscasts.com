@@ -51,7 +51,10 @@
   });
   if (untrack(() => value) === undefined) value = initialValue;
   const initialWall =
-    instantToWallClock(initialValue, untrack(() => zone)) ||
+    instantToWallClock(
+      initialValue,
+      untrack(() => zone),
+    ) ||
     roundedFutureWallClock(
       new Date(),
       untrack(() => zone),
@@ -61,7 +64,11 @@
   let selectedTime = $state(initialWall.time);
   let draft = $state(
     initialValue
-      ? formatSchedule(initialValue, untrack(() => locale), untrack(() => zone))
+      ? formatSchedule(
+          initialValue,
+          untrack(() => locale),
+          untrack(() => zone),
+        )
       : "",
   );
   let interpretation = $state(
@@ -85,13 +92,14 @@
   let root;
   let minimumTimestamp = $derived.by(() => {
     const configured = new Date(min).getTime();
-    return Math.max(Date.now(), Number.isNaN(configured) ? -Infinity : configured);
+    return Math.max(
+      Date.now(),
+      Number.isNaN(configured) ? -Infinity : configured,
+    );
   });
   let calendarMin = $derived(
-    instantToWallClock(
-      new Date(minimumTimestamp + 1000).toISOString(),
-      zone,
-    ).date,
+    instantToWallClock(new Date(minimumTimestamp + 1000).toISOString(), zone)
+      .date,
   );
   let choices = $derived(timeOptions(minuteStep));
   let proposalIsPast = $derived(
@@ -233,8 +241,7 @@
   $effect(() => {
     const element = input?.getElement();
     if (!element) return;
-    if (required && !value)
-      element.setCustomValidity("Choose a schedule.");
+    if (required && !value) element.setCustomValidity("Choose a schedule.");
     else if (invalid) element.setCustomValidity(statusText);
     else element.setCustomValidity("");
   });

@@ -1,5 +1,10 @@
 <script setup>
+import { computed, onMounted, ref, watch } from 'vue'
 import { useClipboard } from '../composables/useClipboard.js'
+import {
+  highlightCode,
+  inferCodeLanguage
+} from '../composables/highlightCode.js'
 
 const props = defineProps({
   code: {
@@ -9,16 +14,41 @@ const props = defineProps({
   label: {
     type: String,
     default: 'Code'
+  },
+  language: {
+    type: String,
+    default: undefined
   }
 })
 
 const { copied, copyFailed, copy } = useClipboard()
+const highlighted = ref('')
+const resolvedLanguage = computed(
+  () => props.language ?? inferCodeLanguage(props.label)
+)
+let highlightRequest = 0
+
+async function updateHighlight() {
+  const request = ++highlightRequest
+
+  try {
+    const html = await highlightCode(props.code, resolvedLanguage.value)
+    if (request === highlightRequest) highlighted.value = html
+  } catch {
+    if (request === highlightRequest) highlighted.value = ''
+  }
+}
+
+onMounted(updateHighlight)
+watch(() => [props.code, props.language, props.label], updateHighlight)
 </script>
 
 <template>
   <figure class="copy-code">
     <figcaption>{{ label }}</figcaption>
-    <pre tabindex="0"><code>{{ code }}</code></pre>
+    <pre
+      tabindex="0"
+    ><code v-if="highlighted" v-html="highlighted"></code><code v-else>{{ code }}</code></pre>
     <button
       type="button"
       class="copy-code__button"

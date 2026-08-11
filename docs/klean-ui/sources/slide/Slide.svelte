@@ -77,7 +77,11 @@
   );
 
   function measure() {
-    if (!buttonElement || !thumbElement || typeof getComputedStyle === "undefined")
+    if (
+      !buttonElement ||
+      !thumbElement ||
+      typeof getComputedStyle === "undefined"
+    )
       return;
 
     const buttonStyle = getComputedStyle(buttonElement);
@@ -302,10 +306,7 @@
       stroke="currentColor"
       stroke-width="2"
     >
-      <path
-        d="m9 5 7 7-7 7"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+      <path d="m9 5 7 7-7 7" stroke-linecap="round" stroke-linejoin="round"
       ></path>
     </svg>
   </span>

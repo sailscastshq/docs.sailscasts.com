@@ -73,9 +73,7 @@
   let pendingEdge = "selected";
 
   function enabledIndexes() {
-    return options.flatMap((option, index) =>
-      option.disabled ? [] : [index],
-    );
+    return options.flatMap((option, index) => (option.disabled ? [] : [index]));
   }
 
   function initialHighlight(edge = "selected") {
@@ -144,9 +142,7 @@
   function findTypeaheadMatch(text) {
     const enabled = enabledIndexes();
     if (!enabled.length) return -1;
-    const current = enabled.indexOf(
-      isOpen ? highlightedIndex : selectedIndex,
-    );
+    const current = enabled.indexOf(isOpen ? highlightedIndex : selectedIndex);
     const ordered = [
       ...enabled.slice(current + 1),
       ...enabled.slice(0, current + 1),
@@ -346,7 +342,7 @@
       syncTriggerWidth();
     }}
     onkeydown={handleKeydown}
-    onblur={onblur}
+    {onblur}
   >
     <span
       data-slot="select-value"
