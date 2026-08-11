@@ -32,17 +32,17 @@ The product is called Bearing inside Slipway. Public pages use the plain labels 
 Bearing stays on the deployed application's domain. A root application uses:
 
 ```text
-https://your-app.example.com/feedback
-https://your-app.example.com/roadmap
-https://your-app.example.com/updates
+https://your-app.example.com/bearing/feedback
+https://your-app.example.com/bearing/roadmap
+https://your-app.example.com/bearing/updates
 ```
 
 For an application mounted below `/academy`, the same pages become:
 
 ```text
-https://example.com/academy/feedback
-https://example.com/academy/roadmap
-https://example.com/academy/updates
+https://example.com/academy/bearing/feedback
+https://example.com/academy/bearing/roadmap
+https://example.com/academy/bearing/updates
 ```
 
 Slipway serves these pages through the application's existing Caddy route. Navigation, sessions, and assets remain on the app's origin.
@@ -95,8 +95,8 @@ Bearing is configured per app because each app owns its domain, route prefix, de
 | Bearing                       | Off     | Master switch for all Bearing routes and writes                |
 | Accept new feedback           | On      | Pauses new submissions while keeping existing feedback visible |
 | Allow anonymous participation | Off     | Allows guests to submit and vote                               |
-| Public roadmap                | On      | Publishes or hides `/roadmap`                                  |
-| Public updates                | On      | Publishes or hides `/updates`                                  |
+| Public roadmap                | On      | Publishes or hides `/bearing/roadmap`                          |
+| Public updates                | On      | Publishes or hides `/bearing/updates`                          |
 | In-app widget                 | Off     | Adds the Bearing launcher to successful HTML pages             |
 | Widget side                   | Right   | Places the launcher at the bottom right or bottom left         |
 | Opening view                  | Updates | Opens the widget on Updates or Feedback                        |
@@ -119,7 +119,7 @@ Planned and In-progress feedback automatically appears on the public Roadmap. Th
 
 An update explains something useful that changed. Link it to one or more feedback items when the release delivers what customers requested.
 
-Publishing the update marks those linked items Shipped and makes the update available on `/updates` and in the widget.
+Publishing the update marks those linked items Shipped and makes the update available on `/bearing/updates` and in the widget.
 
 This publish and state change happen in one database transaction. A failed
 publish cannot leave the public update and its linked roadmap items disagreeing.
@@ -144,6 +144,58 @@ there is nothing to mark as new, and a previously seen release does not stay
 highlighted forever.
 
 The hook skips JSON, redirects, downloads, streams, Server-Sent Events, and responses whose Content Security Policy cannot safely allow the same-origin script.
+
+### Open Bearing from your application
+
+Your application can open the injected widget from its own button or menu
+without importing a component or adding another script. Set
+`data-slipway-bearing-open` to the surface you want to show:
+
+```html
+<button type="button" data-slipway-bearing-open="feedback">
+  Share feedback
+</button>
+```
+
+The supported surfaces are `feedback`, `roadmap`, and `updates`. Omitting the
+attribute value uses the opening view configured in Slipway. The bootstrap uses
+delegated click handling, so controls rendered after the page loads work too.
+
+Framework menu APIs that expose a command instead of button attributes can
+dispatch the equivalent browser event:
+
+```js
+window.dispatchEvent(
+  new CustomEvent('slipway:bearing:open', {
+    detail: { surface: 'feedback' }
+  })
+)
+```
+
+For example, an Inertia application can use the event from an account-menu
+command while keeping a normal footer link:
+
+```js
+const feedbackItem = {
+  label: 'Share feedback',
+  command: () => {
+    window.dispatchEvent(
+      new CustomEvent('slipway:bearing:open', {
+        detail: { surface: 'feedback' }
+      })
+    )
+  }
+}
+```
+
+The widget restores focus to the host control when it closes. Unknown surfaces
+are ignored safely. If the in-app widget is disabled, the trigger is inert, so
+keep an ordinary `/bearing/feedback` link wherever customers need a durable,
+shareable destination.
+
+Ordinary links remain ordinary navigation. Do not add
+`data-slipway-bearing-open` to links that should open the full public page in
+the current tab or a new tab.
 
 ## Security boundaries
 
