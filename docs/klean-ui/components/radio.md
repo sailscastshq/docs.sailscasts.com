@@ -47,7 +47,7 @@ not duplicate HTML's group contract.
         <label
           v-for="item in regions"
           :key="item.value"
-          class="flex min-h-14 cursor-pointer items-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-3 has-[:checked]:border-gray-950 dark:border-gray-800 dark:bg-gray-950 dark:has-[:checked]:border-white"
+          class="flex min-h-14 cursor-pointer items-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-3 has-checked:border-gray-950 dark:border-gray-800 dark:bg-gray-950 dark:has-checked:border-white"
         >
           <KleanRadio
             v-model="region"
@@ -226,7 +226,7 @@ Keep Radio visible when familiarity and quick scanning matter:
 Visually hide only Radio and let the wrapping label present the large choice:
 
 <div class="grid gap-3 py-4 sm:grid-cols-2">
-  <label class="cursor-pointer rounded-xl bg-gray-50 p-4 transition has-[:checked]:bg-gray-950 has-[:checked]:text-white dark:bg-gray-900 dark:has-[:checked]:bg-white dark:has-[:checked]:text-gray-950">
+  <label class="cursor-pointer rounded-xl bg-gray-50 p-4 transition has-checked:bg-gray-950 has-checked:text-white dark:bg-gray-900 dark:has-checked:bg-white dark:has-checked:text-gray-950">
     <KleanRadio
       v-model="participation"
       class="sr-only"
@@ -236,7 +236,7 @@ Visually hide only Radio and let the wrapping label present the large choice:
     <span class="block text-sm font-medium">Logged-in users only</span>
     <span class="mt-2 block text-sm opacity-70">Every vote has a person behind it.</span>
   </label>
-  <label class="cursor-pointer rounded-xl bg-gray-50 p-4 transition has-[:checked]:bg-gray-950 has-[:checked]:text-white dark:bg-gray-900 dark:has-[:checked]:bg-white dark:has-[:checked]:text-gray-950">
+  <label class="cursor-pointer rounded-xl bg-gray-50 p-4 transition has-checked:bg-gray-950 has-checked:text-white dark:bg-gray-900 dark:has-checked:bg-white dark:has-checked:text-gray-950">
     <KleanRadio
       v-model="participation"
       class="sr-only"
@@ -262,7 +262,7 @@ Radio is also suitable for one filter from a compact visible set:
     <label
       v-for="item in ['all', 'billing', 'deploys', 'domains']"
       :key="item"
-      class="min-h-11 cursor-pointer rounded-xl bg-gray-50 px-4 py-3 text-sm font-medium text-gray-500 has-[:checked]:bg-gray-950 has-[:checked]:text-white dark:bg-gray-900 dark:text-gray-400 dark:has-[:checked]:bg-white dark:has-[:checked]:text-gray-950"
+      class="min-h-11 cursor-pointer rounded-xl bg-gray-50 px-4 py-3 text-sm font-medium text-gray-500 has-checked:bg-gray-950 has-checked:text-white dark:bg-gray-900 dark:text-gray-400 dark:has-checked:bg-white dark:has-checked:text-gray-950"
     >
       <KleanRadio
         v-model="category"
@@ -329,7 +329,7 @@ For example:
 <Radio class="size-5 text-emerald-700 focus-visible:outline-emerald-700" />
 
 <!-- Entire label becomes the visible choice -->
-<label class="has-[:checked]:bg-gray-950 has-[:checked]:text-white">
+<label class="has-checked:bg-gray-950 has-checked:text-white">
   <Radio class="sr-only" />
   Team plan
 </label>

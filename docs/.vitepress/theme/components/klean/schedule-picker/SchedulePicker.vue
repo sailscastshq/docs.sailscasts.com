@@ -134,7 +134,7 @@ const describedBy = computed(() =>
 )
 const rootClasses = computed(() =>
   twMerge(
-    'grid w-full gap-2 [&_[data-slot=schedule-picker-field]]:relative [&_[data-slot=schedule-picker-field]]:flex [&_[data-slot=schedule-picker-field]]:items-stretch [&_[data-slot=input]]:pe-12',
+    'grid w-full gap-2 **:data-[slot=schedule-picker-field]:relative **:data-[slot=schedule-picker-field]:flex **:data-[slot=schedule-picker-field]:items-stretch **:data-[slot=input]:pe-12',
     attrs.class
   )
 )
@@ -355,7 +355,7 @@ defineExpose({
         type="button"
         :popovertarget="popoverId"
         data-slot="schedule-picker-button"
-        class="absolute inset-y-0 end-0 grid min-w-11 place-items-center rounded-e-md text-gray-500 hover:bg-gray-100 hover:text-gray-950 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950 disabled:cursor-not-allowed disabled:opacity-40 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white dark:focus-visible:outline-white"
+        class="absolute inset-y-0 inset-e-0 grid min-w-11 place-items-center rounded-e-md text-gray-500 hover:bg-gray-100 hover:text-gray-950 focus-visible:z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950 disabled:cursor-not-allowed disabled:opacity-40 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white dark:focus-visible:outline-white"
         :disabled="disabled || readonly"
         aria-label="Choose a date and time"
       >
@@ -377,7 +377,7 @@ defineExpose({
     <p
       :id="statusId"
       data-slot="schedule-picker-status"
-      class="text-sm text-gray-600 aria-[invalid=true]:text-red-700 dark:text-gray-400 dark:aria-[invalid=true]:text-red-400"
+      class="text-sm text-gray-600 aria-invalid:text-red-700 dark:text-gray-400 dark:aria-invalid:text-red-400"
       :aria-invalid="invalid"
       aria-live="polite"
     >
@@ -430,7 +430,7 @@ defineExpose({
                 :aria-selected="time === selectedTime"
                 :disabled="timeIsUnavailable(time)"
                 :tabindex="time === selectedTime ? 0 : -1"
-                class="block min-h-11 w-full rounded-md px-3 text-start text-sm tabular-nums hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-gray-950 disabled:cursor-not-allowed disabled:text-gray-300 aria-selected:bg-gray-950 aria-selected:font-semibold aria-selected:text-white dark:hover:bg-gray-800 dark:focus-visible:outline-white dark:disabled:text-gray-700 dark:aria-selected:bg-white dark:aria-selected:text-gray-950"
+                class="block min-h-11 w-full rounded-md px-3 text-start text-sm tabular-nums hover:bg-gray-100 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-gray-950 disabled:cursor-not-allowed disabled:text-gray-300 aria-selected:bg-gray-950 aria-selected:font-semibold aria-selected:text-white dark:hover:bg-gray-800 dark:focus-visible:outline-white dark:disabled:text-gray-700 dark:aria-selected:bg-white dark:aria-selected:text-gray-950"
                 @click="chooseTime(time)"
                 @keydown="handleTimeKeydown($event, index)"
               >

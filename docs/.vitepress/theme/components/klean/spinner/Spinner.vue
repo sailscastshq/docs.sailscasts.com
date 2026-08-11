@@ -30,7 +30,7 @@ const forwardedAttrs = computed(() => {
     :class="
       twMerge(
         [
-          'inline-flex size-4 shrink-0 items-center justify-center motion-reduce:animate-none! motion-reduce:[&_*]:animate-none! [&>*]:size-full',
+          'inline-flex size-4 shrink-0 items-center justify-center motion-reduce:animate-none! motion-reduce:**:animate-none! *:size-full',
           hasCustomMark ? '' : 'animate-spin'
         ],
         attrs.class

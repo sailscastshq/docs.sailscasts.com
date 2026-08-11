@@ -471,7 +471,7 @@ const Select = forwardRef(function Select(
           }
           aria-label={ariaLabel ? `${ariaLabel} options` : undefined}
           data-slot="select-listbox"
-          className="max-h-[17rem] overflow-y-auto overscroll-contain outline-none"
+          className="max-h-68 overflow-y-auto overscroll-contain outline-none"
         >
           {options.length ? (
             groups.map((group, groupIndex) => (
@@ -505,7 +505,7 @@ const Select = forwardRef(function Select(
                     }
                     data-selected={index === selectedIndex ? '' : undefined}
                     data-disabled={option.disabled ? '' : undefined}
-                    className="flex min-h-11 cursor-pointer items-center justify-between gap-3 rounded px-3 py-2 text-sm text-gray-700 outline-none data-[highlighted]:bg-gray-100 data-[highlighted]:text-gray-950 data-[disabled]:cursor-not-allowed data-[disabled]:opacity-40 dark:text-gray-200 dark:data-[highlighted]:bg-white/10 dark:data-[highlighted]:text-white"
+                    className="flex min-h-11 cursor-pointer items-center justify-between gap-3 rounded px-3 py-2 text-sm text-gray-700 outline-none data-highlighted:bg-gray-100 data-highlighted:text-gray-950 data-disabled:cursor-not-allowed data-disabled:opacity-40 dark:text-gray-200 dark:data-highlighted:bg-white/10 dark:data-highlighted:text-white"
                     onPointerMove={() => {
                       if (!option.disabled) setHighlightedIndex(index)
                     }}
