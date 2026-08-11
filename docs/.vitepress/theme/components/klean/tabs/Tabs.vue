@@ -66,14 +66,29 @@ function tabValue(element) {
   return element?.getAttribute('data-value') ?? ''
 }
 
-function tabs() {
+function belongsToThisTabs(element) {
+  return element.closest('[data-slot="tabs"]') === root.value
+}
+
+function triggers() {
   const list = listElement()
   if (!list) return []
-  return [...list.querySelectorAll('button[data-value]')].filter(
-    (tab) =>
-      tab.closest('[role="tablist"]') === list ||
-      !tab.closest('[role="tablist"]')
-  )
+  return [
+    ...list.querySelectorAll('button[data-value], a[href][data-value]')
+  ].filter(belongsToThisTabs)
+}
+
+function mode(elements = triggers()) {
+  if (!elements.length) return 'empty'
+  if (elements.every((element) => element.matches('button'))) return 'panels'
+  if (elements.every((element) => element.matches('a[href]'))) {
+    return 'navigation'
+  }
+  return 'mixed'
+}
+
+function tabs() {
+  return triggers().filter((trigger) => trigger.matches('button'))
 }
 
 function panels() {
@@ -122,11 +137,75 @@ function generatedPairId(candidate, index) {
   return `klean-tabs-${componentId}-${slug}-${index}`
 }
 
+function setAttribute(element, name, nextValue) {
+  if (element.getAttribute(name) !== nextValue) {
+    element.setAttribute(name, nextValue)
+  }
+}
+
+function syncList(list, currentMode) {
+  if (!list) return
+  list.setAttribute('data-slot', 'tabs-list')
+  list.setAttribute('data-mode', currentMode)
+  list.setAttribute('data-orientation', props.orientation)
+  if (attrs['aria-label']) list.setAttribute('aria-label', attrs['aria-label'])
+  if (attrs['aria-labelledby'])
+    list.setAttribute('aria-labelledby', attrs['aria-labelledby'])
+}
+
+function syncNavigation(list, links) {
+  if (list.getAttribute('role') === 'tablist') list.removeAttribute('role')
+  list.removeAttribute('aria-orientation')
+
+  const current = value.value
+  const currentLink = links.find((link) => tabValue(link) === current)
+  const markedLink = links.find(
+    (link) => link.getAttribute('aria-current') === 'page'
+  )
+  const selected = currentLink ?? (!isControlled.value ? markedLink : undefined)
+
+  if (!isControlled.value && selected && tabValue(selected) !== current) {
+    internalValue.value = tabValue(selected)
+  }
+
+  links.forEach((link) => {
+    const active = link === selected
+    link.setAttribute('data-slot', 'tab')
+    link.setAttribute('data-mode', 'navigation')
+    link.setAttribute('data-state', active ? 'active' : 'inactive')
+    link.setAttribute('data-orientation', props.orientation)
+    if (link.getAttribute('role') === 'tab') link.removeAttribute('role')
+    link.removeAttribute('aria-selected')
+    link.removeAttribute('aria-controls')
+    if (active) setAttribute(link, 'aria-current', 'page')
+    else if (link.getAttribute('aria-current') === 'page') {
+      link.removeAttribute('aria-current')
+    }
+  })
+}
+
 function sync() {
   if (!root.value || syncing) return
   syncing = true
 
   const list = listElement()
+  const allTriggers = triggers()
+  const currentMode = mode(allTriggers)
+  root.value.setAttribute('data-mode', currentMode)
+  syncList(list, currentMode)
+
+  if (currentMode === 'navigation') {
+    syncNavigation(list, allTriggers)
+    previousValues = []
+    syncing = false
+    return
+  }
+
+  if (currentMode !== 'panels') {
+    syncing = false
+    return
+  }
+
   const allTabs = tabs()
   const allPanels = panels()
   const current = value.value
@@ -141,15 +220,7 @@ function sync() {
 
   if (list) {
     list.setAttribute('role', 'tablist')
-    list.setAttribute('data-slot', 'tabs-list')
-    list.setAttribute('data-orientation', props.orientation)
     list.setAttribute('aria-orientation', props.orientation)
-    if (attrs['aria-label'])
-      list.setAttribute('aria-label', attrs['aria-label'])
-    else list.removeAttribute('aria-label')
-    if (attrs['aria-labelledby'])
-      list.setAttribute('aria-labelledby', attrs['aria-labelledby'])
-    else list.removeAttribute('aria-labelledby')
   }
 
   allTabs.forEach((tab, index) => {
@@ -161,6 +232,7 @@ function sync() {
     if (!tab.hasAttribute('type')) tab.setAttribute('type', 'button')
     tab.setAttribute('role', 'tab')
     tab.setAttribute('data-slot', 'tab')
+    tab.setAttribute('data-mode', 'panels')
     tab.setAttribute('data-state', selected ? 'active' : 'inactive')
     tab.setAttribute('data-orientation', props.orientation)
     tab.setAttribute('aria-selected', String(selected))
@@ -272,7 +344,13 @@ onMounted(async () => {
     childList: true,
     subtree: true,
     attributes: true,
-    attributeFilter: ['data-value', 'disabled', 'aria-disabled']
+    attributeFilter: [
+      'data-value',
+      'disabled',
+      'aria-disabled',
+      'href',
+      'aria-current'
+    ]
   })
 })
 

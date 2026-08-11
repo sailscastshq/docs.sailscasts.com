@@ -37,14 +37,27 @@
     return element?.getAttribute("data-value") ?? "";
   }
 
-  function tabs() {
+  function triggers() {
     const list = listElement();
     if (!list) return [];
-    return [...list.querySelectorAll("button[data-value]")].filter(
-      (tab) =>
-        tab.closest('[role="tablist"]') === list ||
-        !tab.closest('[role="tablist"]'),
+    return [
+      ...list.querySelectorAll("button[data-value], a[href][data-value]"),
+    ].filter(
+      (element) => element.closest('[data-slot="tabs"]') === rootElement,
     );
+  }
+
+  function mode(elements = triggers()) {
+    if (!elements.length) return "empty";
+    if (elements.every((element) => element.matches("button"))) return "panels";
+    if (elements.every((element) => element.matches("a[href]"))) {
+      return "navigation";
+    }
+    return "mixed";
+  }
+
+  function tabs() {
+    return triggers().filter((trigger) => trigger.matches("button"));
   }
 
   function panels() {
@@ -92,6 +105,12 @@
     return `klean-tabs-${componentId}-${slug}-${index}`;
   }
 
+  function setAttribute(element, name, nextValue) {
+    if (element.getAttribute(name) !== nextValue) {
+      element.setAttribute(name, nextValue);
+    }
+  }
+
   function sync() {
     if (!rootElement || syncing) return;
     syncing = true;
@@ -103,6 +122,56 @@
     }
 
     const list = listElement();
+    const allTriggers = triggers();
+    const currentMode = mode(allTriggers);
+    rootElement.setAttribute("data-mode", currentMode);
+
+    if (list) {
+      list.setAttribute("data-slot", "tabs-list");
+      list.setAttribute("data-mode", currentMode);
+      list.setAttribute("data-orientation", orientation);
+      if (ariaLabel) list.setAttribute("aria-label", ariaLabel);
+      if (ariaLabelledby) list.setAttribute("aria-labelledby", ariaLabelledby);
+    }
+
+    if (currentMode === "navigation") {
+      if (list.getAttribute("role") === "tablist") list.removeAttribute("role");
+      list.removeAttribute("aria-orientation");
+
+      const currentLink = allTriggers.find((link) => tabValue(link) === value);
+      const markedLink = allTriggers.find(
+        (link) => link.getAttribute("aria-current") === "page",
+      );
+      const selected =
+        currentLink ?? (value === undefined ? markedLink : undefined);
+
+      if (value === undefined && selected) value = tabValue(selected);
+
+      allTriggers.forEach((link) => {
+        const active = link === selected;
+        link.setAttribute("data-slot", "tab");
+        link.setAttribute("data-mode", "navigation");
+        link.setAttribute("data-state", active ? "active" : "inactive");
+        link.setAttribute("data-orientation", orientation);
+        if (link.getAttribute("role") === "tab") link.removeAttribute("role");
+        link.removeAttribute("aria-selected");
+        link.removeAttribute("aria-controls");
+        if (active) setAttribute(link, "aria-current", "page");
+        else if (link.getAttribute("aria-current") === "page") {
+          link.removeAttribute("aria-current");
+        }
+      });
+
+      previousValues = [];
+      syncing = false;
+      return;
+    }
+
+    if (currentMode !== "panels") {
+      syncing = false;
+      return;
+    }
+
     const allTabs = tabs();
     const allPanels = panels();
     const current = value;
@@ -117,13 +186,7 @@
 
     if (list) {
       list.setAttribute("role", "tablist");
-      list.setAttribute("data-slot", "tabs-list");
-      list.setAttribute("data-orientation", orientation);
       list.setAttribute("aria-orientation", orientation);
-      if (ariaLabel) list.setAttribute("aria-label", ariaLabel);
-      else list.removeAttribute("aria-label");
-      if (ariaLabelledby) list.setAttribute("aria-labelledby", ariaLabelledby);
-      else list.removeAttribute("aria-labelledby");
     }
 
     allTabs.forEach((tab, index) => {
@@ -135,6 +198,7 @@
       if (!tab.hasAttribute("type")) tab.setAttribute("type", "button");
       tab.setAttribute("role", "tab");
       tab.setAttribute("data-slot", "tab");
+      tab.setAttribute("data-mode", "panels");
       tab.setAttribute("data-state", selected ? "active" : "inactive");
       tab.setAttribute("data-orientation", orientation);
       tab.setAttribute("aria-selected", String(selected));
@@ -249,7 +313,13 @@
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ["data-value", "disabled", "aria-disabled"],
+      attributeFilter: [
+        "data-value",
+        "disabled",
+        "aria-disabled",
+        "href",
+        "aria-current",
+      ],
     });
     return () => observer?.disconnect();
   });

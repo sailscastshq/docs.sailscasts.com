@@ -14,6 +14,12 @@ function assignRef(ref, value) {
   else if (ref) ref.current = value
 }
 
+function setAttribute(element, name, nextValue) {
+  if (element.getAttribute(name) !== nextValue) {
+    element.setAttribute(name, nextValue)
+  }
+}
+
 const Tabs = forwardRef(function Tabs(
   {
     value,
@@ -60,15 +66,33 @@ const Tabs = forwardRef(function Tabs(
     []
   )
 
-  const tabs = useCallback(() => {
+  const triggers = useCallback(() => {
     const list = listElement()
     if (!list) return []
-    return [...list.querySelectorAll('button[data-value]')].filter(
-      (tab) =>
-        tab.closest('[role="tablist"]') === list ||
-        !tab.closest('[role="tablist"]')
+    return [
+      ...list.querySelectorAll('button[data-value], a[href][data-value]')
+    ].filter(
+      (element) => element.closest('[data-slot="tabs"]') === rootRef.current
     )
   }, [listElement])
+
+  const mode = useCallback(
+    (elements = triggers()) => {
+      if (!elements.length) return 'empty'
+      if (elements.every((element) => element.matches('button')))
+        return 'panels'
+      if (elements.every((element) => element.matches('a[href]'))) {
+        return 'navigation'
+      }
+      return 'mixed'
+    },
+    [triggers]
+  )
+
+  const tabs = useCallback(
+    () => triggers().filter((trigger) => trigger.matches('button')),
+    [triggers]
+  )
 
   const panels = useCallback(() => {
     const list = listElement()
@@ -132,6 +156,59 @@ const Tabs = forwardRef(function Tabs(
     syncingRef.current = true
 
     const list = listElement()
+    const allTriggers = triggers()
+    const currentMode = mode(allTriggers)
+    rootRef.current.setAttribute('data-mode', currentMode)
+
+    if (list) {
+      list.setAttribute('data-slot', 'tabs-list')
+      list.setAttribute('data-mode', currentMode)
+      list.setAttribute('data-orientation', orientation)
+      if (ariaLabel) list.setAttribute('aria-label', ariaLabel)
+      if (ariaLabelledby) list.setAttribute('aria-labelledby', ariaLabelledby)
+    }
+
+    if (currentMode === 'navigation') {
+      if (list.getAttribute('role') === 'tablist') list.removeAttribute('role')
+      list.removeAttribute('aria-orientation')
+
+      const currentLink = allTriggers.find(
+        (link) => tabValue(link) === resolvedValue
+      )
+      const markedLink = allTriggers.find(
+        (link) => link.getAttribute('aria-current') === 'page'
+      )
+      const selected = currentLink ?? (!controlled ? markedLink : undefined)
+
+      if (!controlled && selected && tabValue(selected) !== resolvedValue) {
+        setLocalValue(tabValue(selected))
+      }
+
+      allTriggers.forEach((link) => {
+        const active = link === selected
+        link.setAttribute('data-slot', 'tab')
+        link.setAttribute('data-mode', 'navigation')
+        link.setAttribute('data-state', active ? 'active' : 'inactive')
+        link.setAttribute('data-orientation', orientation)
+        if (link.getAttribute('role') === 'tab') link.removeAttribute('role')
+        link.removeAttribute('aria-selected')
+        link.removeAttribute('aria-controls')
+        if (active) setAttribute(link, 'aria-current', 'page')
+        else if (link.getAttribute('aria-current') === 'page') {
+          link.removeAttribute('aria-current')
+        }
+      })
+
+      previousValuesRef.current = []
+      syncingRef.current = false
+      return
+    }
+
+    if (currentMode !== 'panels') {
+      syncingRef.current = false
+      return
+    }
+
     const allTabs = tabs()
     const allPanels = panels()
     const current = resolvedValue
@@ -146,13 +223,7 @@ const Tabs = forwardRef(function Tabs(
 
     if (list) {
       list.setAttribute('role', 'tablist')
-      list.setAttribute('data-slot', 'tabs-list')
-      list.setAttribute('data-orientation', orientation)
       list.setAttribute('aria-orientation', orientation)
-      if (ariaLabel) list.setAttribute('aria-label', ariaLabel)
-      else list.removeAttribute('aria-label')
-      if (ariaLabelledby) list.setAttribute('aria-labelledby', ariaLabelledby)
-      else list.removeAttribute('aria-labelledby')
     }
 
     allTabs.forEach((tab, index) => {
@@ -164,6 +235,7 @@ const Tabs = forwardRef(function Tabs(
       if (!tab.hasAttribute('type')) tab.setAttribute('type', 'button')
       tab.setAttribute('role', 'tab')
       tab.setAttribute('data-slot', 'tab')
+      tab.setAttribute('data-mode', 'panels')
       tab.setAttribute('data-state', selected ? 'active' : 'inactive')
       tab.setAttribute('data-orientation', orientation)
       tab.setAttribute('aria-selected', String(selected))
@@ -208,6 +280,7 @@ const Tabs = forwardRef(function Tabs(
     fallbackValue,
     generatedPairId,
     listElement,
+    mode,
     onValueChange,
     orientation,
     panelFor,
@@ -215,7 +288,8 @@ const Tabs = forwardRef(function Tabs(
     resolvedValue,
     tabFor,
     tabs,
-    tabValue
+    tabValue,
+    triggers
   ])
 
   useLayoutEffect(sync)
@@ -227,7 +301,13 @@ const Tabs = forwardRef(function Tabs(
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ['data-value', 'disabled', 'aria-disabled']
+      attributeFilter: [
+        'data-value',
+        'disabled',
+        'aria-disabled',
+        'href',
+        'aria-current'
+      ]
     })
     return () => observerRef.current?.disconnect()
   }, [sync])
