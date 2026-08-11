@@ -65,6 +65,10 @@ A one-component fixed-list value picker with typed values, grouped and disabled 
 
 An editable search-and-choose input for long or remotely loaded lists, with typed values, local filtering, stable loading and error states, full keyboard behavior, and application-owned request policy.
 
+### [Command](/klean-ui/components/command)
+
+A pragmatic searchable composition for application actions and destinations, with stable input focus, active-descendant keyboard behavior, explicit keywords, nested-flow seams, and application-owned routes and work.
+
 ### [Dialog](/klean-ui/components/dialog)
 
 A native modal surface with platform focus containment, inert background behavior, native commands and dialog forms, durable dismissal policy, and application-owned semantic content.
