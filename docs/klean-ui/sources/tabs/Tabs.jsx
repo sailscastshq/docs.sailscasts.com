@@ -22,6 +22,7 @@ function setAttribute(element, name, nextValue) {
 
 const Tabs = forwardRef(function Tabs(
   {
+    as: Root = 'div',
     value,
     defaultValue,
     onValueChange,
@@ -50,6 +51,7 @@ const Tabs = forwardRef(function Tabs(
   const controlled = value !== undefined
   const [localValue, setLocalValue] = useState(defaultValue)
   const resolvedValue = controlled ? value : localValue
+  const isNavigationRoot = Root === 'nav'
 
   const setRoot = useCallback(
     (node) => {
@@ -59,7 +61,13 @@ const Tabs = forwardRef(function Tabs(
     [forwardedRef]
   )
 
-  const listElement = useCallback(() => rootRef.current?.firstElementChild, [])
+  const listElement = useCallback(
+    () =>
+      rootRef.current?.matches('nav')
+        ? rootRef.current
+        : rootRef.current?.firstElementChild,
+    []
+  )
 
   const tabValue = useCallback(
     (element) => element?.getAttribute('data-value') ?? '',
@@ -79,6 +87,11 @@ const Tabs = forwardRef(function Tabs(
   const mode = useCallback(
     (elements = triggers()) => {
       if (!elements.length) return 'empty'
+      if (isNavigationRoot) {
+        return elements.every((element) => element.matches('a[href]'))
+          ? 'navigation'
+          : 'mixed'
+      }
       if (elements.every((element) => element.matches('button')))
         return 'panels'
       if (elements.every((element) => element.matches('a[href]'))) {
@@ -86,7 +99,7 @@ const Tabs = forwardRef(function Tabs(
       }
       return 'mixed'
     },
-    [triggers]
+    [isNavigationRoot, triggers]
   )
 
   const tabs = useCallback(
@@ -161,11 +174,14 @@ const Tabs = forwardRef(function Tabs(
     rootRef.current.setAttribute('data-mode', currentMode)
 
     if (list) {
-      list.setAttribute('data-slot', 'tabs-list')
+      const listIsRoot = list === rootRef.current
+      if (!listIsRoot) list.setAttribute('data-slot', 'tabs-list')
       list.setAttribute('data-mode', currentMode)
       list.setAttribute('data-orientation', orientation)
-      if (ariaLabel) list.setAttribute('aria-label', ariaLabel)
-      if (ariaLabelledby) list.setAttribute('aria-labelledby', ariaLabelledby)
+      if (!listIsRoot && ariaLabel) list.setAttribute('aria-label', ariaLabel)
+      if (!listIsRoot && ariaLabelledby) {
+        list.setAttribute('aria-labelledby', ariaLabelledby)
+      }
     }
 
     if (currentMode === 'navigation') {
@@ -385,18 +401,20 @@ const Tabs = forwardRef(function Tabs(
   }
 
   return (
-    <div
+    <Root
       {...rootProps}
       ref={setRoot}
       data-slot="tabs"
       data-orientation={orientation}
+      aria-label={isNavigationRoot ? ariaLabel : undefined}
+      aria-labelledby={isNavigationRoot ? ariaLabelledby : undefined}
       className={twMerge(className)}
       onClick={handleClick}
       onFocus={handleFocus}
       onKeyDown={handleKeydown}
     >
       {children}
-    </div>
+    </Root>
   )
 })
 

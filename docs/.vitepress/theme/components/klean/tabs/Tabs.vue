@@ -14,6 +14,12 @@ import { twMerge } from 'tailwind-merge'
 defineOptions({ inheritAttrs: false })
 
 const props = defineProps({
+  /** Root element. Use `nav` when the children are route destinations. */
+  as: {
+    type: String,
+    default: 'div',
+    validator: (value) => ['div', 'nav'].includes(value)
+  },
   /** Framework-native controlled value. Omit for uncontrolled use. */
   modelValue: { type: String, default: undefined },
   /** Initial value when `modelValue` is not controlled. */
@@ -42,13 +48,11 @@ const value = computed(() =>
   isControlled.value ? props.modelValue : internalValue.value
 )
 const rootAttrs = computed(() => {
-  const {
-    class: _class,
-    'aria-label': _ariaLabel,
-    'aria-labelledby': _ariaLabelledby,
-    role: _role,
-    ...rest
-  } = attrs
+  const { class: _class, role: _role, ...rest } = attrs
+  if (props.as !== 'nav') {
+    delete rest['aria-label']
+    delete rest['aria-labelledby']
+  }
   return rest
 })
 const rootClasses = computed(() => twMerge(attrs.class))
@@ -59,6 +63,7 @@ let lastFocusedValue
 let syncing = false
 
 function listElement() {
+  if (root.value?.matches('nav')) return root.value
   return root.value?.firstElementChild
 }
 
@@ -80,6 +85,11 @@ function triggers() {
 
 function mode(elements = triggers()) {
   if (!elements.length) return 'empty'
+  if (props.as === 'nav') {
+    return elements.every((element) => element.matches('a[href]'))
+      ? 'navigation'
+      : 'mixed'
+  }
   if (elements.every((element) => element.matches('button'))) return 'panels'
   if (elements.every((element) => element.matches('a[href]'))) {
     return 'navigation'
@@ -145,11 +155,13 @@ function setAttribute(element, name, nextValue) {
 
 function syncList(list, currentMode) {
   if (!list) return
-  list.setAttribute('data-slot', 'tabs-list')
+  const isRoot = list === root.value
+  if (!isRoot) list.setAttribute('data-slot', 'tabs-list')
   list.setAttribute('data-mode', currentMode)
   list.setAttribute('data-orientation', props.orientation)
-  if (attrs['aria-label']) list.setAttribute('aria-label', attrs['aria-label'])
-  if (attrs['aria-labelledby'])
+  if (!isRoot && attrs['aria-label'])
+    list.setAttribute('aria-label', attrs['aria-label'])
+  if (!isRoot && attrs['aria-labelledby'])
     list.setAttribute('aria-labelledby', attrs['aria-labelledby'])
 }
 
@@ -363,7 +375,8 @@ onBeforeUnmount(() => observer?.disconnect())
 </script>
 
 <template>
-  <div
+  <component
+    :is="as"
     v-bind="rootAttrs"
     ref="root"
     data-slot="tabs"
@@ -374,5 +387,5 @@ onBeforeUnmount(() => observer?.disconnect())
     @keydown="handleKeydown"
   >
     <slot />
-  </div>
+  </component>
 </template>

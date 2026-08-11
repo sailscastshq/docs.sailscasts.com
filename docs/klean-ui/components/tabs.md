@@ -41,7 +41,7 @@ const navigationSections = [
 
 Tabs gives one durable contract to two things applications routinely need: buttons that switch mounted peer panels, and links that navigate among related pages. The caller writes the real elements; Klean reads their semantics instead of asking for a mode, item schema, or router adapter.
 
-With `button[data-value]`, Klean supplies the missing ARIA tab contract: relationships, selected and hidden state, roving focus, Arrow keys, Home/End, disabled skipping, overflow reveal, and safe fallback when a dynamic tab disappears. With `a[href][data-value]`—including a framework Link that renders an anchor—Klean preserves native navigation and adds only active-state and styling hooks. Tailwind, routing, persistence, loading, and close policy remain application code.
+With `button[data-value]`, Klean supplies the missing ARIA tab contract: relationships, selected and hidden state, roving focus, Arrow keys, Home/End, disabled skipping, overflow reveal, and safe fallback when a dynamic tab disappears. With `as="nav"` and direct `a[href][data-value]` children—including a framework Link that renders an anchor—Tabs becomes the navigation landmark, preserves native navigation, and adds only active-state and styling hooks. Tailwind, routing, persistence, loading, and close policy remain application code.
 
 <KleanPreview id="tabs-source" :source="tabsSource" filename="Tabs.vue">
   <template #preview>
@@ -108,10 +108,10 @@ There is no initializer, provider, item schema, `klean-ui.json`, generated class
 
 ## Usage
 
-The first child is the list or navigation landmark. Klean infers the contract from its descendants:
+Klean infers the contract from the real elements you provide:
 
-- `button[data-value]` creates a tab widget. Each later direct child with the same `data-value` is that button's panel.
-- `a[href][data-value]` creates durable navigation. Native anchors and framework Links keep their normal browser and router behavior; no panels are required.
+- With the default `as="div"`, make the first child a list of `button[data-value]`. Each later direct child with the same `data-value` is that button's panel.
+- With `as="nav"`, put `a[href][data-value]` or framework Links directly inside Tabs. Tabs itself becomes the navigation landmark; no extra wrapper or panels are required.
 
 Keep a group all buttons or all links. A mixed group is ambiguous, so Klean deliberately leaves it unenhanced.
 
@@ -136,6 +136,7 @@ The binding syntax changes, but the visible HTML and `data-value` relationship s
 | Vue `v-model`                                    | inferred     | Controlled or uncontrolled selected value.                           |
 | React `value` / `defaultValue` / `onValueChange` | inferred     | React-native controlled or initial selected value.                   |
 | Svelte `bind:value`                              | inferred     | Svelte-native selected value.                                        |
+| `as`                                             | `div`        | Use `nav` when the direct children are route destinations.           |
 | `orientation`                                    | `horizontal` | `horizontal` uses Left/Right; `vertical` uses Up/Down.               |
 | `activation`                                     | `automatic`  | `automatic` selects on focus; `manual` waits for Enter or Space.     |
 | `aria-label` / `aria-labelledby`                 | required     | Accessible name forwarded to the button list or navigation landmark. |
@@ -191,7 +192,7 @@ Panel mode falls back to the first enabled button. Navigation mode uses the cont
   </template>
 </KleanPreview>
 
-The visual shape does not decide the semantics. If every settings item has its own URL or Inertia page, put the real links inside Tabs. Klean detects the anchors, skips the ARIA tab widget behavior, and applies `aria-current="page"` plus `data-state="active"` to the selected destination. Reload, sharing, Back/Forward, prefetch, modified clicks, and open-in-new-tab remain native.
+The visual shape does not decide the semantics. If every settings item has its own URL or Inertia page, use `as="nav"` and put the real links directly inside Tabs. Klean skips the ARIA tab widget behavior and applies `aria-current="page"` plus `data-state="active"` to the selected destination. Reload, sharing, Back/Forward, prefetch, modified clicks, and open-in-new-tab remain native.
 
 <KleanPreview id="tabs-navigation" :source="settingsNavigation" filename="SettingsNavigation.vue">
   <template #preview>
@@ -204,23 +205,22 @@ The visual shape does not decide the semantics. If every settings item has its o
         </div>
       </div>
       <KleanTabs
+        as="nav"
         :model-value="navigationActive"
         orientation="vertical"
         aria-label="Account settings"
-        class="mt-8"
+        class="mt-8 flex flex-col gap-1"
       >
-        <nav class="flex flex-col gap-1">
-          <a
-            v-for="section in navigationSections"
-            :key="section.value"
-            :href="section.href"
-            :data-value="section.value"
-            class="block min-h-11 cursor-pointer rounded-lg px-3 py-2 text-sm font-medium text-black/60 no-underline outline-none hover:bg-black/5 hover:text-black focus-visible:ring-2 focus-visible:ring-black data-[state=active]:bg-black data-[state=active]:text-white dark:text-white/65 dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:ring-white dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
-            @click="navigationActive = section.value"
-          >
-            {{ section.label }}
-          </a>
-        </nav>
+        <a
+          v-for="section in navigationSections"
+          :key="section.value"
+          :href="section.href"
+          :data-value="section.value"
+          class="block min-h-11 cursor-pointer rounded-lg px-3 py-2 text-sm font-medium text-black/60 no-underline outline-none hover:bg-black/5 hover:text-black focus-visible:ring-2 focus-visible:ring-black data-[state=active]:bg-black data-[state=active]:text-white dark:text-white/65 dark:hover:bg-white/5 dark:hover:text-white dark:focus-visible:ring-white dark:data-[state=active]:bg-white dark:data-[state=active]:text-black"
+          @click="navigationActive = section.value"
+        >
+          {{ section.label }}
+        </a>
       </KleanTabs>
     </div>
   </template>
@@ -281,7 +281,7 @@ Loading policy still belongs to the page. Tabs does not fetch, cache, suspend, o
 Style the real button, link, and panel elements directly. Klean adds stable state hooks:
 
 - root: `data-slot="tabs"`, `data-mode="panels|navigation"`, and `data-orientation`;
-- list: `data-slot="tabs-list"`, `data-mode`, and `data-orientation`;
+- panel list: `data-slot="tabs-list"`, `data-mode`, and `data-orientation`;
 - buttons or links: `data-slot="tab"`, `data-mode`, `data-state="active|inactive"`, and `data-orientation`;
 - panels: `data-slot="tab-panel"`, `data-state="active|inactive"`, and `data-orientation`.
 
@@ -297,6 +297,8 @@ Style the real button, link, and panel elements directly. Klean adds stable stat
 ```
 
 These are ordinary Tailwind selectors, not Klean color, size, tone, elevation, or variant APIs. A product-owned wrapper may repeat a house treatment without hiding the semantic buttons.
+
+With `as="nav"`, the root is also the navigation list, so it keeps `data-slot="tabs"`; there is intentionally no extra `tabs-list` wrapper.
 
 The same state selector styles navigation without a second styling API:
 
@@ -386,12 +388,12 @@ Button mode:
 
 Navigation mode:
 
-- The caller's `<nav>` remains a navigation landmark and every destination remains an anchor.
+- `<Tabs as="nav">` renders the navigation landmark itself, and every destination remains an anchor.
 - The selected destination receives `aria-current="page"`; links never receive `role="tab"`, `aria-selected`, or roving `tabindex`.
 - Native Tab visits links normally. Klean does not replace native link keyboard behavior with Arrow-key handling.
 - Ordinary and modified clicks are not cancelled, so the browser or framework Link remains in control.
 
-Use a concise visible heading near the component when possible. Otherwise provide `aria-label`; use `aria-labelledby` when an existing heading should name the list or navigation landmark.
+Use a concise visible heading near the component when possible. Otherwise provide `aria-label`; use `aria-labelledby` when an existing heading should name the panel list or navigation landmark. In navigation mode the name is rendered on the `<nav>` immediately, including during server rendering.
 
 ## Complete framework source
 
