@@ -17,6 +17,7 @@
   const BASE_CLASSES = [
     "z-50 m-0 w-max max-w-[calc(100vw-1rem)] overflow-visible rounded-md border border-gray-950 bg-gray-950 px-2.5 py-1.5 text-xs font-medium leading-none text-white shadow-md outline-none",
     "transition-opacity duration-100 starting:opacity-0 motion-reduce:transition-none",
+    "dark:border-white dark:bg-white dark:text-gray-950",
     "forced-colors:border forced-colors:border-[CanvasText] forced-colors:bg-[Canvas] forced-colors:text-[CanvasText]",
   ];
   const OPEN_DELAY = 400;
