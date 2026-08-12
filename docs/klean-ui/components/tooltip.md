@@ -17,7 +17,10 @@ import svelteSource from '../sources/tooltip/Tooltip.svelte?raw'
 import vueUsage from '../snippets/tooltip/usage.vue?raw'
 import reactUsage from '../snippets/tooltip/usage.jsx?raw'
 import svelteUsage from '../snippets/tooltip/usage.svelte?raw'
+import themeUsage from '../snippets/tooltip/theme.vue?raw'
 import stylingUsage from '../snippets/tooltip/styling.vue?raw'
+import reactStylingUsage from '../snippets/tooltip/styling.jsx?raw'
+import svelteStylingUsage from '../snippets/tooltip/styling.svelte?raw'
 </script>
 
 # Tooltip
@@ -122,17 +125,66 @@ Klean adds its generated description to the trigger without discarding an existi
 
 Do not put links, buttons, fields, headings, or long instructions inside a Tooltip. Use [Popover](/klean-ui/components/popover) for interactive or structured content.
 
+## Theme without configuration
+
+The neutral default stays visually distinct from the application surface: it is dark in a light colour scheme and light in a dark colour scheme. Tooltip follows the application's ordinary Tailwind `dark:` state, so normal usage needs no theme prop, provider, colour calculation, or configuration.
+
+<KleanPreview id="tooltip-theme" :source="themeUsage" filename="TooltipTheme.vue">
+  <template #preview>
+    <section class="grid overflow-hidden rounded-lg border border-gray-200 md:grid-cols-2 dark:border-gray-800">
+      <article class="grid min-h-52 place-items-center bg-white p-8 text-gray-950">
+        <div class="grid justify-items-center gap-4">
+          <p class="text-sm font-medium">Light application</p>
+          <KleanTooltip text="Dark by default" placement="bottom">
+            <button
+              type="button"
+              class="min-h-11 cursor-pointer rounded-md border border-gray-300 bg-white px-4 text-sm shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950"
+            >
+              Focus or hover
+            </button>
+          </KleanTooltip>
+        </div>
+      </article>
+      <article class="dark grid min-h-52 place-items-center bg-gray-950 p-8 text-white">
+        <div class="grid justify-items-center gap-4">
+          <p class="text-sm font-medium">Dark application</p>
+          <KleanTooltip text="Light by default" placement="bottom">
+            <button
+              type="button"
+              class="min-h-11 cursor-pointer rounded-md border border-gray-700 bg-gray-900 px-4 text-sm shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              Focus or hover
+            </button>
+          </KleanTooltip>
+        </div>
+      </article>
+    </section>
+  </template>
+</KleanPreview>
+
+The theme signal handles the ordinary case. If a branded or isolated local surface deliberately differs from the application scheme, pass the complete light and dark treatment through `class` or `className`; caller classes merge last.
+
 ## Styling with Tailwind
 
 Style the trigger on the trigger. Style the floating surface through Tooltip's ordinary class input:
 
+### Vue
+
 <CopyCode :code="stylingUsage" label="invoice-tooltip.vue" />
+
+### React
+
+<CopyCode :code="reactStylingUsage" label="invoice-tooltip.jsx" />
+
+### Svelte
+
+<CopyCode :code="svelteStylingUsage" label="invoice-tooltip.svelte" />
 
 The arrow belongs to Tooltip. It inherits the surface colour and follows the collision-resolved side, so it still points to the trigger when the preferred placement flips or shifts near a viewport edge. `data-slot="tooltip"` and `data-slot="tooltip-arrow"` remain stable nearby styling hooks; there is no `arrow`, `tone`, `size`, `radius`, `elevation`, or `variant` prop.
 
 Keep the arrow visible. It communicates which control the supplementary text describes while ordinary Tailwind classes remain free to restyle the surface.
 
-Repeated product treatment can become a small application-owned wrapper. Hagfish and Slipway can therefore share the accessible behavior without sharing a visual identity.
+Repeated product treatment can become a small application-owned wrapper. Hagfish and Slipway can therefore share the accessible behavior and inverse neutral default without sharing a visual identity.
 
 ## Accessible behavior
 
