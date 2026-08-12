@@ -267,6 +267,8 @@ defineExpose({ focus, clear: () => setQuery('') })
       <slot name="suffix" />
     </div>
 
+    <slot name="before" />
+
     <div
       :id="listId"
       role="listbox"
@@ -274,8 +276,6 @@ defineExpose({ focus, clear: () => setQuery('') })
       data-slot="command-list"
       class="max-h-72 overflow-y-auto overscroll-contain p-1.5"
     >
-      <slot name="before" />
-
       <div
         v-for="group in commandGroups"
         :key="group.headingId"
@@ -332,15 +332,21 @@ defineExpose({ focus, clear: () => setQuery('') })
           </slot>
         </div>
       </div>
+    </div>
 
-      <div
-        v-if="!entries.length"
-        data-slot="command-empty"
-        class="py-10 text-center text-sm text-gray-500 dark:text-gray-400"
-        aria-live="polite"
-      >
-        <slot name="empty" :query="currentQuery"> No matching command. </slot>
-      </div>
+    <div
+      data-slot="command-empty"
+      :class="
+        entries.length
+          ? 'sr-only'
+          : 'py-10 text-center text-sm text-gray-500 dark:text-gray-400'
+      "
+      role="status"
+      aria-atomic="true"
+    >
+      <slot v-if="!entries.length" name="empty" :query="currentQuery">
+        No matching command.
+      </slot>
     </div>
 
     <slot name="footer" />

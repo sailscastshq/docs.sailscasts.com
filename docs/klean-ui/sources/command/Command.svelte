@@ -250,6 +250,8 @@
     {@render suffix?.()}
   </div>
 
+  {@render before?.()}
+
   <div
     id={listId}
     role="listbox"
@@ -257,8 +259,6 @@
     data-slot="command-list"
     class="max-h-72 overflow-y-auto overscroll-contain p-1.5"
   >
-    {@render before?.()}
-
     {#each commandGroups as group (group.headingId)}
       <div
         role="group"
@@ -320,19 +320,22 @@
         {/each}
       </div>
     {/each}
+  </div>
 
+  <div
+    data-slot="command-empty"
+    class={entries.length
+      ? "sr-only"
+      : "py-10 text-center text-sm text-gray-500 dark:text-gray-400"}
+    role="status"
+    aria-atomic="true"
+  >
     {#if !entries.length}
-      <div
-        data-slot="command-empty"
-        class="py-10 text-center text-sm text-gray-500 dark:text-gray-400"
-        aria-live="polite"
-      >
-        {#if empty}
-          {@render empty({ query: currentQuery })}
-        {:else}
-          No matching command.
-        {/if}
-      </div>
+      {#if empty}
+        {@render empty({ query: currentQuery })}
+      {:else}
+        No matching command.
+      {/if}
     {/if}
   </div>
 

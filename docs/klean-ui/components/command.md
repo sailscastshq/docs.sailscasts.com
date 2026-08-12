@@ -208,7 +208,7 @@ The default renderer covers a title, subtitle, shortcut, disabled state, groups,
 | ------------- | ----------------------------- | ------------- | ---------------- |
 | Before input  | `#prefix`                     | `prefix`      | `prefix` snippet |
 | After input   | `#suffix`                     | `suffix`      | `suffix` snippet |
-| Before groups | `#before`                     | `before`      | `before` snippet |
+| Above results | `#before`                     | `before`      | `before` snippet |
 | Each item     | `#item="{ command, active }"` | `renderItem`  | `item` snippet   |
 | Empty result  | `#empty="{ query }"`          | `renderEmpty` | `empty` snippet  |
 | After list    | `#footer`                     | `footer`      | `footer` snippet |
@@ -245,6 +245,9 @@ The original record can carry `children`, `action`, or any other application fie
 - Dynamic permission or data changes recover to a valid active descendant.
 - Long lists reveal the active command as it moves.
 - Tab is untouched and continues through the document normally.
+- Empty-result feedback is written into an already-mounted polite status region.
+
+The `before` seam is a sibling above the listbox, so nested flows may place a real Back button there without introducing an interactive descendant inside the composite results widget.
 
 The built-in `label` names the input and groups label themselves. Visible item content should make the action or destination clear without relying on an icon or shortcut.
 

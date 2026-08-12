@@ -261,6 +261,8 @@ const Command = forwardRef(function Command(
         {suffix}
       </div>
 
+      {before}
+
       <div
         id={listId}
         role="listbox"
@@ -268,7 +270,6 @@ const Command = forwardRef(function Command(
         data-slot="command-list"
         className="max-h-72 overflow-y-auto overscroll-contain p-1.5"
       >
-        {before}
         {commandGroups.map((group) => (
           <div
             key={group.headingId}
@@ -335,16 +336,21 @@ const Command = forwardRef(function Command(
             })}
           </div>
         ))}
+      </div>
 
-        {!entries.length ? (
-          <div
-            data-slot="command-empty"
-            className="py-10 text-center text-sm text-gray-500 dark:text-gray-400"
-            aria-live="polite"
-          >
-            {renderEmpty?.({ query: currentQuery }) ?? 'No matching command.'}
-          </div>
-        ) : null}
+      <div
+        data-slot="command-empty"
+        className={
+          entries.length
+            ? 'sr-only'
+            : 'py-10 text-center text-sm text-gray-500 dark:text-gray-400'
+        }
+        role="status"
+        aria-atomic="true"
+      >
+        {!entries.length
+          ? (renderEmpty?.({ query: currentQuery }) ?? 'No matching command.')
+          : null}
       </div>
 
       {footer}
