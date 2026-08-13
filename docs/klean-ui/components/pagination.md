@@ -107,6 +107,20 @@ Render Pagination from the same server pagination object that rendered the visib
 
 That is the behavioral API. Change the copied Tailwind classes for a product's visual language instead of adding presentation props.
 
+## Styling different products
+
+The installed file is application source, so change its baseline Tailwind once when the whole product needs a different pagination treatment. For a contextual treatment, target the stable `data-slot` hooks with ordinary Tailwind:
+
+```vue
+<Pagination
+  :page="pagination.page"
+  :pages="pagination.totalPages"
+  class="**:data-[slot=page]:rounded-none **:data-[slot=page]:border-black [&_[data-slot=page][data-state=current]]:bg-black [&_[data-slot=page][data-state=current]]:text-white"
+/>
+```
+
+The available hooks are `pagination`, `previous`, `page`, `ellipsis`, `summary`, and `next`; the current page also has `data-state="current"` and a pending destination has `data-pending`. These are styling seams, not visual variants—the navigation contract stays the same.
+
 ## Durable by default
 
 Pagination treats the URL and server response as the record of what the user is viewing:
