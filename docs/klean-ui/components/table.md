@@ -204,4 +204,5 @@ Copy, inspect, and change the complete one-file source for your framework.
 - [Checkbox](/klean-ui/components/checkbox) — supports explicit row selection when the application owns that state.
 - [Combobox](/klean-ui/components/combobox) — handles searchable filters outside the table.
 - [Tabs](/klean-ui/components/tabs) — separates related result views without changing table semantics.
+- [Pagination](/klean-ui/components/pagination) — navigates server-owned result pages while preserving the list's URL state.
 - Data Table — the planned stateful layer for durable sorting, filtering, selection, and pagination.

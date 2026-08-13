@@ -57,6 +57,10 @@ Accessible peer panels with roving focus, automatic or manual activation, dynami
 
 A native table with a neutral baseline, caller-written captions, sections, headers, rows, cells, and actions, plus an explicit boundary before stateful Data Table behavior.
 
+### [Pagination](/klean-ui/components/pagination)
+
+Durable server-list navigation with framework-native Inertia links, canonical page URLs, truthful edges, compact mobile output, and application-owned query state.
+
 ### [Popover](/klean-ui/components/popover)
 
 A native-first non-modal floating surface with light dismissal, focus return, collision-aware positioning, and ordinary semantic content. A real button invokes it through the browser's `popovertarget` relationship.
