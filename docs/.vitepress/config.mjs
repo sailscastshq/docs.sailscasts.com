@@ -113,6 +113,7 @@ function kleanUiGuide() {
       collapsed: false,
       items: [
         { text: 'Overview', link: '/klean-ui/components/' },
+        { text: 'Alert', link: '/klean-ui/components/alert' },
         { text: 'Button', link: '/klean-ui/components/button' },
         { text: 'Input', link: '/klean-ui/components/input' },
         { text: 'Textarea', link: '/klean-ui/components/textarea' },

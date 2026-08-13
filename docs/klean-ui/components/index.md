@@ -13,6 +13,10 @@ Components do not share a visual variant API. Each page shows the behavioral con
 
 ## Available components
 
+### [Alert](/klean-ui/components/alert)
+
+A shallow notice surface with silent defaults, explicit announcement semantics, native headings and lists, real actions, and caller-owned Tailwind styling.
+
 ### [Button](/klean-ui/components/button)
 
 A native-first action primitive that can render a truthful button, anchor, or Boring Stack Link. It handles safe type defaults, disabled semantics, attribute forwarding, and caller-owned Tailwind classes.
