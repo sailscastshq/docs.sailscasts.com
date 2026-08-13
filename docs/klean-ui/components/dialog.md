@@ -18,6 +18,7 @@ import svelteSource from '../sources/dialog/Dialog.svelte?raw'
 import vueUsage from '../snippets/dialog/usage.vue?raw'
 import reactUsage from '../snippets/dialog/usage.jsx?raw'
 import svelteUsage from '../snippets/dialog/usage.svelte?raw'
+import productSource from '../snippets/dialog/products.vue?raw'
 
 const result = ref('No choice yet.')
 
@@ -148,6 +149,49 @@ completion; observe state only when application behavior genuinely needs it.
 - Explicit completion remains available when ambient dismissal is disabled.
 - Open state stays ephemeral unless the Dialog represents a shareable resource.
 - No motion, product tone, or action layout is imposed by Klean.
+
+## Product recipes
+
+Hagfish and Slipway share the native modal contract while keeping their product language in visible Tailwind classes. The heading, consequence, safest initial action, and completion value remain ordinary application markup.
+
+<KleanPreview id="dialog-products" :source="productSource" filename="product-dialogs.vue">
+  <template #preview>
+    <div class="grid w-full max-w-3xl gap-8 sm:grid-cols-2">
+      <section class="bg-[#f7f3eb] p-8">
+        <p class="mb-5 text-xs font-medium uppercase tracking-[0.18em] text-black/60">
+          Hagfish / invoice editor
+        </p>
+        <KleanButton commandfor="docs-delete-invoice" command="show-modal" class="rounded-lg border-2 border-black bg-black text-white hover:bg-white hover:text-black hover:shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+          Delete draft
+        </KleanButton>
+        <KleanDialog id="docs-delete-invoice" aria-labelledby="docs-delete-invoice-title" aria-describedby="docs-delete-invoice-description" class="max-w-md rounded-2xl border-2 border-black p-6 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+          <p class="text-xs font-medium uppercase tracking-wider text-red-700">Permanent action</p>
+          <h2 id="docs-delete-invoice-title" class="mt-1 text-xl font-semibold">Delete this draft invoice?</h2>
+          <p id="docs-delete-invoice-description" class="mt-4 text-sm leading-6 text-black/60">INV-1042 and its public link will be permanently removed.</p>
+          <form method="dialog" class="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <KleanButton type="submit" value="cancel" autofocus class="border-2 border-black bg-white text-black hover:bg-black hover:text-white">Cancel</KleanButton>
+            <KleanButton type="submit" value="delete" class="border-2 border-red-700 bg-red-700 text-white hover:bg-white hover:text-red-700">Delete invoice</KleanButton>
+          </form>
+        </KleanDialog>
+      </section>
+      <section class="dark bg-gray-950 p-8 text-white">
+        <p class="mb-5 font-mono text-xs uppercase tracking-[0.18em] text-gray-400">Slipway / project settings</p>
+        <KleanButton commandfor="docs-delete-slipway-project" command="show-modal" class="min-h-9 min-w-0 bg-red-600 px-3 py-1.5 text-sm text-white hover:bg-red-700">Delete project</KleanButton>
+        <KleanDialog id="docs-delete-slipway-project" aria-labelledby="docs-delete-slipway-title" aria-describedby="docs-delete-slipway-description" class="max-w-sm border-gray-700 bg-gray-900 p-6 text-white shadow-xl">
+          <h2 id="docs-delete-slipway-title" class="text-lg font-semibold">Delete project?</h2>
+          <p id="docs-delete-slipway-description" class="mt-2 text-sm text-gray-400">Recovery data remains unless you choose to purge it.</p>
+          <form method="dialog" class="mt-5 flex justify-end gap-3">
+            <KleanButton type="submit" value="cancel" autofocus class="min-h-9 min-w-0 border border-gray-600 bg-transparent px-3 py-1.5 text-sm text-gray-300 hover:bg-gray-800">Cancel</KleanButton>
+            <KleanButton type="submit" value="delete" class="min-h-9 min-w-0 bg-red-600 px-3 py-1.5 text-sm text-white hover:bg-red-700">Delete</KleanButton>
+          </form>
+        </KleanDialog>
+      </section>
+    </div>
+  </template>
+  <template #caption>
+    Klean owns the modal behavior. Each app keeps its hierarchy, density, color, and action language at the call site.
+  </template>
+</KleanPreview>
 
 ## Complete framework source
 

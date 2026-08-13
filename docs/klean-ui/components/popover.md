@@ -13,7 +13,11 @@ import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanButton from '../../.vitepress/theme/components/klean/Button.vue'
 import KleanPopover from '../../.vitepress/theme/components/klean/popover/Popover.vue'
 import popoverSource from '../../.vitepress/theme/components/klean/popover/Popover.vue?raw'
-import usageSource from '../snippets/popover/usage.vue?raw'
+import reactSource from '../sources/popover/Popover.jsx?raw'
+import svelteSource from '../sources/popover/Popover.svelte?raw'
+import vueUsage from '../snippets/popover/usage.vue?raw'
+import reactUsage from '../snippets/popover/usage.jsx?raw'
+import svelteUsage from '../snippets/popover/usage.svelte?raw'
 import observedSource from '../snippets/popover/observed.vue?raw'
 import productSource from '../snippets/popover/products.vue?raw'
 
@@ -85,7 +89,17 @@ Run the same command in Vue, React, or Svelte. Klean detects the framework and c
 
 ## Usage
 
-<CopyCode :code="usageSource" label="usage.vue" />
+### Vue
+
+<CopyCode :code="vueUsage" label="Filters.vue" />
+
+### React
+
+<CopyCode :code="reactUsage" label="Filters.jsx" />
+
+### Svelte
+
+<CopyCode :code="svelteUsage" label="Filters.svelte" />
 
 `popovertarget` and `id` are native HTML. A native button works too:
 
@@ -110,6 +124,20 @@ Use a real button because opening interface content is an action. An anchor rema
 Vue uses `v-model:open`, React uses `open` with `onOpenChange`, and Svelte uses `bind:open`. The native uncontrolled relationship remains the default in every framework.
 
 Placement and offset describe geometry, not appearance. Popover has no `variant`, `tone`, `size`, `radius`, `elevation`, or animation props.
+
+## Complete framework source
+
+### Vue
+
+<CopyCode :code="popoverSource" label="Popover.vue" />
+
+### React
+
+<CopyCode :code="reactSource" label="Popover.jsx" />
+
+### Svelte
+
+<CopyCode :code="svelteSource" label="Popover.svelte" />
 
 ## Closing the surface
 
