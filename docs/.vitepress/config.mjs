@@ -123,6 +123,7 @@ function kleanUiGuide() {
         { text: 'Spinner', link: '/klean-ui/components/spinner' },
         { text: 'Tooltip', link: '/klean-ui/components/tooltip' },
         { text: 'Tabs', link: '/klean-ui/components/tabs' },
+        { text: 'Table', link: '/klean-ui/components/table' },
         { text: 'Popover', link: '/klean-ui/components/popover' },
         { text: 'Menu', link: '/klean-ui/components/menu' },
         { text: 'Select', link: '/klean-ui/components/select' },
