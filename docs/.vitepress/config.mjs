@@ -122,6 +122,7 @@ function kleanUiGuide() {
         { text: 'Switch', link: '/klean-ui/components/switch' },
         { text: 'Spinner', link: '/klean-ui/components/spinner' },
         { text: 'Tooltip', link: '/klean-ui/components/tooltip' },
+        { text: 'Breadcrumb', link: '/klean-ui/components/breadcrumb' },
         { text: 'Tabs', link: '/klean-ui/components/tabs' },
         { text: 'Table', link: '/klean-ui/components/table' },
         { text: 'Pagination', link: '/klean-ui/components/pagination' },
