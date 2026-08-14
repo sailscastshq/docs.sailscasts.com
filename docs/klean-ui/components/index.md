@@ -49,6 +49,10 @@ A calm decorative mark for indeterminate work, with caller-owned Tailwind stylin
 
 Short supplementary text for one semantic button or link, with accessible hover, focus, dismissal, collision handling, and caller-owned Tailwind styling.
 
+### [Breadcrumb](/klean-ui/components/breadcrumb)
+
+Durable location hierarchy with framework-native Inertia links, truthful current-page semantics, one responsive ordered trail, and caller-owned Tailwind styling.
+
 ### [Tabs](/klean-ui/components/tabs)
 
 Accessible peer panels with roving focus, automatic or manual activation, dynamic removal, overflow reveal, and caller-owned native buttons and Tailwind styling.
