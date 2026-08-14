@@ -21,6 +21,10 @@ A shallow notice surface with silent defaults, explicit announcement semantics, 
 
 A native-first action primitive that can render a truthful button, anchor, or Boring Stack Link. It handles safe type defaults, disabled semantics, attribute forwarding, and caller-owned Tailwind classes.
 
+### [Card](/klean-ui/components/card)
+
+One shallow semantic surface with native application content, truthful whole-card links or actions, explicit multiple-action composition, and caller-owned Tailwind styling.
+
 ### [Input](/klean-ui/components/input)
 
 A styled native input that forwards native attributes and framework-native value binding. Labels, help, errors, IDs, validation, and layout remain visible application markup.
