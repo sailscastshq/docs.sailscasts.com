@@ -115,6 +115,7 @@ function kleanUiGuide() {
         { text: 'Overview', link: '/klean-ui/components/' },
         { text: 'Alert', link: '/klean-ui/components/alert' },
         { text: 'Button', link: '/klean-ui/components/button' },
+        { text: 'Card', link: '/klean-ui/components/card' },
         { text: 'Input', link: '/klean-ui/components/input' },
         { text: 'Textarea', link: '/klean-ui/components/textarea' },
         { text: 'Checkbox', link: '/klean-ui/components/checkbox' },
