@@ -114,6 +114,7 @@ function kleanUiGuide() {
       items: [
         { text: 'Overview', link: '/klean-ui/components/' },
         { text: 'Alert', link: '/klean-ui/components/alert' },
+        { text: 'Avatar', link: '/klean-ui/components/avatar' },
         { text: 'Badge', link: '/klean-ui/components/badge' },
         { text: 'Button', link: '/klean-ui/components/button' },
         { text: 'Card', link: '/klean-ui/components/card' },
