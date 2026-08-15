@@ -17,6 +17,10 @@ Components do not share a visual variant API. Each page shows the behavioral con
 
 A shallow notice surface with silent defaults, explicit announcement semantics, native headings and lists, real actions, and caller-owned Tailwind styling.
 
+### [Badge](/klean-ui/components/badge)
+
+One static inline metadata span for visible labels, counts, and compact statuses, with caller-owned Tailwind and truthful notification composition.
+
 ### [Button](/klean-ui/components/button)
 
 A native-first action primitive that can render a truthful button, anchor, or Boring Stack Link. It handles safe type defaults, disabled semantics, attribute forwarding, and caller-owned Tailwind classes.
