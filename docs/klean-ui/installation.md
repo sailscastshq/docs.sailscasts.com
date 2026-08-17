@@ -74,4 +74,4 @@ Adding the same unchanged source is idempotent. If the destination was edited, K
 npx klean-ui add button --dry-run
 ```
 
-Read the [CLI reference](/klean-ui/cli) for the complete command contract.
+Read [Updating](/klean-ui/updating) before adopting later source revisions, or use the [CLI reference](/klean-ui/cli) for the complete command contract.

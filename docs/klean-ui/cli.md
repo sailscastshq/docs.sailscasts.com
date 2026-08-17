@@ -7,16 +7,20 @@ outline: [2, 3]
 
 # CLI
 
-The Klean CLI is a source installer for conventional Boring Stack applications:
+The Klean CLI installs and safely updates source in conventional Boring Stack applications:
 
 ```bash
 npx klean-ui add button
 npx klean-ui add input
 npx klean-ui add textarea
 npx klean-ui add select
+npx klean-ui check
+npx klean-ui diff button
+npx klean-ui update button
+npx klean-ui update --all
 ```
 
-It has one job: place the right framework-native source in the right application path safely.
+It has one job: keep the right framework-native source in the right application path without taking ownership away from the application.
 
 ## How `npx klean-ui add` works
 
@@ -64,6 +68,18 @@ npx klean-ui add button --components-dir resources/js/ui
 
 # Override a stylesheet path for an item that needs CSS
 npx klean-ui add button --css resources/css/app.css
+
+# Inspect every installed component without writing
+npx klean-ui check
+
+# Review application source against this CLI version
+npx klean-ui diff button
+
+# Safely replace one exact historical Klean revision
+npx klean-ui update button
+
+# Update every safe item and report anything skipped
+npx klean-ui update --all
 ```
 
 Exceptional paths are flags, not permanent consumer configuration.
@@ -92,7 +108,7 @@ Vue installs `Button.vue`; React installs `Button.jsx`; Svelte installs `Button.
 - A partial failure returns a non-zero exit code and rolls back where practical.
 - Missing destination directories are created safely.
 
-Source ownership begins at installation, so an update command cannot assume the local file still matches upstream.
+Source ownership begins at installation, so update commands inspect exact source before writing. Known earlier Klean source is safely replaceable; locally modified and untracked source is not. Read [Updating](/klean-ui/updating) for status meanings, diffs, exit codes, rollback, and recovery.
 
 ## What the CLI does not create
 

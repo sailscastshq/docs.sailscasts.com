@@ -50,6 +50,8 @@ Add a component with one command. Klean infers the framework and conventional Bo
 
 <KleanInstallation id="klean-installation" :source="buttonSource" />
 
+Already using Klean source? [Check, review, and update it safely](/klean-ui/updating) without adding a manifest or silently replacing local changes.
+
 ## The contract
 
 - **Own the source.** Components land in the application as readable files.
@@ -69,4 +71,4 @@ Button is the first documented component, not the definition of the library. Its
 
 Klean takes the useful part of the shadcn model—discoverable examples and source ownership—then removes the required initialization ceremony, visual variant matrix, public class helper, and hidden theme prerequisites.
 
-Read the [Doctrine](/klean-ui/doctrine) for the boundaries behind those choices, or the [CLI reference](/klean-ui/cli) for the complete installer contract.
+Read the [Doctrine](/klean-ui/doctrine) for the boundaries behind those choices, [Updating](/klean-ui/updating) for source-aware upgrades, or the [CLI reference](/klean-ui/cli) for the complete command contract.
