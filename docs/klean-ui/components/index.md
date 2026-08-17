@@ -53,6 +53,10 @@ A native-first mutually exclusive choice for short visible lists. Shared names, 
 
 A native-first boolean setting that takes effect immediately, with real checked state, browser keyboard and form behavior, honest optimistic rollback recipes, and caller-owned Tailwind styling.
 
+### [Separator](/klean-ui/components/separator)
+
+One native-first semantic boundary: a native horizontal rule, a correct vertical ARIA bridge, and caller-owned Tailwind for the rare places where spacing is not enough.
+
 ### [Spinner](/klean-ui/components/spinner)
 
 A calm decorative mark for indeterminate work, with caller-owned Tailwind styling and truthful busy and status semantics left in visible application markup.

@@ -123,6 +123,7 @@ function kleanUiGuide() {
         { text: 'Checkbox', link: '/klean-ui/components/checkbox' },
         { text: 'Radio', link: '/klean-ui/components/radio' },
         { text: 'Switch', link: '/klean-ui/components/switch' },
+        { text: 'Separator', link: '/klean-ui/components/separator' },
         { text: 'Spinner', link: '/klean-ui/components/spinner' },
         { text: 'Tooltip', link: '/klean-ui/components/tooltip' },
         { text: 'Breadcrumb', link: '/klean-ui/components/breadcrumb' },
