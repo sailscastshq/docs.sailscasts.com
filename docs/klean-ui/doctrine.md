@@ -49,6 +49,12 @@ The application owns:
 
 That boundary lets Hagfish, Slipway, and future applications share behavior without being forced into one visual personality.
 
+## Ownership survives updates
+
+Source ownership is meaningful only when an updater respects it. Klean's [update workflow](/klean-ui/updating) distinguishes exact Klean source from local changes before writing. Known historical source can adopt an upstream fix safely; locally modified and untracked source remains untouched for human review.
+
+Updates stay progressive and component-scoped. Patch releases repair correctness, minor releases add capability, and any necessary breaking change carries migration guidance and proving-application evidence. Klean does not use an update command to smuggle in redesigns, a runtime package, or new visual variants.
+
 ## Use the platform
 
 An action begins as `<button>`. Navigation remains `<a>` or the Boring Stack Link. A field uses a real `<label>`. Related choices use `<fieldset>` and `<legend>`. Headings describe document structure rather than font size.
