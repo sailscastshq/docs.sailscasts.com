@@ -120,6 +120,7 @@ function kleanUiGuide() {
         { text: 'Button', link: '/klean-ui/components/button' },
         { text: 'Card', link: '/klean-ui/components/card' },
         { text: 'Input', link: '/klean-ui/components/input' },
+        { text: 'Tags Input', link: '/klean-ui/components/tags-input' },
         { text: 'Textarea', link: '/klean-ui/components/textarea' },
         { text: 'Checkbox', link: '/klean-ui/components/checkbox' },
         { text: 'Radio', link: '/klean-ui/components/radio' },

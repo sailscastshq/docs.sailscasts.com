@@ -182,7 +182,7 @@ Use it when the text remains understandable at a glance and when the inline pill
 - Use [Alert](/klean-ui/components/alert) for visible guidance, warnings, failures, or results that need explanatory content.
 - Use [Toast](/klean-ui/components/toast) for a transient application event.
 - Use [Tabs](/klean-ui/components/tabs) or [Menu](/klean-ui/components/menu) when a compact label is actually choosing or navigating.
-- Do not use Badge as a removable tag. A future tags-input contract must own editing, keyboard removal, focus, and form state.
+- Do not use Badge as a removable tag. [Tags Input](/klean-ui/components/tags-input) owns editing, keyboard removal, focus, and form state.
 
 ## Complete framework source
 
