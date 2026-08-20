@@ -105,6 +105,10 @@ A pragmatic searchable composition for application actions and destinations, wit
 
 A native modal surface with platform focus containment, inert background behavior, native commands and dialog forms, durable dismissal policy, and application-owned semantic content.
 
+### [Sheet](/klean-ui/components/sheet)
+
+A native off-canvas dialog for mobile navigation, comments, inspectors, and focused edge workflows, with caller-owned placement, semantic content, and Tailwind styling.
+
 ### [Calendar](/klean-ui/components/calendar)
 
 An always-visible, locale-aware date-only surface with complete keyboard navigation, caller-owned availability, and stable `YYYY-MM-DD` values.

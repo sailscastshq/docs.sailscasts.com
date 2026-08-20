@@ -138,6 +138,7 @@ function kleanUiGuide() {
         { text: 'Combobox', link: '/klean-ui/components/combobox' },
         { text: 'Command', link: '/klean-ui/components/command' },
         { text: 'Dialog', link: '/klean-ui/components/dialog' },
+        { text: 'Sheet', link: '/klean-ui/components/sheet' },
         { text: 'Calendar', link: '/klean-ui/components/calendar' },
         { text: 'Date Picker', link: '/klean-ui/components/date-picker' },
         {
