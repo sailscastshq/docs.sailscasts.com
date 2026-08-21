@@ -77,6 +77,14 @@ Accessible peer panels with roving focus, automatic or manual activation, dynami
 
 A native table with a neutral baseline, caller-written captions, sections, headers, rows, cells, and actions, plus an explicit boundary before stateful Data Table behavior.
 
+### [Sparkline](/klean-ui/components/sparkline)
+
+A compact trend beside an exact value, with truthful decorative defaults, honest missing-data gaps, and caller-owned Tailwind styling.
+
+### [Line Chart](/klean-ui/components/line-chart)
+
+A calm captioned trend with exact accessible values from the same data, resilient empty and missing states, and caller-owned Tailwind styling.
+
 ### [Pagination](/klean-ui/components/pagination)
 
 Durable server-list navigation with framework-native Inertia links, canonical page URLs, truthful edges, compact mobile output, and application-owned query state.
