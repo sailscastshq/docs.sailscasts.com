@@ -15,7 +15,7 @@ export default function SignupChart() {
     <LineChart
       data={signups}
       caption="Signups — last 7 days"
-      className="h-72 text-gray-950"
+      className="h-56 text-gray-950"
     />
   )
 }

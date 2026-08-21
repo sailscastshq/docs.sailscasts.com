@@ -16,6 +16,6 @@ const signups = [
   <LineChart
     :data="signups"
     caption="Signups — last 7 days"
-    class="h-72 text-gray-950"
+    class="h-56 text-gray-950"
   />
 </template>

@@ -32,12 +32,23 @@ const formatPercent = (value) => `${value}%`
 
 # Line Chart
 
-Line Chart gives one ordered trend a visible caption, a calm responsive line, and the exact same values for assistive technology. It is deliberately small enough for real application dashboards without bringing a charting system into the product.
+Line Chart gives one ordered trend a visible caption, a readable scale, calm responsive geometry, and points that disclose the same exact values on hover, touch, or keyboard focus. It is deliberately small enough for real application dashboards without bringing a charting system into the product.
 
 <KleanPreview id="line-chart-source" :source="lineChartSource" filename="LineChart.vue">
   <template #preview>
-    <section class="w-full max-w-xl rounded-xl border border-gray-200 bg-white p-6 text-gray-950 shadow-sm dark:border-gray-800 dark:bg-gray-950 dark:text-white">
-      <KleanLineChart :data="signups" caption="Signups — last 7 days" class="h-72" />
+    <section class="w-full max-w-xl rounded-2xl bg-white p-6 text-gray-950 shadow-sm dark:bg-gray-950 dark:text-white dark:shadow-black/30">
+      <header class="flex items-end justify-between gap-6">
+        <div>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Last 7 days</p>
+          <p class="mt-1 text-4xl font-semibold tracking-tight tabular-nums">38</p>
+        </div>
+        <p class="pb-1 text-right text-sm text-gray-500 dark:text-gray-400">+8 from<br />the week before</p>
+      </header>
+      <KleanLineChart
+        :data="signups"
+        caption="Daily signups"
+        class="mt-8 h-56 text-gray-950 dark:text-gray-100"
+      />
     </section>
   </template>
   <template #source>
@@ -82,14 +93,14 @@ Use [Sparkline](/klean-ui/components/sparkline) when an adjacent visible number 
 
 ## API
 
-| Input                    | Default   | Purpose                                                                                     |
-| ------------------------ | --------- | ------------------------------------------------------------------------------------------- |
-| `data`                   | `[]`      | Ordered `{ label, value, detail? }` points. Non-finite values create honest gaps.           |
-| `caption`                | required  | Visible name for the figure.                                                                |
-| `emptyLabel`             | `No data` | Visible and announced wording when no finite values exist.                                  |
-| `formatValue`            | `String`  | Formats exact values for assistive technology when a point does not supply `detail`.        |
-| `class` / `className`    | —         | Ordinary Tailwind merged after the neutral responsive frame. Color follows `currentColor`.  |
-| native/global attributes | —         | IDs, data hooks, event hooks, and framework-native figure references when genuinely needed. |
+| Input                    | Default   | Purpose                                                                                      |
+| ------------------------ | --------- | -------------------------------------------------------------------------------------------- |
+| `data`                   | `[]`      | Ordered `{ label, value, detail? }` points. Non-finite values create honest gaps.            |
+| `caption`                | required  | Visible name for the figure.                                                                 |
+| `emptyLabel`             | `No data` | Visible and announced wording when no finite values exist.                                   |
+| `formatValue`            | `String`  | Formats the visible scale and exact accessible values when a point does not supply `detail`. |
+| `class` / `className`    | —         | Ordinary Tailwind merged after the neutral responsive frame. Color follows `currentColor`.   |
+| native/global attributes | —         | IDs, data hooks, event hooks, and framework-native figure references when genuinely needed.  |
 
 The stable datum contract is intentionally boring:
 
@@ -103,9 +114,11 @@ The stable datum contract is intentionally boring:
 
 `detail` is optional. Use it when the exact accessible sentence needs more context than `formatValue(value)` can provide.
 
-## Accessible values
+## Inspecting exact values
 
-The visible caption names a native figure. The visual line is decorative to assistive technology, while an exact list generated from the same `data` is available to screen readers. There is no second dataset to drift out of sync.
+The visible caption names a native figure. Hover, tap, or focus any finite sample to inspect its exact label and value. Edge points place their readout inward and high points place it below, so the callout stays with the chart in narrow containers.
+
+The visual line, guides, and SVG markers remain decorative to assistive technology. The inspectable points form an exact labelled list generated from the same `data`, including unavailable samples. There is no second dataset to drift out of sync and hover is never the only route to the data.
 
 The default exact value is `String(value)`. Format units or locale-sensitive numbers at the call site:
 
@@ -119,20 +132,21 @@ The default exact value is `String(value)`. Format units or locale-sensitive num
 
 Use `Intl.NumberFormat`, `Intl.DateTimeFormat`, or application-owned formatting before data reaches the component when locale changes the meaning. The chart does not guess locale, timezone, or units.
 
-If sighted users need every exact value too, render a visible [Table](/klean-ui/components/table) from the same array next to the chart. Do not make hover the only route to data.
+Render a visible [Table](/klean-ui/components/table) from the same array when people need persistent comparison or retrieval rather than one-at-a-time inspection.
 
 ## Empty, missing, and live data
 
 - Empty or entirely invalid data shows `emptyLabel`.
 - One finite value renders a point rather than inventing a trend.
 - Flat, zero, negative, and very large values remain finite and stable.
+- The finite minimum and maximum stay visible, so the tighter vertical range remains honest.
 - Missing values break the line instead of implying continuity.
 - Replacing `data` updates the figure; polling, realtime transport, and loading policy remain application state.
 - Time range, metric selection, and filters belong in the URL only when they should survive refresh, history, or sharing.
 
 ## Styling with Tailwind
 
-Height, width, color, caption treatment, labels, empty state, and line treatment stay in caller Tailwind. Stable `data-slot` hooks make targeted styling explicit:
+Height, width, color, caption treatment, labels, empty state, line treatment, and point readouts stay in caller Tailwind. Stable `data-slot` hooks make targeted styling explicit:
 
 ```vue
 <LineChart
