@@ -205,6 +205,7 @@ This keeps Cmd/Ctrl-click, open-in-new-tab, copied URLs, Inertia navigation, and
 - Give repeated links and actions specific names such as “Actions for api”.
 - DataTable announces the selection count and supplies a real mixed current-page checkbox.
 - Keep every current row in one native table. The outer DataTable container scrolls horizontally when caller-owned `min-w-*` classes need more room.
+- When wide operational tables need more context on small screens, use caller-owned `sticky` classes to keep selection and the primary row identity visible while the remaining columns scroll.
 - Do not collapse a data relationship into cards merely to avoid horizontal scrolling. Use a list when the content was not tabular in the first place.
 
 ## Styling with Tailwind
