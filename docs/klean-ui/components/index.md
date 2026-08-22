@@ -77,6 +77,10 @@ Accessible peer panels with roving focus, automatic or manual activation, dynami
 
 A native table with a neutral baseline, caller-written captions, sections, headers, rows, cells, and actions, plus an explicit boundary before stateful Data Table behavior.
 
+### [DataTable](/klean-ui/components/data-table)
+
+A durable server-driven table block with one native table, page-scoped selection, clean Inertia URL queries, truthful pending state, and caller-owned application markup.
+
 ### [Pagination](/klean-ui/components/pagination)
 
 Durable server-list navigation with framework-native Inertia links, canonical page URLs, truthful edges, compact mobile output, and application-owned query state.

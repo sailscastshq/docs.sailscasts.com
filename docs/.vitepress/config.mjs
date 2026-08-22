@@ -131,6 +131,7 @@ function kleanUiGuide() {
         { text: 'Breadcrumb', link: '/klean-ui/components/breadcrumb' },
         { text: 'Tabs', link: '/klean-ui/components/tabs' },
         { text: 'Table', link: '/klean-ui/components/table' },
+        { text: 'DataTable', link: '/klean-ui/components/data-table' },
         { text: 'Pagination', link: '/klean-ui/components/pagination' },
         { text: 'Popover', link: '/klean-ui/components/popover' },
         { text: 'Menu', link: '/klean-ui/components/menu' },
