@@ -489,6 +489,7 @@ The built-in body is deliberately neutral and never maps `success`, `error`, or 
 - New notifications are announced politely and never steal focus.
 - Timers pause while a toast is hovered or focused, and while the page is inactive. They resume with the remaining time.
 - Dismiss controls have specific accessible names. Actions use real links or buttons.
+- The notification shelf stays above other floating application surfaces, so actions and dismissal remain reachable while a tooltip, menu, popover, or dialog is present.
 - `update()` keeps long-running work in one notification.
 - Reduced-motion preferences are respected.
 - Notifications are temporary and are never persisted in storage or the URL.

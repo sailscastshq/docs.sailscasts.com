@@ -1,5 +1,13 @@
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
+import {
+  computed,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  useAttrs,
+  useTemplateRef,
+  watch
+} from 'vue'
 import { twMerge } from 'tailwind-merge'
 import { toast } from './toast.js'
 
@@ -97,6 +105,7 @@ const props = defineProps({
 
 const attrs = useAttrs()
 const items = ref([])
+const viewport = useTemplateRef('viewport')
 const activeController = computed(() => props.controller ?? toast)
 const defaultDirection = computed(() =>
   props.position.endsWith('-left') ? 'left' : 'right'
@@ -107,7 +116,7 @@ let unsubscribe = () => {}
 
 const viewportClasses = computed(() =>
   twMerge(
-    'pointer-events-none fixed z-100 m-0 flex w-[min(24rem,calc(100vw-2rem))] flex-col',
+    'pointer-events-none fixed inset-auto z-100 m-0 flex w-[min(24rem,calc(100vw-2rem))] flex-col border-0 bg-transparent p-0',
     POSITIONS[props.position],
     attrs.class
   )
@@ -119,6 +128,7 @@ const viewportAttrs = computed(() => {
     style: _style,
     'aria-label': _ariaLabel,
     'aria-live': _ariaLive,
+    popover: _popover,
     'data-slot': _dataSlot,
     ...rest
   } = attrs
@@ -206,9 +216,26 @@ function handleWindowFocus() {
   activeController.value.resumeAll('window-blur')
 }
 
+function showTopLayer() {
+  try {
+    viewport.value?.showPopover?.()
+  } catch {
+    // Already open or rejected by a partial Popover API implementation.
+  }
+}
+
+function hideTopLayer() {
+  try {
+    viewport.value?.hidePopover?.()
+  } catch {
+    // Already closed during teardown.
+  }
+}
+
 watch(activeController, subscribe)
 
 onMounted(() => {
+  showTopLayer()
   subscribe(activeController.value)
   document.addEventListener('visibilitychange', handleVisibility)
   window.addEventListener('blur', handleWindowBlur)
@@ -217,6 +244,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  hideTopLayer()
   unsubscribe()
   document.removeEventListener('visibilitychange', handleVisibility)
   window.removeEventListener('blur', handleWindowBlur)
@@ -228,7 +256,9 @@ onBeforeUnmount(() => {
 
 <template>
   <section
+    ref="viewport"
     v-bind="viewportAttrs"
+    popover="manual"
     data-slot="toast-viewport"
     :data-position="position"
     :data-from="resolvedFrom"

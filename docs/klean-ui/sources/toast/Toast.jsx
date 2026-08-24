@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useSyncExternalStore } from 'react'
+import { useEffect, useMemo, useRef, useSyncExternalStore } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { toast } from './toast.js'
 
@@ -104,6 +104,7 @@ export default function Toast({
   children,
   ...viewportProps
 }) {
+  const viewportRef = useRef(null)
   const defaultDirection = position.endsWith('-left') ? 'left' : 'right'
   const resolvedFrom = from ?? defaultDirection
   const resolvedTo = to ?? defaultDirection
@@ -116,6 +117,23 @@ export default function Toast({
     () => motionStyle(resolvedFrom, resolvedTo, position, style),
     [position, resolvedFrom, resolvedTo, style]
   )
+
+  useEffect(() => {
+    const viewport = viewportRef.current
+    try {
+      viewport?.showPopover?.()
+    } catch {
+      // Already open or rejected by a partial Popover API implementation.
+    }
+
+    return () => {
+      try {
+        viewport?.hidePopover?.()
+      } catch {
+        // Already closed during teardown.
+      }
+    }
+  }, [])
 
   useEffect(() => {
     function syncInstantMotion() {
@@ -241,7 +259,9 @@ export default function Toast({
 
   return (
     <section
+      ref={viewportRef}
       {...viewportProps}
+      popover="manual"
       data-slot="toast-viewport"
       data-position={position}
       data-from={resolvedFrom}
@@ -251,7 +271,7 @@ export default function Toast({
       aria-atomic="false"
       aria-relevant="additions text"
       className={twMerge(
-        'pointer-events-none fixed z-100 m-0 flex w-[min(24rem,calc(100vw-2rem))] flex-col',
+        'pointer-events-none fixed inset-auto z-100 m-0 flex w-[min(24rem,calc(100vw-2rem))] flex-col border-0 bg-transparent p-0',
         POSITIONS[position],
         className
       )}
