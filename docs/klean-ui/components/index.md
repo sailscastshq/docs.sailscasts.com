@@ -85,6 +85,10 @@ A durable server-driven table block with one native table, page-scoped selection
 
 A compact group of real row links and buttons with optional accessible overflow, truthful busy state, row-click isolation, and caller-owned Tailwind styling.
 
+### [Bulk Actions](/klean-ui/components/bulk-actions)
+
+A selected-record action region with a polite count, real caller-authored links and buttons, truthful busy state, and deliberate focus recovery.
+
 ### [Filter Bar](/klean-ui/components/filter-bar)
 
 A native filter form with separate draft and committed state, immediate active-filter removal, pending safety, deterministic URLs, and caller-owned controls and Tailwind.
