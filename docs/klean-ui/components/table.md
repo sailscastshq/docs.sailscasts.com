@@ -163,11 +163,11 @@ The same Table can carry Slipway's dense operational results and Hagfish's edito
   </template>
 </KleanPreview>
 
-## Table or Data Table?
+## Table or DataTable?
 
 Use Table when the application already has rows to render and native markup expresses the experience. It is enough for reports, invoices, query results, audit history, comparison matrices, and small operational lists.
 
-A future Data Table will compose Table when users need a coordinated stateful system: sorting, filtering, column visibility, selection, pagination, or server-backed loading. That state should be durable in the URL when it changes what the user is looking at, so reload, sharing, Back/Forward, and server rendering preserve the same view.
+[DataTable](/klean-ui/components/data-table) composes Table when users need a coordinated server-driven system: search, filtering, sorting, selection, pagination, and pending navigation. Its optional query helper keeps that visible state durable in clean URLs so reload, sharing, Back/Forward, and server rendering preserve the same view.
 
 Keeping the layers separate avoids making every small table configure features it does not use. Moving from Table to Data Table should preserve the native rows and cells rather than require a new visual language.
 
@@ -180,7 +180,7 @@ Use Table when rows and columns have relationships that users need to compare or
 - Use a list when each item stands alone and column alignment adds no meaning.
 - Use cards when each item has a different content shape or a strong independent action hierarchy.
 - Keep editable invoice line items as a responsive form/list when controls must reflow naturally on small screens.
-- Wait for Data Table when the primary problem is coordinated sort, filter, selection, pagination, and server state rather than markup.
+- Use [DataTable](/klean-ui/components/data-table) when the primary problem is coordinated search, filters, sorting, selection, pagination, and server state rather than markup.
 
 ## Complete framework source
 
@@ -205,4 +205,4 @@ Copy, inspect, and change the complete one-file source for your framework.
 - [Combobox](/klean-ui/components/combobox) — handles searchable filters outside the table.
 - [Tabs](/klean-ui/components/tabs) — separates related result views without changing table semantics.
 - [Pagination](/klean-ui/components/pagination) — navigates server-owned result pages while preserving the list's URL state.
-- Data Table — the planned stateful layer for durable sorting, filtering, selection, and pagination.
+- [DataTable](/klean-ui/components/data-table) — the durable server-driven layer for search, filters, sorting, selection, and pagination.
