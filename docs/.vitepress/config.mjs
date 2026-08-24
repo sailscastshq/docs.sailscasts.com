@@ -132,6 +132,7 @@ function kleanUiGuide() {
         { text: 'Tabs', link: '/klean-ui/components/tabs' },
         { text: 'Table', link: '/klean-ui/components/table' },
         { text: 'DataTable', link: '/klean-ui/components/data-table' },
+        { text: 'FileUpload', link: '/klean-ui/components/file-upload' },
         { text: 'Sparkline', link: '/klean-ui/components/sparkline' },
         { text: 'Line Chart', link: '/klean-ui/components/line-chart' },
         { text: 'Pagination', link: '/klean-ui/components/pagination' },
