@@ -41,6 +41,22 @@ const Dialog = forwardRef(function Dialog(
   desiredOpenRef.current = desiredOpen
   onOpenChangeRef.current = onOpenChange
 
+  const resolveInvoker = useCallback((source, element) => {
+    const activeElement =
+      typeof document === 'undefined' ? undefined : document.activeElement
+
+    return [source, activeElement].find(
+      (candidate) =>
+        candidate &&
+        candidate !== document.body &&
+        candidate !== document.documentElement &&
+        candidate !== element &&
+        !element.contains(candidate) &&
+        candidate.isConnected &&
+        typeof candidate.focus === 'function'
+    )
+  }, [])
+
   const setRef = useCallback(
     (element) => {
       dialogRef.current = element
@@ -82,11 +98,11 @@ const Dialog = forwardRef(function Dialog(
       const element = dialogRef.current
       if (!element || element.open) return
 
-      fallbackInvoker.current = source
+      fallbackInvoker.current = resolveInvoker(source, element)
       element.showModal()
       observeNativeOpen(true)
     },
-    [observeNativeOpen]
+    [observeNativeOpen, resolveInvoker]
   )
 
   const close = useCallback(
