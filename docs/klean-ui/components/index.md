@@ -89,6 +89,10 @@ A compact group of real row links and buttons with optional accessible overflow,
 
 A selected-record action region with a polite count, real caller-authored links and buttons, truthful busy state, and deliberate focus recovery.
 
+### [Empty State](/klean-ui/components/empty-state)
+
+One shallow empty-result layout with caller-owned semantic headings, explicit reasons, real next actions, and ordinary Tailwind.
+
 ### [Filter Bar](/klean-ui/components/filter-bar)
 
 A native filter form with separate draft and committed state, immediate active-filter removal, pending safety, deterministic URLs, and caller-owned controls and Tailwind.
