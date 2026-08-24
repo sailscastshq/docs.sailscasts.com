@@ -38,8 +38,14 @@ const rootAttrs = computed(() => {
   return rest
 })
 
+function setDraft(next) {
+  draft.value = clone(
+    typeof next === 'function' ? next(clone(draft.value)) : next
+  )
+}
+
 function update(key, nextValue) {
-  draft.value = { ...draft.value, [key]: nextValue }
+  setDraft((current) => ({ ...current, [key]: nextValue }))
 }
 
 function commit(next, eventName) {
@@ -148,7 +154,7 @@ watch(
   { deep: true }
 )
 
-defineExpose({ root, apply, cancel, clear, remove })
+defineExpose({ root, setDraft, apply, cancel, clear, remove })
 </script>
 
 <template>
@@ -171,6 +177,7 @@ defineExpose({ root, apply, cancel, clear, remove })
       :count="count"
       :dirty="dirty"
       :busy="busy"
+      :set-draft="setDraft"
       :update="update"
       :apply="apply"
       :cancel="cancel"
