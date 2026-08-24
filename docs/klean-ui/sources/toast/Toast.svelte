@@ -65,6 +65,7 @@
     ...viewportProps
   } = $props();
 
+  let viewport;
   let items = $state([]);
   let defaultDirection = $derived(
     position.endsWith("-left") ? "left" : "right",
@@ -135,6 +136,12 @@
   }
 
   onMount(() => {
+    try {
+      viewport?.showPopover?.();
+    } catch {
+      // Already open or rejected by a partial Popover API implementation.
+    }
+
     function handleVisibility() {
       if (document.hidden) controller.pauseAll("page-hidden");
       else controller.resumeAll("page-hidden");
@@ -152,6 +159,11 @@
     handleVisibility();
 
     return () => {
+      try {
+        viewport?.hidePopover?.();
+      } catch {
+        // Already closed during teardown.
+      }
       document.removeEventListener("visibilitychange", handleVisibility);
       window.removeEventListener("blur", handleBlur);
       window.removeEventListener("focus", handleFocus);
@@ -162,7 +174,9 @@
 </script>
 
 <section
+  bind:this={viewport}
   {...viewportProps}
+  popover="manual"
   data-slot="toast-viewport"
   data-position={position}
   data-from={resolvedFrom}
@@ -172,7 +186,7 @@
   aria-atomic="false"
   aria-relevant="additions text"
   class={twMerge(
-    "pointer-events-none fixed z-100 m-0 flex w-[min(24rem,calc(100vw-2rem))] flex-col",
+    "pointer-events-none fixed inset-auto z-100 m-0 flex w-[min(24rem,calc(100vw-2rem))] flex-col border-0 bg-transparent p-0",
     POSITIONS[position],
     className,
   )}
