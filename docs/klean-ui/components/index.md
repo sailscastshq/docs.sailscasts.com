@@ -97,6 +97,10 @@ One shallow empty-result layout with caller-owned semantic headings, explicit re
 
 One truthful pending-content status layout with caller-owned busy regions, useful copy, product marks, skeleton markup, and ordinary Tailwind.
 
+### [Error State](/klean-ui/components/error-state)
+
+One shallow failed-content layout with caller-owned announcement semantics, recovery controls, safe diagnostics, and ordinary Tailwind.
+
 ### [Filter Bar](/klean-ui/components/filter-bar)
 
 A native filter form with separate draft and committed state, immediate active-filter removal, pending safety, deterministic URLs, and caller-owned controls and Tailwind.
