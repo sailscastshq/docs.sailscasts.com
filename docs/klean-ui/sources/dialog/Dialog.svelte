@@ -35,6 +35,22 @@
   let scrollLocked = false;
   let desiredOpen = $derived(open ?? internalOpen);
 
+  function resolveInvoker(source, element) {
+    const activeElement =
+      typeof document === "undefined" ? undefined : document.activeElement;
+
+    return [source, activeElement].find(
+      (candidate) =>
+        candidate &&
+        candidate !== document.body &&
+        candidate !== document.documentElement &&
+        candidate !== element &&
+        !element.contains(candidate) &&
+        candidate.isConnected &&
+        typeof candidate.focus === "function",
+    );
+  }
+
   function lockScroll() {
     if (scrollLocked || typeof document === "undefined") return;
     previousDocumentOverflow = document.documentElement.style.overflow;
@@ -62,7 +78,7 @@
   export function showModal(source) {
     if (!dialogElement || dialogElement.open) return;
 
-    fallbackInvoker = source;
+    fallbackInvoker = resolveInvoker(source, dialogElement);
     dialogElement.showModal();
     observeNativeOpen(true);
   }

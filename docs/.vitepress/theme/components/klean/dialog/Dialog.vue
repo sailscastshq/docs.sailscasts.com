@@ -66,6 +66,22 @@ let previousDocumentOverflow = ''
 let scrollLocked = false
 let fallbackInvoker
 
+function resolveInvoker(source, element) {
+  const activeElement =
+    typeof document === 'undefined' ? undefined : document.activeElement
+
+  return [source, activeElement].find(
+    (candidate) =>
+      candidate &&
+      candidate !== document.body &&
+      candidate !== document.documentElement &&
+      candidate !== element &&
+      !element.contains(candidate) &&
+      candidate.isConnected &&
+      typeof candidate.focus === 'function'
+  )
+}
+
 function callListener(listener, event) {
   for (const callback of Array.isArray(listener) ? listener : [listener]) {
     callback?.(event)
@@ -99,7 +115,7 @@ function showModal(source) {
   const element = dialog.value
   if (!element || element.open) return
 
-  fallbackInvoker = source
+  fallbackInvoker = resolveInvoker(source, element)
   element.showModal()
   observeNativeOpen(true)
 }

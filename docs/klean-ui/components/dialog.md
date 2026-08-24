@@ -117,8 +117,8 @@ must not interrupt the current task.
 Opening with `showModal()` puts the element in the top layer. The browser owns
 the inert background, modal focus containment, initial focus, Escape behavior,
 and the native `<form method="dialog">` completion path. Klean adds controlled
-state observation, a `closedby` fallback, safe scroll restoration, and caller-winning
-Tailwind defaults.
+state observation, exact invoker focus return, a `closedby` fallback, safe scroll
+restoration, and caller-winning Tailwind defaults.
 
 Every Dialog needs an accessible name. Point `aria-labelledby` at a visible
 heading or provide `aria-label`. Use `aria-describedby` for a short description;
@@ -144,7 +144,9 @@ completion; observe state only when application behavior genuinely needs it.
 ## Durable behavior
 
 - Escape, platform close, and backdrop dismissal follow `dismissible`.
-- The native dialog owns focus entry, containment, and return.
+- The native dialog owns focus entry and containment. Klean remembers the exact
+  external invoker for native-command, imperative, and controlled opening, then
+  restores it after close when it is still connected.
 - Background scroll returns to its previous value after close and unmount.
 - Explicit completion remains available when ambient dismissal is disabled.
 - Open state stays ephemeral unless the Dialog represents a shareable resource.
