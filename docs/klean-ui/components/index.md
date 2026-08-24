@@ -93,6 +93,10 @@ A selected-record action region with a polite count, real caller-authored links 
 
 One shallow empty-result layout with caller-owned semantic headings, explicit reasons, real next actions, and ordinary Tailwind.
 
+### [Loading State](/klean-ui/components/loading-state)
+
+One truthful pending-content status layout with caller-owned busy regions, useful copy, product marks, skeleton markup, and ordinary Tailwind.
+
 ### [Filter Bar](/klean-ui/components/filter-bar)
 
 A native filter form with separate draft and committed state, immediate active-filter removal, pending safety, deterministic URLs, and caller-owned controls and Tailwind.
