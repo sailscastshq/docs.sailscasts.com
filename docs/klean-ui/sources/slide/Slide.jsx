@@ -7,6 +7,7 @@ const BASE_CLASSES = [
   'group/slide relative inline-grid min-h-11 w-56 max-w-full touch-none cursor-grab select-none overflow-hidden rounded-full border border-gray-300 bg-gray-100 p-1 text-sm font-medium text-gray-700 shadow-sm outline-none',
   'focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2',
   'disabled:cursor-not-allowed disabled:opacity-50',
+  'aria-disabled:cursor-not-allowed aria-disabled:opacity-50',
   'dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:focus-visible:ring-white'
 ]
 
@@ -38,6 +39,7 @@ const Slide = forwardRef(function Slide(
     onPointerCancel,
     onLostPointerCapture,
     'aria-busy': ariaBusy,
+    'aria-disabled': ariaDisabled,
     ...buttonProps
   },
   forwardedRef
@@ -261,6 +263,11 @@ const Slide = forwardRef(function Slide(
       return
     }
 
+    if (disabled || pending) {
+      event.preventDefault()
+      return
+    }
+
     if (event.detail !== 0) {
       event.preventDefault()
       return
@@ -304,8 +311,9 @@ const Slide = forwardRef(function Slide(
       {...buttonProps}
       ref={setRef}
       type="button"
-      disabled={disabled || pending}
+      disabled={disabled}
       aria-busy={pending ? true : ariaBusy}
+      aria-disabled={pending ? true : ariaDisabled}
       data-slot="slide"
       data-state={state}
       data-progress={progressState}
