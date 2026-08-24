@@ -135,6 +135,7 @@ function kleanUiGuide() {
         { text: 'Row Actions', link: '/klean-ui/components/row-actions' },
         { text: 'Bulk Actions', link: '/klean-ui/components/bulk-actions' },
         { text: 'Empty State', link: '/klean-ui/components/empty-state' },
+        { text: 'Loading State', link: '/klean-ui/components/loading-state' },
         { text: 'Filter Bar', link: '/klean-ui/components/filter-bar' },
         { text: 'FileUpload', link: '/klean-ui/components/file-upload' },
         { text: 'Sparkline', link: '/klean-ui/components/sparkline' },
