@@ -18,6 +18,9 @@ import vueUsage from '../snippets/slide/usage.vue?raw'
 import reactUsage from '../snippets/slide/usage.jsx?raw'
 import svelteUsage from '../snippets/slide/usage.svelte?raw'
 import stylingUsage from '../snippets/slide/styling.vue?raw'
+import vueThumb from '../snippets/slide/thumb.vue?raw'
+import reactThumb from '../snippets/slide/thumb.jsx?raw'
+import svelteThumb from '../snippets/slide/thumb.svelte?raw'
 
 const pending = ref(false)
 const message = ref('Ready to deploy.')
@@ -128,10 +131,31 @@ A future range-value control would be named Slider and would use native slider s
 | Confirmation | `@confirm`   | `onConfirm` | `onconfirm`     | Called once after a valid slide or native button activation.              |
 | Styling      | `class`      | `className` | `class`         | Ordinary Tailwind merged after neutral defaults.                          |
 | Content      | default slot | `children`  | default snippet | Visible, product-owned action language.                                   |
+| Thumb        | `#thumb`     | `thumb`     | `thumb` snippet | Optional product-owned decorative content; the arrow remains the default. |
 
 Native `aria-describedby`, `name`, `value`, `form`, data attributes, and other ordinary button attributes pass through. The confirmation threshold is the one conventional 85% behavior, not an application setting.
 
 Keep `pending` truthful. Set it before starting asynchronous work, then return it to `false` on success or failure. That reset is declarative; there is no imperative `reset()` method.
+
+The custom thumb receives `pending` and `progress`, where progress is `start`, `middle`, `ready`, or `complete`. Use those truthful states for content, not a second source of interaction state.
+
+## Custom thumb content
+
+The default arrow needs no configuration. When a product has a meaningful mark—such as an application mascot—place it in the thumb with the framework-native content hook.
+
+### Vue
+
+<CopyCode :code="vueThumb" label="DeployAction.vue" />
+
+### React
+
+<CopyCode :code="reactThumb" label="DeployAction.jsx" />
+
+### Svelte
+
+<CopyCode :code="svelteThumb" label="DeployAction.svelte" />
+
+The entire thumb is decorative. Keep the image `alt` empty and communicate pending work through the visible action label and the surrounding application status, not through the moving artwork alone.
 
 ## Styling progress
 

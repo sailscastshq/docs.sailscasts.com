@@ -28,6 +28,7 @@ const Slide = forwardRef(function Slide(
     pending = false,
     className,
     children,
+    thumb,
     onConfirm,
     onClick,
     onKeyDown,
@@ -293,6 +294,10 @@ const Slide = forwardRef(function Slide(
         : progress >= 0.33
           ? 'middle'
           : 'start'
+  const thumbContent =
+    typeof thumb === 'function'
+      ? thumb({ pending, progress: progressState })
+      : thumb
 
   return (
     <button
@@ -332,15 +337,23 @@ const Slide = forwardRef(function Slide(
         className={THUMB_CLASSES.join(' ')}
         style={{ transform: `translateX(${direction * progress * travel}px)` }}
       >
-        <svg
-          className="size-4 rtl:rotate-180"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="m9 5 7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        {thumb === undefined ? (
+          <svg
+            className="size-4 rtl:rotate-180"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path
+              d="m9 5 7 7-7 7"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        ) : (
+          thumbContent
+        )}
       </span>
       <span data-slot="slide-status" className="sr-only" aria-live="polite">
         {status}

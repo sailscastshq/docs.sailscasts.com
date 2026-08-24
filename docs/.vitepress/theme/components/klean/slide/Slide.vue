@@ -328,15 +328,21 @@ onBeforeUnmount(() => {
       :class="thumbClasses"
       :style="thumbStyle"
     >
-      <svg
-        class="size-4 rtl:rotate-180"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
-        <path d="m9 5 7 7-7 7" stroke-linecap="round" stroke-linejoin="round" />
-      </svg>
+      <slot name="thumb" :pending="pending" :progress="progressState">
+        <svg
+          class="size-4 rtl:rotate-180"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            d="m9 5 7 7-7 7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </slot>
     </span>
     <span data-slot="slide-status" class="sr-only" aria-live="polite">
       {{ status }}

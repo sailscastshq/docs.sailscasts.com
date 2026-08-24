@@ -37,6 +37,7 @@
     onlostpointercapture,
     "aria-busy": ariaBusy,
     children,
+    thumb,
     ...buttonProps
   } = $props();
 
@@ -299,16 +300,20 @@
     class={THUMB_CLASSES.join(" ")}
     style:transform={`translateX(${direction * progress * travel}px)`}
   >
-    <svg
-      class="size-4 rtl:rotate-180"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-    >
-      <path d="m9 5 7 7-7 7" stroke-linecap="round" stroke-linejoin="round"
-      ></path>
-    </svg>
+    {#if thumb}
+      {@render thumb({ pending, progress: progressState })}
+    {:else}
+      <svg
+        class="size-4 rtl:rotate-180"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path d="m9 5 7 7-7 7" stroke-linecap="round" stroke-linejoin="round"
+        ></path>
+      </svg>
+    {/if}
   </span>
   <span data-slot="slide-status" class="sr-only" aria-live="polite">
     {status}
