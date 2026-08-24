@@ -81,6 +81,10 @@ A native table with a neutral baseline, caller-written captions, sections, heade
 
 A durable server-driven table block with one native table, page-scoped selection, clean Inertia URL queries, truthful pending state, and caller-owned application markup.
 
+### [Row Actions](/klean-ui/components/row-actions)
+
+A compact group of real row links and buttons with optional accessible overflow, truthful busy state, row-click isolation, and caller-owned Tailwind styling.
+
 ### [Filter Bar](/klean-ui/components/filter-bar)
 
 A native filter form with separate draft and committed state, immediate active-filter removal, pending safety, deterministic URLs, and caller-owned controls and Tailwind.
