@@ -40,6 +40,7 @@ const baseClasses = [
   'group/slide relative inline-grid min-h-11 w-56 max-w-full touch-none cursor-grab select-none overflow-hidden rounded-full border border-gray-300 bg-gray-100 p-1 text-sm font-medium text-gray-700 shadow-sm outline-none',
   'focus-visible:ring-2 focus-visible:ring-gray-950 focus-visible:ring-offset-2',
   'disabled:cursor-not-allowed disabled:opacity-50',
+  'aria-disabled:cursor-not-allowed aria-disabled:opacity-50',
   'dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:focus-visible:ring-white'
 ]
 
@@ -79,6 +80,7 @@ const buttonAttrs = computed(() => {
     type: _type,
     disabled: _disabled,
     'aria-busy': _ariaBusy,
+    'aria-disabled': _ariaDisabled,
     'data-slot': _dataSlot,
     'data-state': _dataState,
     'data-progress': _dataProgress,
@@ -236,6 +238,11 @@ function handleClick(event) {
     return
   }
 
+  if (props.disabled || props.pending) {
+    event.preventDefault()
+    return
+  }
+
   if (event.detail !== 0) {
     event.preventDefault()
     return
@@ -294,8 +301,9 @@ onBeforeUnmount(() => {
     ref="button"
     v-bind="buttonAttrs"
     type="button"
-    :disabled="disabled || pending"
+    :disabled="disabled"
     :aria-busy="pending ? 'true' : attrs['aria-busy']"
+    :aria-disabled="pending ? 'true' : attrs['aria-disabled']"
     data-slot="slide"
     :data-state="state"
     :data-progress="progressState"

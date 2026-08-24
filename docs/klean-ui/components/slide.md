@@ -127,7 +127,7 @@ A future range-value control would be named Slider and would use native slider s
 | Input        | Vue          | React       | Svelte          | Purpose                                                                   |
 | ------------ | ------------ | ----------- | --------------- | ------------------------------------------------------------------------- |
 | Disabled     | `:disabled`  | `disabled`  | `disabled`      | Native disabled state; no confirmation can fire.                          |
-| Pending      | `:pending`   | `pending`   | `pending`       | Caller-owned in-progress truth; disables duplicates and sets `aria-busy`. |
+| Pending      | `:pending`   | `pending`   | `pending`       | Caller-owned in-progress truth; blocks duplicates without dropping focus. |
 | Confirmation | `@confirm`   | `onConfirm` | `onconfirm`     | Called once after a valid slide or native button activation.              |
 | Styling      | `class`      | `className` | `class`         | Ordinary Tailwind merged after neutral defaults.                          |
 | Content      | default slot | `children`  | default snippet | Visible, product-owned action language.                                   |
@@ -136,6 +136,8 @@ A future range-value control would be named Slider and would use native slider s
 Native `aria-describedby`, `name`, `value`, `form`, data attributes, and other ordinary button attributes pass through. The confirmation threshold is the one conventional 85% behavior, not an application setting.
 
 Keep `pending` truthful. Set it before starting asynchronous work, then return it to `false` on success or failure. That reset is declarative; there is no imperative `reset()` method.
+
+Pending is temporary application state, so Slide reports `aria-busy="true"` and `aria-disabled="true"` while retaining focus. The explicit `disabled` input remains a real native disabled state for controls that cannot currently be used.
 
 The custom thumb receives `pending` and `progress`, where progress is `start`, `middle`, `ready`, or `complete`. Use those truthful states for content, not a second source of interaction state.
 
