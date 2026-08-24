@@ -81,6 +81,10 @@ A native table with a neutral baseline, caller-written captions, sections, heade
 
 A durable server-driven table block with one native table, page-scoped selection, clean Inertia URL queries, truthful pending state, and caller-owned application markup.
 
+### [FileUpload](/klean-ui/components/file-upload)
+
+One native file-selection bridge with honest validation, previews, drop behavior, and caller-owned upload markup.
+
 ### [Sparkline](/klean-ui/components/sparkline)
 
 A compact trend beside an exact value, with truthful decorative defaults, honest missing-data gaps, and caller-owned Tailwind styling.
