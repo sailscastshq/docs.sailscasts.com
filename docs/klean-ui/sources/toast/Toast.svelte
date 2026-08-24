@@ -67,6 +67,7 @@
 
   let viewport;
   let items = $state([]);
+  let promotedItemId;
   let defaultDirection = $derived(
     position.endsWith("-left") ? "left" : "right",
   );
@@ -108,8 +109,23 @@
 
   $effect(() => {
     const activeController = controller;
+    promotedItemId = undefined;
     const sync = () => {
       items = activeController.getSnapshot();
+      const enteringItem = items.findLast((item) => item.state === "entering");
+      if (enteringItem && enteringItem.id !== promotedItemId) {
+        promotedItemId = enteringItem.id;
+        try {
+          viewport?.hidePopover?.();
+        } catch {
+          // Not open yet or already closed.
+        }
+        try {
+          viewport?.showPopover?.();
+        } catch {
+          // Rejected by a partial Popover API implementation.
+        }
+      }
       syncInstantMotion();
     };
 

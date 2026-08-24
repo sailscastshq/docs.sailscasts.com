@@ -27,7 +27,7 @@ import svelteStylingUsage from '../snippets/tooltip/styling.svelte?raw'
 
 Tooltip adds short supplementary text to one real button or link. Wrap the trigger, provide the text, and keep the trigger's semantics and Tailwind classes where they are visible.
 
-Klean supplies the accessible description, hover and keyboard behavior, collision-safe placement, Escape dismissal, touch behavior, and cleanup. There are no trigger IDs, compound components, providers, visual variants, or configuration ceremony.
+Klean supplies the accessible description, hover and keyboard behavior, collision-safe placement, Escape dismissal, touch behavior, and cleanup. The supplementary text never captures pointer actions from the application beneath it. There are no trigger IDs, compound components, providers, visual variants, or configuration ceremony.
 
 <KleanPreview id="tooltip-source" :source="tooltipSource" filename="Tooltip.vue">
   <template #preview>
@@ -190,7 +190,7 @@ Repeated product treatment can become a small application-owned wrapper. Hagfish
 
 - Pointer hover and keyboard focus reveal the same supplementary text.
 - Escape dismisses an open Tooltip without moving focus away from its trigger.
-- Moving between the trigger and Tooltip does not dismiss it prematurely.
+- Moving away from the trigger dismisses Tooltip after a short delay; the floating text never captures pointer actions.
 - Only one Tooltip is open at a time.
 - Touch activation does not create a sticky synthetic hover surface.
 - Placement flips or shifts when the preferred side would leave the viewport, and the arrow follows the resolved side and clamped cross-axis position.
