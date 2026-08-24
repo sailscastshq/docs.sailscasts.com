@@ -125,6 +125,10 @@ A native modal surface with platform focus containment, inert background behavio
 
 A native off-canvas dialog for mobile navigation, comments, inspectors, and focused edge workflows, with caller-owned placement, semantic content, and Tailwind styling.
 
+### [Sidebar](/klean-ui/components/sidebar)
+
+A durable native desktop aside with remembered visibility, honest closed-state semantics, and application-owned links, navigation, and Tailwind styling.
+
 ### [Calendar](/klean-ui/components/calendar)
 
 An always-visible, locale-aware date-only surface with complete keyboard navigation, caller-owned availability, and stable `YYYY-MM-DD` values.
