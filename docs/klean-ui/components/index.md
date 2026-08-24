@@ -81,6 +81,10 @@ A native table with a neutral baseline, caller-written captions, sections, heade
 
 A durable server-driven table block with one native table, page-scoped selection, clean Inertia URL queries, truthful pending state, and caller-owned application markup.
 
+### [Filter Bar](/klean-ui/components/filter-bar)
+
+A native filter form with separate draft and committed state, immediate active-filter removal, pending safety, deterministic URLs, and caller-owned controls and Tailwind.
+
 ### [FileUpload](/klean-ui/components/file-upload)
 
 One native file-selection bridge with honest validation, previews, drop behavior, and caller-owned upload markup.
