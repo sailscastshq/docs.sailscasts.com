@@ -113,6 +113,7 @@ const defaultDirection = computed(() =>
 const resolvedFrom = computed(() => props.from ?? defaultDirection.value)
 const resolvedTo = computed(() => props.to ?? defaultDirection.value)
 let unsubscribe = () => {}
+let promotedItemId
 
 const viewportClasses = computed(() =>
   twMerge(
@@ -170,8 +171,17 @@ function activateAction(item, event) {
 
 function subscribe(controller) {
   unsubscribe()
+  promotedItemId = undefined
   const sync = () => {
-    items.value = controller.getSnapshot()
+    const snapshot = controller.getSnapshot()
+    items.value = snapshot
+
+    const enteringItem = snapshot.findLast((item) => item.state === 'entering')
+    if (enteringItem && enteringItem.id !== promotedItemId) {
+      promotedItemId = enteringItem.id
+      hideTopLayer()
+      showTopLayer()
+    }
 
     if (resolvedFrom.value === 'none' || resolvedTo.value === 'none') {
       queueMicrotask(() => {

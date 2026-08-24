@@ -105,6 +105,7 @@ export default function Toast({
   ...viewportProps
 }) {
   const viewportRef = useRef(null)
+  const promotedItemRef = useRef()
   const defaultDirection = position.endsWith('-left') ? 'left' : 'right'
   const resolvedFrom = from ?? defaultDirection
   const resolvedTo = to ?? defaultDirection
@@ -134,6 +135,24 @@ export default function Toast({
       }
     }
   }, [])
+
+  useEffect(() => {
+    const enteringItem = items.findLast((item) => item.state === 'entering')
+    if (!enteringItem || enteringItem.id === promotedItemRef.current) return
+
+    promotedItemRef.current = enteringItem.id
+    const viewport = viewportRef.current
+    try {
+      viewport?.hidePopover?.()
+    } catch {
+      // Not open yet or already closed.
+    }
+    try {
+      viewport?.showPopover?.()
+    } catch {
+      // Rejected by a partial Popover API implementation.
+    }
+  }, [items])
 
   useEffect(() => {
     function syncInstantMotion() {
