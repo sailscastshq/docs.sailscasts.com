@@ -1,10 +1,13 @@
 <script>
+  import { untrack } from "svelte";
+
   let {
     file = $bindable(null),
     onchange,
     onreject,
     accept,
     capture,
+    multiple = false,
     disabled = false,
     validate = () => true,
     class: className,
@@ -18,12 +21,65 @@
 
   let root = $state();
   let input = $state();
-  let previewUrl = $state("");
+  let previewEntries = $state([]);
   let dragging = $state(false);
   let dragDepth = 0;
+  let files = $derived(
+    multiple
+      ? Array.isArray(file)
+        ? file.filter(Boolean)
+        : file
+          ? [file]
+          : []
+      : file
+        ? [file]
+        : [],
+  );
+  let singleFile = $derived(multiple ? null : (files[0] ?? null));
+  let previews = $derived(
+    previewEntries.map((entry) => ({
+      file: entry.file,
+      previewUrl: entry.url,
+    })),
+  );
+  let previewUrl = $derived(previews[0]?.previewUrl ?? "");
 
   function resetInput() {
     if (input) input.value = "";
+  }
+
+  function revokeEntry(entry) {
+    if (entry?.url) URL.revokeObjectURL?.(entry.url);
+  }
+
+  function createPreviewEntry(candidate) {
+    const canPreview =
+      candidate &&
+      typeof Blob !== "undefined" &&
+      candidate instanceof Blob &&
+      typeof URL.createObjectURL === "function";
+    return {
+      file: candidate,
+      url: canPreview ? URL.createObjectURL(candidate) : "",
+    };
+  }
+
+  function syncPreviews(candidates) {
+    const remaining = [...previewEntries];
+    const next = candidates.map((candidate) => {
+      const index = remaining.findIndex((entry) =>
+        Object.is(entry.file, candidate),
+      );
+      if (index === -1) return createPreviewEntry(candidate);
+      return remaining.splice(index, 1)[0];
+    });
+    for (const entry of remaining) revokeEntry(entry);
+    previewEntries = next;
+  }
+
+  function revokePreviews() {
+    for (const entry of previewEntries) revokeEntry(entry);
+    previewEntries = [];
   }
 
   function acceptedByAttribute(candidate) {
@@ -50,53 +106,71 @@
     return false;
   }
 
-  function setFile(candidate) {
-    file = candidate;
-    onchange?.(candidate);
+  function setSelection(selection) {
+    file = selection;
+    onchange?.(selection);
     resetInput();
     return true;
   }
 
-  function select(files) {
+  function select(selection) {
     if (disabled) return false;
-    const candidates = Array.from(files ?? []);
+    const candidates = Array.from(selection ?? []);
     if (!candidates.length) return false;
-    if (candidates.length > 1) {
-      return reject(
+    if (!multiple && candidates.length > 1) {
+      reject(
         candidates[0],
         "multiple",
         "Choose one file at a time.",
         candidates,
       );
+      resetInput();
+      return false;
     }
 
-    const candidate = candidates[0];
-    if (!acceptedByAttribute(candidate)) {
-      return reject(candidate, "accept", "That file type is not accepted.");
+    const accepted = [];
+    const current = multiple ? [...files] : [];
+    for (const candidate of candidates) {
+      if (!acceptedByAttribute(candidate)) {
+        reject(candidate, "accept", "That file type is not accepted.");
+        continue;
+      }
+
+      let result;
+      try {
+        result = validate(candidate, {
+          files: [...current, ...accepted],
+          multiple,
+        });
+      } catch {
+        reject(candidate, "validate", "That file could not be validated.");
+        continue;
+      }
+
+      if (result !== true && result !== undefined) {
+        reject(
+          candidate,
+          typeof result === "object" && result?.reason
+            ? result.reason
+            : "validate",
+          typeof result === "string" && result
+            ? result
+            : typeof result === "object" && result?.message
+              ? result.message
+              : "That file is not valid.",
+        );
+        continue;
+      }
+
+      accepted.push(candidate);
     }
 
-    let result;
-    try {
-      result = validate(candidate);
-    } catch {
-      return reject(candidate, "validate", "That file could not be validated.");
+    if (!accepted.length) {
+      resetInput();
+      return false;
     }
 
-    if (result !== true && result !== undefined) {
-      return reject(
-        candidate,
-        typeof result === "object" && result?.reason
-          ? result.reason
-          : "validate",
-        typeof result === "string" && result
-          ? result
-          : typeof result === "object" && result?.message
-            ? result.message
-            : "That file is not valid.",
-      );
-    }
-
-    return setFile(candidate);
+    return setSelection(multiple ? [...current, ...accepted] : accepted[0]);
   }
 
   export function choose() {
@@ -114,7 +188,17 @@
   }
 
   export function clear() {
-    if (!disabled) setFile(null);
+    if (!disabled) setSelection(multiple ? [] : null);
+  }
+
+  export function remove(candidate) {
+    if (disabled) return false;
+    if (!multiple) return setSelection(null);
+    const index = files.findIndex((entry) => Object.is(entry, candidate));
+    if (index === -1) return false;
+    const next = [...files];
+    next.splice(index, 1);
+    return setSelection(next);
   }
 
   export function getRoot() {
@@ -165,10 +249,16 @@
 
   let api = {
     get file() {
-      return file;
+      return singleFile;
     },
     get previewUrl() {
       return previewUrl;
+    },
+    get files() {
+      return files;
+    },
+    get previews() {
+      return previews;
     },
     get dragging() {
       return dragging;
@@ -178,23 +268,16 @@
     },
     choose,
     clear,
+    remove,
   };
 
   $effect(() => {
-    const candidate = file;
-    if (
-      !candidate ||
-      typeof Blob === "undefined" ||
-      !(candidate instanceof Blob) ||
-      typeof URL.createObjectURL !== "function"
-    ) {
-      previewUrl = "";
-      return;
-    }
+    const candidates = files;
+    untrack(() => syncPreviews(candidates));
+  });
 
-    const url = URL.createObjectURL(candidate);
-    previewUrl = url;
-    return () => URL.revokeObjectURL?.(url);
+  $effect(() => {
+    return () => untrack(revokePreviews);
   });
 </script>
 
@@ -202,7 +285,7 @@
   {...props}
   bind:this={root}
   data-slot="file-upload"
-  data-state={file ? "ready" : "empty"}
+  data-state={files.length ? "ready" : "empty"}
   data-dragging={dragging ? "" : undefined}
   data-disabled={disabled ? "" : undefined}
   class={className}
@@ -214,6 +297,7 @@
     data-part="input"
     {accept}
     {capture}
+    {multiple}
     {disabled}
     onchange={(event) => select(event.currentTarget.files)}
   />

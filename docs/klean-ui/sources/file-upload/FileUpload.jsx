@@ -3,6 +3,7 @@ import {
   useCallback,
   useEffect,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState
 } from 'react'
@@ -31,6 +32,7 @@ const FileUpload = forwardRef(function FileUpload(
     onReject,
     accept,
     capture,
+    multiple = false,
     disabled = false,
     validate = () => true,
     className,
@@ -46,20 +48,33 @@ const FileUpload = forwardRef(function FileUpload(
   const rootRef = useRef(null)
   const inputRef = useRef(null)
   const dragDepth = useRef(0)
+  const previewEntriesRef = useRef([])
   const controlled = value !== undefined
-  const [localFile, setLocalFile] = useState(defaultValue)
-  const [previewUrl, setPreviewUrl] = useState('')
+  const [localValue, setLocalValue] = useState(defaultValue)
+  const [previews, setPreviews] = useState([])
   const [dragging, setDragging] = useState(false)
-  const file = controlled ? value : localFile
+  const selectedValue = controlled ? value : localValue
+  const files = useMemo(() => {
+    if (multiple) {
+      return Array.isArray(selectedValue)
+        ? selectedValue.filter(Boolean)
+        : selectedValue
+          ? [selectedValue]
+          : []
+    }
+    return selectedValue ? [selectedValue] : []
+  }, [multiple, selectedValue])
+  const file = multiple ? null : (files[0] ?? null)
+  const previewUrl = previews[0]?.previewUrl ?? ''
 
   const resetInput = useCallback(() => {
     if (inputRef.current) inputRef.current.value = ''
   }, [])
 
-  const setFile = useCallback(
-    (candidate) => {
-      if (!controlled) setLocalFile(candidate)
-      onChange?.(candidate)
+  const setSelection = useCallback(
+    (selection) => {
+      if (!controlled) setLocalValue(selection)
+      onChange?.(selection)
       resetInput()
       return true
     },
@@ -78,52 +93,75 @@ const FileUpload = forwardRef(function FileUpload(
   )
 
   const select = useCallback(
-    (files) => {
+    (selection) => {
       if (disabled) return false
-      const candidates = Array.from(files ?? [])
+      const candidates = Array.from(selection ?? [])
       if (!candidates.length) return false
-      if (candidates.length > 1) {
-        return reject(
+      if (!multiple && candidates.length > 1) {
+        reject(
           candidates[0],
           'multiple',
           'Choose one file at a time.',
           candidates
         )
+        resetInput()
+        return false
       }
 
-      const candidate = candidates[0]
-      if (!acceptedByAttribute(candidate, accept)) {
-        return reject(candidate, 'accept', 'That file type is not accepted.')
+      const accepted = []
+      const current = multiple ? [...files] : []
+      for (const candidate of candidates) {
+        if (!acceptedByAttribute(candidate, accept)) {
+          reject(candidate, 'accept', 'That file type is not accepted.')
+          continue
+        }
+
+        let result
+        try {
+          result = validate(candidate, {
+            files: [...current, ...accepted],
+            multiple
+          })
+        } catch {
+          reject(candidate, 'validate', 'That file could not be validated.')
+          continue
+        }
+
+        if (result !== true && result !== undefined) {
+          reject(
+            candidate,
+            typeof result === 'object' && result?.reason
+              ? result.reason
+              : 'validate',
+            typeof result === 'string' && result
+              ? result
+              : typeof result === 'object' && result?.message
+                ? result.message
+                : 'That file is not valid.'
+          )
+          continue
+        }
+
+        accepted.push(candidate)
       }
 
-      let result
-      try {
-        result = validate(candidate)
-      } catch {
-        return reject(
-          candidate,
-          'validate',
-          'That file could not be validated.'
-        )
+      if (!accepted.length) {
+        resetInput()
+        return false
       }
 
-      if (result !== true && result !== undefined) {
-        return reject(
-          candidate,
-          typeof result === 'object' && result?.reason
-            ? result.reason
-            : 'validate',
-          typeof result === 'string' && result
-            ? result
-            : typeof result === 'object' && result?.message
-              ? result.message
-              : 'That file is not valid.'
-        )
-      }
-
-      return setFile(candidate)
+      return setSelection(multiple ? [...current, ...accepted] : accepted[0])
     },
-    [accept, disabled, reject, setFile, validate]
+    [
+      accept,
+      disabled,
+      files,
+      multiple,
+      reject,
+      resetInput,
+      setSelection,
+      validate
+    ]
   )
 
   const choose = useCallback(() => {
@@ -142,8 +180,21 @@ const FileUpload = forwardRef(function FileUpload(
   }, [disabled, resetInput])
 
   const clear = useCallback(() => {
-    if (!disabled) setFile(null)
-  }, [disabled, setFile])
+    if (!disabled) setSelection(multiple ? [] : null)
+  }, [disabled, multiple, setSelection])
+
+  const remove = useCallback(
+    (candidate) => {
+      if (disabled) return false
+      if (!multiple) return setSelection(null)
+      const index = files.findIndex((entry) => Object.is(entry, candidate))
+      if (index === -1) return false
+      const next = [...files]
+      next.splice(index, 1)
+      return setSelection(next)
+    },
+    [disabled, files, multiple, setSelection]
+  )
 
   function hasFiles(event) {
     return Array.from(event.dataTransfer?.types ?? []).includes('Files')
@@ -179,20 +230,37 @@ const FileUpload = forwardRef(function FileUpload(
   }
 
   useEffect(() => {
-    if (
-      !file ||
-      typeof Blob === 'undefined' ||
-      !(file instanceof Blob) ||
-      typeof URL.createObjectURL !== 'function'
-    ) {
-      setPreviewUrl('')
-      return undefined
+    const remaining = [...previewEntriesRef.current]
+    const next = files.map((candidate) => {
+      const index = remaining.findIndex((entry) =>
+        Object.is(entry.file, candidate)
+      )
+      if (index !== -1) return remaining.splice(index, 1)[0]
+      const canPreview =
+        typeof Blob !== 'undefined' &&
+        candidate instanceof Blob &&
+        typeof URL.createObjectURL === 'function'
+      return {
+        file: candidate,
+        previewUrl: canPreview ? URL.createObjectURL(candidate) : ''
+      }
+    })
+    for (const entry of remaining) {
+      if (entry.previewUrl) URL.revokeObjectURL?.(entry.previewUrl)
     }
+    previewEntriesRef.current = next
+    setPreviews(next)
+  }, [files])
 
-    const url = URL.createObjectURL(file)
-    setPreviewUrl(url)
-    return () => URL.revokeObjectURL?.(url)
-  }, [file])
+  useEffect(
+    () => () => {
+      for (const entry of previewEntriesRef.current) {
+        if (entry.previewUrl) URL.revokeObjectURL?.(entry.previewUrl)
+      }
+      previewEntriesRef.current = []
+    },
+    []
+  )
 
   const dropzone = {
     'data-dragging': dragging ? '' : undefined,
@@ -209,11 +277,18 @@ const FileUpload = forwardRef(function FileUpload(
     get previewUrl() {
       return previewUrl
     },
+    get files() {
+      return files
+    },
+    get previews() {
+      return previews
+    },
     get dragging() {
       return dragging
     },
     choose,
     clear,
+    remove,
     get dropzone() {
       return dropzone
     }
@@ -222,7 +297,8 @@ const FileUpload = forwardRef(function FileUpload(
   useImperativeHandle(forwardedRef, () => ({
     root: rootRef.current,
     choose,
-    clear
+    clear,
+    remove
   }))
 
   return (
@@ -230,7 +306,7 @@ const FileUpload = forwardRef(function FileUpload(
       {...props}
       ref={rootRef}
       data-slot="file-upload"
-      data-state={file ? 'ready' : 'empty'}
+      data-state={files.length ? 'ready' : 'empty'}
       data-dragging={dragging ? '' : undefined}
       data-disabled={disabled ? '' : undefined}
       className={className}
@@ -242,6 +318,7 @@ const FileUpload = forwardRef(function FileUpload(
         data-part="input"
         accept={accept}
         capture={capture}
+        multiple={multiple}
         disabled={disabled}
         onChange={(event) => select(event.currentTarget.files)}
       />
