@@ -10,6 +10,8 @@ const logo = shallowRef(null)
 const removeCurrentLogo = ref(false)
 const receipt = shallowRef(null)
 const receiptError = ref('')
+const images = shallowRef([])
+const imagesError = ref('')
 
 const portraitMarkup = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
   <rect width="160" height="160" fill="#dbeafe"/>
@@ -35,6 +37,27 @@ function validateReceipt(candidate) {
   return candidate.size <= 5 * 1024 * 1024
     ? true
     : 'Receipts must be 5 MB or smaller.'
+}
+
+function imageSignature(candidate) {
+  return [
+    candidate.name,
+    candidate.size,
+    candidate.type,
+    candidate.lastModified
+  ].join(':')
+}
+
+function validateImage(candidate, { files }) {
+  if (candidate.size > 5 * 1024 * 1024) {
+    return 'Each image must be 5 MB or smaller.'
+  }
+  if (
+    files.some((file) => imageSignature(file) === imageSignature(candidate))
+  ) {
+    return { reason: 'duplicate', message: 'That image is already attached.' }
+  }
+  return files.length < 4 ? true : 'Attach up to 4 images.'
 }
 </script>
 
@@ -187,6 +210,124 @@ function validateReceipt(candidate) {
         </div>
       </div>
     </div>
+  </FileUpload>
+
+  <FileUpload
+    v-else-if="recipe === 'attachments'"
+    v-model="images"
+    multiple
+    accept="image/avif,image/gif,image/jpeg,image/png,image/webp"
+    :validate="validateImage"
+    @change="imagesError = ''"
+    @reject="imagesError = $event.message"
+    v-slot="upload"
+    class="mx-auto max-w-3xl"
+  >
+    <section
+      class="rounded-2xl border border-gray-200 bg-white p-5 text-gray-950 shadow-sm dark:border-gray-800 dark:bg-gray-950 dark:text-white sm:p-7"
+      aria-labelledby="file-upload-attachments-title"
+    >
+      <h3
+        id="file-upload-attachments-title"
+        class="m-0 text-xl font-semibold tracking-tight"
+      >
+        Attach screenshots
+      </h3>
+      <p
+        class="m-0 mt-2 max-w-xl text-sm leading-6 text-gray-500 dark:text-gray-400"
+      >
+        Add up to four images. Paste can update this same file array.
+      </p>
+
+      <div
+        v-bind="upload.dropzone"
+        :class="[
+          'mt-6 rounded-xl border border-dashed p-5 transition-colors duration-150 motion-reduce:transition-none',
+          upload.dragging
+            ? 'border-gray-950 bg-gray-50 dark:border-white dark:bg-gray-900'
+            : 'border-gray-300 dark:border-gray-700'
+        ]"
+      >
+        <div
+          v-if="upload.previews.length"
+          class="grid grid-cols-2 gap-3 sm:grid-cols-4"
+        >
+          <figure
+            v-for="preview in upload.previews"
+            :key="preview.file.name + preview.file.lastModified"
+            class="group relative m-0 min-w-0 overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-900"
+          >
+            <img
+              :src="preview.previewUrl"
+              :alt="preview.file.name"
+              class="m-0 aspect-square w-full object-cover"
+            />
+            <figcaption
+              class="absolute inset-x-0 bottom-0 flex items-center gap-2 bg-gray-950/80 px-2 py-1.5 text-white backdrop-blur-sm"
+            >
+              <span class="min-w-0 flex-1 truncate text-xs">
+                {{ preview.file.name }}
+              </span>
+              <button
+                type="button"
+                class="grid size-8 shrink-0 cursor-pointer place-items-center rounded-md no-underline hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-white"
+                :aria-label="`Remove ${preview.file.name}`"
+                @click="upload.remove(preview.file)"
+              >
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 20 20"
+                  class="size-4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                >
+                  <path d="m6 6 8 8m0-8-8 8" stroke-linecap="round" />
+                </svg>
+              </button>
+            </figcaption>
+          </figure>
+        </div>
+
+        <div
+          :class="
+            upload.previews.length
+              ? 'mt-5 flex flex-wrap items-center justify-between gap-3'
+              : 'py-7 text-center'
+          "
+        >
+          <div :class="upload.previews.length ? '' : 'mx-auto'">
+            <p class="m-0 text-sm font-medium">
+              {{
+                upload.previews.length
+                  ? `${upload.files.length} of 4 attached`
+                  : 'Drop screenshots here'
+              }}
+            </p>
+            <p class="m-0 mt-1 text-xs text-gray-500 dark:text-gray-400">
+              AVIF, GIF, JPEG, PNG, or WebP · 5 MB each
+            </p>
+          </div>
+          <button
+            type="button"
+            :class="[
+              'inline-flex min-h-11 cursor-pointer items-center justify-center rounded-lg bg-gray-950 px-4 text-sm font-medium text-white no-underline hover:bg-gray-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-200 dark:focus-visible:outline-white',
+              upload.previews.length ? 'mt-0' : 'mt-4'
+            ]"
+            @click="upload.choose"
+          >
+            {{ upload.previews.length ? 'Add more' : 'Choose images' }}
+          </button>
+        </div>
+      </div>
+      <p
+        v-if="imagesError"
+        role="alert"
+        class="m-0 mt-3 text-sm font-medium text-red-700 dark:text-red-400"
+      >
+        {{ imagesError }}
+      </p>
+    </section>
   </FileUpload>
 
   <FileUpload

@@ -1,11 +1,19 @@
 <script setup>
-import { computed, onBeforeUnmount, ref, useAttrs, watch } from 'vue'
+import {
+  computed,
+  onBeforeUnmount,
+  ref,
+  shallowRef,
+  useAttrs,
+  watch
+} from 'vue'
 
 defineOptions({ inheritAttrs: false })
 
 const props = defineProps({
   accept: { type: String, default: undefined },
   capture: { type: [String, Boolean], default: undefined },
+  multiple: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
   validate: { type: Function, default: () => true }
 })
@@ -15,10 +23,31 @@ const file = defineModel({ default: null })
 const attrs = useAttrs()
 const root = ref()
 const input = ref()
-const previewUrl = ref('')
+const previewEntries = shallowRef([])
 const dragging = ref(false)
 let dragDepth = 0
-let previewFile
+
+const files = computed(() => {
+  const current = file.value
+  if (props.multiple) {
+    return Array.isArray(current)
+      ? current.filter(Boolean)
+      : current
+        ? [current]
+        : []
+  }
+  return current ? [current] : []
+})
+const singleFile = computed(() =>
+  props.multiple ? null : (files.value[0] ?? null)
+)
+const previews = computed(() =>
+  previewEntries.value.map(({ file: candidate, url }) => ({
+    file: candidate,
+    previewUrl: url
+  }))
+)
+const previewUrl = computed(() => previews.value[0]?.previewUrl ?? '')
 
 const rootAttrs = computed(() => {
   const {
@@ -36,27 +65,70 @@ function resetInput() {
   if (input.value) input.value.value = ''
 }
 
-function revokePreview() {
-  if (previewUrl.value && typeof URL.revokeObjectURL === 'function') {
-    URL.revokeObjectURL(previewUrl.value)
+function revokeEntry(entry) {
+  if (entry?.url && typeof URL.revokeObjectURL === 'function') {
+    URL.revokeObjectURL(entry.url)
   }
-  previewUrl.value = ''
-  previewFile = undefined
 }
 
-function syncPreview(candidate) {
-  if (Object.is(candidate, previewFile)) return
-  revokePreview()
-  previewFile = candidate
-
-  if (
+function createPreviewEntry(candidate) {
+  const canPreview =
     candidate &&
     typeof Blob !== 'undefined' &&
     candidate instanceof Blob &&
     typeof URL.createObjectURL === 'function'
-  ) {
-    previewUrl.value = URL.createObjectURL(candidate)
+  return {
+    file: candidate,
+    url: canPreview ? URL.createObjectURL(candidate) : ''
   }
+}
+
+function syncPreviews(candidates) {
+  const remaining = [...previewEntries.value]
+  const next = candidates.map((candidate) => {
+    const index = remaining.findIndex((entry) =>
+      Object.is(entry.file, candidate)
+    )
+    if (index === -1) return createPreviewEntry(candidate)
+    return remaining.splice(index, 1)[0]
+  })
+  for (const entry of remaining) revokeEntry(entry)
+  previewEntries.value = next
+}
+
+function revokePreviews() {
+  for (const entry of previewEntries.value) revokeEntry(entry)
+  previewEntries.value = []
+}
+
+function validationResult(candidate, acceptedFiles) {
+  if (!acceptedByAttribute(candidate)) {
+    reject(candidate, 'accept', 'That file type is not accepted.')
+    return false
+  }
+
+  let result
+  try {
+    result = props.validate(candidate, {
+      files: [...acceptedFiles],
+      multiple: props.multiple
+    })
+  } catch {
+    reject(candidate, 'validate', 'That file could not be validated.')
+    return false
+  }
+
+  if (result === true || result === undefined) return true
+  reject(
+    candidate,
+    typeof result === 'object' && result?.reason ? result.reason : 'validate',
+    typeof result === 'string' && result
+      ? result
+      : typeof result === 'object' && result?.message
+        ? result.message
+        : 'That file is not valid.'
+  )
+  return false
 }
 
 function acceptedByAttribute(candidate) {
@@ -90,44 +162,30 @@ function setFile(candidate) {
   return true
 }
 
-function select(files) {
+function select(selection) {
   if (props.disabled) return false
-  const candidates = Array.from(files ?? [])
+  const candidates = Array.from(selection ?? [])
   if (!candidates.length) return false
-  if (candidates.length > 1) {
-    return reject(
-      candidates[0],
-      'multiple',
-      'Choose one file at a time.',
-      candidates
-    )
+  if (!props.multiple && candidates.length > 1) {
+    reject(candidates[0], 'multiple', 'Choose one file at a time.', candidates)
+    resetInput()
+    return false
   }
 
-  const candidate = candidates[0]
-  if (!acceptedByAttribute(candidate)) {
-    return reject(candidate, 'accept', 'That file type is not accepted.')
+  const accepted = []
+  const current = props.multiple ? [...files.value] : []
+  for (const candidate of candidates) {
+    if (validationResult(candidate, [...current, ...accepted])) {
+      accepted.push(candidate)
+    }
   }
 
-  let result
-  try {
-    result = props.validate(candidate)
-  } catch {
-    return reject(candidate, 'validate', 'That file could not be validated.')
+  if (!accepted.length) {
+    resetInput()
+    return false
   }
 
-  if (result !== true && result !== undefined) {
-    return reject(
-      candidate,
-      typeof result === 'object' && result?.reason ? result.reason : 'validate',
-      typeof result === 'string' && result
-        ? result
-        : typeof result === 'object' && result?.message
-          ? result.message
-          : 'That file is not valid.'
-    )
-  }
-
-  return setFile(candidate)
+  return setFile(props.multiple ? [...current, ...accepted] : accepted[0])
 }
 
 function choose() {
@@ -146,7 +204,17 @@ function choose() {
 
 function clear() {
   if (props.disabled) return
-  setFile(null)
+  setFile(props.multiple ? [] : null)
+}
+
+function remove(candidate) {
+  if (props.disabled) return false
+  if (!props.multiple) return setFile(null)
+  const index = files.value.findIndex((entry) => Object.is(entry, candidate))
+  if (index === -1) return false
+  const next = [...files.value]
+  next.splice(index, 1)
+  return setFile(next)
 }
 
 function hasFiles(event) {
@@ -192,18 +260,18 @@ const dropzone = computed(() => ({
 }))
 
 watch(
-  file,
-  (candidate) => {
-    syncPreview(candidate)
+  files,
+  (candidates) => {
+    syncPreviews(candidates)
   },
   { immediate: true, flush: 'sync' }
 )
 
 onBeforeUnmount(() => {
-  revokePreview()
+  revokePreviews()
 })
 
-defineExpose({ root, choose, clear })
+defineExpose({ root, choose, clear, remove })
 </script>
 
 <template>
@@ -211,7 +279,7 @@ defineExpose({ root, choose, clear })
     ref="root"
     v-bind="rootAttrs"
     data-slot="file-upload"
-    :data-state="file ? 'ready' : 'empty'"
+    :data-state="files.length ? 'ready' : 'empty'"
     :data-dragging="dragging ? '' : undefined"
     :data-disabled="disabled ? '' : undefined"
     :class="attrs.class"
@@ -223,15 +291,19 @@ defineExpose({ root, choose, clear })
       data-part="input"
       :accept="accept"
       :capture="capture"
+      :multiple="multiple"
       :disabled="disabled"
       @change="select($event.currentTarget.files)"
     />
     <slot
-      :file="file"
+      :file="singleFile"
+      :files="files"
       :preview-url="previewUrl"
+      :previews="previews"
       :dragging="dragging"
       :choose="choose"
       :clear="clear"
+      :remove="remove"
       :dropzone="dropzone"
     />
   </div>

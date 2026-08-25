@@ -1,7 +1,7 @@
 ---
 title: FileUpload
 titleTemplate: Klean UI
-description: One native file-selection bridge with honest validation, previews, drop behavior, and caller-owned Tailwind across Vue, React, and Svelte.
+description: Native single- and multiple-file selection with honest validation, previews, drop behavior, and caller-owned Tailwind across Vue, React, and Svelte.
 outline: [2, 3]
 ---
 
@@ -18,11 +18,12 @@ import reactUsage from '../snippets/file-upload/usage.jsx?raw'
 import svelteUsage from '../snippets/file-upload/usage.svelte?raw'
 import logoSource from '../snippets/file-upload/logo.vue?raw'
 import receiptSource from '../snippets/file-upload/receipt.vue?raw'
+import attachmentsSource from '../snippets/file-upload/attachments.vue?raw'
 </script>
 
 # FileUpload
 
-FileUpload turns one native file picker into calm application state. It chooses or drops one file, keeps the last accepted value when a candidate is rejected, supplies a temporary preview URL, and cleans that preview up when it is replaced or removed.
+FileUpload turns one native file picker into calm application state. It chooses or drops one file by default, opts into the platform's `multiple` selection when the product needs it, keeps accepted values when another candidate is rejected, and supplies previews that disappear when their files are removed.
 
 The application writes every visible element: the real choose button, drop surface, filename, preview, remove action, error, and Tailwind classes. It also owns the eventual upload request. There is no visual variant, upload runtime, anatomy package, or hidden storage decision.
 
@@ -37,7 +38,7 @@ The application writes every visible element: the real choose button, drop surfa
 
 ## Installation
 
-One command detects Vue, React, or Svelte and writes the matching one-file source into the conventional component directory:
+One command detects Vue, React, or Svelte and writes the matching source into the conventional component directory:
 
 <KleanInstallation
   id="file-upload-installation"
@@ -51,7 +52,7 @@ There is no provider, initializer, `klean-ui.json`, upload SDK, class helper, ba
 
 ## Usage
 
-The framework-native binding contains a `File` or `null`. The content slot or render function receives the same small API in each framework.
+The framework-native binding contains a `File` or `null`. Add the native `multiple` prop and the binding becomes `File[]`. The content slot or render function receives the same small API in each framework.
 
 ### Vue
 
@@ -69,34 +70,38 @@ The framework-native binding contains a `File` or `null`. The content slot or re
 
 ### Inputs and events
 
-| Input or event           | Default | Purpose                                                                                                       |
-| ------------------------ | ------- | ------------------------------------------------------------------------------------------------------------- |
-| bound file               | `null`  | Vue `v-model`, React `value`/`onChange`, or Svelte `bind:file`; the selected `File` is the application truth. |
-| `accept`                 | —       | Native accept expression, also checked for dropped files: MIME types, wildcards such as `image/*`, or `.ext`. |
-| `capture`                | —       | Native mobile capture hint such as `environment`.                                                             |
-| `disabled`               | `false` | Prevents browse, drop, replace, and clear.                                                                    |
-| `validate(file)`         | accept  | Returns `true`/`undefined` to accept, a message to reject, or `{ reason, message }` for a named policy.       |
-| `change` / `onChange`    | —       | Receives the accepted `File` or `null` after clear.                                                           |
-| `reject` / `onReject`    | —       | Receives `{ file, reason, message }`; a multiple drop also includes `files`.                                  |
-| `class` / `className`    | —       | Ordinary classes on the neutral FileUpload root.                                                              |
-| native/global attributes | —       | IDs, titles, data hooks, and accessible relationships for the root.                                           |
+| Input or event            | Default | Purpose                                                                                                                                                     |
+| ------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| bound value               | `null`  | A `File` or `null`; with `multiple`, a `File[]`. Vue uses `v-model`, React uses `value`/`onChange`, and Svelte uses `bind:file`.                            |
+| `accept`                  | —       | Native accept expression, also checked for dropped files: MIME types, wildcards such as `image/*`, or `.ext`.                                               |
+| `capture`                 | —       | Native mobile capture hint such as `environment`.                                                                                                           |
+| `multiple`                | `false` | Uses the native multiple-file picker and appends accepted candidates to the bound file array.                                                               |
+| `disabled`                | `false` | Prevents browse, drop, replace, and clear.                                                                                                                  |
+| `validate(file, context)` | accept  | Returns `true`/`undefined` to accept, a message to reject, or `{ reason, message }`. `context.files` contains files already accepted before this candidate. |
+| `change` / `onChange`     | —       | Receives the next `File`, `null`, or `File[]` after an accepted selection, removal, or clear.                                                               |
+| `reject` / `onReject`     | —       | Receives `{ file, reason, message }`; a multi-file mistake in single mode also includes the attempted `files`.                                              |
+| `class` / `className`     | —       | Ordinary classes on the neutral FileUpload root.                                                                                                            |
+| native/global attributes  | —       | IDs, titles, data hooks, and accessible relationships for the root.                                                                                         |
 
 ### Content API
 
-| Value        | Purpose                                                                                                               |
-| ------------ | --------------------------------------------------------------------------------------------------------------------- |
-| `file`       | The current accepted `File` or `null`.                                                                                |
-| `previewUrl` | A temporary local URL for the current file. Render it only in an element appropriate for the file type.               |
-| `dragging`   | Whether a file drag is currently over the bound drop surface.                                                         |
-| `choose()`   | Opens the platform file picker. Call it from a real visible button.                                                   |
-| `clear()`    | Returns the bound file to `null` and releases its preview.                                                            |
-| `dropzone`   | Additive drag/drop event and data bindings for an ordinary caller-owned element. It does not invent button semantics. |
+| Value          | Purpose                                                                                                               |
+| -------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `file`         | The current accepted `File` in single mode, otherwise `null`.                                                         |
+| `files`        | A normalized array of accepted files in both single and multiple modes.                                               |
+| `previewUrl`   | The current single-file preview address. Render it only in an element appropriate for the file type.                  |
+| `previews`     | Ordered `{ file, previewUrl }` entries for rendering multiple previews without matching arrays by hand.               |
+| `dragging`     | Whether a file drag is currently over the bound drop surface.                                                         |
+| `choose()`     | Opens the platform file picker. Call it from a real visible button.                                                   |
+| `remove(file)` | Removes one accepted file. In single mode it clears the current value.                                                |
+| `clear()`      | Returns the bound value to `null` or `[]` and releases its previews.                                                  |
+| `dropzone`     | Additive drag/drop event and data bindings for an ordinary caller-owned element. It does not invent button semantics. |
 
-There is deliberately no `variant`, `multiple`, `maxSize`, `upload`, `progress`, `retry`, `endpoint`, `existingUrl`, or preview-kind prop. Validation and visible presentation are clearer where the product rule is written.
+There is deliberately no `variant`, `maxSize`, `maxFiles`, `upload`, `progress`, `retry`, `endpoint`, `existingUrl`, or preview-kind prop. The native `multiple` switch changes selection cardinality; validation and visible presentation remain clearer where the product rule is written.
 
 ## Browse and drop are one path
 
-`accept` affects the platform picker and is also checked when a file is dropped. A drop of several files is rejected instead of silently choosing one. A rejected candidate never destroys the current accepted file.
+`accept` affects the platform picker and is also checked when files are dropped. Single mode rejects a several-file drop instead of silently choosing one. Multiple mode considers each candidate in order, appends the accepted files, and reports rejected files without discarding the successful part of the batch or an earlier selection.
 
 Drop remains additive. The drop surface is not given a button role or tab stop because a real visible button already invokes `choose()`. Users who cannot or do not drag receive the same capability with native keyboard activation and an honest accessible name.
 
@@ -104,11 +109,28 @@ Client checks are convenience, not trust. MIME metadata and filenames can be wro
 
 ## Native form boundary
 
-FileUpload resets its internal picker after selection so choosing the same file again is observable. The bound `File` is therefore the source of truth and the application builds the multipart request explicitly.
+FileUpload resets its internal picker after selection so choosing the same file again is observable. The bound `File` or `File[]` is therefore the source of truth and the application builds the multipart request explicitly.
 
 That is why FileUpload does not accept `name`, `form`, or `required`: those props would falsely imply that the browser submits the hidden picker for you. Keep required validation next to the rest of the form state. Use [Input](/klean-ui/components/input) with `type="file"` when ordinary native form serialization—not a custom preview or drop experience—is the actual requirement.
 
 Upload progress, cancellation, retry, scanning, storage, and server errors also belong to the request layer. Compose [Spinner](/klean-ui/components/spinner), [Alert](/klean-ui/components/alert), and a real status region around FileUpload when those states exist.
+
+## Multiple attachments
+
+Use `multiple` when the product evidence is genuinely plural: feedback screenshots, supporting documents, or a small attachment set. Keep count, duplicate, and size policy in `validate(file, { files })`; do not turn those product decisions into Klean props.
+
+<KleanPreview id="file-upload-attachments" :source="attachmentsSource" filename="FeedbackAttachments.vue">
+  <template #preview>
+    <FileUploadRecipes recipe="attachments" />
+  </template>
+  <template #caption>
+    Native multiple selection, partial rejection, wrapping previews, and per-file removal share one file array. Paste handling and the upload request remain application composition.
+  </template>
+</KleanPreview>
+
+`files` is useful for count and submission. `previews` pairs each accepted file with its temporary preview, so reordering or removing files does not require matching parallel arrays. `remove(file)` removes one; `clear()` removes all.
+
+The component appends an accepted browse or drop selection. If the product supports paste, read the clipboard files in the application and update the same bound array. If the product supports drag-to-reorder, write that ordering UI around the array; FileUpload is selection state, not a gallery manager.
 
 ## Hagfish business logo
 
@@ -144,7 +166,7 @@ The receipt flow accepts camera-friendly images and PDF documents, validates the
 
 An unsubmitted local `File` cannot be reconstructed after refresh, Back/Forward restoration, SSR, or on another device. FileUpload does not pretend otherwise. On refresh, show the server-owned current asset or ask the user to select the file again.
 
-Form drafts may safely remember application metadata such as “a receipt still needs to be reselected,” but must not persist a temporary preview URL or fake a file handle. When a candidate is replaced, cleared, externally changed, or its owner unmounts, its temporary preview is released.
+Form drafts may safely remember application metadata such as “a receipt still needs to be reselected,” but must not persist a temporary preview address or fake a file handle. When a candidate is replaced, cleared, externally changed, or its owner unmounts, its temporary preview is released.
 
 Persisted assets become durable only after the server accepts them and returns authoritative record data or a URL. Navigation and rollback should then use that server truth.
 
@@ -152,7 +174,7 @@ Persisted assets become durable only after the server accepts them and returns a
 
 - Always provide a real visible `button type="button"` for `choose()`; drag and drop is never the only path.
 - Name the button for the action and context: “Choose receipt,” “Replace business logo,” or equivalent visible text.
-- Keep rejection text visible and use `role="alert"` when it appears as the immediate result of the user's choice.
+- Keep rejection text visible and use `role="alert"` when it appears as the immediate result of the user's choice. In multiple mode, announce both accepted and rejected counts when that distinction matters.
 - Give image previews useful alt text such as “Selected receipt preview.” Do not use an image element for PDFs or unknown file types.
 - Include filename and size as text. Do not rely on a thumbnail, color, or icon alone.
 - Keep disabled styling and behavior aligned on the visible controls and FileUpload.
@@ -161,7 +183,7 @@ Persisted assets become durable only after the server accepts them and returns a
 
 ## Styling with Tailwind
 
-FileUpload renders no opinionated visible surface. Style the application markup directly: a quiet rounded dropzone, a compact logo tile, a Hagfish border and shadow, or a dense receipt row are all Tailwind recipes.
+FileUpload renders no opinionated visible surface. Style the application markup directly: a quiet rounded dropzone, a wrapping attachment grid, a compact logo tile, a Hagfish border and shadow, or a dense receipt row are all Tailwind recipes.
 
 When one product repeats the same treatment, keep a small product wrapper such as `ReceiptField.vue`. That wrapper may own copy and policy without turning them into global Klean variants.
 
@@ -169,7 +191,7 @@ When one product repeats the same treatment, keep a small product wrapper such a
 
 - Use [Input](/klean-ui/components/input) with `type="file"` for an ordinary native file field submitted by its form.
 - Use [Avatar](/klean-ui/components/avatar) to render resilient identity, not to select or upload its source.
-- Use a dedicated evidenced component for multiple-file queues, reorderable galleries, image cropping, or resumable uploads.
+- Keep queue progress, drag-to-reorder galleries, image cropping, and resumable upload workflows in application composition; `multiple` only owns selection state and preview lifecycle.
 - Keep upload transport, storage SDKs, antivirus scanning, and server validation outside FileUpload.
 - Do not persist `File`, blob URLs, or client MIME metadata as durable truth.
 
