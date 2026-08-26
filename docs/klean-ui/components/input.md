@@ -1,19 +1,53 @@
 ---
 title: Input
 titleTemplate: Klean UI
-description: A styled native Klean UI input with caller-owned form markup and Tailwind styling.
+description: A styled native Klean UI input for Vue, React, and Svelte with caller-owned form markup and Tailwind styling.
 outline: [2, 3]
 ---
 
 <script setup>
 import { computed, ref } from 'vue'
-import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanButton from '../../.vitepress/theme/components/klean/Button.vue'
 import KleanInput from '../../.vitepress/theme/components/klean/input/Input.vue'
 import inputSource from '../../.vitepress/theme/components/klean/input/Input.vue?raw'
-import usageSource from '../snippets/input/usage.vue?raw'
+import reactSource from '../sources/input/Input.jsx?raw'
+import svelteSource from '../sources/input/Input.svelte?raw'
+import vueUsage from '../snippets/input/usage.vue?raw'
+import reactUsage from '../snippets/input/usage.jsx?raw'
+import svelteUsage from '../snippets/input/usage.svelte?raw'
+
+const inputFrameworks = [
+  {
+    id: 'vue',
+    label: 'Vue',
+    code: inputSource,
+    filename: 'Input.vue',
+    destination: 'assets/js/components/ui/input/Input.vue'
+  },
+  {
+    id: 'react',
+    label: 'React',
+    code: reactSource,
+    filename: 'Input.jsx',
+    destination: 'assets/js/components/ui/input/Input.jsx'
+  },
+  {
+    id: 'svelte',
+    label: 'Svelte',
+    code: svelteSource,
+    filename: 'Input.svelte',
+    destination: 'assets/js/components/ui/input/Input.svelte'
+  }
+]
+
+const inputUsage = [
+  { id: 'vue', label: 'Vue', code: vueUsage, filename: 'EmailField.vue' },
+  { id: 'react', label: 'React', code: reactUsage, filename: 'EmailField.jsx' },
+  { id: 'svelte', label: 'Svelte', code: svelteUsage, filename: 'EmailField.svelte' }
+]
 
 const email = ref('kelvin@')
 const submitted = ref(false)
@@ -79,14 +113,16 @@ One command installs one framework-native source file. There is no initializer, 
 <KleanInstallation
   id="input-installation"
   component="input"
-  :source="inputSource"
-  filename="Input.vue"
-  destination="assets/js/components/ui/input/Input.vue"
+  :frameworks="inputFrameworks"
 />
 
 ## Native form recipe
 
-<CopyCode :code="usageSource" label="usage.vue" />
+<KleanFrameworkCode
+  id="input-usage"
+  :frameworks="inputUsage"
+  label="Input usage framework"
+/>
 
 The application owns the visible label, deterministic IDs, help and error elements, validation timing, and submitted value. Help and error nodes keep stable IDs, so `aria-describedby` never needs conditional string building. `aria-invalid="false"` is valid, and `empty:hidden` collapses an empty error. When an error appears, the existing relationship becomes useful automatically.
 
@@ -118,6 +154,16 @@ If that dense treatment is a recurring product concept, create an application-ow
 - Focus remains visible in light, dark, and high-contrast contexts.
 - Validation waits for blur or submission instead of punishing untouched input.
 - A failed submission that needs announcement uses one application-owned error summary and focus recovery, not `role="alert"` on every inline error.
+
+## Complete framework source
+
+The live preview demonstrates the shared native form contract. Copy the complete framework-native source for your application:
+
+<KleanFrameworkCode
+  id="input-complete-source"
+  :frameworks="inputFrameworks"
+  label="Input source framework"
+/>
 
 ## Related components
 
