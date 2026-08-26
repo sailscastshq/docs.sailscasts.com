@@ -32,6 +32,8 @@ The CLI is a delivery tool. The installed component does not import a Klean runt
 
 Registry items may include prerequisites and more than one source file. Button, Input, and Textarea are deliberately self-contained. Popover installs its focused geometry dependencies, and `npx klean-ui add menu`, `npx klean-ui add select`, or `npx klean-ui add combobox` resolves Popover first before writing the requested component. The full plan stays visible with `--dry-run`; prerequisite handling adds no configuration step.
 
+The registry also delivers focused nonvisual source. `npx klean-ui add durable-ui` writes the framework-native resilience utilities and their browser core beside the components. It follows the same detection, ownership, diff, and safe-update rules without installing a Durable UI runtime package.
+
 ## Conventional paths
 
 For a Boring Stack application, the framework determines the file—not a prompt:
