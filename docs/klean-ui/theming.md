@@ -96,7 +96,7 @@ An application that follows the operating system can use Tailwind's ordinary `da
 
 If the stored preference is `system`, application-owned code resolves the media query and writes `light` or `dark` before paint. A server-readable cookie is the right convention when SSR must avoid a flash.
 
-The mode preference is a Durable UI concern because a person chose it. Store that preference in application-owned code, resolve it before paint, and leave component source unaware of the storage mechanism.
+The mode preference is a Durable UI concern because a person chose it. Store that preference with the framework-native `useStoredState` or `createStoredState` source from the [Durable UI bundle](/klean-ui/durable-ui), resolve it before paint, and leave component source unaware of the storage mechanism.
 
 ## Proving applications, not themes
 
