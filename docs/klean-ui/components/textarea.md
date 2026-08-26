@@ -1,18 +1,52 @@
 ---
 title: Textarea
 titleTemplate: Klean UI
-description: A styled native Klean UI textarea that grows from current content while caller Tailwind stays in control.
+description: A styled native Klean UI textarea for Vue, React, and Svelte that grows from current content while caller Tailwind stays in control.
 outline: [2, 3]
 ---
 
 <script setup>
 import { ref } from 'vue'
-import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanTextarea from '../../.vitepress/theme/components/klean/textarea/Textarea.vue'
 import textareaSource from '../../.vitepress/theme/components/klean/textarea/Textarea.vue?raw'
-import usageSource from '../snippets/textarea/usage.vue?raw'
+import reactSource from '../sources/textarea/Textarea.jsx?raw'
+import svelteSource from '../sources/textarea/Textarea.svelte?raw'
+import vueUsage from '../snippets/textarea/usage.vue?raw'
+import reactUsage from '../snippets/textarea/usage.jsx?raw'
+import svelteUsage from '../snippets/textarea/usage.svelte?raw'
+
+const textareaFrameworks = [
+  {
+    id: 'vue',
+    label: 'Vue',
+    code: textareaSource,
+    filename: 'Textarea.vue',
+    destination: 'assets/js/components/ui/textarea/Textarea.vue'
+  },
+  {
+    id: 'react',
+    label: 'React',
+    code: reactSource,
+    filename: 'Textarea.jsx',
+    destination: 'assets/js/components/ui/textarea/Textarea.jsx'
+  },
+  {
+    id: 'svelte',
+    label: 'Svelte',
+    code: svelteSource,
+    filename: 'Textarea.svelte',
+    destination: 'assets/js/components/ui/textarea/Textarea.svelte'
+  }
+]
+
+const textareaUsage = [
+  { id: 'vue', label: 'Vue', code: vueUsage, filename: 'NoteField.vue' },
+  { id: 'react', label: 'React', code: reactUsage, filename: 'NoteField.jsx' },
+  { id: 'svelte', label: 'Svelte', code: svelteUsage, filename: 'NoteField.svelte' }
+]
 
 const note = ref(
   'This value represents a draft restored by the application.\n\nTextarea derives its height from the value already rendered.'
@@ -61,14 +95,16 @@ Textarea is a styled native control with one durable behavior: its presentation 
 <KleanInstallation
   id="textarea-installation"
   component="textarea"
-  :source="textareaSource"
-  filename="Textarea.vue"
-  destination="assets/js/components/ui/textarea/Textarea.vue"
+  :frameworks="textareaFrameworks"
 />
 
 ## Native form recipe
 
-<CopyCode :code="usageSource" label="usage.vue" />
+<KleanFrameworkCode
+  id="textarea-usage"
+  :frameworks="textareaUsage"
+  label="Textarea usage framework"
+/>
 
 The surrounding label, help, error, IDs, validation, and value source remain ordinary application markup. Keep help and error nodes stable, bind `aria-invalid` to the boolean error state, and hide an empty error with `empty:hidden`. There is no Field context, accessibility helper, or `autoGrow` switch.
 
@@ -97,6 +133,16 @@ Textarea accepts native textarea attributes, framework-native value binding, and
 - Do not use placeholder text as the label.
 - Caller-owned fixed sizing must preserve usable content access and keyboard operation.
 - Focus remains visible and decorative transitions respect reduced motion.
+
+## Complete framework source
+
+The live preview demonstrates the shared native and content-derived sizing contract. Copy the complete framework-native source for your application:
+
+<KleanFrameworkCode
+  id="textarea-complete-source"
+  :frameworks="textareaFrameworks"
+  label="Textarea source framework"
+/>
 
 ## Related components
 

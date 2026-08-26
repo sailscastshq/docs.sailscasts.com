@@ -1,5 +1,6 @@
 <script setup>
 import { computed, nextTick, ref } from 'vue'
+import { useKleanFramework } from '../composables/useKleanFramework.js'
 import CopyCode from './CopyCode.vue'
 
 const props = defineProps({
@@ -9,7 +10,11 @@ const props = defineProps({
   },
   source: {
     type: String,
-    required: true
+    default: ''
+  },
+  frameworks: {
+    type: Array,
+    default: undefined
   },
   component: {
     type: String,
@@ -61,7 +66,7 @@ const packageManagers = computed(() => [
   }
 ])
 
-const sourceFiles = computed(() =>
+const fallbackSourceFiles = computed(() =>
   props.files?.length
     ? props.files
     : [
@@ -69,6 +74,29 @@ const sourceFiles = computed(() =>
           filename: props.filename,
           destination: props.destination,
           source: props.source
+        }
+      ]
+)
+
+const frameworkOptions = computed(() =>
+  props.frameworks?.length
+    ? props.frameworks.map((framework) => ({
+        ...framework,
+        files: framework.files?.length
+          ? framework.files
+          : [
+              {
+                filename: framework.filename,
+                destination: framework.destination,
+                source: framework.source ?? framework.code
+              }
+            ]
+      }))
+    : [
+        {
+          id: 'vue',
+          label: 'Vue',
+          files: fallbackSourceFiles.value
         }
       ]
 )
@@ -81,6 +109,8 @@ const activeMethod = ref('command')
 const activePackageManager = ref('npm')
 const methodRefs = ref([])
 const packageManagerRefs = ref([])
+const frameworkRefs = ref([])
+const { activeFramework, selectFramework } = useKleanFramework(frameworkOptions)
 
 function methodTabId(method) {
   return `${props.id}-${method}-tab`
@@ -96,6 +126,14 @@ function packageManagerTabId(packageManager) {
 
 function packageManagerPanelId(packageManager) {
   return `${props.id}-${packageManager}-panel`
+}
+
+function frameworkTabId(framework) {
+  return `${props.id}-${framework}-framework-tab`
+}
+
+function frameworkPanelId(framework) {
+  return `${props.id}-${framework}-framework-panel`
 }
 
 async function selectTab(value, refs, options, focusTab) {
@@ -127,6 +165,11 @@ function selectMethod(method, focusTab = false) {
 function selectPackageManager(packageManager, focusTab = false) {
   activePackageManager.value = packageManager
   selectTab(packageManager, packageManagerRefs, packageManagers.value, focusTab)
+}
+
+function chooseFramework(framework, focusTab = false) {
+  selectFramework(framework)
+  selectTab(framework, frameworkRefs, frameworkOptions.value, focusTab)
 }
 </script>
 
@@ -224,17 +267,55 @@ function selectPackageManager(packageManager, focusTab = false) {
       tabindex="0"
       class="klean-installation__panel"
     >
-      <ol class="klean-installation__steps">
-        <li>
-          <h3>Install direct dependencies</h3>
-          <CopyCode :code="dependencyCommand" label="Terminal" />
-        </li>
-        <li v-for="file in sourceFiles" :key="file.destination">
-          <h3>Copy {{ file.filename }}</h3>
-          <CopyCode :code="file.source" :label="file.filename" />
-          <CopyCode :code="file.destination" label="Destination" />
-        </li>
-      </ol>
+      <div
+        v-if="frameworkOptions.length > 1"
+        class="klean-installation__frameworks"
+        role="tablist"
+        aria-label="Manual installation framework"
+      >
+        <button
+          v-for="(framework, index) in frameworkOptions"
+          :id="frameworkTabId(framework.id)"
+          :key="framework.id"
+          :ref="(element) => (frameworkRefs[index] = element)"
+          type="button"
+          role="tab"
+          :aria-selected="activeFramework === framework.id"
+          :aria-controls="frameworkPanelId(framework.id)"
+          :tabindex="activeFramework === framework.id ? 0 : -1"
+          @click="chooseFramework(framework.id)"
+          @keydown="
+            handleTabKeydown($event, index, frameworkOptions, chooseFramework)
+          "
+        >
+          {{ framework.label }}
+        </button>
+      </div>
+
+      <div
+        v-for="framework in frameworkOptions"
+        v-show="activeFramework === framework.id"
+        :id="frameworkPanelId(framework.id)"
+        :key="framework.id"
+        :role="frameworkOptions.length > 1 ? 'tabpanel' : undefined"
+        :aria-labelledby="
+          frameworkOptions.length > 1 ? frameworkTabId(framework.id) : undefined
+        "
+        :tabindex="frameworkOptions.length > 1 ? 0 : undefined"
+        class="klean-installation__framework-panel"
+      >
+        <ol class="klean-installation__steps">
+          <li>
+            <h3>Install direct dependencies</h3>
+            <CopyCode :code="dependencyCommand" label="Terminal" />
+          </li>
+          <li v-for="file in framework.files" :key="file.destination">
+            <h3>Copy {{ file.filename }}</h3>
+            <CopyCode :code="file.source" :label="file.filename" />
+            <CopyCode :code="file.destination" label="Destination" />
+          </li>
+        </ol>
+      </div>
     </section>
   </div>
 </template>
@@ -258,7 +339,8 @@ function selectPackageManager(packageManager, focusTab = false) {
 }
 
 .klean-installation__methods button,
-.klean-installation__packages button {
+.klean-installation__packages button,
+.klean-installation__frameworks button {
   position: relative;
   border: 0;
   background: transparent;
@@ -317,7 +399,21 @@ function selectPackageManager(packageManager, focusTab = false) {
   margin-bottom: 0.75rem;
 }
 
-.klean-installation__packages button {
+.klean-installation__frameworks {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  gap: 0.25rem;
+  overflow-x: auto;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 0.65rem;
+  background: var(--vp-c-bg-soft);
+  padding: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.klean-installation__packages button,
+.klean-installation__frameworks button {
   min-height: 2.5rem;
   border-radius: 0.5rem;
   padding: 0 0.8rem;
@@ -329,15 +425,31 @@ function selectPackageManager(packageManager, focusTab = false) {
   color: var(--vp-c-text-1);
 }
 
+.klean-installation__frameworks button:hover {
+  color: var(--vp-c-text-1);
+}
+
 .klean-installation__packages button[aria-selected='true'] {
   background: var(--vp-c-bg-mute);
   color: var(--vp-c-text-1);
 }
 
+.klean-installation__frameworks button[aria-selected='true'] {
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 8%);
+}
+
 .klean-installation__methods button:focus-visible,
-.klean-installation__packages button:focus-visible {
+.klean-installation__packages button:focus-visible,
+.klean-installation__frameworks button:focus-visible,
+.klean-installation__framework-panel:focus-visible {
   outline: 2px solid var(--vp-c-text-2);
   outline-offset: 2px;
+}
+
+.klean-installation__framework-panel {
+  outline: none;
 }
 
 .klean-installation__summary {

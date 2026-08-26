@@ -1,22 +1,56 @@
 ---
 title: Button
 titleTemplate: Klean UI
-description: A native-first Klean UI action primitive with behavioral props and Tailwind as its visual API.
+description: A native-first Klean UI action primitive for Vue, React, and Svelte with behavioral props and Tailwind as its visual API.
 outline: [2, 3]
 ---
 
 <script setup>
-import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanButton from '../../.vitepress/theme/components/klean/Button.vue'
 import ProductLoader from '../../.vitepress/theme/components/klean/spinner/ProductLoader.vue'
 import KleanSpinner from '../../.vitepress/theme/components/klean/spinner/Spinner.vue'
 import buttonSource from '../../.vitepress/theme/components/klean/Button.vue?raw'
-import basicUsage from '../snippets/button/usage.vue?raw'
+import reactSource from '../sources/button/Button.jsx?raw'
+import svelteSource from '../sources/button/Button.svelte?raw'
+import vueUsage from '../snippets/button/usage.vue?raw'
+import reactUsage from '../snippets/button/usage.jsx?raw'
+import svelteUsage from '../snippets/button/usage.svelte?raw'
 import pendingUsage from '../snippets/button/pending.vue?raw'
 import semanticUsage from '../snippets/button/semantics.vue?raw'
 import productRecipes from '../snippets/button/products.vue?raw'
+
+const buttonFrameworks = [
+  {
+    id: 'vue',
+    label: 'Vue',
+    code: buttonSource,
+    filename: 'Button.vue',
+    destination: 'assets/js/components/ui/button/Button.vue'
+  },
+  {
+    id: 'react',
+    label: 'React',
+    code: reactSource,
+    filename: 'Button.jsx',
+    destination: 'assets/js/components/ui/button/Button.jsx'
+  },
+  {
+    id: 'svelte',
+    label: 'Svelte',
+    code: svelteSource,
+    filename: 'Button.svelte',
+    destination: 'assets/js/components/ui/button/Button.svelte'
+  }
+]
+
+const buttonUsage = [
+  { id: 'vue', label: 'Vue', code: vueUsage, filename: 'SaveButton.vue' },
+  { id: 'react', label: 'React', code: reactUsage, filename: 'SaveButton.jsx' },
+  { id: 'svelte', label: 'Svelte', code: svelteUsage, filename: 'SaveButton.svelte' }
+]
 </script>
 
 # Button
@@ -48,11 +82,21 @@ There are intentionally no `variant`, `size`, `color`, `tone`, `radius`, `elevat
 
 The standard Boring Stack path requires no `init`, `klean-ui.json`, alias prompt, or generated `cn.js`. The installer detects the framework and conventional source paths.
 
-<KleanInstallation id="button-installation" :source="buttonSource" />
+<KleanInstallation
+  id="button-installation"
+  component="button"
+  :frameworks="buttonFrameworks"
+/>
 
 ## Usage
 
-<CopyCode :code="basicUsage" label="usage.vue" />
+Choose a framework. The preference is remembered across Klean component pages, while the command remains the same because the CLI detects the application.
+
+<KleanFrameworkCode
+  id="button-usage"
+  :frameworks="buttonUsage"
+  label="Button usage framework"
+/>
 
 Visual styling stays in the framework's ordinary class API. If the same product treatment repeats, create an application-owned component such as `PrimaryButton.vue` using Button as its semantic base.
 
@@ -154,6 +198,16 @@ Klean's neutral default stays motionless and uses tonal feedback. Hagfish delibe
 - Disabled links leave the tab order and cannot activate.
 - Processing indicators are decorative when the visible label already describes the state.
 - Base interaction is motionless, and transitions are removed for reduced-motion preferences.
+
+## Complete framework source
+
+The live preview demonstrates the shared semantic contract. Copy the complete framework-native source that belongs in your application:
+
+<KleanFrameworkCode
+  id="button-complete-source"
+  :frameworks="buttonFrameworks"
+  label="Button source framework"
+/>
 
 ## Related components
 
