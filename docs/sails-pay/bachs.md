@@ -10,14 +10,14 @@ prev:
   text: Paystack
   link: /sails-pay/paystack
 next:
-  text: Creating checkouts
-  link: /sails-pay/checkout
+  text: Bachs Connect
+  link: /sails-pay/bachs-connect
 editLink: true
 ---
 
 # Bachs
 
-[Bachs](https://bachs.io) is a billing and payments platform for hosted checkout, product-based payments, webhook-confirmed collections, refunds, and multi-currency payment flows.
+[Bachs](https://bachs.io) is a billing and payments platform for hosted checkout, product-based payments, webhook-confirmed collections, refunds, multi-currency payment flows, and marketplace payouts through Bachs Connect.
 
 The `@sails-pay/bachs` adapter lets Sails applications create Bachs hosted checkouts through the same `sails.pay.checkout()` API used by other Sails Pay providers.
 
@@ -32,6 +32,18 @@ Relevant Bachs capabilities include:
 - **Customer portal sessions**: Create fresh, short-lived billing management URLs with `sails.pay.customer.portal({ customerId })`.
 - **Webhook signatures**: Verify `X-Bachs-Timestamp` and `X-Bachs-Signature` using HMAC SHA-256.
 - **Refunds**: Create full or partial refunds for completed charges.
+- **Connected accounts**: Create recipient accounts and hosted onboarding links.
+- **Transfers and balances**: Fund recipient balances from the platform and reconcile each movement.
+- **Contributor payouts**: Resolve banks, register destinations, and withdraw a connected-account balance.
+
+## Bachs Connect
+
+`@sails-pay/bachs` 0.0.4 and later includes the recipient onboarding and payout
+surface needed by marketplaces and contributor networks.
+
+See [Bachs Connect](/sails-pay/bachs-connect) for the complete method reference,
+required capabilities, money flow, webhook lifecycle, and a same-currency
+contributor payout example.
 
 ## Getting started with Bachs
 
@@ -389,6 +401,7 @@ const refund = await sails.pay.refund.create({
 
 ## Next steps
 
+- [Bachs Connect](/sails-pay/bachs-connect) - Onboard and pay contributors
 - [Creating checkouts](/sails-pay/checkout) - Redirect users to complete payment
 - [Create a customer portal session](#customer-portal) - Let customers manage billing
 - [Verify transaction](/sails-pay/verify-transaction) - Confirm charge status
