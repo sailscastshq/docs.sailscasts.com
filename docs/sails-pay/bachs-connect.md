@@ -64,21 +64,17 @@ it does not yet provide payout quote creation for cross-currency withdrawals,
 payout schedules, account listing, transfer listing, or direct connected-account
 charge helpers. Use a single currency for the flow on this page.
 
-## Configure a named provider
+## Configure Bachs as the provider
 
-Applications commonly use one provider for incoming payments and Bachs Connect
-for outgoing marketplace or contributor payouts. Configure Bachs as a named
-provider so each call makes the payment direction explicit.
+Bachs can handle hosted checkout, signed collection events, and Connect payouts
+in the same application. Configure it as the default provider when Bachs owns
+both directions of the money flow.
 
 ```js
 // config/pay.js
 module.exports.pay = {
-  provider: 'paystack',
+  provider: 'bachs',
   providers: {
-    paystack: {
-      adapter: '@sails-pay/paystack',
-      secretKey: process.env.PAYSTACK_SECRET_KEY
-    },
     bachs: {
       adapter: '@sails-pay/bachs',
       apiKey: process.env.BACHS_API_KEY,
@@ -89,11 +85,19 @@ module.exports.pay = {
 }
 ```
 
-Select it once in application code:
+You can use the default checkout API and select Bachs once for Connect calls:
 
 ```js
+const checkoutUrl = await sails.pay.checkout({
+  // Bachs checkout inputs
+})
+
 const bachs = sails.pay.provider('bachs')
 ```
+
+If an application deliberately configures several payment providers, keep the
+same `providers.bachs` block and select `provider('bachs')` explicitly for each
+Bachs operation.
 
 Use a sandbox key beginning with `sk_sandbox_` while developing. The adapter
 selects `https://sandbox-api.bachs.io` for sandbox keys unless `baseUrl` is
