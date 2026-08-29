@@ -243,7 +243,9 @@ const recovery = await bachs.transfer.create({
 })
 ```
 
-The adapter maps `accountId` to Bachs' connected-account header. A recovery only
+For transfer recovery, the adapter maps `accountId` to
+`X-Connected-Account-ID`. Bachs uses the distinct `X-Account-Id` header for
+account-scoped balances, destinations, and withdrawals. A recovery only
 succeeds while the connected account still has the available balance.
 
 ## Check available balances
