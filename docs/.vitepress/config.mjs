@@ -647,6 +647,11 @@ function SailsPayGuide() {
       items: [{ text: 'Creating checkouts', link: 'sails-pay/checkout' }]
     },
     {
+      text: 'Connect',
+      collapsed: false,
+      items: [{ text: 'Bachs Connect', link: 'sails-pay/bachs-connect' }]
+    },
+    {
       text: 'Transactions',
       collapsed: false,
       items: [
