@@ -67,7 +67,7 @@ const usageFrameworks = [
 
 # Icons
 
-Klean Icons is a small, original SVG family drawn from the actions and objects that repeat across Slipway and Hagfish. Every mark uses the same 24px canvas, calm 1.5px stroke, rounded joins, and optical rhythm.
+Klean Icons is a focused family of 98 original SVGs drawn from the actions and objects that repeat across Slipway and Hagfish. Every mark uses the same 24px canvas, calm 1.5px stroke, rounded joins, and optical rhythm.
 
 There is no icon font, runtime package, provider, icon registry in the browser, size prop, color prop, or variant API. Install only the source you use. Then style ordinary SVG with Tailwind or native attributes.
 
