@@ -96,6 +96,7 @@ function kleanUiGuide() {
       collapsed: false,
       items: [
         { text: 'Introduction', link: '/klean-ui/' },
+        { text: 'Launch', link: '/klean-ui/launch' },
         { text: 'Installation', link: '/klean-ui/installation' },
         { text: 'Updating', link: '/klean-ui/updating' }
       ]
