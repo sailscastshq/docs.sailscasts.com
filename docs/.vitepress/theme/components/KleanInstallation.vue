@@ -305,7 +305,7 @@ function chooseFramework(framework, focusTab = false) {
         class="klean-installation__framework-panel"
       >
         <ol class="klean-installation__steps">
-          <li>
+          <li v-if="dependencies.length">
             <h3>Install direct dependencies</h3>
             <CopyCode :code="dependencyCommand" label="Terminal" />
           </li>
