@@ -118,6 +118,7 @@ function kleanUiGuide() {
         { text: 'Avatar', link: '/klean-ui/components/avatar' },
         { text: 'Badge', link: '/klean-ui/components/badge' },
         { text: 'Button', link: '/klean-ui/components/button' },
+        { text: 'Icons', link: '/klean-ui/components/icons' },
         { text: 'Card', link: '/klean-ui/components/card' },
         { text: 'Input', link: '/klean-ui/components/input' },
         { text: 'Tags Input', link: '/klean-ui/components/tags-input' },
