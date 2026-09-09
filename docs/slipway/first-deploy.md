@@ -140,12 +140,12 @@ Most Sails apps need environment variables. Set them before or after deploying:
 
 ```bash
 # Set individual variables
-slipway env:set myapp DATABASE_URL=postgres://...
-slipway env:set myapp SESSION_SECRET=your-secret-key
-slipway env:set myapp NODE_ENV=production
+slipway env:set DATABASE_URL=postgres://...
+slipway env:set SESSION_SECRET=your-secret-key
+slipway env:set NODE_ENV=production
 
 # Or set multiple at once
-slipway env:set myapp \
+slipway env:set \
   DATABASE_URL=postgres://... \
   SESSION_SECRET=your-secret-key \
   NODE_ENV=production
@@ -162,13 +162,13 @@ slipway slide
 
 ## Add a Custom Domain
 
-Give your app a proper domain:
+Assign one custom hostname to the production environment from your linked project directory:
 
 ```bash
-slipway domain:add myapp myapp.example.com
+slipway environment:update production --domain myapp.example.com
 ```
 
-Then point your DNS to your Slipway server's IP address. SSL will be provisioned automatically via Caddy.
+Point DNS to your Slipway server's public IP and allow ports 80 and 443. Saving verifies the proxy route, not DNS propagation or certificate issuance. Open the HTTPS URL to verify it. See [Custom Domain & SSL](/slipway/custom-domain) for removal, fallback access, and troubleshooting.
 
 ## View Logs
 
@@ -176,19 +176,17 @@ Check your application logs:
 
 ```bash
 # View recent logs
-slipway logs myapp
+slipway logs --env production
 
 # Tail logs in real-time
-slipway logs myapp -t
+slipway logs --env production --follow
 ```
 
 ## Open the Helm (REPL)
 
 Need to debug or query your production data? Open the Helm:
 
-```bash
-slipway helm myapp
-```
+Open the deployed app in the dashboard and choose **Helm** from its tools menu.
 
 ```javascript
 Slipway Helm (myapp production)
