@@ -19,6 +19,8 @@ editLink: true
 
 Slipway provisions and manages databases for your Sails applications from the same platform.
 
+For another trusted container image, use [private custom services](/slipway/custom-services). Custom images do not receive database-specific backup or schema tools.
+
 ## Supported Databases
 
 | Database       | Type       | Use Case                        |

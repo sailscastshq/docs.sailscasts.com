@@ -1112,6 +1112,7 @@ function slipwayGuide() {
         { text: 'Secrets', link: '/slipway/secrets' },
         { text: 'File Uploads', link: '/slipway/file-uploads' },
         { text: 'Database Services', link: '/slipway/database-services' },
+        { text: 'Custom Services', link: '/slipway/custom-services' },
         {
           text: 'Multi-App Environments',
           link: '/slipway/multi-app'
