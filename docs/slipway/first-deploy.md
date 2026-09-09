@@ -31,12 +31,12 @@ Before deploying, make sure:
 If your Sails app doesn't have a Dockerfile yet, here's a simple one to get started:
 
 ```dockerfile
-FROM node:20-alpine
+FROM node:24-alpine
 
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci --production
+RUN npm ci --omit=dev
 
 COPY . .
 
@@ -60,9 +60,9 @@ slipway init
 This will:
 
 1. Prompt you for a project name (defaults to your package.json name)
-2. Check for a Dockerfile
-3. Create the project in Slipway
-4. Save a `.slipway.json` config file locally
+2. Create the project in Slipway
+3. Save a `.slipway.json` config file locally
+4. Show the initial server-owned deployment readiness report
 
 ```
   Initialize Slipway Project
@@ -86,6 +86,37 @@ slipway link my-sails-app
 ```
 
 :::
+
+## Check deployment readiness
+
+Push the source you want to inspect, then request its readiness report:
+
+```bash
+slipway push
+slipway readiness --env production
+```
+
+The app and environment pages show the same server-owned report. Use `--app web` to select an app, or `--json` for the structured result. The report identifies its source fingerprint and configured health path. Refresh it after source or configuration changes.
+
+**Required checks** block a deployment when a problem is proven, such as a missing Dockerfile, an unsupported Node runtime, or a missing explicitly required variable. **Recommendations** do not disable deployment. **Optional capabilities** describe packages such as `sails-hook-slipway`, which unlocks configured Bridge and Lookout features but is not required just to deploy.
+
+Managed databases and Redis are optional. A configured external connection is accepted without requiring a managed service; the app must still establish that connection during startup. Redis guidance follows the app's production session/socket configuration. Apps that need sessions to survive restarts should use an appropriate durable session store.
+
+The app must honor `PORT=1337`, bind to `0.0.0.0`, and serve a successful HTTP response at its configured health path (default `/health`). Slipway checks the actual deployment snapshot and probes the candidate before switching traffic. A previous successful probe does not verify changed source or settings.
+
+To make specific variables required, declare their names in package.json:
+
+```json
+{
+  "slipway": {
+    "readiness": {
+      "requiredEnv": ["DATABASE_URL", "PAYMENT_KEY"]
+    }
+  }
+}
+```
+
+Only explicitly declared requirements are blockers. Missing names can appear in the report; secret values never do. Dynamic configuration that cannot be verified remains advisory. Use an actively supported Node LTS release; the example above uses Node 24.
 
 ## Deploy Your App
 
