@@ -144,6 +144,20 @@ Slipway only automates tested adjacent major-version upgrades. It does not autom
 After an upgrade, verify application reads and writes before deleting the retained previous container or volume. The service settings page records the exact previous container and backup used for recovery.
 :::
 
+## Private backup storage
+
+In **Settings → File storage → Backup storage**, keep the existing private R2/S3/Spaces configuration or select separate **S3-compatible storage** or **Azure Blob Storage**. Public upload settings remain separate; Azure is offered for private backups only.
+
+For Azure, enter an existing private container and storage account. Prefer a container-scoped SAS token with read, write, delete permissions and a future expiry. Encrypted account keys are also supported. Credentials are never returned to the browser. Custom endpoints are optional; HTTP requires explicit opt-in for a trusted private network.
+
+**Test connection** verifies a temporary upload, download, checksum, anonymous-access rejection and deletion. **Save** repeats that verification before storing the configuration. Backup objects must deny anonymous reads; an existing public upload bucket may need a separate private backup bucket.
+
+Manual and scheduled database backups, restore downloads, retention deletion, service upgrades and pre-update Slipway database snapshots use this storage. Existing S3 backup records remain supported. New backups retain their original provider and encrypted connection when settings change; saving verified replacement credentials for the same location also renews matching backup records.
+
+Transfers have size/time limits and checksum verification. Failed object deletion preserves the backup record for a later retry. Provider-managed historical versions and soft-delete retention follow the provider's lifecycle rules; Slipway's retention count controls current backup objects, not all historical bytes. Keep the instance encryption keys with recovery material.
+
+The automated contract uses local S3 and Azure emulators, including real SDK transfers, scoped SAS, cancellation, cleanup, credential renewal and the backup lifecycle. Before relying on a new provider, create a backup and restore it into a disposable database to verify its contents and your real network/account policy.
+
 ## Connecting Directly
 
 Need to run SQL queries or inspect data? Connect directly to your database:
