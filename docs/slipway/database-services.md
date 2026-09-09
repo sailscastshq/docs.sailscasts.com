@@ -525,3 +525,19 @@ Common issues:
 - Learn about [Helm](/slipway/helm) for querying your database via the Sails REPL
 - Set up [Environment Variables](/slipway/environment-variables) for other configuration
 - Configure [Auto-Deploy](/slipway/auto-deploy) for continuous deployment
+
+## External PostgreSQL
+
+You can connect an existing PostgreSQL 14–17 database to an environment without moving it to Slipway's Docker host. Under **Add service**, select **External PostgreSQL**, name the connection, enter its PostgreSQL URL, and select **Connect**. Then use **Verify connection** on the service page. Registering and editing connections requires a team owner or administrator.
+
+Verification reports **Unverified**, **Reachable**, or **Unreachable**. It checks access from Slipway's client network, including DNS, TCP, TLS, authentication and read permissions. Reachable describes the last check; a successful backup confirms actual dump access. It is not continuous monitoring or a high-availability guarantee.
+
+Verified TLS is the default. The hostname must match the server certificate; an optional PEM CA supports private trust chains. Unverified encryption or plaintext requires explicit acknowledgement. Allow the Slipway server's outbound address through your database firewall, and make private DNS/VPN routes available from the `slipway` Docker network. No inbound public database port is opened. The URL accepts only the `sslmode` query parameter, matching the selected TLS setting.
+
+Slipway saves the encrypted connection as a managed secret: `DATABASE_URL` if available, otherwise `<SERVICE_NAME>_URL`. A custom CA is available as `<CONNECTION_VARIABLE>_CA_CERT`. Configure your application's database driver to use the appropriate TLS policy and CA; Slipway's verification configures its own client, not arbitrary application libraries. Readiness recognizes the verified connection when it matches the effective runtime configuration. Existing variables are preserved and saved connection values are omitted from browser/API responses.
+
+Use **Edit connection** to rotate credentials. Blank URL and CA fields keep saved values. Saving resets verification and preserves unrelated variables. Verify again and redeploy applications to apply changed connection settings; running apps are not restarted automatically.
+
+After configuring private backup storage and verifying the connection, create a manual backup or include the service in the instance backup schedule. Slipway uses a temporary PostgreSQL 17 client pinned to an immutable image, with bounded resources, private memory-backed credentials, and size/time-limited dumps. Existing private storage, checksum, notification and retention handling applies. Docker and access to the PostgreSQL client image are required; interrupted client cleanup is retried.
+
+These are single-database logical backups, not physical snapshots or point-in-time recovery. **Restore into an external database is disabled.** Recover through your provider or a reviewed `pg_restore` workflow into a separate database, verify the result, then deliberately change your application's connection. Slipway does not stop, restart, upgrade or delete the external database server. Existing managed database services keep their current lifecycle.
