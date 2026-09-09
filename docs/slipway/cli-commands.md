@@ -174,6 +174,16 @@ slipway push [--env <environment>]
 
 Useful when you want to upload code separately from triggering a deployment.
 
+### readiness
+
+Inspect the current server-side source and effective app/environment configuration with the same report shown in the dashboard.
+
+```bash
+slipway readiness [--env production] [--app web] [--json]
+```
+
+Push source first with `slipway push`. Required checks produce a nonzero exit code; recommendations and optional capabilities do not block deployment. The report includes its source fingerprint, health path, evidence, and fixes. See [Your First Deploy](/slipway/first-deploy#check-deployment-readiness).
+
 ### deployments
 
 List recent deployments.
