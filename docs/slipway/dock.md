@@ -192,21 +192,24 @@ drop extra tables, collections, or columns automatically.
 An explicit Waterline `columnType` is used as the desired physical type. Review
 it carefully because it bypasses the normal logical type mapping.
 
-### Apply a migration
+### Native schema and semantic differences
 
-Select the model groups, read every generated statement, choose **Apply
-Migration**, and confirm the count. Dock executes statements sequentially and
-stops on the first failure. The response reports each successful statement and
-the failing one.
+Dock reads a canonical physical schema before comparing models. Native defaults, keys, constraints and indexes are retained during inspection instead of reducing the database to logical Waterline types. The diff distinguishes equivalent definitions from real changes. A change that cannot be verified is blocked, rather than presented as an executable guess.
 
-Dock does not automatically wrap the whole generated list in a transaction.
-Earlier statements can remain applied if a later statement fails. Recompute
-the diff before retrying.
+PostgreSQL and MySQL previews use the native engine and current schema in an isolated preflight. Live data checks can still find values that violate a proposed constraint. Preflight does not make arbitrary production changes safe; review the SQL and test your application's behavior.
+
+### Apply a reviewed plan
+
+Only team owners and administrators can execute generated migrations. The server creates a plan bound to the operator, target database, app source, model metadata and schema. The preview expires after five minutes; refresh after a deployment, schema change or Slipway restart. The apply endpoint accepts the plan identity and selected operation IDs, not executable SQL supplied by the browser.
+
+**Automatic whole-plan execution is available for PostgreSQL and for SQLite through Bosun. MySQL and MongoDB automatic apply remain unavailable until a whole-plan recovery workflow is verified.** You can inspect their differences, but should use a reviewed database-native migration workflow for execution.
+
+For supported plans, Slipway locks the target, rechecks the schema and source, executes the selected operations in a transaction, and verifies the resulting schema and row counts before commit. SQLite also checks database integrity and foreign keys; higher-risk rebuilds require a verified backup. PostgreSQL uses a single transaction with bounded lock and statement waits. Failed verification rolls back the transaction. If the connection is lost around commit, inspect the resulting schema and refresh the preview before attempting another change.
+
+Review, execution and verification are audited. A saved preview does not remain valid after its underlying source or database changes.
 
 ::: warning Back up and stage schema changes
-Generated SQL is a useful translation of model metadata, not a proof that the
-data can satisfy a new constraint. Test the same change in staging, inspect
-existing nulls and duplicates, and create a backup before production.
+Review generated SQL, test the same change in staging and keep a recoverable backup. Schema and row-count verification do not prove that every application-level business rule still holds.
 :::
 
 ## Initialize an empty database
@@ -218,7 +221,7 @@ Dock can still build a diff from pushed source:
 2. create and start the database service;
 3. open **Dock → Migrate** for that service;
 4. verify that model source was loaded and review the generated tables;
-5. apply the migration; and
+5. apply a verified plan for a supported engine, or use your reviewed database-native migration workflow; and
 6. redeploy or restart the application.
 
 If Dock reports `modelsSourceNotFound`, push source before trying again.

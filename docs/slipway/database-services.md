@@ -146,6 +146,8 @@ Slipway only automates tested adjacent major-version upgrades. It does not autom
 After an upgrade, verify application reads and writes before deleting the retained previous container or volume. The service settings page records the exact previous container and backup used for recovery.
 :::
 
+Detailed connection, credential-rotation and recovery guidance is available in [Private backup storage](/slipway/backup-storage) and [External PostgreSQL](/slipway/external-postgresql).
+
 ## Private backup storage
 
 In **Settings → File storage → Backup storage**, keep the existing private R2/S3/Spaces configuration or select separate **S3-compatible storage** or **Azure Blob Storage**. Public upload settings remain separate; Azure is offered for private backups only.

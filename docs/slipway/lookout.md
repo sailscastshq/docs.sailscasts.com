@@ -29,6 +29,8 @@ You can therefore start with a host or container problem, move into a slow
 request or exception, and inspect the exact application environment without
 maintaining a separate monitoring stack.
 
+For acquisition, visitor journeys, signup conversion and revenue, use [Wake](/slipway/wake). Wake has its own app setting, credential and analytics database; enabling Lookout does not enable Wake.
+
 ## Choose the right Lookout view
 
 | View                | Use it for                                                    | Data source             |

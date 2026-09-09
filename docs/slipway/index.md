@@ -51,12 +51,16 @@ features:
   - icon: 📊
     title: Infrastructure Monitoring
     details: Monitor server resources, container health, and app performance in real-time with Lookout.
+  - icon: 🌊
+    title: Product Analytics
+    details: Follow acquisition, activity and revenue with Wake. Consent controls, anonymous journeys and committed payment receipts stay on your infrastructure.
+    link: /slipway/wake
   - icon: ⏰
     title: Job Scheduling
     details: Schedule and manage background jobs with Quest. Cron tasks, recurring scripts, and deferred work.
   - icon: 💾
     title: Backups & Recovery
-    details: Automatic database backups with one-click restore. Never lose your production data.
+    details: Private S3-compatible and Azure backups for managed databases, plus logical backups for external PostgreSQL.
   - icon: 👥
     title: Team Collaboration
     details: Manage projects and team members. Control access and permissions across your organization.
