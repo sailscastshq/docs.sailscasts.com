@@ -166,9 +166,11 @@ bounded data.
 ## Migrate
 
 The **Migrate** tab compares Slipway's current Waterline model metadata with one
-of its three internal SQLite schemas. It is the production path for bringing an
-existing Slipway database forward when a release adds tables, columns, renamed
-attributes, or indexes.
+of the supported internal SQLite datastores: app, observability and cache.
+Slipway v0.0.65 prepares its new schema automatically during startup; you do
+not need to run SQL or apply a Bosun migration before that upgrade. Use this
+tab to inspect remaining model/schema drift. Wake analytics has a separate
+`db/analytics.db` managed by its own startup and maintenance helpers.
 
 The workflow is:
 
@@ -183,17 +185,24 @@ SQLite cannot perform every column alteration in place. When required, the
 generated migration rebuilds a table, copies compatible data, replaces the old
 table, and recreates indexes.
 
-Statements are executed in order. Bosun stops on the first error and reports
-which statements succeeded. It attempts `ROLLBACK` when an error occurs, but
-the whole list is not automatically wrapped in one transaction; statements
-that committed before the failure can remain applied. Re-run the diff before
-deciding what to do next.
+Only owners and administrators can execute a generated migration. Bosun creates
+a server-owned plan bound to the operator, selected database, source and schema.
+Plans expire after five minutes and do not survive a process restart. The
+apply endpoint accepts selected operation IDs, not browser-supplied SQL.
+
+Execution uses one SQLite transaction with a write lock. Higher-risk rebuilds
+require a verified backup. Bosun rechecks the schema and source, preserves
+supported native objects, and verifies the resulting diff, row counts, integrity
+and foreign keys before commit. Unverified rebuilds are blocked. A failure
+before commit rolls back the plan. If the outcome is unknown after a connection
+interruption, inspect the current schema and refresh the preview before retrying.
 
 ::: warning Back up before migrating
 The Migrate tab is safer than pasting generated SQL blindly because it derives
 and previews the diff, but it still modifies the live internal database. Keep a
-copy of the relevant `db/*.db` file or a current server backup before applying
-a release migration.
+consistent database backup before applying a migration. Use SQLite’s online
+backup API or stop Slipway and preserve the database with outstanding WAL state;
+copying only a live `.db` file is not a consistent backup.
 :::
 
 ## Environment
@@ -261,11 +270,12 @@ Confirm the selected database. Then open **Migrate** and inspect its diff. Do
 not create an empty replacement table manually unless the generated migration
 cannot represent the required change.
 
-### A migration partially fails
+### A migration fails or its result is unknown
 
-Read the per-statement results, take a fresh backup or copy before further
-changes, and recompute the diff. Earlier successful statements may already be
-present.
+Read the failure and refresh the diff. Verified plans roll back on failure
+before commit. If the connection was interrupted around commit, verify the
+current schema before retrying; do not replay an expired plan or paste its SQL
+into the console.
 
 ### An environment change has no effect
 

@@ -1028,6 +1028,7 @@ function slipwayGuide() {
       collapsed: false,
       items: [
         { text: 'Overview', link: '/slipway/' },
+        { text: 'What’s new in v0.0.65', link: '/slipway/whats-new' },
         { text: 'What is Slipway?', link: '/slipway/what-is-slipway' },
         { text: 'Why Slipway?', link: '/slipway/why-slipway' },
         { text: 'The Name', link: '/slipway/the-name' },
@@ -1113,6 +1114,8 @@ function slipwayGuide() {
         { text: 'File Uploads', link: '/slipway/file-uploads' },
         { text: 'Database Services', link: '/slipway/database-services' },
         { text: 'Custom Services', link: '/slipway/custom-services' },
+        { text: 'Private Backup Storage', link: '/slipway/backup-storage' },
+        { text: 'External PostgreSQL', link: '/slipway/external-postgresql' },
         {
           text: 'Multi-App Environments',
           link: '/slipway/multi-app'
@@ -1125,12 +1128,23 @@ function slipwayGuide() {
       items: [
         { text: 'Helm', link: '/slipway/helm' },
         { text: 'Bridge', link: '/slipway/bridge' },
+        { text: 'Support Views', link: '/slipway/bridge-support' },
         { text: 'Bearing', link: '/slipway/bearing' },
         { text: 'Content', link: '/slipway/content' },
         { text: 'Quest', link: '/slipway/quest' },
         { text: 'Dock', link: '/slipway/dock' },
         { text: 'Lookout', link: '/slipway/lookout' },
         { text: 'Bosun', link: '/slipway/bosun' }
+      ]
+    },
+    {
+      text: 'Wake',
+      collapsed: false,
+      items: [
+        { text: 'Overview and Setup', link: '/slipway/wake' },
+        { text: 'Collection and Consent', link: '/slipway/wake-collection' },
+        { text: 'Goals and Revenue', link: '/slipway/wake-revenue' },
+        { text: 'Operations and Recovery', link: '/slipway/wake-operations' }
       ]
     },
     {

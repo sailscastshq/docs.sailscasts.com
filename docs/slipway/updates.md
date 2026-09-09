@@ -19,6 +19,24 @@ editLink: true
 
 Slipway includes built-in update detection and one-click updates from the dashboard.
 
+## Upgrading to v0.0.65
+
+[See everything new in this release](/slipway/whats-new), including Wake, Bridge support views, private backup providers, external PostgreSQL and custom-service routing and updates.
+
+**No manual SQL is required in Bosun before deploying this version.** Startup creates missing tables and adds missing columns for existing installations. Keep production migration mode at `safe`; do not set `SLIPWAY_MIGRATE=alter` or `drop` to perform this upgrade. These are Slipway's own schema changes, not migrations of your deployed apps' databases.
+
+Before the update, take a consistent backup of Slipway's database and retain its encryption keys. Preserve the existing `/app/db` volume. Wake adds `analytics.db` in that volume; existing analytics rows backfill automatically in bounded background batches. Review [Wake backup and recovery](/slipway/wake-operations#backup-and-restore) when backing up an instance that already collects analytics.
+
+Wake and Bridge support views remain off by default. To use them, install the app hook and redeploy the application after configuring the capability:
+
+```sh
+npm install sails-hook-slipway@0.0.10
+```
+
+Updating the Slipway instance alone does not upgrade dependencies inside deployed apps. Custom images do not automatically gain Sails-specific capabilities.
+
+The release image is `ghcr.io/sailscastshq/slipway:0.0.65`. [Release notes](https://github.com/sailscastshq/slipway/releases/tag/v0.0.65) describe compatibility and recovery boundaries.
+
 ## How It Works
 
 Slipway checks for new versions by querying the [GitHub Releases API](https://github.com/sailscastshq/slipway/releases) for the latest release. Checks are cached for 1 hour to respect rate limits. No data is sent to external servers — Slipway only reads the public release metadata.

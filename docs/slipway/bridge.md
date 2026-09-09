@@ -21,6 +21,8 @@ Bridge is Slipway's data management interface for Sails applications. It discove
 
 Use the zero-configuration interface for internal tools and early applications. Add a resource contract when Bridge should become a deliberately curated operational or content-management surface.
 
+Read-only customer support is a separate opt-in capability. See [Support views](/slipway/bridge-support) for **View as this user**, approved pages, session isolation and audit recovery. Ordinary Bridge record editing retains its existing permissions.
+
 ## Requirements
 
 - The target Sails app must be running.

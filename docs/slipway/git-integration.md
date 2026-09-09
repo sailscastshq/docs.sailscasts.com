@@ -325,3 +325,7 @@ jobs:
 - Set up [Auto-Deploy](/slipway/auto-deploy) with branch mappings and preview environments
 - Learn [How Deployments Work](/slipway/how-deployments-work)
 - Configure [Rollbacks](/slipway/rollbacks) for quick recovery
+
+## Repository listing
+
+Repository pickers load every GitHub API page instead of stopping at the first page. Listings are cached per connection context, so changing connections does not reuse another connection's repository list. The GitHub App installation must still have access to the repository; pagination does not grant additional permissions.
