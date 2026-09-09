@@ -27,7 +27,7 @@ Connections can be changed from the service detail page. Redeploy affected apps 
 
 Docker health checks report healthy, checking or unhealthy. A running image without a health check is **Unverified**. Refresh status reads Docker again; a missing container or repeated restart has an explanatory alert. Start/restart keeps the immutable image and saved definition. If the container is missing, Start recreates it using the same image ID and owned volumes. If that image is no longer available locally, creation fails safely instead of substituting a newer tag.
 
-Environment values and saved definitions are encrypted in Slipway's database. Reviews, API responses and audit records omit the values. Values are supplied to Docker through stdin, and exact occurrences of explicit service values are redacted in service logs. Images still control their own output; transformed or encoded credentials cannot be reliably identified. Docker administrators can inspect container environment values.
+Environment values and saved definitions are encrypted in Slipway's database. Reviews, API responses and audit records omit the values. Values are supplied through a private temporary file (in shared memory on Linux), removed immediately after container creation, and exact occurrences of explicit service values are redacted in service logs. Images still control their own output; transformed or encoded credentials cannot be reliably identified. Docker administrators can inspect container environment values.
 
 Removing a custom service uses Slipway's resumable cleanup. Data is retained by default; explicitly choosing purge removes its owned volumes. Container and volume ownership are checked before removal. A failed launch remains visible for diagnosis and cleanup.
 
