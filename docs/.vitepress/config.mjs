@@ -124,6 +124,7 @@ function kleanUiGuide() {
         { text: 'Input', link: '/klean-ui/components/input' },
         { text: 'Tags Input', link: '/klean-ui/components/tags-input' },
         { text: 'Textarea', link: '/klean-ui/components/textarea' },
+        { text: 'RichText', link: '/klean-ui/components/rich-text' },
         { text: 'Checkbox', link: '/klean-ui/components/checkbox' },
         { text: 'Radio', link: '/klean-ui/components/radio' },
         { text: 'Switch', link: '/klean-ui/components/switch' },

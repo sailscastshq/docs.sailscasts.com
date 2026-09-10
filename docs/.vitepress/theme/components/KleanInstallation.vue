@@ -101,9 +101,12 @@ const frameworkOptions = computed(() =>
       ]
 )
 
-const dependencyCommand = computed(
-  () => `npm install ${props.dependencies.join(' ')}`
-)
+const dependencyCommand = computed(() => {
+  const framework = frameworkOptions.value.find(
+    ({ id }) => id === activeFramework.value
+  )
+  return `npm install ${(framework?.dependencies ?? props.dependencies).join(' ')}`
+})
 
 const activeMethod = ref('command')
 const activePackageManager = ref('npm')

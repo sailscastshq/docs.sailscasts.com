@@ -45,6 +45,10 @@ A styled native input that forwards native attributes and framework-native value
 
 A styled native textarea whose durable presentation grows from its current value and responsive width. Caller Tailwind can take ownership of height and resizing without a component prop.
 
+### [RichText](/klean-ui/components/rich-text)
+
+One authoring field for formatted HTML or Markdown, with a compact toolbar, editable source, native form participation, and application-owned image uploads and draft recovery.
+
 ### [Checkbox](/klean-ui/components/checkbox)
 
 A native-first checked value for booleans, collection membership, and real indeterminate selection. Browser form and accessibility behavior stay intact while labels, groups, validation, and product styling remain visible application markup.
