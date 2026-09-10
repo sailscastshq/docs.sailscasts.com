@@ -146,6 +146,7 @@ The live preview demonstrates the shared native and content-derived sizing contr
 
 ## Related components
 
+- [RichText](/klean-ui/components/rich-text) — formatted HTML or Markdown with visual editing and source access.
 - [Input](/klean-ui/components/input) — single-line native input.
 - [Button](/klean-ui/components/button) — submit or act on form data.
 - [Toast](/klean-ui/components/toast) — announce the result after a draft is saved.

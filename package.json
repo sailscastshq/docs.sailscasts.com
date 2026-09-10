@@ -18,10 +18,20 @@
     "@inertiajs/vue3": "^3.6.1",
     "@internationalized/date": "^3.12.3",
     "@tailwindcss/postcss": "^4.3.3",
+    "@tiptap/core": "^3.31.3",
+    "@tiptap/extension-file-handler": "^3.31.3",
+    "@tiptap/extension-image": "^3.31.3",
+    "@tiptap/extension-placeholder": "^3.31.3",
+    "@tiptap/markdown": "^3.31.3",
+    "@tiptap/pm": "^3.31.3",
+    "@tiptap/starter-kit": "^3.31.3",
+    "@tiptap/vue-3": "^3.31.3",
     "axios": "^1.19.0",
     "chrono-node": "^2.10.1",
+    "dompurify": "^3.4.14",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.3",
+    "marked": "^17.0.1",
     "postcss": "^8.5.25",
     "prettier": "^3.6.2",
     "prettier-plugin-svelte": "^4.1.1",
@@ -36,6 +46,6 @@
     "**/*": "prettier --write --ignore-unknown"
   },
   "engines": {
-    "node": ">=18.0"
+    "node": ">=20.0"
   }
 }
