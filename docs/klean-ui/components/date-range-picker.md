@@ -186,7 +186,7 @@ Choose Schedule Picker when time and timezone must resolve to an exact ISO insta
 
 - [Calendar](/klean-ui/components/calendar) — one always-visible date-only `YYYY-MM-DD` surface.
 - [Date Picker](/klean-ui/components/date-picker) — independent date-only `YYYY-MM-DD` values and asymmetric rules.
-- [Schedule Picker](/klean-ui/components/schedule-picker) — date, time, and IANA timezone stored as an exact ISO instant.
+- [Schedule Picker](/klean-ui/components/schedule-picker) — date and time as an exact ISO instant; future scheduling by default, historical editing with `allowPast`.
 - [Popover](/klean-ui/components/popover) — the floating surface used by the compact range.
 
 ## Complete framework source

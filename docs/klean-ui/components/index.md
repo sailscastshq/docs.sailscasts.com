@@ -171,7 +171,7 @@ One related start-and-end decision with inclusive date boundaries, native form n
 
 ### [Schedule Picker](/klean-ui/components/schedule-picker)
 
-Natural-language future scheduling with Calendar, time choices, IANA timezone safety, exact relative durations, and predictable Enter or composite-blur commit.
+Choose a date and time together, with natural input, a visible timezone, and localized hour and minute controls. Schedule future work by default, or allow past dates for record editing.
 
 ### [Toast](/klean-ui/components/toast)
 
