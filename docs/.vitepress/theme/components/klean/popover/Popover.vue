@@ -4,7 +4,8 @@ import {
   computePosition,
   flip,
   offset as floatingOffset,
-  shift
+  shift,
+  size
 } from '@floating-ui/dom'
 import {
   computed,
@@ -27,6 +28,8 @@ const props = defineProps({
   open: { type: Boolean, default: undefined },
   /** Initial state when `open` is not controlled. */
   defaultOpen: { type: Boolean, default: false },
+  /** Element or element id used only for floating-surface positioning. */
+  anchor: { type: [String, Object], default: undefined },
   /** Preferred logical placement. Collision handling may flip it. */
   placement: {
     type: String,
@@ -59,7 +62,12 @@ const activeInvoker = ref()
 const internalOpen = ref(props.defaultOpen)
 const nativePopover = ref(false)
 const resolvedPlacement = ref(props.placement)
-const positionStyle = ref({ position: 'fixed', left: '0px', top: '0px' })
+const positionStyle = ref({
+  position: 'fixed',
+  inset: 'auto',
+  left: '0px',
+  top: '0px'
+})
 let cleanupPosition = () => {}
 
 const isControlled = computed(() => props.open !== undefined)
@@ -114,6 +122,21 @@ function resolveInvoker(candidate) {
   }
 
   return activeInvoker.value
+}
+
+function resolveAnchor() {
+  if (typeof props.anchor === 'string') {
+    const root = content.value?.getRootNode?.() ?? document
+    const element =
+      root.getElementById?.(props.anchor) ??
+      document.getElementById(props.anchor)
+
+    if (element?.isConnected) return element
+  } else if (props.anchor?.isConnected) {
+    return props.anchor
+  }
+
+  return resolveInvoker()
 }
 
 function syncInvokerAria() {
@@ -217,12 +240,13 @@ function handleFallbackInvokerClick(event) {
 
 function handleOutsidePointer(event) {
   const path = eventPath(event)
-  const reference = resolveInvoker()
+  const invoker = resolveInvoker()
+  const anchor = resolveAnchor()
 
   if (
     path.includes(content.value) ||
-    (reference &&
-      (path.includes(reference) || reference.contains?.(event.target))) ||
+    (invoker && (path.includes(invoker) || invoker.contains?.(event.target))) ||
+    (anchor && (path.includes(anchor) || anchor.contains?.(event.target))) ||
     invokers().some(
       (invoker) => path.includes(invoker) || invoker.contains(event.target)
     )
@@ -234,10 +258,22 @@ function handleOutsidePointer(event) {
 }
 
 function handleEscape(event) {
-  if (event.key !== 'Escape') return
+  if (event.key !== 'Escape' || event.defaultPrevented) return
 
   if (nativePopover.value) {
-    const openPopovers = [...document.querySelectorAll(':popover-open')]
+    const root = content.value?.getRootNode?.() ?? document
+    const path = eventPath(event)
+    const rootIndex = path.indexOf(root)
+    const innerPath = rootIndex < 0 ? path : path.slice(0, rootIndex)
+    // An open nested surface in a shadow tree owns Escape before its parent.
+    if (
+      innerPath.some(
+        (node) =>
+          node !== root && node?.host && node.querySelector?.(':popover-open')
+      )
+    )
+      return
+    const openPopovers = [...root.querySelectorAll(':popover-open')]
     if (openPopovers.at(-1) !== content.value) return
   }
 
@@ -246,20 +282,39 @@ function handleEscape(event) {
 }
 
 async function updatePosition() {
-  const invoker = resolveInvoker()
-  if (!isOpen.value || !invoker || !content.value) return
+  const anchor = resolveAnchor()
+  const element = content.value
+  if (!isOpen.value || !anchor || !element) return
 
-  const { x, y, placement } = await computePosition(invoker, content.value, {
+  const { x, y, placement } = await computePosition(anchor, element, {
     placement: props.placement,
     strategy: 'fixed',
-    middleware: [floatingOffset(props.offset), flip(), shift({ padding: 8 })]
+    middleware: [
+      floatingOffset(props.offset),
+      flip({ padding: 8 }),
+      size({
+        padding: 8,
+        apply({ availableHeight, elements }) {
+          elements.floating.style.setProperty(
+            '--klean-popover-available-height',
+            `${Math.max(0, availableHeight)}px`
+          )
+        }
+      }),
+      shift({ padding: 8, crossAxis: true })
+    ]
   })
 
+  if (content.value !== element || !isOpen.value) return
   resolvedPlacement.value = placement
   positionStyle.value = {
     position: 'fixed',
+    inset: 'auto',
     left: `${x}px`,
-    top: `${y}px`
+    top: `${y}px`,
+    '--klean-popover-available-height': element.style.getPropertyValue(
+      '--klean-popover-available-height'
+    )
   }
 }
 
@@ -276,17 +331,23 @@ async function syncOpenEffects() {
   syncInvokerAria()
   syncNativePopover()
 
-  const invoker = resolveInvoker()
-  if (!isOpen.value || !invoker || !content.value) return
+  const anchor = resolveAnchor()
+  if (!isOpen.value || !anchor || !content.value) return
 
-  cleanupPosition = autoUpdate(invoker, content.value, updatePosition)
+  cleanupPosition = autoUpdate(anchor, content.value, updatePosition)
 
   document.addEventListener('keydown', handleEscape)
   document.addEventListener('pointerdown', handleOutsidePointer, true)
 }
 
 watch(
-  () => [isOpen.value, props.placement, props.offset, activeInvoker.value],
+  () => [
+    isOpen.value,
+    props.anchor,
+    props.placement,
+    props.offset,
+    activeInvoker.value
+  ],
   syncOpenEffects,
   { flush: 'post' }
 )

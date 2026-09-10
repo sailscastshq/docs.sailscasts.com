@@ -5,6 +5,7 @@
     flip,
     offset as floatingOffset,
     shift,
+    size,
   } from "@floating-ui/dom";
   import { onMount, untrack } from "svelte";
   import { twMerge } from "tailwind-merge";
@@ -18,6 +19,7 @@
     id,
     open = $bindable(),
     defaultOpen = false,
+    anchor,
     onOpenChange,
     placement = "bottom-start",
     offset = 8,
@@ -34,7 +36,12 @@
   let activeInvoker = $state();
   let supportsNative = $state(false);
   let resolvedPlacement = $state(untrack(() => placement));
-  let positionStyle = $state({ position: "fixed", left: "0px", top: "0px" });
+  let positionStyle = $state({
+    position: "fixed",
+    inset: "auto",
+    left: "0px",
+    top: "0px",
+  });
   let isOpen = $derived(open ?? internalOpen);
   let contentId = $derived(id ?? generatedId);
   let mergedStyle = $derived(
@@ -75,6 +82,20 @@
 
     if (!activeInvoker?.isConnected) activeInvoker = invokers()[0];
     return activeInvoker;
+  }
+
+  function resolveAnchor() {
+    if (typeof anchor === "string") {
+      const root = contentElement?.getRootNode?.() ?? document;
+      const element =
+        root.getElementById?.(anchor) ?? document.getElementById(anchor);
+
+      if (element?.isConnected) return element;
+    } else if (anchor?.isConnected) {
+      return anchor;
+    }
+
+    return resolveInvoker();
   }
 
   function syncInvokerAria() {
@@ -193,25 +214,49 @@
     syncInvokerAria();
     syncNativePopover();
 
-    const invoker = resolveInvoker();
-    if (!isOpen || !invoker || !contentElement) return;
+    const anchorElement = resolveAnchor();
+    if (!isOpen || !anchorElement || !contentElement) return;
+    const element = contentElement;
+    let active = true;
 
     const updatePosition = async () => {
-      const result = await computePosition(invoker, contentElement, {
+      const result = await computePosition(anchorElement, element, {
         placement,
         strategy: "fixed",
-        middleware: [floatingOffset(offset), flip(), shift({ padding: 8 })],
+        middleware: [
+          floatingOffset(offset),
+          flip({ padding: 8 }),
+          size({
+            padding: 8,
+            apply({ availableHeight, elements }) {
+              elements.floating.style.setProperty(
+                "--klean-popover-available-height",
+                `${Math.max(0, availableHeight)}px`,
+              );
+            },
+          }),
+          shift({ padding: 8, crossAxis: true }),
+        ],
       });
 
+      if (!active || contentElement !== element) return;
       resolvedPlacement = result.placement;
       positionStyle = {
         position: "fixed",
+        inset: "auto",
         left: `${result.x}px`,
         top: `${result.y}px`,
+        "--klean-popover-available-height": element.style.getPropertyValue(
+          "--klean-popover-available-height",
+        ),
       };
     };
 
-    return autoUpdate(invoker, contentElement, updatePosition);
+    const cleanup = autoUpdate(anchorElement, element, updatePosition);
+    return () => {
+      active = false;
+      cleanup();
+    };
   });
 
   $effect(() => {
@@ -219,12 +264,16 @@
 
     function handleOutsidePointer(event) {
       const path = eventPath(event);
-      const reference = resolveInvoker();
+      const invoker = resolveInvoker();
+      const anchorElement = resolveAnchor();
 
       if (
         path.includes(contentElement) ||
-        (reference &&
-          (path.includes(reference) || reference.contains?.(event.target))) ||
+        (invoker &&
+          (path.includes(invoker) || invoker.contains?.(event.target))) ||
+        (anchorElement &&
+          (path.includes(anchorElement) ||
+            anchorElement.contains?.(event.target))) ||
         invokers().some(
           (invoker) => path.includes(invoker) || invoker.contains(event.target),
         )
@@ -236,10 +285,24 @@
     }
 
     function handleEscape(event) {
-      if (event.key !== "Escape") return;
+      if (event.key !== "Escape" || event.defaultPrevented) return;
 
       if (supportsNative) {
-        const openPopovers = [...document.querySelectorAll(":popover-open")];
+        const root = contentElement?.getRootNode?.() ?? document;
+        const path = eventPath(event);
+        const rootIndex = path.indexOf(root);
+        const innerPath = rootIndex < 0 ? path : path.slice(0, rootIndex);
+        // An open nested surface in a shadow tree owns Escape before its parent.
+        if (
+          innerPath.some(
+            (node) =>
+              node !== root &&
+              node?.host &&
+              node.querySelector?.(":popover-open"),
+          )
+        )
+          return;
+        const openPopovers = [...root.querySelectorAll(":popover-open")];
         if (openPopovers.at(-1) !== contentElement) return;
       }
 

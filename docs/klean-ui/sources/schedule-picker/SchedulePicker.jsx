@@ -3,7 +3,6 @@ import {
   useEffect,
   useId,
   useImperativeHandle,
-  useMemo,
   useRef,
   useState
 } from 'react'
@@ -13,12 +12,14 @@ import Input from '../input/Input.jsx'
 import Popover from '../popover/Popover.jsx'
 import {
   formatSchedule,
-  formatTimeLabel,
   instantToWallClock,
+  initialScheduleWallClock,
   interpretSchedule,
   resolveTimeZone,
-  roundedFutureWallClock,
-  timeOptions,
+  scheduleCalendarBounds,
+  scheduleConstraint,
+  timeFields,
+  updateTimeField,
   wallClockToIso
 } from './schedule.js'
 
@@ -34,7 +35,9 @@ const SchedulePicker = forwardRef(function SchedulePicker(
     timeZone,
     locale,
     dir,
+    allowPast = false,
     min,
+    max,
     minuteStep = 15,
     open,
     defaultOpen = false,
@@ -59,9 +62,13 @@ const SchedulePicker = forwardRef(function SchedulePicker(
     : defaultValue
   const [internalValue, setInternalValue] = useState(validDefault)
   const committedValue = value === undefined ? internalValue : value
-  const initialWall =
-    instantToWallClock(committedValue, zone) ||
-    roundedFutureWallClock(new Date(), zone, minuteStep)
+  const initialWall = initialScheduleWallClock(committedValue, {
+    allowPast,
+    min,
+    max,
+    timeZone: zone,
+    minuteStep
+  })
   const [selectedDate, setSelectedDate] = useState(initialWall.date)
   const [selectedTime, setSelectedTime] = useState(initialWall.time)
   const [draft, setDraft] = useState(
@@ -78,27 +85,32 @@ const SchedulePicker = forwardRef(function SchedulePicker(
       : { state: 'empty' }
   )
   const [touched, setTouched] = useState(false)
+  const [validationClock, setValidationClock] = useState(Date.now)
   const inputRef = useRef(null)
   const popoverRef = useRef(null)
   const panelRef = useRef(null)
   const rootRef = useRef(null)
-  const configuredMinimum = new Date(min).getTime()
-  const minimumTimestamp = Math.max(
-    Date.now(),
-    Number.isNaN(configuredMinimum) ? -Infinity : configuredMinimum
+  const constraints = {
+    allowPast,
+    min,
+    max,
+    reference: new Date(validationClock)
+  }
+  const calendarBounds = scheduleCalendarBounds({
+    ...constraints,
+    timeZone: zone
+  })
+  const fields = timeFields(selectedTime, locale)
+  const minutes = Array.from({ length: 60 }, (_, minute) =>
+    String(minute).padStart(2, '0')
   )
-  const calendarMin = instantToWallClock(
-    new Date(minimumTimestamp + 1000).toISOString(),
-    zone
-  ).date
-  const choices = useMemo(() => timeOptions(minuteStep), [minuteStep])
-  const proposalIsPast =
-    interpretation.state === 'proposal' &&
-    new Date(interpretation.iso).getTime() <= minimumTimestamp
-  const committable = interpretation.state === 'proposal' && !proposalIsPast
+  const constraintError = interpretation.iso
+    ? scheduleConstraint(interpretation.iso, constraints)
+    : ''
+  const committable = interpretation.state === 'proposal' && !constraintError
   const invalid =
     interpretation.state === 'invalid' ||
-    proposalIsPast ||
+    Boolean(constraintError) ||
     (touched && interpretation.state === 'incomplete')
   let statusText
   if (interpretation.state === 'empty')
@@ -107,10 +119,16 @@ const SchedulePicker = forwardRef(function SchedulePicker(
     statusText = 'Enter a date and time, such as tomorrow at 9am.'
   else if (interpretation.state === 'incomplete')
     statusText = interpretation.message
-  else if (proposalIsPast) statusText = 'Choose a time in the future.'
+  else if (constraintError === 'past')
+    statusText = 'Choose a time in the future.'
+  else if (constraintError === 'min')
+    statusText = `Choose ${formatSchedule(min, locale, zone)} or later.`
+  else if (constraintError === 'max')
+    statusText = `Choose ${formatSchedule(max, locale, zone)} or earlier.`
   else if (interpretation.state === 'proposal')
-    statusText = `Will schedule for ${interpretation.label} in ${zone}. Press Enter or leave the picker to use it.`
-  else statusText = `Scheduled for ${interpretation.label} in ${zone}.`
+    statusText = `${allowPast ? 'Use' : 'Will schedule for'} ${interpretation.label} in ${zone}. Press Enter or leave the picker to use it.`
+  else
+    statusText = `${allowPast ? 'Selected' : 'Scheduled for'} ${interpretation.label} in ${zone}.`
   const describedBy = [externalDescribedBy, statusId].filter(Boolean).join(' ')
 
   function updateValue(nextValue) {
@@ -119,6 +137,7 @@ const SchedulePicker = forwardRef(function SchedulePicker(
   }
 
   function readDraft(nextDraft) {
+    setValidationClock(Date.now())
     setDraft(nextDraft)
     if (!nextDraft.trim()) {
       updateValue('')
@@ -128,7 +147,8 @@ const SchedulePicker = forwardRef(function SchedulePicker(
     const next = interpretSchedule(nextDraft, {
       reference: new Date(),
       locale,
-      timeZone: zone
+      timeZone: zone,
+      allowPast
     })
     setInterpretation(next)
     if (next.date) setSelectedDate(next.date)
@@ -136,20 +156,36 @@ const SchedulePicker = forwardRef(function SchedulePicker(
   }
 
   function stage(date = selectedDate, time = selectedTime) {
-    const iso = wallClockToIso({ date, time, timeZone: zone })
+    if (disabled || readOnly) return
+    setValidationClock(Date.now())
+    // Reselecting an unchanged instant must not discard its seconds.
+    const iso =
+      interpretation.iso &&
+      interpretation.date === date &&
+      interpretation.time === time
+        ? interpretation.iso
+        : wallClockToIso({ date, time, timeZone: zone })
+    setSelectedDate(date)
+    setSelectedTime(time)
     if (!iso) {
       setInterpretation({ state: 'invalid' })
       return
     }
     const label = formatSchedule(iso, locale, zone)
-    setSelectedDate(date)
-    setSelectedTime(time)
     setDraft(label)
     setInterpretation({ state: 'proposal', iso, date, time, label })
   }
 
   function commitProposal({ restoreFocus = true } = {}) {
-    if (!committable || disabled || readOnly) return
+    const reference = new Date()
+    setValidationClock(reference.getTime())
+    if (
+      interpretation.state !== 'proposal' ||
+      disabled ||
+      readOnly ||
+      scheduleConstraint(interpretation.iso, { allowPast, min, max, reference })
+    )
+      return
     updateValue(interpretation.iso)
     setDraft(interpretation.label)
     setInterpretation({ ...interpretation, state: 'committed' })
@@ -166,46 +202,45 @@ const SchedulePicker = forwardRef(function SchedulePicker(
     commitProposal({ restoreFocus: false })
   }
 
+  function finish() {
+    const reference = new Date()
+    setValidationClock(reference.getTime())
+    if (
+      disabled ||
+      readOnly ||
+      scheduleConstraint(interpretation.iso, { allowPast, min, max, reference })
+    )
+      return
+    if (interpretation.state === 'committed') {
+      popoverRef.current?.close()
+      return
+    }
+    commitProposal()
+  }
+
   function handleOpenChange(nextOpen) {
+    setValidationClock(Date.now())
     onOpenChange?.(nextOpen)
     if (!nextOpen) return
-    queueMicrotask(() =>
-      panelRef.current
-        ?.querySelector(`[data-time="${selectedTime}"]`)
-        ?.scrollIntoView?.({ block: 'center' })
-    )
-  }
-
-  function timeIsUnavailable(time) {
-    const iso = wallClockToIso({ date: selectedDate, time, timeZone: zone })
-    return !iso || new Date(iso).getTime() <= minimumTimestamp
-  }
-
-  function handleTimeKeyDown(event, index) {
-    let nextIndex
-    if (event.key === 'ArrowDown')
-      nextIndex = Math.min(index + 1, choices.length - 1)
-    else if (event.key === 'ArrowUp') nextIndex = Math.max(index - 1, 0)
-    else if (event.key === 'Home') nextIndex = 0
-    else if (event.key === 'End') nextIndex = choices.length - 1
-    else return
-    event.preventDefault()
-    const movement = nextIndex >= index ? 1 : -1
-    while (
-      nextIndex >= 0 &&
-      nextIndex < choices.length &&
-      timeIsUnavailable(choices[nextIndex])
-    ) {
-      nextIndex += movement
+    if (interpretation.state === 'empty') {
+      const wall = initialScheduleWallClock('', {
+        allowPast,
+        min,
+        max,
+        timeZone: zone,
+        minuteStep
+      })
+      setSelectedDate(wall.date)
+      setSelectedTime(wall.time)
     }
-    const nextTime = choices[nextIndex]
-    if (!nextTime) return
-    setSelectedTime(nextTime)
-    queueMicrotask(() =>
-      panelRef.current
-        ?.querySelector(`[data-time="${nextTime}"]`)
-        ?.focus({ preventScroll: true })
-    )
+    requestAnimationFrame(() => {
+      if (!panelRef.current?.getClientRects().length) return
+      panelRef.current.parentElement.scrollTop = 0
+    })
+  }
+
+  function chooseTimeField(part, nextValue) {
+    stage(selectedDate, updateTimeField(selectedTime, part, nextValue, locale))
   }
 
   useEffect(() => {
@@ -232,10 +267,18 @@ const SchedulePicker = forwardRef(function SchedulePicker(
   useEffect(() => {
     if (!inputRef.current) return
     if (required && !committedValue)
-      inputRef.current.setCustomValidity('Choose a schedule.')
-    else if (invalid) inputRef.current.setCustomValidity(statusText)
+      inputRef.current.setCustomValidity('Choose a date and time.')
+    else if (invalid || interpretation.state === 'incomplete')
+      inputRef.current.setCustomValidity(statusText)
     else inputRef.current.setCustomValidity('')
-  }, [committable, committedValue, invalid, required, statusText])
+  }, [
+    committable,
+    committedValue,
+    interpretation.state,
+    invalid,
+    required,
+    statusText
+  ])
 
   useImperativeHandle(forwardedRef, () => ({
     input: inputRef.current,
@@ -269,7 +312,6 @@ const SchedulePicker = forwardRef(function SchedulePicker(
           readOnly={readOnly}
           aria-invalid={invalid || undefined}
           aria-describedby={describedBy}
-          data-slot="schedule-picker-input"
           onChange={(event) => {
             onChange?.(event)
             if (!event.defaultPrevented) {
@@ -284,8 +326,15 @@ const SchedulePicker = forwardRef(function SchedulePicker(
             if (event.key === 'ArrowDown' && !disabled && !readOnly) {
               event.preventDefault()
               popoverRef.current?.open()
-            } else if (event.key === 'Enter' && committable) {
+            } else if (
+              event.key === 'Enter' &&
+              (interpretation.state === 'proposal' ||
+                interpretation.state === 'incomplete' ||
+                interpretation.state === 'invalid' ||
+                constraintError)
+            ) {
               event.preventDefault()
+              setTouched(true)
               commitProposal({ restoreFocus: false })
             }
           }}
@@ -311,7 +360,14 @@ const SchedulePicker = forwardRef(function SchedulePicker(
           </svg>
         </button>
       </div>
-      {name ? <input type="hidden" name={name} value={committedValue} /> : null}
+      {name ? (
+        <input
+          type="hidden"
+          name={name}
+          value={committedValue}
+          disabled={disabled}
+        />
+      ) : null}
       <p
         id={statusId}
         data-slot="schedule-picker-status"
@@ -325,18 +381,20 @@ const SchedulePicker = forwardRef(function SchedulePicker(
       <Popover
         ref={popoverRef}
         id={popoverId}
+        anchor={inputId}
         open={open}
         defaultOpen={defaultOpen}
         onOpenChange={handleOpenChange}
         placement="bottom-start"
         data-slot="schedule-picker-popover"
-        className="w-[min(42rem,calc(100vw-1rem))] p-0"
+        className="max-h-[min(var(--klean-popover-available-height,100dvh),calc(100dvh-1rem))] w-[min(24rem,calc(100vw-1rem))] overflow-y-auto overscroll-contain rounded-xl p-0"
       >
         <div ref={panelRef} data-slot="schedule-picker-panel">
-          <div className="grid sm:grid-cols-[minmax(0,1fr)_10rem]">
+          <div className="grid">
             <Calendar
               value={selectedDate}
-              min={calendarMin}
+              min={calendarBounds.min}
+              max={calendarBounds.max}
               locale={locale}
               dir={dir}
               disabled={disabled}
@@ -346,57 +404,122 @@ const SchedulePicker = forwardRef(function SchedulePicker(
             />
             <section
               data-slot="schedule-picker-times"
-              className="border-t border-gray-200 p-3 sm:border-s sm:border-t-0 dark:border-gray-700"
+              className="sticky bottom-0 grid min-w-0 gap-2 border-t border-gray-200 bg-white px-4 py-3 dark:border-gray-800 dark:bg-gray-950"
               aria-labelledby={timeHeadingId}
             >
-              <h2
-                id={timeHeadingId}
-                className="px-2 pb-2 text-sm font-semibold"
-              >
-                Time
-              </h2>
-              <div
-                role="listbox"
-                aria-label="Choose a time"
-                className="max-h-64 overflow-y-auto overscroll-contain"
-              >
-                {choices.map((time, index) => (
-                  <button
-                    key={time}
-                    type="button"
-                    role="option"
-                    data-slot="schedule-picker-time"
-                    data-time={time}
-                    aria-selected={time === selectedTime}
-                    disabled={timeIsUnavailable(time)}
-                    tabIndex={time === selectedTime ? 0 : -1}
-                    className="block min-h-11 w-full rounded-md px-3 text-start text-sm tabular-nums hover:bg-gray-100 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-gray-950 disabled:cursor-not-allowed disabled:text-gray-300 aria-selected:bg-gray-950 aria-selected:font-semibold aria-selected:text-white dark:hover:bg-gray-800 dark:focus-visible:outline-white dark:disabled:text-gray-700 dark:aria-selected:bg-white dark:aria-selected:text-gray-950"
-                    onClick={() => stage(selectedDate, time)}
-                    onKeyDown={(event) => handleTimeKeyDown(event, index)}
-                  >
-                    {formatTimeLabel(time, locale)}
-                  </button>
-                ))}
+              <div className="flex min-w-0 items-baseline justify-between gap-3">
+                <h2 id={timeHeadingId} className="text-sm font-medium">
+                  Time
+                </h2>
+                <p
+                  id={`${inputId}-time-zone`}
+                  data-slot="schedule-picker-time-zone"
+                  className="min-w-0 text-end text-xs wrap-anywhere text-gray-500 dark:text-gray-400"
+                >
+                  {zone}
+                </p>
               </div>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div
+                  data-slot="schedule-picker-time-fields"
+                  role="group"
+                  aria-labelledby={timeHeadingId}
+                  aria-describedby={`${inputId}-time-zone`}
+                  dir="ltr"
+                  className="inline-flex shrink-0 items-center rounded-lg border border-gray-200 bg-gray-50 p-0.5 text-sm font-medium tabular-nums shadow-xs dark:border-gray-700 dark:bg-gray-900"
+                >
+                  <select
+                    data-slot="schedule-picker-hour"
+                    aria-label="Hour"
+                    className="h-11 w-11 cursor-pointer appearance-none rounded-md bg-transparent text-center text-gray-950 hover:bg-gray-200/60 focus-visible:bg-white focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-gray-950 disabled:cursor-not-allowed disabled:opacity-40 dark:text-white dark:hover:bg-gray-800 dark:focus-visible:bg-gray-800 dark:focus-visible:outline-white"
+                    value={fields.hour}
+                    disabled={disabled || readOnly}
+                    onChange={(event) =>
+                      chooseTimeField('hour', event.target.value)
+                    }
+                  >
+                    {fields.hours.map((hour) => (
+                      <option key={hour.value} value={hour.value}>
+                        {hour.label}
+                      </option>
+                    ))}
+                  </select>
+                  <span aria-hidden="true" className="text-gray-400">
+                    :
+                  </span>
+                  <select
+                    data-slot="schedule-picker-minute"
+                    aria-label="Minute"
+                    className="h-11 w-11 cursor-pointer appearance-none rounded-md bg-transparent text-center text-gray-950 hover:bg-gray-200/60 focus-visible:bg-white focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-gray-950 disabled:cursor-not-allowed disabled:opacity-40 dark:text-white dark:hover:bg-gray-800 dark:focus-visible:bg-gray-800 dark:focus-visible:outline-white"
+                    value={fields.minute}
+                    disabled={disabled || readOnly}
+                    onChange={(event) =>
+                      chooseTimeField('minute', event.target.value)
+                    }
+                  >
+                    {minutes.map((minute) => (
+                      <option key={minute} value={minute}>
+                        {minute}
+                      </option>
+                    ))}
+                  </select>
+                  {fields.hour12 ? (
+                    <div className="relative ms-1 border-s border-gray-200 ps-1 dark:border-gray-700">
+                      <select
+                        data-slot="schedule-picker-period"
+                        aria-label="Period"
+                        className="h-11 min-w-16 cursor-pointer appearance-none rounded-md bg-transparent ps-2 pe-6 text-gray-950 hover:bg-gray-200/60 focus-visible:bg-white focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-gray-950 disabled:cursor-not-allowed disabled:opacity-40 dark:text-white dark:hover:bg-gray-800 dark:focus-visible:bg-gray-800 dark:focus-visible:outline-white"
+                        value={fields.period}
+                        disabled={disabled || readOnly}
+                        onChange={(event) =>
+                          chooseTimeField('period', event.target.value)
+                        }
+                      >
+                        {fields.periods.map((period) => (
+                          <option key={period.value} value={period.value}>
+                            {period.label}
+                          </option>
+                        ))}
+                      </select>
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="pointer-events-none absolute inset-e-2 top-1/2 size-3 -translate-y-1/2 text-gray-500 dark:text-gray-400"
+                      >
+                        <path d="m7 10 5 5 5-5" />
+                      </svg>
+                    </div>
+                  ) : null}
+                </div>
+                <div data-slot="schedule-picker-footer">
+                  <button
+                    type="button"
+                    data-slot="schedule-picker-confirm"
+                    className="min-h-11 cursor-pointer rounded-lg bg-gray-950 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-200 dark:focus-visible:outline-white"
+                    disabled={
+                      (!committable && interpretation.state !== 'committed') ||
+                      invalid ||
+                      disabled ||
+                      readOnly
+                    }
+                    onClick={finish}
+                  >
+                    Done
+                  </button>
+                </div>
+              </div>
+              {invalid ? (
+                <p className="text-sm text-red-700 dark:text-red-400">
+                  {statusText}
+                </p>
+              ) : null}
             </section>
           </div>
-          <footer
-            data-slot="schedule-picker-footer"
-            className="flex flex-col gap-3 border-t border-gray-200 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-gray-700"
-          >
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              {statusText}
-            </p>
-            <button
-              type="button"
-              data-slot="schedule-picker-confirm"
-              className="min-h-11 shrink-0 rounded-md bg-gray-950 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-white dark:text-gray-950 dark:hover:bg-gray-200 dark:focus-visible:outline-white"
-              disabled={!committable || disabled || readOnly}
-              onClick={() => commitProposal()}
-            >
-              Use this time
-            </button>
-          </footer>
         </div>
       </Popover>
     </div>

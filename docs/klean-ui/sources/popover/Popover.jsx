@@ -3,7 +3,8 @@ import {
   computePosition,
   flip,
   offset as floatingOffset,
-  shift
+  shift,
+  size
 } from '@floating-ui/dom'
 import {
   forwardRef,
@@ -26,6 +27,7 @@ const Popover = forwardRef(function Popover(
     id,
     open: controlledOpen,
     defaultOpen = false,
+    anchor,
     onOpenChange,
     placement = 'bottom-start',
     offset = 8,
@@ -47,6 +49,7 @@ const Popover = forwardRef(function Popover(
   const [resolvedPlacement, setResolvedPlacement] = useState(placement)
   const [positionStyle, setPositionStyle] = useState({
     position: 'fixed',
+    inset: 'auto',
     left: 0,
     top: 0
   })
@@ -86,6 +89,20 @@ const Popover = forwardRef(function Popover(
     },
     [contentId, invokers]
   )
+
+  const resolveAnchor = useCallback(() => {
+    if (typeof anchor === 'string') {
+      const root = contentRef.current?.getRootNode?.() ?? document
+      const element =
+        root.getElementById?.(anchor) ?? document.getElementById(anchor)
+
+      if (element?.isConnected) return element
+    } else if (anchor?.isConnected) {
+      return anchor
+    }
+
+    return resolveInvoker()
+  }, [anchor, resolveInvoker])
 
   const syncInvokerAria = useCallback(() => {
     for (const invoker of invokers()) {
@@ -192,26 +209,55 @@ const Popover = forwardRef(function Popover(
     syncInvokerAria()
     syncNativePopover()
 
-    const invoker = resolveInvoker()
-    if (!isOpen || !invoker || !contentRef.current) return
+    const anchorElement = resolveAnchor()
+    if (!isOpen || !anchorElement || !contentRef.current) return
+    const element = contentRef.current
+    let active = true
 
     const updatePosition = async () => {
-      const result = await computePosition(invoker, contentRef.current, {
+      const result = await computePosition(anchorElement, element, {
         placement,
         strategy: 'fixed',
-        middleware: [floatingOffset(offset), flip(), shift({ padding: 8 })]
+        middleware: [
+          floatingOffset(offset),
+          flip({ padding: 8 }),
+          size({
+            padding: 8,
+            apply({ availableHeight, elements }) {
+              elements.floating.style.setProperty(
+                '--klean-popover-available-height',
+                `${Math.max(0, availableHeight)}px`
+              )
+            }
+          }),
+          shift({ padding: 8, crossAxis: true })
+        ]
       })
 
+      if (!active || contentRef.current !== element) return
       setResolvedPlacement(result.placement)
-      setPositionStyle({ position: 'fixed', left: result.x, top: result.y })
+      setPositionStyle({
+        position: 'fixed',
+        inset: 'auto',
+        left: result.x,
+        top: result.y,
+        '--klean-popover-available-height': element.style.getPropertyValue(
+          '--klean-popover-available-height'
+        )
+      })
     }
 
-    return autoUpdate(invoker, contentRef.current, updatePosition)
+    const cleanup = autoUpdate(anchorElement, element, updatePosition)
+    return () => {
+      active = false
+      cleanup()
+    }
   }, [
     isOpen,
     offset,
     placement,
     referenceVersion,
+    resolveAnchor,
     resolveInvoker,
     syncInvokerAria,
     syncNativePopover
@@ -222,12 +268,16 @@ const Popover = forwardRef(function Popover(
 
     function handleOutsidePointer(event) {
       const path = eventPath(event)
-      const reference = resolveInvoker()
+      const invoker = resolveInvoker()
+      const anchorElement = resolveAnchor()
 
       if (
         path.includes(contentRef.current) ||
-        (reference &&
-          (path.includes(reference) || reference.contains?.(event.target))) ||
+        (invoker &&
+          (path.includes(invoker) || invoker.contains?.(event.target))) ||
+        (anchorElement &&
+          (path.includes(anchorElement) ||
+            anchorElement.contains?.(event.target))) ||
         invokers().some(
           (invoker) => path.includes(invoker) || invoker.contains(event.target)
         )
@@ -239,10 +289,24 @@ const Popover = forwardRef(function Popover(
     }
 
     function handleEscape(event) {
-      if (event.key !== 'Escape') return
+      if (event.key !== 'Escape' || event.defaultPrevented) return
 
       if (supportsNative) {
-        const openPopovers = [...document.querySelectorAll(':popover-open')]
+        const root = contentRef.current?.getRootNode?.() ?? document
+        const path = eventPath(event)
+        const rootIndex = path.indexOf(root)
+        const innerPath = rootIndex < 0 ? path : path.slice(0, rootIndex)
+        // An open nested surface in a shadow tree owns Escape before its parent.
+        if (
+          innerPath.some(
+            (node) =>
+              node !== root &&
+              node?.host &&
+              node.querySelector?.(':popover-open')
+          )
+        )
+          return
+        const openPopovers = [...root.querySelectorAll(':popover-open')]
         if (openPopovers.at(-1) !== contentRef.current) return
       }
 
@@ -257,7 +321,14 @@ const Popover = forwardRef(function Popover(
       document.removeEventListener('pointerdown', handleOutsidePointer, true)
       document.removeEventListener('keydown', handleEscape)
     }
-  }, [isOpen, invokers, requestOpen, supportsNative])
+  }, [
+    isOpen,
+    invokers,
+    requestOpen,
+    resolveAnchor,
+    resolveInvoker,
+    supportsNative
+  ])
 
   function handleNativeToggle(event) {
     const nativeEvent = event.nativeEvent
