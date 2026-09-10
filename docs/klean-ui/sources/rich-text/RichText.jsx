@@ -521,6 +521,7 @@ const RichText = forwardRef(function RichText(
       !current ||
       syncing.current ||
       composing.current ||
+      pendingExternal.current !== undefined ||
       modeRef.current !== 'visual' ||
       latest.current.disabled ||
       latest.current.readOnly
@@ -635,8 +636,8 @@ const RichText = forwardRef(function RichText(
           composing.current = false
           queueMicrotask(() => {
             if (alive.current) {
-              commitEditor()
-              flushExternal()
+              if (pendingExternal.current !== undefined) flushExternal()
+              else commitEditor()
             }
           })
           return false
@@ -1021,8 +1022,8 @@ const RichText = forwardRef(function RichText(
         }}
         onCompositionEnd={(event) => {
           composing.current = false
-          updateSource(event)
-          flushExternal()
+          if (pendingExternal.current !== undefined) flushExternal()
+          else updateSource(event)
         }}
         onInvalid={(event) => {
           event.preventDefault()

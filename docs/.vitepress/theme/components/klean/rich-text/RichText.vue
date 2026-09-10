@@ -199,8 +199,8 @@ const editor = useEditor({
         composing = false
         queueMicrotask(() => {
           if (destroyed) return
-          commitEditor()
-          flushExternal()
+          if (pendingExternal !== undefined) flushExternal()
+          else commitEditor()
         })
         return false
       }
@@ -234,7 +234,13 @@ function serialize(current = editor.value) {
     : current.getHTML()
 }
 function commitEditor() {
-  if (!editor.value || syncing || locked.value || mode.value !== 'visual')
+  if (
+    !editor.value ||
+    syncing ||
+    locked.value ||
+    mode.value !== 'visual' ||
+    pendingExternal !== undefined
+  )
     return
   const value = editor.value.isEmpty ? '' : serialize()
   if (value === sourceValue.value) return
@@ -992,8 +998,8 @@ defineExpose({
       @compositionend="
         (event) => {
           composing = false
-          updateSource(event)
-          flushExternal()
+          if (pendingExternal !== undefined) flushExternal()
+          else updateSource(event)
         }
       "
       @invalid="invalid"

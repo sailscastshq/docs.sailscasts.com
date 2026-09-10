@@ -187,7 +187,15 @@
     onValueChange?.(next);
   }
   function commitEditor() {
-    if (!editor || syncing || locked || mode !== "visual" || composing) return;
+    if (
+      !editor ||
+      syncing ||
+      locked ||
+      mode !== "visual" ||
+      composing ||
+      pendingExternal !== undefined
+    )
+      return;
     const next = editor.isEmpty
       ? ""
       : format === "markdown"
@@ -688,8 +696,8 @@
             composing = false;
             queueMicrotask(() => {
               if (!destroyed) {
-                commitEditor();
-                flushExternal();
+                if (pendingExternal !== undefined) flushExternal();
+                else commitEditor();
               }
             });
             return false;
@@ -974,8 +982,8 @@
     oncompositionstart={() => (composing = true)}
     oncompositionend={(event) => {
       composing = false;
-      updateSource(event);
-      flushExternal();
+      if (pendingExternal !== undefined) flushExternal();
+      else updateSource(event);
     }}
     oninvalid={invalid}></textarea>
   {#if validationError}<p
