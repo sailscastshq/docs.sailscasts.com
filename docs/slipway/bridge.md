@@ -1254,13 +1254,18 @@ fields, excludes hidden fields from required validation, and resets entered
 values on reopening or changing records. Conditional actions always open a
 dialog, even when no input fields remain.
 
-Submissions carry a short-lived, signed state token. Bridge checks the current
-record and configuration before validating visible inputs, and checks the
-referenced values again immediately before calling the helper. A changed state,
-expired dialog, or newly denied action stops execution through the normal
-Inertia error flow; the user must reopen the action. Hidden submitted values are
-discarded; they are not silently reused for another decision. Tokens expire
-after 15 minutes and are bound to the actor, app/container, record, and action.
+Submissions carry a signed state token bound to the actor, app/container,
+record, and action configuration. Dialogs have no independent time limit;
+normal session expiry and authorization still apply. Bridge reloads the record,
+validates only visible inputs, and checks the referenced values again immediately
+before calling the helper. Hidden submitted values are discarded.
+
+A real status change stops submission and asks the user to reopen the action.
+The open dialog retains the draft so it can be copied before reopening. Missing
+records and loading failures have distinct messages; loading failures can be
+retried without sending anything. Server logs retain diagnostic reasons without
+exposing private errors to the user. Dialogs opened before this token-format
+update must be reopened once.
 
 These checks are not a database transaction or an exactly-once delivery system.
 If a decision helper must atomically claim a record or avoid duplicate emails,
