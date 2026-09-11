@@ -1147,6 +1147,161 @@ audit event containing the actor, project, environment, action, scope, and
 affected record identifiers. Submitted field values and helper return data are
 not stored in the audit log.
 
+## Public URL slugs
+
+Keep model keys and custom action names as JavaScript identifiers. Bridge uses
+kebab-case action URLs automatically: `requestChanges` becomes `request-changes`
+and `exportAttendees` becomes `export-attendees`. The helper and authorization
+hook still receive the original identifiers.
+
+Set a resource's `slug` to give it a shorter public URL without renaming its
+Waterline model or database table:
+
+```js
+module.exports.slipway = {
+  bridge: {
+    resources: {
+      conferenceevent: {
+        slug: 'event',
+        actions: {
+          requestChanges: {
+            scope: 'record',
+            helper: 'bridge.requestChanges'
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+This produces `/bridge/event` and `/bridge/event/actions/request-changes` on an
+app's Bridge domain, with the same suffixes in Slipway's project navigation.
+Actions can also set `slug` explicitly. Slugs must start with a lowercase letter
+and contain lowercase letters, digits, or single separating hyphens. Reserved
+route names and collisions with another slug or original identifier are rejected.
+Built-in actions such as `create`, `update`, and `delete` retain their routes.
+
+Navigation, forms, uploads, related-record links, and successful mutation
+redirects use canonical slugs. Existing original-identifier URLs continue to
+work directly, including POST requests: Bridge resolves them before authorization
+and executes once, without redirecting the request body. Changing an explicit
+slug does not preserve the previous custom slug as an alias; only the original
+identifier remains a permanent compatibility path.
+
+Changing a URL slug does not change helper names, authorization action names,
+audit identifiers, upload storage namespaces, or database tables. Deploy the
+application's configuration change and refresh Bridge to load its contract.
+
+### Conditional record actions and fields
+
+::: warning Availability
+This configuration requires the Slipway release containing issue #575. It is not supported by v0.0.73. Upgrade Slipway before deploying it in an application.
+:::
+
+Use `visibleWhen` to show an action or its fields according to the current saved
+record. Conditions are data, not functions or executable expressions:
+
+```js
+// config/slipway.js, inside bridge.resources.proposal
+{
+  show: ['id', 'title', 'status'],
+  actions: {
+    sendDecision: {
+      label: 'Send decision',
+      scope: 'record',
+      visibleWhen: {
+        'record.status': { in: ['accepted', 'rejected'] }
+      },
+      helper: 'bridge.decision',
+      fields: {
+        acceptanceMessage: {
+          type: 'textarea',
+          label: 'Message to the speaker',
+          visibleWhen: { 'record.status': 'accepted' }
+        },
+        reason: {
+          type: 'textarea',
+          label: 'Reason for rejection',
+          required: true,
+          visibleWhen: { 'record.status': 'rejected' }
+        }
+      }
+    }
+  }
+}
+```
+
+An accepted proposal shows only the optional message. A rejected proposal shows
+only the required rejection reason. Other statuses hide **Send decision**.
+The helper still receives `recordId`, the actor/resource envelope, and only the
+visible field values. Existing direct-helper bindings work too.
+
+Supported conditions are scalar equality (`'record.status': 'accepted'`) and
+membership (`'record.status': { in: ['accepted', 'rejected'] }`). Multiple entries
+are combined using AND. Comparisons do not coerce types: `1` and `'1'` differ.
+A missing field does not match, even when the expected value is `null`.
+
+References must be `record.<field>` and point to non-sensitive scalar fields on
+the resource's `show` surface. Nested paths, relationships, JSON, currency
+fields, private fields, and unsupported operators are rejected. Conditions
+currently require `scope: 'record'`; resource and bulk actions cannot use them.
+The user must also be allowed to view the record and execute the action.
+Visibility never replaces authorization.
+
+Opening the action fetches the saved state again. The dialog shows only visible
+fields, excludes hidden fields from required validation, and resets entered
+values on reopening or changing records. Conditional actions always open a
+dialog, even when no input fields remain.
+
+Submissions carry a short-lived, signed state token. Bridge checks the current
+record and configuration before validating visible inputs, and checks the
+referenced values again immediately before calling the helper. A changed state,
+expired dialog, or newly denied action stops execution through the normal
+Inertia error flow; the user must reopen the action. Hidden submitted values are
+discarded; they are not silently reused for another decision. Tokens expire
+after 15 minutes and are bound to the actor, app/container, record, and action.
+
+These checks are not a database transaction or an exactly-once delivery system.
+If a decision helper must atomically claim a record or avoid duplicate emails,
+keep that domain-specific transaction/idempotency logic in the application's
+helper. Unconditional actions and existing camelCase identifiers/URL slugs keep
+their current behavior.
+
+### Mail from custom actions
+
+Action helpers can use the target app's configured template-based mail helpers.
+Bridge's worker initializes the app's views and rendering support without
+starting another HTTP listener. Keep normal mail-provider and template settings
+in the application; no extra Bridge field setting is needed.
+
+An action is not automatically transactional. If it saves a record and then mail
+fails, the saved change can remain. Make decision helpers idempotent when users
+may retry, and do not assume a failure rolls back earlier work.
+
+### Custom-action validation failures
+
+Helpers can deliberately return safe validation feedback by throwing an error
+with the `BRIDGE_ACTION_VALIDATION_FAILED` code. `publicMessage` is the form
+message; `fieldErrors` may contain messages for fields declared by that action:
+
+```js
+throw Object.assign(new Error('Private diagnostic context'), {
+  code: 'BRIDGE_ACTION_VALIDATION_FAILED',
+  publicMessage: 'Please revise the note.',
+  fieldErrors: { note: 'Explain the requested changes.' }
+})
+```
+
+Only use those public properties for text intended for the person completing
+the action. Other exceptions display a generic failure message. Their diagnostic
+information is logged server-side with an identifier also stored in the action's
+failure audit event. Submitted values and stacks are not added to audit details
+or sent to the browser. Inertia failures redirect back with errors so the action
+dialog and its entered values remain available. The same behavior applies to
+project routes and app-domain Bridge routes. CamelCase helper identities remain
+valid and do not need to match the action's URL key.
+
 ## Field options
 
 | Option        | Purpose                                         |
@@ -1196,7 +1351,7 @@ Bridge hides encrypted and protected attributes, plus names that look like passw
 
 The field engine supports `text`, `textarea`, `richtext`, `email`, `url`,
 `number`, `currency`, `boolean`, `select`, `belongsTo`, `json`, `date`,
-`datetime`, `timestamp`, `password`, `secret`, `file`, `image`, and `upload`.
+`datetime`, `timestamp`, `chips`, `password`, `secret`, `file`, `image`, and `upload`.
 Bridge infers email, URL, enum, boolean, JSON, relationship, timestamp,
 encrypted, and long-text behavior from Waterline metadata. Use an explicit
 `type` when the stored Waterline type does not describe the intended editor.
@@ -1217,6 +1372,27 @@ status: {
   ]
 }
 ```
+
+### Date and time fields
+
+`type: 'datetime'` and `type: 'timestamp'` use Klean SchedulePicker: one field
+with a combined calendar and time popover. Bridge enables historical dates
+internally, so existing records can be edited as well as future events.
+Date-only fields (`type: 'date'`) keep the calendar-only picker.
+
+Existing configuration stays the same:
+
+```js
+// bridge.resources.<resource>.fields (or the fluent resource fields object)
+startsAt: { type: 'datetime' },
+endsAt: { type: 'datetime' },
+cfpClosesAt: { type: 'datetime' }
+```
+
+No `allowPast` or `schedulePicker` key is needed in `config/slipway.js`.
+These fields display in the browser's timezone and submit ISO instants.
+Opening and saving an unchanged record preserves seconds and milliseconds.
+Datetime filters use the same combined control.
 
 ### Currency fields
 
@@ -1243,9 +1419,47 @@ database already stores `34.99`.
 The fraction digit options default to `2` and can be changed with
 `minimumFractionDigits` and `maximumFractionDigits`.
 
+### Array chips
+
+Explicitly configure a JSON attribute as `type: 'chips'` to edit an array as
+removable values. Ordinary JSON fields keep their existing editor.
+
+```js
+donationPresetsUsd: {
+  type: 'chips',
+  label: 'Suggested donations (USD)',
+  items: {
+    type: 'currency',
+    currency: {
+      code: 'USD',
+      locale: 'en-US',
+      storage: 'minor',
+      submit: 'minor'
+    }
+  }
+}
+```
+
+Use `NGN` and `en-NG` for naira. Users enter major units: `5` dollars is
+stored as `500` cents and `1000` naira as `100000` kobo. Existing arrays are
+converted for editing and converted back once on submission. Clearing all
+chips saves `[]`. Enter adds a value without submitting the form; each remove
+button is keyboard accessible. Uncommitted input is added on blur.
+
+Currency chips require matching `storage` and `submit` units; the scalar
+currency lifecycle-callback convention is not supported for array items.
+Precision defaults to two decimal places and supports zero through six.
+Amounts must be positive and fit within JavaScript's safe integer range when
+expressed in minor units. Invalid amounts, excess decimal places, duplicates,
+and arrays longer than 100 items are rejected on both client and server.
+
+For text arrays use `items: { type: 'text' }` (also the default). Text values
+are trimmed and must contain 1–1000 characters. Enable this configuration in
+an app only after deploying a Slipway version that supports chips.
+
 ### Markdown fields
 
-Set `type: 'richtext'` and `format: 'markdown'` to activate the TipTap visual
+Set `type: 'richtext'` and `format: 'markdown'` to activate the Klean RichText visual
 editor while keeping the model value as Markdown.
 
 The editor supports Markdown shortcuts, a compact formatting menu when text is selected, and direct Markdown source editing. Before entering visual mode, Bridge verifies that the value can round-trip safely. Unsupported Markdown stays in source mode instead of being silently rewritten. Rich-text fields without the explicit `markdown` format continue to use a multiline input.
