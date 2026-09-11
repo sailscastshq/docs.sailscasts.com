@@ -1196,7 +1196,7 @@ application's configuration change and refresh Bridge to load its contract.
 ### Conditional record actions and fields
 
 ::: warning Availability
-This configuration requires the Slipway release containing issue #575. It is not supported by v0.0.73. Upgrade Slipway before deploying it in an application.
+Available in Slipway v0.0.74 and later. Upgrade Slipway before deploying this configuration in an application.
 :::
 
 Use `visibleWhen` to show an action or its fields according to the current saved
