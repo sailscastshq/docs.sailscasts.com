@@ -10,8 +10,8 @@ prev:
   text: Bachs
   link: /sails-pay/bachs
 next:
-  text: Verify transaction
-  link: /sails-pay/verify-transaction
+  text: Connect
+  link: /sails-pay/connect
 editLink: true
 ---
 

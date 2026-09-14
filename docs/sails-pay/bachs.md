@@ -17,7 +17,7 @@ editLink: true
 
 # Bachs
 
-[Bachs](https://bachs.io) is a billing and payments platform for hosted checkout, product-based payments, webhook-confirmed collections, refunds, and multi-currency payment flows.
+[Bachs](https://bachs.io) is a billing and payments platform for hosted checkout, product-based payments, webhook-confirmed collections, refunds, multi-currency payment flows, and marketplace payouts through Bachs Connect.
 
 The `@sails-pay/bachs` adapter lets Sails applications create Bachs hosted checkouts through the same `sails.pay.checkout()` API used by other Sails Pay providers.
 
@@ -32,6 +32,11 @@ Relevant Bachs capabilities include:
 - **Customer portal sessions**: Create fresh, short-lived billing management URLs with `sails.pay.customer.portal({ customerId })`.
 - **Webhook signatures**: Verify `X-Bachs-Timestamp` and `X-Bachs-Signature` using HMAC SHA-256.
 - **Refunds**: Create full or partial refunds for completed charges.
+- **Connect**: Give recipients balances of their own, fund them, and let them withdraw with `sails.pay.connect`.
+
+## Connect
+
+Bachs supports [`sails.pay.connect`](/sails-pay/connect) (`@sails-pay/bachs` 0.0.4 and later) for platforms that pay creators, maintainers, contractors, or sellers: connected accounts, hosted onboarding, transfers, balances, and withdrawals.
 
 ## Getting started with Bachs
 
@@ -389,6 +394,7 @@ const refund = await sails.pay.refund.create({
 
 ## Next steps
 
+- [Connect](/sails-pay/connect) - Onboard recipients and pay them out
 - [Creating checkouts](/sails-pay/checkout) - Redirect users to complete payment
 - [Create a customer portal session](#customer-portal) - Let customers manage billing
 - [Verify transaction](/sails-pay/verify-transaction) - Confirm charge status

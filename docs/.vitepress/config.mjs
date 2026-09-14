@@ -650,6 +650,11 @@ function SailsPayGuide() {
       items: [{ text: 'Creating checkouts', link: 'sails-pay/checkout' }]
     },
     {
+      text: 'Connect',
+      collapsed: false,
+      items: [{ text: 'Accounts and payouts', link: 'sails-pay/connect' }]
+    },
+    {
       text: 'Transactions',
       collapsed: false,
       items: [

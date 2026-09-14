@@ -7,8 +7,8 @@ title: Verify transaction
 titleTemplate: Sails Pay
 description: Learn how to verify payment transactions with Sails Pay
 prev:
-  text: Creating checkouts
-  link: /sails-pay/checkout
+  text: Connect
+  link: /sails-pay/connect
 next:
   text: Verifying webhooks
   link: /sails-pay/webhooks
