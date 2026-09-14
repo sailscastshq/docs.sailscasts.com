@@ -324,7 +324,7 @@ With Bachs as your provider, each method maps to these requests:
 | `balance.get`     | `GET /v1/balances` acting as the account                                                                   |
 | `payout.create`   | `GET /v1/payouts/destinations` (when resolving the default), then `POST /v1/payouts` acting as the account |
 
-`checkout({ connect })` creates a Bachs [destination charge](https://docs.bachs.io/connect/split-payments/destination): `connect.destination` becomes `transfer_data.destination` and `connect.platformFee` becomes `platform_fee`. Bachs keeps a platform fee record for every split you can read in your dashboard.
+`checkout({ connect })` creates a Bachs [destination charge](https://docs.bachs.io/connect/split-payments/destination): `connect.destination` becomes `transfer_data.destination` and `connect.platformFee` becomes `platform_fee`. Bachs keeps a platform fee record for every split, readable at `GET /v1/platform_fees`.
 
 Before creating accounts, request the **`connect`** capability for your Bachs organization from the Bachs dashboard. You use your existing organization; no new Bachs account is needed.
 
