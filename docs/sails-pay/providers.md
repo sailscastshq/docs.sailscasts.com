@@ -76,8 +76,8 @@ const portalUrl = await sails.pay.provider('bachs').customer.portal({
 
 Provider-specific methods are documented on each provider's page. See
 [Bachs customer portal sessions](/sails-pay/bachs#customer-portal) for billing
-management and [Bachs Connect](/sails-pay/bachs-connect) for connected accounts,
-transfers, balances, destinations, and contributor withdrawals.
+management. Connected accounts, transfers, balances, and withdrawals use the
+provider-agnostic [`sails.pay.connect`](/sails-pay/connect) API.
 
 ## Multiple providers
 

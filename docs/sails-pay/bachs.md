@@ -10,8 +10,8 @@ prev:
   text: Paystack
   link: /sails-pay/paystack
 next:
-  text: Bachs Connect
-  link: /sails-pay/bachs-connect
+  text: Creating checkouts
+  link: /sails-pay/checkout
 editLink: true
 ---
 
@@ -32,18 +32,11 @@ Relevant Bachs capabilities include:
 - **Customer portal sessions**: Create fresh, short-lived billing management URLs with `sails.pay.customer.portal({ customerId })`.
 - **Webhook signatures**: Verify `X-Bachs-Timestamp` and `X-Bachs-Signature` using HMAC SHA-256.
 - **Refunds**: Create full or partial refunds for completed charges.
-- **Connected accounts**: Create recipient accounts and hosted onboarding links.
-- **Transfers and balances**: Fund recipient balances from the platform and reconcile each movement.
-- **Contributor payouts**: Resolve banks, register destinations, and withdraw a connected-account balance.
+- **Connect**: Give recipients balances of their own, fund them, and let them withdraw with `sails.pay.connect`.
 
-## Bachs Connect
+## Connect
 
-`@sails-pay/bachs` 0.0.4 and later includes the recipient onboarding and payout
-surface needed by marketplaces and contributor networks.
-
-See [Bachs Connect](/sails-pay/bachs-connect) for the complete method reference,
-required capabilities, money flow, webhook lifecycle, and a same-currency
-contributor payout example.
+Bachs supports [`sails.pay.connect`](/sails-pay/connect) (`@sails-pay/bachs` 0.0.4 and later) for platforms that pay creators, maintainers, contractors, or sellers: connected accounts, hosted onboarding, transfers, balances, and withdrawals.
 
 ## Getting started with Bachs
 
@@ -401,7 +394,7 @@ const refund = await sails.pay.refund.create({
 
 ## Next steps
 
-- [Bachs Connect](/sails-pay/bachs-connect) - Onboard and pay contributors
+- [Connect](/sails-pay/connect) - Onboard recipients and pay them out
 - [Creating checkouts](/sails-pay/checkout) - Redirect users to complete payment
 - [Create a customer portal session](#customer-portal) - Let customers manage billing
 - [Verify transaction](/sails-pay/verify-transaction) - Confirm charge status

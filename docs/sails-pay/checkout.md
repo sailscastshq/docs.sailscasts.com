@@ -7,11 +7,11 @@ title: Creating checkouts
 titleTemplate: Sails Pay
 description: Learn how to create payment checkouts with Sails Pay
 prev:
-  text: Bachs Connect
-  link: /sails-pay/bachs-connect
+  text: Bachs
+  link: /sails-pay/bachs
 next:
-  text: Verify transaction
-  link: /sails-pay/verify-transaction
+  text: Connect
+  link: /sails-pay/connect
 editLink: true
 ---
 

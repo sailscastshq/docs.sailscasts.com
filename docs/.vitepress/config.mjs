@@ -652,7 +652,7 @@ function SailsPayGuide() {
     {
       text: 'Connect',
       collapsed: false,
-      items: [{ text: 'Bachs Connect', link: 'sails-pay/bachs-connect' }]
+      items: [{ text: 'Accounts and payouts', link: 'sails-pay/connect' }]
     },
     {
       text: 'Transactions',
