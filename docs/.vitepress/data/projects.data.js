@@ -179,9 +179,8 @@ export default {
         {
           name: 'Hagfish',
           description:
-            'Hagfish helps professional creators send beautiful invoices, track expenses, and get paid faster.',
-          link: 'https://hagfish.app',
-          external: true
+            'Professional invoicing for creators, with an API and signed webhooks for products, automations, and agents.',
+          link: '/hagfish/'
         },
         {
           name: 'The African Engineer',

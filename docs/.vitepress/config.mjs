@@ -33,6 +33,7 @@ export default {
     search: { provider: 'local' },
     nav: nav(),
     sidebar: {
+      '/hagfish/': hagfishApiGuide(),
       '/slipway/': slipwayGuide(),
       '/captain-vane/': captainVaneGuide(),
       '/sounding/': soundingGuide(),
@@ -78,6 +79,33 @@ export default {
       copyright: 'Copyright © 2022-present The Sailscasts Company'
     }
   }
+}
+
+function hagfishApiGuide() {
+  return [
+    {
+      text: 'Hagfish API',
+      collapsed: false,
+      items: [
+        { text: 'Overview', link: '/hagfish/api/' },
+        { text: 'Getting started', link: '/hagfish/api/getting-started' },
+        {
+          text: 'Authentication and idempotency',
+          link: '/hagfish/api/authentication'
+        },
+        { text: 'Clients and invoices', link: '/hagfish/api/resources' },
+        {
+          text: 'Deliveries and billing',
+          link: '/hagfish/api/deliveries-and-billing'
+        },
+        { text: 'Webhooks', link: '/hagfish/api/webhooks' },
+        {
+          text: 'Errors and local testing',
+          link: '/hagfish/api/errors-and-local-testing'
+        }
+      ]
+    }
+  ]
 }
 
 function nav() {
