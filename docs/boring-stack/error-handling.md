@@ -147,6 +147,30 @@ A good rule is:
 
 Do not replace Sails' built-in error handling globally unless every route in the app is truly Inertia-only.
 
+## Cloudflare challenges and other interstitials
+
+Some responses never come from Sails. A Cloudflare challenge, a WAF block, or a proxy error page answers the request at the edge, so no Sails response can help. Left alone, Inertia shows these HTML pages inside its error modal, where a challenge can never complete.
+
+`rsbuild-plugin-inertia` handles this for you, with no changes to `app.js`. When an Inertia visit gets back an HTML page that is not an Inertia response, the page loads for real so the browser can deal with it:
+
+- a `<Link>` click or other GET visit loads the page the visitor was going to
+- a form submission reloads the current page, since a POST can't be replayed as a navigation
+- background requests like `router.reload()`, polling, and `<InfiniteScroll>` reload the current page
+
+JSON errors and Inertia's own error responses still use the error modal. In development, the modal also stays for ordinary server errors so you can debug them; only clear interstitials (a `cf-mitigated` header, or a `403`, `429`, or `503` HTML page) load as a real page. If the same URL is blocked again within 15 seconds of that page load, Inertia's modal shows instead, so it can never reload in a loop.
+
+This requires `rsbuild-plugin-inertia` 0.0.2 or newer:
+
+```bash
+npm install -D rsbuild-plugin-inertia@^0.0.2
+```
+
+To keep Inertia's default modal for every non-Inertia response, opt out in `config/shipwright.js`:
+
+```js
+pluginInertia({ interstitials: false })
+```
+
 ## Custom responses
 
 The Boring Stack templates include `notFound` and `forbidden` responses that route production-friendly statuses through the Inertia error page:
