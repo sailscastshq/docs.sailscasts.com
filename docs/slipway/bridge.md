@@ -1719,6 +1719,41 @@ instance-global values. Within each scope, explicit `BRIDGE_R2_*` or
 `BRIDGE_S3_*` values override the corresponding conventional value. This lets
 Bridge use a separate bucket without changing the app's own upload setup.
 
+### Allow browser uploads with CORS
+
+Bridge uploads files directly from the operator's browser to a short-lived,
+signed object-storage URL. The bucket must therefore allow cross-origin `PUT`
+requests from every origin where operators use Bridge. The URL path is not part
+of an origin: for app-local Bridge at `https://example.com/bridge`, allow
+`https://example.com`.
+
+For Cloudflare R2, open the selected bucket, choose **Settings → CORS Policy**,
+and add:
+
+```json
+[
+  {
+    "AllowedOrigins": ["https://example.com"],
+    "AllowedMethods": ["GET", "PUT", "HEAD"],
+    "AllowedHeaders": ["Content-Type"],
+    "ExposeHeaders": ["ETag"],
+    "MaxAgeSeconds": 3600
+  }
+]
+```
+
+Replace `https://example.com` with the deployed application's origin. If
+operators also upload through the Slipway-hosted Bridge URL, add that URL's
+origin as a second `AllowedOrigins` entry. Use origins only—no `/bridge` path
+and no trailing slash. Existing bucket policies should be extended rather than
+discarded when other applications also use the bucket.
+
+The CORS policy does not make the bucket writable by the public. Every upload
+still requires the scoped, expiring URL signed by Bridge. Configure
+`BRIDGE_R2_PUBLIC_URL` or `R2_PUBLIC_URL` with a public development URL or,
+preferably, a custom asset domain so the stored URL can be displayed after the
+upload. R2 CORS changes can take several seconds to propagate.
+
 ### Preserve an existing bucket hierarchy
 
 Uploads remain isolated under a team/project/environment namespace by default.
@@ -1759,13 +1794,14 @@ related records from the target app, blocks uploads until required selections
 exist, sanitizes every segment, and rejects traversal. `scope: 'bucket'` must
 be explicit because it intentionally omits Slipway's normal namespace.
 
-Bridge authorizes the actor and target resource before streaming the file to
-object storage. It enforces the MIME allowlist and size limit without buffering
-the entire upload in application memory. The response contains the public URL
-and a short-lived receipt signed by Slipway. A create or update accepts that
-URL only when the receipt matches the current actor, project, environment,
-resource, and field, so a browser cannot substitute an arbitrary remote URL or
-reuse a receipt on another app.
+Bridge authorizes the actor and target resource before issuing a short-lived,
+scoped upload URL. The browser sends the file directly to object storage, then
+Bridge verifies the stored object's type, size, and identity before returning
+the public URL and a signed receipt. A create or update accepts that URL only
+when the receipt matches the current actor, project, environment, resource, and
+field, so a browser cannot substitute an arbitrary remote URL or reuse a
+receipt on another app. Provider credentials never enter the browser, and the
+application container does not buffer the file.
 
 Use a dedicated asset origin and configure an object-store lifecycle rule for
 abandoned objects under the default `bridge/` prefix or the bucket-root prefix
@@ -1790,6 +1826,15 @@ Check the correct surface: `create`, `edit`, or `show`. Protected, encrypted, ge
 ### A save is rejected
 
 Bridge rejects forged or stale attributes before executing the mutation. Reload the page and compare the submitted field with the resource contract.
+
+### The browser cannot reach object storage
+
+The signed upload was prepared, but the browser could not complete its direct
+request to the bucket. Confirm that the selected `BRIDGE_R2_BUCKET` or
+`R2_BUCKET` has a CORS policy for the current Bridge origin, permits `PUT`, and
+allows the `Content-Type` header. Also confirm that the configured endpoint is
+reachable and that the signed URL has not expired. A bucket with no CORS policy
+rejects cross-origin browser uploads by default.
 
 ## What's next?
 
