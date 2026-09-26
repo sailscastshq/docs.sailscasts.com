@@ -215,6 +215,37 @@ The adapter keeps your Sails code camelCase and maps to Bachs snake case at the 
 For product checkout sessions, Bachs requires exactly one of `items` or `productCollectionId`.
 :::
 
+## Guest checkout
+
+Starting with `@sails-pay/bachs` **0.0.8**, omit `customer`, `customerEmail`, and other customer details on a one-time hosted checkout. Bachs asks the buyer for their name and email on its checkout page. You no longer need a shared placeholder address or an account in your app before someone can pay.
+
+```js
+const checkoutUrl = await sails.pay.checkout({
+  items: [{ product: 'prod_abc123', quantity: 1 }],
+  reference: purchase.reference,
+  metadata: { purchase: String(purchase.id) },
+  returnUrl: `${sails.config.custom.baseUrl}/payment/return`,
+  cancelUrl: `${sails.config.custom.baseUrl}/payment/cancel`,
+  idempotencyKey: purchase.reference
+})
+```
+
+The 0.0.8 adapter leaves `customer` out of the Bachs request when you supply no identity. Passing a real `customer` still prefills checkout for a signed-in buyer. Guest checkout is for one-time payments; a checkout containing a recurring product still requires a durable customer identity.
+
+By default, Bachs does **not** create a customer record for a guest. After they enter their details, `customer_details` contains the email and name, while `customer` remains `null`. Before that point, both can be `null`. Read the payer's email from a **verified** `collection.succeeded` event to send a receipt, and use your own `reference` or metadata to locate the payment:
+
+```js
+const data = event.data
+const reference = data.reference || data.metadata?.purchase
+const guestEmail = data.customer_details?.email
+
+// After verifying the webhook signature, settle the matching payment once.
+// A guest's email is for payment and receipts; it does not prove account
+// ownership or decide whether their name appears publicly.
+```
+
+If you need the guest in your Bachs customer directory, Bachs also offers `customer_creation: "always"` on its API. The Sails Pay adapter does not currently expose that option; its default guest behavior keeps `customer` null. See [Bachs' guest checkout guide](https://docs.bachs.io/guides/checkout/checkout-sessions#guest-checkout).
+
 ## Selection-mode checkout
 
 Use `productCollectionId` when you want customers to choose from a Bachs product collection.
@@ -396,6 +427,7 @@ const refund = await sails.pay.refund.create({
 
 - [Connect](/sails-pay/connect) - Onboard recipients and pay them out
 - [Creating checkouts](/sails-pay/checkout) - Redirect users to complete payment
+- [Guest checkout](#guest-checkout) - Accept a one-time payment without an app account
 - [Create a customer portal session](#customer-portal) - Let customers manage billing
 - [Verify transaction](/sails-pay/verify-transaction) - Confirm charge status
 - [Verifying webhooks](/sails-pay/webhooks) - Verify provider webhook deliveries

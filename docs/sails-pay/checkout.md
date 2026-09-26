@@ -329,20 +329,22 @@ Bachs supports product Checkout Sessions and Pure Checkout through `sails.pay.ch
 
 #### Product Checkout Session parameters
 
-| Parameter                   | Type   | Required | Description                                                 |
-| --------------------------- | ------ | -------- | ----------------------------------------------------------- |
-| `items`                     | Array  | Yes      | Product cart items. Each item uses `product` or `productId` |
-| `productCollectionId`       | String | Yes      | Product collection ID for selection-mode checkout           |
-| `customer`                  | Object | Yes      | Customer details or an existing Bachs customer ID           |
-| `billingCurrency`           | String | No       | Currency used to select the product price row               |
-| `allowedPaymentMethodTypes` | Array  | No       | Payment method allowlist, such as `bank_transfer` or `card` |
-| `returnUrl`                 | String | No       | URL Bachs redirects to after checkout-session payment       |
-| `cancelUrl`                 | String | No       | URL Bachs redirects to when checkout is cancelled           |
-| `reference`                 | String | No       | Unique merchant reference                                   |
-| `metadata`                  | Object | No       | Metadata returned in webhook payloads                       |
-| `idempotencyKey`            | String | No       | Value sent as the `Idempotency-Key` header                  |
+| Parameter                   | Type   | Required | Description                                                                   |
+| --------------------------- | ------ | -------- | ----------------------------------------------------------------------------- |
+| `items`                     | Array  | Yes      | Product cart items. Each item uses `product` or `productId`                   |
+| `productCollectionId`       | String | Yes      | Product collection ID for selection-mode checkout                             |
+| `customer`                  | Object | No       | Prefill a buyer or use an existing Bachs customer ID; omit for guest checkout |
+| `billingCurrency`           | String | No       | Currency used to select the product price row                                 |
+| `allowedPaymentMethodTypes` | Array  | No       | Payment method allowlist, such as `bank_transfer` or `card`                   |
+| `returnUrl`                 | String | No       | URL Bachs redirects to after checkout-session payment                         |
+| `cancelUrl`                 | String | No       | URL Bachs redirects to when checkout is cancelled                             |
+| `reference`                 | String | No       | Unique merchant reference                                                     |
+| `metadata`                  | Object | No       | Metadata returned in webhook payloads                                         |
+| `idempotencyKey`            | String | No       | Value sent as the `Idempotency-Key` header                                    |
 
 Provide exactly one of `items` or `productCollectionId`.
+
+For a one-time checkout with `@sails-pay/bachs` 0.0.8 or later, omit customer details so Bachs collects them on the hosted page. See [Bachs guest checkout](/sails-pay/bachs#guest-checkout) for an example and webhook handling.
 
 #### Pure Checkout parameters
 
@@ -351,7 +353,7 @@ Provide exactly one of `items` or `productCollectionId`.
 | `amount`           | String | Yes      | Decimal amount string, such as `"50.00"`           |
 | `currency`         | String | Yes      | Currency code, such as `"USD"` or `"NGN"`          |
 | `currencyOptions`  | Object | No       | Per-currency amount overrides                      |
-| `customerEmail`    | String | Yes      | Customer email address                             |
+| `customerEmail`    | String | No       | Prefill buyer email; omit for guest checkout       |
 | `customerName`     | String | No       | Customer full name                                 |
 | `successUrl`       | String | No       | URL Bachs redirects to after Pure Checkout payment |
 | `cancelUrl`        | String | No       | URL Bachs redirects to when checkout is cancelled  |
