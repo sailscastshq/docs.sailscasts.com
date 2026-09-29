@@ -351,3 +351,69 @@ Bachs' processing fee comes out of your platform balance unless your organizatio
 - [Transfers](https://docs.bachs.io/connect/transfers)
 - [Payouts](https://docs.bachs.io/connect/payouts)
 - [Hosted onboarding](https://docs.bachs.io/connect/guides/hosted-onboarding)
+
+## Bank details and payout destinations
+
+Bank lookup and destination management require `@sails-pay/bachs` **0.0.10** or later. This is an adapter patch; the existing `sails-pay` 0.2.6 hook already exposes these methods.
+
+Use the provider's bank directory and account resolution to let recipients correct their payout details. Identity checks and onboarding can stay in the provider's hosted flow.
+
+```js
+// Get the provider's current bank directory; do not maintain one yourself.
+const banks = await sails.pay.connect.bank.list({ country: 'NG' })
+
+// Keep account numbers as strings so leading zeros survive.
+const resolved = await sails.pay.connect.bank.resolve({
+  country: 'NG',
+  bankCode: '058',
+  accountNumber: '0123456789'
+})
+
+// A successful HTTP response may still contain resolved: false.
+if (!resolved.resolved) throw new Error('Check your bank details')
+
+// List destinations belonging to this authenticated recipient's account.
+const { destinations } = await sails.pay.connect.destination.list({
+  account: recipient.connectedAccountId,
+  currency: 'NGN',
+  limit: 100,
+  offset: 0
+})
+
+// Get a destination's latest status before allowing withdrawals.
+const destination = await sails.pay.connect.destination.get({
+  account: recipient.connectedAccountId,
+  destination: recipient.payoutDestinationId
+})
+
+// Update the chosen bank with the name resolved on your server.
+const updated = await sails.pay.connect.destination.update({
+  account: recipient.connectedAccountId,
+  destination: destination.id,
+  type: 'bank',
+  currency: 'NGN',
+  bankCode: '058',
+  accountNumber: resolved.accountNumber,
+  accountName: resolved.accountName
+})
+
+// Create a destination if the recipient has none yet.
+const created = await sails.pay.connect.destination.create({
+  account: recipient.connectedAccountId,
+  type: 'bank',
+  currency: 'NGN',
+  bankCode: '058',
+  accountNumber: resolved.accountNumber,
+  idempotencyKey: `bank-${recipient.id}-${confirmation.id}`
+})
+```
+
+`bank.list` returns `{ code, name }[]`. `bank.resolve` returns `{ resolved, accountName, accountNumber, message }`. Both are platform-level reference calls. Destination operations are scoped to `account`; derive that account and the selected destination from the authenticated recipient, never arbitrary browser inputs.
+
+`destination.list` returns `{ destinations, total, limit, offset }`. Each destination has normalized `type` (`bank`, `mobileMoney`, or `crypto`), `status` (`approved`, `pending`, or `rejected`), `statusReason`, `isUsable`, `isDefault`, routing details, and `raw`. Supported rails depend on the provider. Keep full account numbers and raw responses on the server; send only a masked summary to the browser.
+
+Changing bank routing details can return the destination to review. Enable withdrawals only when `status === 'approved'` **and** `isUsable`. Retain the chosen destination ID and pass it to `payout.create({ account, destination, ... })`; do not switch to a different bank while review is pending. The Bachs adapter also refuses an unusable default rather than silently choosing a different usable destination.
+
+Resolve and save are separate steps. Store a short-lived server confirmation bound to the connected account, bank code, account number and resolved name. Invalidate it when any input changes, and invalidate an existing withdrawal quote when the selected bank changes. Saving bank details should not automatically retry an old withdrawal.
+
+For Bachs bank creation, the provider resolves the name itself. Bank updates use the supplied account name, so only send a name obtained through server-side resolution. Provider failures have dedicated exits: `couldNotListBanks`, `couldNotResolveBank`, `couldNotListDestinations`, `couldNotGetDestination`, `couldNotCreateDestination`, and `couldNotUpdateDestination`.
