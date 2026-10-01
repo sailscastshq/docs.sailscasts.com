@@ -6,18 +6,12 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanPagination from '../../.vitepress/theme/components/klean/pagination/Pagination.vue'
 import paginationSource from '../../.vitepress/theme/components/klean/pagination/Pagination.vue?raw'
-import reactSource from '../sources/pagination/Pagination.jsx?raw'
-import svelteSource from '../sources/pagination/Pagination.svelte?raw'
-import vueUsage from '../snippets/pagination/usage.vue?raw'
-import reactUsage from '../snippets/pagination/usage.jsx?raw'
-import svelteUsage from '../snippets/pagination/usage.svelte?raw'
 
 const previewPage = ref(4)
 
@@ -77,23 +71,15 @@ One command detects Vue, React, or Svelte, installs the matching official Inerti
 
 Render Pagination from the same server pagination object that rendered the visible rows. The server remains authoritative; Klean does not create a second client-side page state.
 
-<KleanFrameworkCode id="pagination-usage-1" label="pagination Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="ProjectPages.vue" />
+<<< ../snippets/pagination/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/pagination/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="ProjectPages.jsx" />
+<<< ../snippets/pagination/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="ProjectPages.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 `only` is optional. Use it when an Inertia partial reload should request only the result and pagination props. Leave it out when changing page should refresh the full page payload.
 
@@ -176,23 +162,15 @@ Use Pagination when a server-backed collection is divided into discrete pages: a
 
 Copy, inspect, and change the complete one-file source for your framework.
 
-<KleanFrameworkCode id="pagination-complete-framework-source-2" label="pagination Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="paginationSource" label="Pagination.vue" />
+<<< ../../.vitepress/theme/components/klean/pagination/Pagination.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/pagination/Pagination.jsx [React]
 
-<CopyCode :code="reactSource" label="Pagination.jsx" />
+<<< ../sources/pagination/Pagination.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Pagination.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

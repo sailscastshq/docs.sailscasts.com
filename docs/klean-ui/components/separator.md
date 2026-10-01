@@ -6,18 +6,13 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanSeparator from '../../.vitepress/theme/components/klean/separator/Separator.vue'
 import SeparatorRecipes from '../../.vitepress/theme/components/klean/separator/SeparatorRecipes.vue'
 import separatorSource from '../../.vitepress/theme/components/klean/separator/Separator.vue?raw'
-import reactSource from '../sources/separator/Separator.jsx?raw'
-import svelteSource from '../sources/separator/Separator.svelte?raw'
-import vueUsage from '../snippets/separator/usage.vue?raw'
-import reactUsage from '../snippets/separator/usage.jsx?raw'
-import svelteUsage from '../snippets/separator/usage.svelte?raw'
+
 import verticalSource from '../snippets/separator/vertical.vue?raw'
 </script>
 
@@ -65,23 +60,15 @@ One command detects Vue, React, or Svelte and writes the matching one-file sourc
 
 Use Separator between adjacent regions only when the boundary carries meaning that spacing alone does not communicate.
 
-<KleanFrameworkCode id="separator-usage-1" label="separator Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="AccountSettings.vue" />
+<<< ../snippets/separator/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/separator/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="AccountSettings.jsx" />
+<<< ../snippets/separator/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="AccountSettings.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## API
 
@@ -212,23 +199,15 @@ Use Separator for:
 
 Copy, inspect, and change the complete one-file source for your framework.
 
-<KleanFrameworkCode id="separator-complete-framework-source-2" label="separator Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="separatorSource" label="Separator.vue" />
+<<< ../../.vitepress/theme/components/klean/separator/Separator.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/separator/Separator.jsx [React]
 
-<CopyCode :code="reactSource" label="Separator.jsx" />
+<<< ../sources/separator/Separator.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Separator.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

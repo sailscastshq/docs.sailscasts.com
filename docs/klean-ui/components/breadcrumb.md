@@ -6,17 +6,11 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanBreadcrumb from '../../.vitepress/theme/components/klean/breadcrumb/Breadcrumb.vue'
 import breadcrumbSource from '../../.vitepress/theme/components/klean/breadcrumb/Breadcrumb.vue?raw'
-import reactSource from '../sources/breadcrumb/Breadcrumb.jsx?raw'
-import svelteSource from '../sources/breadcrumb/Breadcrumb.svelte?raw'
-import vueUsage from '../snippets/breadcrumb/usage.vue?raw'
-import reactUsage from '../snippets/breadcrumb/usage.jsx?raw'
-import svelteUsage from '../snippets/breadcrumb/usage.svelte?raw'
 
 const previewItems = [
   { label: 'Projects', href: '/' },
@@ -71,23 +65,15 @@ One command detects Vue, React, or Svelte, installs the matching official Inerti
 
 Write the hierarchy your page already knows. Ancestors receive destinations; the final item does not need one.
 
-<KleanFrameworkCode id="breadcrumb-usage-1" label="breadcrumb Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="ProjectBreadcrumb.vue" />
+<<< ../snippets/breadcrumb/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/breadcrumb/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="ProjectBreadcrumb.jsx" />
+<<< ../snippets/breadcrumb/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="ProjectBreadcrumb.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 The object shape is identical in every framework. Only the framework's ordinary component syntax changes.
 
@@ -190,23 +176,15 @@ Use Breadcrumb on deeply nested application pages where parent destinations help
 
 Copy, inspect, and change the complete one-file source for your framework.
 
-<KleanFrameworkCode id="breadcrumb-complete-framework-source-2" label="breadcrumb Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="breadcrumbSource" label="Breadcrumb.vue" />
+<<< ../../.vitepress/theme/components/klean/breadcrumb/Breadcrumb.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/breadcrumb/Breadcrumb.jsx [React]
 
-<CopyCode :code="reactSource" label="Breadcrumb.jsx" />
+<<< ../sources/breadcrumb/Breadcrumb.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Breadcrumb.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

@@ -6,7 +6,6 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { onBeforeUnmount, ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -16,11 +15,7 @@ import KleanToast from '../../.vitepress/theme/components/klean/toast/Toast.vue'
 import { createToast } from '../../.vitepress/theme/components/klean/toast/toast.js'
 import toastSource from '../../.vitepress/theme/components/klean/toast/Toast.vue?raw'
 import controllerSource from '../../.vitepress/theme/components/klean/toast/toast.js?raw'
-import reactSource from '../sources/toast/Toast.jsx?raw'
-import svelteSource from '../sources/toast/Toast.svelte?raw'
-import vueUsage from '../snippets/toast/usage.vue?raw'
-import reactUsage from '../snippets/toast/usage.jsx?raw'
-import svelteUsage from '../snippets/toast/usage.svelte?raw'
+
 import actionUsage from '../snippets/toast/actions.vue?raw'
 import motionUsage from '../snippets/toast/motion.vue?raw'
 import longRunningUsage from '../snippets/toast/long-running.vue?raw'
@@ -227,23 +222,15 @@ One command detects Vue, React, or Svelte and adds Toast:
 
 Mount `<Toast />` near the application root. Then call `toast()` wherever a notification is needed.
 
-<KleanFrameworkCode id="toast-usage-1" label="toast Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="AppLayout.vue" />
+<<< ../snippets/toast/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/toast/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="AppLayout.jsx" />
+<<< ../snippets/toast/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="AppLayout.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## API
 
@@ -507,23 +494,15 @@ Copy, inspect, and change the complete source for your framework.
 
 <CopyCode :code="controllerSource" label="toast.js" />
 
-<KleanFrameworkCode id="toast-complete-framework-source-2" label="toast Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="toastSource" label="Toast.vue" />
+<<< ../../.vitepress/theme/components/klean/toast/Toast.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/toast/Toast.jsx [React]
 
-<CopyCode :code="reactSource" label="Toast.jsx" />
+<<< ../sources/toast/Toast.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Toast.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

@@ -6,17 +6,13 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import LoadingStateRecipes from '../../.vitepress/theme/components/klean/loading-state/LoadingStateRecipes.vue'
 import loadingStateSource from '../../.vitepress/theme/components/klean/loading-state/LoadingState.vue?raw'
-import reactSource from '../sources/loading-state/LoadingState.jsx?raw'
-import svelteSource from '../sources/loading-state/LoadingState.svelte?raw'
+
 import vueUsage from '../snippets/loading-state/usage.vue?raw'
-import reactUsage from '../snippets/loading-state/usage.jsx?raw'
-import svelteUsage from '../snippets/loading-state/usage.svelte?raw'
 </script>
 
 # Loading State
@@ -53,23 +49,15 @@ The examples also use [Spinner](/klean-ui/components/spinner). Add it separately
 
 Put `aria-busy` on the region whose content is changing. Loading State provides the persistent polite status; the caller supplies useful words and optional visuals.
 
-<KleanFrameworkCode id="loading-state-usage-1" label="loading state Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="ServicesLoading.vue" />
+<<< ../snippets/loading-state/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/loading-state/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="ServicesLoading.jsx" />
+<<< ../snippets/loading-state/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="ServicesLoading.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## API
 
@@ -129,23 +117,15 @@ Use Loading State when a named region is waiting for content or refreshing exist
 
 ## Complete framework source
 
-<KleanFrameworkCode id="loading-state-complete-framework-source-2" label="loading state Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="loadingStateSource" label="LoadingState.vue" />
+<<< ../../.vitepress/theme/components/klean/loading-state/LoadingState.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/loading-state/LoadingState.jsx [React]
 
-<CopyCode :code="reactSource" label="LoadingState.jsx" />
+<<< ../sources/loading-state/LoadingState.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="LoadingState.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

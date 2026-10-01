@@ -6,18 +6,13 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanCommand from '../../.vitepress/theme/components/klean/command/Command.vue'
 import commandSource from '../../.vitepress/theme/components/klean/command/Command.vue?raw'
-import reactSource from '../sources/command/Command.jsx?raw'
-import svelteSource from '../sources/command/Command.svelte?raw'
-import vueUsage from '../snippets/command/usage.vue?raw'
-import reactUsage from '../snippets/command/usage.jsx?raw'
-import svelteUsage from '../snippets/command/usage.svelte?raw'
+
 import rankedUsage from '../snippets/command/ranked.vue?raw'
 import paletteUsage from '../snippets/command/palette.vue?raw'
 import nestedUsage from '../snippets/command/nested.vue?raw'
@@ -134,23 +129,15 @@ One command detects Vue, React, or Svelte and copies the matching framework-nati
 
 ## Usage
 
-<KleanFrameworkCode id="command-usage-1" label="command Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="ApplicationCommands.vue" />
+<<< ../snippets/command/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/command/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="ApplicationCommands.jsx" />
+<<< ../snippets/command/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="ApplicationCommands.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 The framework binding changes; the command record and selection outcome do not.
 
@@ -283,20 +270,12 @@ Use Command when typed text narrows application actions or destinations: a comma
 
 ## Complete framework source
 
-<KleanFrameworkCode id="command-complete-framework-source-2" label="command Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="commandSource" label="Command.vue" />
+<<< ../../.vitepress/theme/components/klean/command/Command.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/command/Command.jsx [React]
 
-<CopyCode :code="reactSource" label="Command.jsx" />
+<<< ../sources/command/Command.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Command.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::

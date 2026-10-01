@@ -6,7 +6,6 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -15,9 +14,7 @@ import FlagExamples from '../../.vitepress/theme/components/klean/flag/FlagExamp
 import vueSource from '../../.vitepress/theme/components/klean/flag/Flag.vue?raw'
 import reactSource from '../sources/flag/Flag.jsx?raw'
 import svelteSource from '../sources/flag/Flag.svelte?raw'
-import vueUsage from '../snippets/flag/usage.vue?raw'
-import reactUsage from '../snippets/flag/usage.jsx?raw'
-import svelteUsage from '../snippets/flag/usage.svelte?raw'
+
 import selectSource from '../../.vitepress/theme/components/klean/flag/FlagExamples.vue?raw'
 const frameworks = [
   { id: 'vue', label: 'Vue', filename: 'Flag.vue', destination: 'assets/js/components/ui/flag/Flag.vue', source: vueSource },
@@ -56,23 +53,15 @@ For manual installation, copy the matching framework source and [flags.js](/klea
 
 ## Usage
 
-<KleanFrameworkCode id="flag-usage-1" label="flag Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="Countries.vue" />
+<<< ../snippets/flag/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/flag/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="Countries.jsx" />
+<<< ../snippets/flag/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="Countries.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## API
 
@@ -156,23 +145,15 @@ Allow `data:` in the application's CSP `img-src` when using built-in assets. Cus
 
 Copy the matching component and the [shared licensed asset module](/klean-ui/flag/flags.js). The live Vue preview renders this same source.
 
-<KleanFrameworkCode id="flag-complete-framework-source-2" label="flag Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueSource" label="Flag.vue" />
+<<< ../../.vitepress/theme/components/klean/flag/Flag.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/flag/Flag.jsx [React]
 
-<CopyCode :code="reactSource" label="Flag.jsx" />
+<<< ../sources/flag/Flag.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Flag.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

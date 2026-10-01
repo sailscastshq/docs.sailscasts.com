@@ -6,22 +6,14 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { onBeforeUnmount, ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanSlide from '../../.vitepress/theme/components/klean/slide/Slide.vue'
 import slideSource from '../../.vitepress/theme/components/klean/slide/Slide.vue?raw'
-import reactSource from '../sources/slide/Slide.jsx?raw'
-import svelteSource from '../sources/slide/Slide.svelte?raw'
-import vueUsage from '../snippets/slide/usage.vue?raw'
-import reactUsage from '../snippets/slide/usage.jsx?raw'
-import svelteUsage from '../snippets/slide/usage.svelte?raw'
+
 import stylingUsage from '../snippets/slide/styling.vue?raw'
-import vueThumb from '../snippets/slide/thumb.vue?raw'
-import reactThumb from '../snippets/slide/thumb.jsx?raw'
-import svelteThumb from '../snippets/slide/thumb.svelte?raw'
 
 const pending = ref(false)
 const message = ref('Ready to deploy.')
@@ -101,23 +93,15 @@ One command detects Vue, React, or Svelte and installs the framework-native sour
 
 The HTML and behavior stay the same in every framework. Only binding and event syntax change.
 
-<KleanFrameworkCode id="slide-usage-1" label="slide Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="DeployAction.vue" />
+<<< ../snippets/slide/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/slide/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="DeployAction.jsx" />
+<<< ../snippets/slide/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="DeployAction.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Why this is a button
 
@@ -150,23 +134,15 @@ The custom thumb receives `pending` and `progress`, where progress is `start`, `
 
 The default arrow needs no configuration. When a product has a meaningful mark—such as an application mascot—place it in the thumb with the framework-native content hook.
 
-<KleanFrameworkCode id="slide-custom-thumb-content-2" label="slide Custom thumb content framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueThumb" label="DeployAction.vue" />
+<<< ../snippets/slide/thumb.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/slide/thumb.jsx [React]
 
-<CopyCode :code="reactThumb" label="DeployAction.jsx" />
+<<< ../snippets/slide/thumb.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteThumb" label="DeployAction.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 The entire thumb is decorative. Keep the image `alt` empty and communicate pending work through the visible action label and the surrounding application status, not through the moving artwork alone.
 
@@ -197,23 +173,15 @@ Color is never the only progress signal: the thumb position moves, the visible l
 
 Copy, inspect, and change the complete source for your framework.
 
-<KleanFrameworkCode id="slide-complete-framework-source-3" label="slide Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="slideSource" label="Slide.vue" />
+<<< ../../.vitepress/theme/components/klean/slide/Slide.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/slide/Slide.jsx [React]
 
-<CopyCode :code="reactSource" label="Slide.jsx" />
+<<< ../sources/slide/Slide.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Slide.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

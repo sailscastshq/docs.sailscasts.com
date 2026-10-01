@@ -6,7 +6,6 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -14,11 +13,9 @@ import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanAlert from '../../.vitepress/theme/components/klean/alert/Alert.vue'
 import KleanButton from '../../.vitepress/theme/components/klean/Button.vue'
 import alertSource from '../../.vitepress/theme/components/klean/alert/Alert.vue?raw'
-import reactSource from '../sources/alert/Alert.jsx?raw'
-import svelteSource from '../sources/alert/Alert.svelte?raw'
+
 import vueUsage from '../snippets/alert/usage.vue?raw'
-import reactUsage from '../snippets/alert/usage.jsx?raw'
-import svelteUsage from '../snippets/alert/usage.svelte?raw'
+
 import checklistUsage from '../snippets/alert/checklist.vue?raw'
 
 const lastChecklistAction = ref('')
@@ -86,23 +83,15 @@ One command detects Vue, React, or Svelte and writes the matching source into th
 
 The application writes the real content and opts into urgent announcement only when a new failure needs immediate attention.
 
-<KleanFrameworkCode id="alert-usage-1" label="alert Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="DeploymentError.vue" />
+<<< ../snippets/alert/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/alert/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="DeploymentError.jsx" />
+<<< ../snippets/alert/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="DeploymentError.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## API
 
@@ -287,23 +276,15 @@ Use Alert for visible information that deserves a distinct surface: a warning, f
 
 Copy, inspect, and change the complete source for your framework.
 
-<KleanFrameworkCode id="alert-complete-framework-source-2" label="alert Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="alertSource" label="Alert.vue" />
+<<< ../../.vitepress/theme/components/klean/alert/Alert.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/alert/Alert.jsx [React]
 
-<CopyCode :code="reactSource" label="Alert.jsx" />
+<<< ../sources/alert/Alert.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Alert.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

@@ -6,17 +6,13 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import ErrorStateRecipes from '../../.vitepress/theme/components/klean/error-state/ErrorStateRecipes.vue'
 import errorStateSource from '../../.vitepress/theme/components/klean/error-state/ErrorState.vue?raw'
-import reactSource from '../sources/error-state/ErrorState.jsx?raw'
-import svelteSource from '../sources/error-state/ErrorState.svelte?raw'
+
 import vueUsage from '../snippets/error-state/usage.vue?raw'
-import reactUsage from '../snippets/error-state/usage.jsx?raw'
-import svelteUsage from '../snippets/error-state/usage.svelte?raw'
 </script>
 
 # Error State
@@ -53,23 +49,15 @@ The examples also use [Button](/klean-ui/components/button). Add it separately w
 
 Use native alert semantics only when a failure appears dynamically and warrants interruption. Static error pages should use ordinary page or section semantics so their heading is not announced twice.
 
-<KleanFrameworkCode id="error-state-usage-1" label="error state Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="ServicesError.vue" />
+<<< ../snippets/error-state/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/error-state/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="ServicesError.jsx" />
+<<< ../snippets/error-state/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="ServicesError.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## API
 
@@ -148,23 +136,15 @@ Use Error State when a page or meaningful content region failed and the user nee
 
 ## Complete framework source
 
-<KleanFrameworkCode id="error-state-complete-framework-source-2" label="error state Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="errorStateSource" label="ErrorState.vue" />
+<<< ../../.vitepress/theme/components/klean/error-state/ErrorState.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/error-state/ErrorState.jsx [React]
 
-<CopyCode :code="reactSource" label="ErrorState.jsx" />
+<<< ../sources/error-state/ErrorState.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="ErrorState.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

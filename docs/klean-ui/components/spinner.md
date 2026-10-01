@@ -6,7 +6,6 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { onBeforeUnmount, ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -15,11 +14,7 @@ import KleanButton from '../../.vitepress/theme/components/klean/Button.vue'
 import ProductLoader from '../../.vitepress/theme/components/klean/spinner/ProductLoader.vue'
 import KleanSpinner from '../../.vitepress/theme/components/klean/spinner/Spinner.vue'
 import spinnerSource from '../../.vitepress/theme/components/klean/spinner/Spinner.vue?raw'
-import reactSource from '../sources/spinner/Spinner.jsx?raw'
-import svelteSource from '../sources/spinner/Spinner.svelte?raw'
-import vueUsage from '../snippets/spinner/usage.vue?raw'
-import reactUsage from '../snippets/spinner/usage.jsx?raw'
-import svelteUsage from '../snippets/spinner/usage.svelte?raw'
+
 import customUsage from '../snippets/spinner/custom.vue?raw'
 import stylingUsage from '../snippets/spinner/styling.vue?raw'
 
@@ -100,23 +95,15 @@ One command detects Vue, React, or Svelte and installs the framework-native sour
 
 Keep the status surface mounted before its contents change. Spinner is decorative, so the useful status is announced once rather than as an unnamed image and again as text.
 
-<KleanFrameworkCode id="spinner-usage-1" label="spinner Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="DeploymentStatus.vue" />
+<<< ../snippets/spinner/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/spinner/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="DeploymentStatus.jsx" />
+<<< ../snippets/spinner/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="DeploymentStatus.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Loading semantics
 
@@ -203,23 +190,15 @@ Long-running server work is different from an in-flight browser request. Restore
 
 Copy, inspect, and change the complete source for your framework.
 
-<KleanFrameworkCode id="spinner-complete-framework-source-2" label="spinner Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="spinnerSource" label="Spinner.vue" />
+<<< ../../.vitepress/theme/components/klean/spinner/Spinner.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/spinner/Spinner.jsx [React]
 
-<CopyCode :code="reactSource" label="Spinner.jsx" />
+<<< ../sources/spinner/Spinner.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Spinner.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

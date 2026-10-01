@@ -8,7 +8,6 @@ outline: [2, 3]
 <script setup>
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import RichText from '../../.vitepress/theme/components/klean/rich-text/RichText.vue'
@@ -23,14 +22,11 @@ import svelteHelper from '../sources/rich-text/rich-text.svelte.js?raw'
 import sveltePopover from '../sources/popover/Popover.svelte?raw'
 import { iconSource, icons } from '../../.vitepress/theme/components/klean/icons/icons.js'
 import vueUsage from '../snippets/rich-text/usage.vue?raw'
-import reactUsage from '../snippets/rich-text/usage.jsx?raw'
-import svelteUsage from '../snippets/rich-text/usage.svelte?raw'
+
 import vueMarkdown from '../snippets/rich-text/markdown.vue?raw'
-import reactMarkdown from '../snippets/rich-text/markdown.jsx?raw'
-import svelteMarkdown from '../snippets/rich-text/markdown.svelte?raw'
+
 import vueToolbar from '../snippets/rich-text/toolbar.vue?raw'
-import reactToolbar from '../snippets/rich-text/toolbar.jsx?raw'
-import svelteToolbar from '../snippets/rich-text/toolbar.svelte?raw'
+
 import draftExample from '../snippets/rich-text/draft.vue?raw'
 import uploadExample from '../snippets/rich-text/upload.js?raw'
 
@@ -58,14 +54,6 @@ const frameworkSources = [
     })
   ]
 }))
-const examples = (vue, react, svelte, name) => [
-  { id: 'vue', label: 'Vue', code: vue, filename: `${name}.vue` },
-  { id: 'react', label: 'React', code: react, filename: `${name}.jsx` },
-  { id: 'svelte', label: 'Svelte', code: svelte, filename: `${name}.svelte` }
-]
-const usageFrameworks = examples(vueUsage, reactUsage, svelteUsage, 'TalkAbstract')
-const markdownFrameworks = examples(vueMarkdown, reactMarkdown, svelteMarkdown, 'TalkOutline')
-const toolbarFrameworks = examples(vueToolbar, reactToolbar, svelteToolbar, 'ReviewNote')
 
 function inspectSubmission(event) {
   submitted.value = String(new FormData(event.currentTarget).get('abstract') || '')
@@ -114,7 +102,15 @@ manual tab includes the editor, its helper, Popover, and the two toolbar icons.
 
 ## Usage
 
-<KleanFrameworkCode id="rich-text-usage" :frameworks="usageFrameworks" label="RichText usage framework" />
+::: code-group
+
+<<< ../snippets/rich-text/usage.vue [Vue]
+
+<<< ../snippets/rich-text/usage.jsx [React]
+
+<<< ../snippets/rich-text/usage.svelte [Svelte]
+
+:::
 
 Keep the label, help text, error message, and surrounding layout in your form.
 The bound value is a string—not an editor instance or a document object.
@@ -133,7 +129,15 @@ stores Markdown:
   </template>
 </KleanPreview>
 
-<KleanFrameworkCode id="rich-text-markdown-usage" :frameworks="markdownFrameworks" label="Markdown framework" />
+::: code-group
+
+<<< ../snippets/rich-text/markdown.vue [Vue]
+
+<<< ../snippets/rich-text/markdown.jsx [React]
+
+<<< ../snippets/rich-text/markdown.svelte [Svelte]
+
+:::
 
 Choose the format to match the stored field. Switching between Write and Source
 changes how you edit that field; it does not change its storage format.
@@ -224,7 +228,15 @@ workflow needs fewer actions or an application-specific arrangement:
   </template>
 </KleanPreview>
 
-<KleanFrameworkCode id="rich-text-toolbar" :frameworks="toolbarFrameworks" label="Custom toolbar framework" />
+::: code-group
+
+<<< ../snippets/rich-text/toolbar.vue [Vue]
+
+<<< ../snippets/rich-text/toolbar.jsx [React]
+
+<<< ../snippets/rich-text/toolbar.svelte [Svelte]
+
+:::
 
 Vue's `toolbar` slot, React's `renderToolbar`, and Svelte's `toolbar` snippet
 receive `{ editor, mode, setMode, openLink, openImage }`. `editor` is the Tiptap
@@ -284,7 +296,15 @@ API and assume the editor has made it safe.
 
 ## Complete framework source
 
-<KleanFrameworkCode id="rich-text-source" :frameworks="frameworkSources" label="RichText source framework" />
+::: code-group
+
+<<< ../../.vitepress/theme/components/klean/rich-text/RichText.vue [Vue]
+
+<<< ../sources/rich-text/RichText.jsx [React]
+
+<<< ../sources/rich-text/RichText.svelte [Svelte]
+
+:::
 
 The installation section's manual tab includes every companion file.
 

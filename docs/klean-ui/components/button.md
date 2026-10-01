@@ -6,7 +6,6 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanButton from '../../.vitepress/theme/components/klean/Button.vue'
@@ -15,9 +14,7 @@ import KleanSpinner from '../../.vitepress/theme/components/klean/spinner/Spinne
 import buttonSource from '../../.vitepress/theme/components/klean/Button.vue?raw'
 import reactSource from '../sources/button/Button.jsx?raw'
 import svelteSource from '../sources/button/Button.svelte?raw'
-import vueUsage from '../snippets/button/usage.vue?raw'
-import reactUsage from '../snippets/button/usage.jsx?raw'
-import svelteUsage from '../snippets/button/usage.svelte?raw'
+
 import pendingUsage from '../snippets/button/pending.vue?raw'
 import semanticUsage from '../snippets/button/semantics.vue?raw'
 import productRecipes from '../snippets/button/products.vue?raw'
@@ -44,12 +41,6 @@ const buttonFrameworks = [
     filename: 'Button.svelte',
     destination: 'assets/js/components/ui/button/Button.svelte'
   }
-]
-
-const buttonUsage = [
-  { id: 'vue', label: 'Vue', code: vueUsage, filename: 'SaveButton.vue' },
-  { id: 'react', label: 'React', code: reactUsage, filename: 'SaveButton.jsx' },
-  { id: 'svelte', label: 'Svelte', code: svelteUsage, filename: 'SaveButton.svelte' }
 ]
 </script>
 
@@ -88,13 +79,17 @@ There are intentionally no `variant`, `size`, `color`, `tone`, `radius`, `elevat
 
 ## Usage
 
-Choose a framework. The preference is remembered across Klean component pages, while the command remains the same because the CLI detects the application.
+Choose the example for your framework.
 
-<KleanFrameworkCode
-  id="button-usage"
-  :frameworks="buttonUsage"
-  label="Button usage framework"
-/>
+::: code-group
+
+<<< ../snippets/button/usage.vue [Vue]
+
+<<< ../snippets/button/usage.jsx [React]
+
+<<< ../snippets/button/usage.svelte [Svelte]
+
+:::
 
 Visual styling stays in the framework's ordinary class API. If the same product treatment repeats, create an application-owned component such as `PrimaryButton.vue` using Button as its semantic base.
 
@@ -201,11 +196,15 @@ Klean's neutral default stays motionless and uses tonal feedback. Hagfish delibe
 
 The live preview demonstrates the shared semantic contract. Copy the complete framework-native source that belongs in your application:
 
-<KleanFrameworkCode
-  id="button-complete-source"
-  :frameworks="buttonFrameworks"
-  label="Button source framework"
-/>
+::: code-group
+
+<<< ../../.vitepress/theme/components/klean/Button.vue [Vue]
+
+<<< ../sources/button/Button.jsx [React]
+
+<<< ../sources/button/Button.svelte [Svelte]
+
+:::
 
 ## Related components
 

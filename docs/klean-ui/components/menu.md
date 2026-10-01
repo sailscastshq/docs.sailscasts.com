@@ -6,7 +6,6 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -14,11 +13,7 @@ import KleanButton from '../../.vitepress/theme/components/klean/Button.vue'
 import KleanMenu from '../../.vitepress/theme/components/klean/menu/Menu.vue'
 import menuSource from '../../.vitepress/theme/components/klean/menu/Menu.vue?raw'
 import popoverSource from '../../.vitepress/theme/components/klean/popover/Popover.vue?raw'
-import reactMenuSource from '../sources/menu/Menu.jsx?raw'
-import svelteMenuSource from '../sources/menu/Menu.svelte?raw'
-import vueUsage from '../snippets/menu/usage.vue?raw'
-import reactUsage from '../snippets/menu/usage.jsx?raw'
-import svelteUsage from '../snippets/menu/usage.svelte?raw'
+
 import productSource from '../snippets/menu/products.vue?raw'
 
 const vueFiles = [
@@ -114,23 +109,15 @@ Run the same command in Vue, React, or Svelte. Klean detects the framework and c
 
 ## Usage
 
-<KleanFrameworkCode id="menu-usage-1" label="menu Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="ProjectActions.vue" />
+<<< ../snippets/menu/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/menu/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="ProjectActions.jsx" />
+<<< ../snippets/menu/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="ProjectActions.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 The framework syntax changes; the HTML contract does not. A real button uses native `popovertarget`. Native button and anchor children become menu items automatically, so developers do not repeat roles or tab indices.
 
@@ -265,15 +252,15 @@ Slipway needs compact operational actions; Hagfish needs a stronger border and o
 
 ## Complete framework source
 
-<KleanFrameworkCode
-  id="menu-framework-source"
-  :frameworks="[
-    { id: 'vue', label: 'Vue', code: menuSource, filename: 'Menu.vue' },
-    { id: 'react', label: 'React', code: reactMenuSource, filename: 'Menu.jsx' },
-    { id: 'svelte', label: 'Svelte', code: svelteMenuSource, filename: 'Menu.svelte' }
-  ]"
-  label="Menu source framework"
-/>
+::: code-group
+
+<<< ../../.vitepress/theme/components/klean/menu/Menu.vue [Vue]
+
+<<< ../sources/menu/Menu.jsx [React]
+
+<<< ../sources/menu/Menu.svelte [Svelte]
+
+:::
 
 ## Accessibility and Durable UI contract
 

@@ -6,18 +6,13 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanTable from '../../.vitepress/theme/components/klean/table/Table.vue'
 import TableRecipes from '../../.vitepress/theme/components/klean/table/TableRecipes.vue'
 import tableSource from '../../.vitepress/theme/components/klean/table/Table.vue?raw'
-import reactSource from '../sources/table/Table.jsx?raw'
-import svelteSource from '../sources/table/Table.svelte?raw'
-import vueUsage from '../snippets/table/usage.vue?raw'
-import reactUsage from '../snippets/table/usage.jsx?raw'
-import svelteUsage from '../snippets/table/usage.svelte?raw'
+
 import productSource from '../snippets/table/products.vue?raw'
 
 const services = [
@@ -25,7 +20,6 @@ const services = [
   { name: 'worker', dependency: 'Redis 8', status: 'Deploying', memory: '192 MB' },
   { name: 'web', dependency: '—', status: 'Healthy', memory: '256 MB' }
 ]
-
 </script>
 
 # Table
@@ -93,23 +87,15 @@ One command detects Vue, React, or Svelte and writes one framework-native source
 
 Use Table for the root and write ordinary HTML beneath it. This keeps semantics visible in reviews and puts Tailwind exactly where the visual decision belongs.
 
-<KleanFrameworkCode id="table-usage-1" label="table Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="ServicesTable.vue" />
+<<< ../snippets/table/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/table/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="ServicesTable.jsx" />
+<<< ../snippets/table/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="ServicesTable.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## API
 
@@ -191,23 +177,15 @@ Use Table when rows and columns have relationships that users need to compare or
 
 Copy, inspect, and change the complete one-file source for your framework.
 
-<KleanFrameworkCode id="table-complete-framework-source-2" label="table Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="tableSource" label="Table.vue" />
+<<< ../../.vitepress/theme/components/klean/table/Table.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/table/Table.jsx [React]
 
-<CopyCode :code="reactSource" label="Table.jsx" />
+<<< ../sources/table/Table.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Table.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

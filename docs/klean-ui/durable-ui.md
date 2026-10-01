@@ -5,19 +5,6 @@ description: How Klean UI implements resilient state, focus, navigation, and asy
 outline: [2, 3]
 ---
 
-<script setup>
-import KleanFrameworkCode from '../.vitepress/theme/components/KleanFrameworkCode.vue'
-import formDraftVue from './snippets/durable-ui/form-draft.vue?raw'
-import formDraftReact from './snippets/durable-ui/form-draft.jsx?raw'
-import formDraftSvelte from './snippets/durable-ui/form-draft.svelte?raw'
-
-const formDraftExamples = [
-  { id: 'vue', label: 'Vue', code: formDraftVue, filename: 'NewInvoice.vue' },
-  { id: 'react', label: 'React', code: formDraftReact, filename: 'NewInvoice.jsx' },
-  { id: 'svelte', label: 'Svelte', code: formDraftSvelte, filename: 'NewInvoice.svelte' }
-]
-</script>
-
 # Durable UI
 
 Klean UI is the canonical source-owned implementation of Durable UI for The Boring JavaScript Stack. Components should not merely look correct in a screenshot; useful state, navigation context, focus, and in-progress work should survive the real conditions of an application.
@@ -85,11 +72,15 @@ The names follow each framework. The behavior does not drift. Install the bundle
 
 The draft key is the only required durability decision. The application still owns its fields, submission, messages, and server state.
 
-<KleanFrameworkCode
-  id="durable-form-draft"
-  :frameworks="formDraftExamples"
-  label="Recoverable form framework"
-/>
+::: code-group
+
+<<< ./snippets/durable-ui/form-draft.vue [Vue]
+
+<<< ./snippets/durable-ui/form-draft.jsx [React]
+
+<<< ./snippets/durable-ui/form-draft.svelte [Svelte]
+
+:::
 
 The saved draft expires after 24 hours by default. It is offered for deliberate restore or discard, ignores empty work, and is cleared after the application confirms success. A dirty form uses the browser's native unsaved-change guard; `clear()` updates the clean baseline after a successful submission.
 

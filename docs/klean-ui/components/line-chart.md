@@ -6,17 +6,11 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanLineChart from '../../.vitepress/theme/components/klean/line-chart/LineChart.vue'
 import lineChartSource from '../../.vitepress/theme/components/klean/line-chart/LineChart.vue?raw'
-import reactSource from '../sources/line-chart/LineChart.jsx?raw'
-import svelteSource from '../sources/line-chart/LineChart.svelte?raw'
-import vueUsage from '../snippets/line-chart/usage.vue?raw'
-import reactUsage from '../snippets/line-chart/usage.jsx?raw'
-import svelteUsage from '../snippets/line-chart/usage.svelte?raw'
 
 const signups = [
   { label: 'Fri', value: 4, detail: 'Friday, 4 signups' },
@@ -80,23 +74,15 @@ Use [Sparkline](/klean-ui/components/sparkline) when an adjacent visible number 
 
 ## Usage
 
-<KleanFrameworkCode id="line-chart-usage-1" label="line chart Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="SignupChart.vue" />
+<<< ../snippets/line-chart/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/line-chart/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="SignupChart.jsx" />
+<<< ../snippets/line-chart/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="SignupChart.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## API
 
@@ -178,20 +164,12 @@ Hagfish can use the same primitive for small invoice or payment trends without i
 
 ## Complete framework source
 
-<KleanFrameworkCode id="line-chart-complete-framework-source-2" label="line chart Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="lineChartSource" label="LineChart.vue" />
+<<< ../../.vitepress/theme/components/klean/line-chart/LineChart.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/line-chart/LineChart.jsx [React]
 
-<CopyCode :code="reactSource" label="LineChart.jsx" />
+<<< ../sources/line-chart/LineChart.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="LineChart.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::

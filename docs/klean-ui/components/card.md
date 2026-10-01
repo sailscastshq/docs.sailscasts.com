@@ -6,7 +6,6 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
@@ -16,11 +15,7 @@ import KleanButton from '../../.vitepress/theme/components/klean/Button.vue'
 import KleanCard from '../../.vitepress/theme/components/klean/card/Card.vue'
 import CardRecipes from '../../.vitepress/theme/components/klean/card/CardRecipes.vue'
 import cardSource from '../../.vitepress/theme/components/klean/card/Card.vue?raw'
-import reactSource from '../sources/card/Card.jsx?raw'
-import svelteSource from '../sources/card/Card.svelte?raw'
-import vueUsage from '../snippets/card/usage.vue?raw'
-import reactUsage from '../snippets/card/usage.jsx?raw'
-import svelteUsage from '../snippets/card/usage.svelte?raw'
+
 import navigationSource from '../snippets/card/navigation.vue?raw'
 import productSource from '../snippets/card/products.vue?raw'
 
@@ -73,23 +68,15 @@ One command detects Vue, React, or Svelte and writes the matching one-file sourc
 
 Choose the native element from what the content is, then write the markup directly.
 
-<KleanFrameworkCode id="card-usage-1" label="card Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="ReleaseCard.vue" />
+<<< ../snippets/card/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/card/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="ReleaseCard.jsx" />
+<<< ../snippets/card/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="ReleaseCard.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## API
 
@@ -230,23 +217,15 @@ Use it when the outer surface is genuinely shared while the content remains ordi
 
 Copy, inspect, and change the complete one-file source for your framework.
 
-<KleanFrameworkCode id="card-complete-framework-source-2" label="card Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="cardSource" label="Card.vue" />
+<<< ../../.vitepress/theme/components/klean/card/Card.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/card/Card.jsx [React]
 
-<CopyCode :code="reactSource" label="Card.jsx" />
+<<< ../sources/card/Card.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Card.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

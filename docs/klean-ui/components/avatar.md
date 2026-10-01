@@ -6,18 +6,13 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanAvatar from '../../.vitepress/theme/components/klean/avatar/Avatar.vue'
 import AvatarRecipes from '../../.vitepress/theme/components/klean/avatar/AvatarRecipes.vue'
 import avatarSource from '../../.vitepress/theme/components/klean/avatar/Avatar.vue?raw'
-import reactSource from '../sources/avatar/Avatar.jsx?raw'
-import svelteSource from '../sources/avatar/Avatar.svelte?raw'
-import vueUsage from '../snippets/avatar/usage.vue?raw'
-import reactUsage from '../snippets/avatar/usage.jsx?raw'
-import svelteUsage from '../snippets/avatar/usage.svelte?raw'
+
 import compositionSource from '../snippets/avatar/composition.vue?raw'
 import productSource from '../snippets/avatar/products.vue?raw'
 
@@ -75,23 +70,15 @@ One command detects Vue, React, or Svelte and writes the matching one-file sourc
 
 The fallback is ordinary slot or child content. It is visible only when the source is absent or unavailable.
 
-<KleanFrameworkCode id="avatar-usage-1" label="avatar Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="CreatorLink.vue" />
+<<< ../snippets/avatar/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/avatar/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="CreatorLink.jsx" />
+<<< ../snippets/avatar/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="CreatorLink.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## API
 
@@ -230,23 +217,15 @@ Use it when the source and fallback should occupy the same visual space and shar
 
 Copy, inspect, and change the complete one-file source for your framework.
 
-<KleanFrameworkCode id="avatar-complete-framework-source-2" label="avatar Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="avatarSource" label="Avatar.vue" />
+<<< ../../.vitepress/theme/components/klean/avatar/Avatar.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/avatar/Avatar.jsx [React]
 
-<CopyCode :code="reactSource" label="Avatar.jsx" />
+<<< ../sources/avatar/Avatar.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Avatar.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

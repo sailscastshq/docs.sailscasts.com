@@ -6,17 +6,13 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import EmptyStateRecipes from '../../.vitepress/theme/components/klean/empty-state/EmptyStateRecipes.vue'
 import emptyStateSource from '../../.vitepress/theme/components/klean/empty-state/EmptyState.vue?raw'
-import reactSource from '../sources/empty-state/EmptyState.jsx?raw'
-import svelteSource from '../sources/empty-state/EmptyState.svelte?raw'
+
 import vueUsage from '../snippets/empty-state/usage.vue?raw'
-import reactUsage from '../snippets/empty-state/usage.jsx?raw'
-import svelteUsage from '../snippets/empty-state/usage.svelte?raw'
 </script>
 
 # Empty State
@@ -51,23 +47,15 @@ The command detects Vue, React, or Svelte and copies the matching one-file sourc
 
 Write the same ordinary document markup you would use without a component. Empty State supplies the surrounding layout and class-merging seam.
 
-<KleanFrameworkCode id="empty-state-usage-1" label="empty state Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="ProjectsEmptyState.vue" />
+<<< ../snippets/empty-state/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/empty-state/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="ProjectsEmptyState.jsx" />
+<<< ../snippets/empty-state/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="ProjectsEmptyState.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## API
 
@@ -137,23 +125,15 @@ Use Empty State when a successfully loaded collection, page, panel, table, or wo
 
 ## Complete framework source
 
-<KleanFrameworkCode id="empty-state-complete-framework-source-2" label="empty state Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="emptyStateSource" label="EmptyState.vue" />
+<<< ../../.vitepress/theme/components/klean/empty-state/EmptyState.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/empty-state/EmptyState.jsx [React]
 
-<CopyCode :code="reactSource" label="EmptyState.jsx" />
+<<< ../sources/empty-state/EmptyState.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="EmptyState.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

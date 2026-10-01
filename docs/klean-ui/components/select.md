@@ -6,7 +6,6 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -15,11 +14,7 @@ import KleanSelect from '../../.vitepress/theme/components/klean/select/Select.v
 import SlipwaySelectRecipe from '../../.vitepress/theme/components/klean/select/SlipwaySelectRecipe.vue'
 import selectSource from '../../.vitepress/theme/components/klean/select/Select.vue?raw'
 import popoverSource from '../../.vitepress/theme/components/klean/popover/Popover.vue?raw'
-import reactSource from '../sources/select/Select.jsx?raw'
-import svelteSource from '../sources/select/Select.svelte?raw'
-import vueUsage from '../snippets/select/usage.vue?raw'
-import reactUsage from '../snippets/select/usage.jsx?raw'
-import svelteUsage from '../snippets/select/usage.svelte?raw'
+
 import productSource from '../snippets/select/products.vue?raw'
 
 const role = ref('viewer')
@@ -96,23 +91,15 @@ and resolves Popover first when it is missing:
 
 ## Usage
 
-<KleanFrameworkCode id="select-usage-1" label="select Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="MemberRole.vue" />
+<<< ../snippets/select/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/select/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="MemberRole.jsx" />
+<<< ../snippets/select/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="MemberRole.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 The framework binding changes; the value and option contract does not.
 
@@ -245,20 +232,12 @@ interaction state and are not written to storage or the URL by Klean.
 
 ## Complete framework source
 
-<KleanFrameworkCode id="select-complete-framework-source-2" label="select Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="selectSource" label="Select.vue" />
+<<< ../../.vitepress/theme/components/klean/select/Select.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/select/Select.jsx [React]
 
-<CopyCode :code="reactSource" label="Select.jsx" />
+<<< ../sources/select/Select.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Select.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::

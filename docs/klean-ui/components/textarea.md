@@ -7,16 +7,12 @@ outline: [2, 3]
 
 <script setup>
 import { ref } from 'vue'
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanTextarea from '../../.vitepress/theme/components/klean/textarea/Textarea.vue'
 import textareaSource from '../../.vitepress/theme/components/klean/textarea/Textarea.vue?raw'
 import reactSource from '../sources/textarea/Textarea.jsx?raw'
 import svelteSource from '../sources/textarea/Textarea.svelte?raw'
-import vueUsage from '../snippets/textarea/usage.vue?raw'
-import reactUsage from '../snippets/textarea/usage.jsx?raw'
-import svelteUsage from '../snippets/textarea/usage.svelte?raw'
 
 const textareaFrameworks = [
   {
@@ -40,12 +36,6 @@ const textareaFrameworks = [
     filename: 'Textarea.svelte',
     destination: 'assets/js/components/ui/textarea/Textarea.svelte'
   }
-]
-
-const textareaUsage = [
-  { id: 'vue', label: 'Vue', code: vueUsage, filename: 'NoteField.vue' },
-  { id: 'react', label: 'React', code: reactUsage, filename: 'NoteField.jsx' },
-  { id: 'svelte', label: 'Svelte', code: svelteUsage, filename: 'NoteField.svelte' }
 ]
 
 const note = ref(
@@ -100,11 +90,15 @@ Textarea is a styled native control with one durable behavior: its presentation 
 
 ## Native form recipe
 
-<KleanFrameworkCode
-  id="textarea-usage"
-  :frameworks="textareaUsage"
-  label="Textarea usage framework"
-/>
+::: code-group
+
+<<< ../snippets/textarea/usage.vue [Vue]
+
+<<< ../snippets/textarea/usage.jsx [React]
+
+<<< ../snippets/textarea/usage.svelte [Svelte]
+
+:::
 
 The surrounding label, help, error, IDs, validation, and value source remain ordinary application markup. Keep help and error nodes stable, bind `aria-invalid` to the boolean error state, and hide an empty error with `empty:hidden`. There is no Field context, accessibility helper, or `autoGrow` switch.
 
@@ -138,11 +132,15 @@ Textarea accepts native textarea attributes, framework-native value binding, and
 
 The live preview demonstrates the shared native and content-derived sizing contract. Copy the complete framework-native source for your application:
 
-<KleanFrameworkCode
-  id="textarea-complete-source"
-  :frameworks="textareaFrameworks"
-  label="Textarea source framework"
-/>
+::: code-group
+
+<<< ../../.vitepress/theme/components/klean/textarea/Textarea.vue [Vue]
+
+<<< ../sources/textarea/Textarea.jsx [React]
+
+<<< ../sources/textarea/Textarea.svelte [Svelte]
+
+:::
 
 ## Related components
 

@@ -6,18 +6,12 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanRadio from '../../.vitepress/theme/components/klean/radio/Radio.vue'
 import radioSource from '../../.vitepress/theme/components/klean/radio/Radio.vue?raw'
-import reactSource from '../sources/radio/Radio.jsx?raw'
-import svelteSource from '../sources/radio/Radio.svelte?raw'
-import vueUsage from '../snippets/radio/usage.vue?raw'
-import reactUsage from '../snippets/radio/usage.jsx?raw'
-import svelteUsage from '../snippets/radio/usage.svelte?raw'
 
 const regions = [
   { value: 'frankfurt', label: 'Frankfurt', hint: 'Central Europe' },
@@ -94,23 +88,15 @@ source file:
 
 ## Usage
 
-<KleanFrameworkCode id="radio-usage-1" label="radio Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="RegionField.vue" />
+<<< ../snippets/radio/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/radio/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="RegionField.jsx" />
+<<< ../snippets/radio/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="RegionField.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 The framework binding changes, but every version produces one native group and
 submits the checked value under `region`.
@@ -362,20 +348,12 @@ itself.
 
 ## Complete framework source
 
-<KleanFrameworkCode id="radio-complete-framework-source-2" label="radio Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="radioSource" label="Radio.vue" />
+<<< ../../.vitepress/theme/components/klean/radio/Radio.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/radio/Radio.jsx [React]
 
-<CopyCode :code="reactSource" label="Radio.jsx" />
+<<< ../sources/radio/Radio.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Radio.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::

@@ -6,18 +6,13 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanTagsInput from '../../.vitepress/theme/components/klean/tags-input/TagsInput.vue'
 import tagsInputSource from '../../.vitepress/theme/components/klean/tags-input/TagsInput.vue?raw'
-import reactSource from '../sources/tags-input/TagsInput.jsx?raw'
-import svelteSource from '../sources/tags-input/TagsInput.svelte?raw'
-import vueUsage from '../snippets/tags-input/usage.vue?raw'
-import reactUsage from '../snippets/tags-input/usage.jsx?raw'
-import svelteUsage from '../snippets/tags-input/usage.svelte?raw'
+
 import durableUsage from '../snippets/tags-input/durable.vue?raw'
 
 const tags = ref(['billing', 'invoice'])
@@ -93,23 +88,15 @@ source into the application:
 
 ## Usage
 
-<KleanFrameworkCode id="tags-input-usage-1" label="tags input Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="ExpenseTags.vue" />
+<<< ../snippets/tags-input/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/tags-input/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="ExpenseTags.jsx" />
+<<< ../snippets/tags-input/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="ExpenseTags.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 The syntax changes with the framework; the committed tags, pending draft,
 native form, and interaction contract do not.
@@ -213,20 +200,12 @@ the final escape hatch.
 
 ## Complete framework source
 
-<KleanFrameworkCode id="tags-input-complete-framework-source-2" label="tags input Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="tagsInputSource" label="TagsInput.vue" />
+<<< ../../.vitepress/theme/components/klean/tags-input/TagsInput.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/tags-input/TagsInput.jsx [React]
 
-<CopyCode :code="reactSource" label="TagsInput.jsx" />
+<<< ../sources/tags-input/TagsInput.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="TagsInput.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::

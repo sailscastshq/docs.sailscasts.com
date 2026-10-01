@@ -6,18 +6,12 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { computed, ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanCheckbox from '../../.vitepress/theme/components/klean/checkbox/Checkbox.vue'
 import checkboxSource from '../../.vitepress/theme/components/klean/checkbox/Checkbox.vue?raw'
-import reactSource from '../sources/checkbox/Checkbox.jsx?raw'
-import svelteSource from '../sources/checkbox/Checkbox.svelte?raw'
-import vueUsage from '../snippets/checkbox/usage.vue?raw'
-import reactUsage from '../snippets/checkbox/usage.jsx?raw'
-import svelteUsage from '../snippets/checkbox/usage.svelte?raw'
 
 const events = [
   { id: 'builds', label: 'Builds' },
@@ -103,23 +97,15 @@ source file:
 
 ## Usage
 
-<KleanFrameworkCode id="checkbox-usage-1" label="checkbox Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="NotificationsField.vue" />
+<<< ../snippets/checkbox/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/checkbox/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="NotificationsField.jsx" />
+<<< ../snippets/checkbox/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="NotificationsField.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 The binding syntax changes, but every version produces the same native checkbox
 and keeps the visible label in application markup.
@@ -266,20 +252,12 @@ than stored separately.
 
 ## Complete framework source
 
-<KleanFrameworkCode id="checkbox-complete-framework-source-2" label="checkbox Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="checkboxSource" label="Checkbox.vue" />
+<<< ../../.vitepress/theme/components/klean/checkbox/Checkbox.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/checkbox/Checkbox.jsx [React]
 
-<CopyCode :code="reactSource" label="Checkbox.jsx" />
+<<< ../sources/checkbox/Checkbox.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Checkbox.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
