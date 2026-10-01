@@ -51,9 +51,13 @@ That is the behavioral contract. Width, shape, borders, color, and country-picke
 
 The current npm release, `klean-ui@0.0.6`, does not include Flag. Install it using the framework sources and licensed `flags.js` asset module below. There is no Klean runtime dependency, provider, initializer, or asset-host configuration.
 
-<KleanInstallation id="flag-installation" component="flag" :frameworks="frameworks" :dependencies="['tailwind-merge']" :command-available="false" />
+1. Install `tailwind-merge` if your application does not already have it.
+2. Copy the component for your framework to the destination shown below.
+3. [Download the complete licensed flags.js](/klean-ui/flag/flags.js) into the same `flag/` directory. Each component imports `./flags.js`.
 
-For manual installation, copy the component for your framework **and** [download the complete licensed flags.js](/klean-ui/flag/flags.js) into the same `flag/` directory. Each displayed component imports `./flags.js`. Install `tailwind-merge` if your application does not already have it. Keep the license comment when editing or redistributing the asset module.
+Keep the license comment when editing or redistributing the asset module.
+
+<KleanInstallation id="flag-installation" component="flag" :frameworks="frameworks" :dependencies="['tailwind-merge']" :command-available="false" />
 
 ## Usage
 
