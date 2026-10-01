@@ -137,6 +137,10 @@ A native-first non-modal floating surface with light dismissal, focus return, co
 
 An accessible list of truthful button actions and link destinations built on Klean Popover. It adds roving focus, Arrow keys, Home/End, typeahead, disabled-item behavior, selection, and durable focus return while caller Tailwind owns the product treatment.
 
+### [ContextMenu](/klean-ui/components/context-menu)
+
+A right-click and keyboard action menu paired with an existing focusable target. It composes Menu and Popover, handles viewport collision, and leaves touch actions to a regular application button.
+
 ### [Select](/klean-ui/components/select)
 
 A one-component fixed-list value picker with typed values, grouped and disabled options, full keyboard behavior, ordinary form participation, and caller-owned Tailwind. Editable search remains a separate Combobox contract.

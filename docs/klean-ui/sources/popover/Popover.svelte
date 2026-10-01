@@ -91,6 +91,11 @@
         root.getElementById?.(anchor) ?? document.getElementById(anchor);
 
       if (element?.isConnected) return element;
+    } else if (
+      typeof anchor?.getBoundingClientRect === "function" &&
+      !(anchor instanceof Element)
+    ) {
+      return anchor;
     } else if (anchor?.isConnected) {
       return anchor;
     }
@@ -161,6 +166,7 @@
   }
 
   function handleNativeToggle(event) {
+    contentProps.ontoggle?.(event);
     const nextOpen = event.newState === "open";
     const shouldRestoreFocus =
       !nextOpen &&
@@ -324,7 +330,7 @@
   {...contentProps}
   bind:this={contentElement}
   id={contentId}
-  popover="auto"
+  popover={contentProps.popover ?? "auto"}
   hidden={!supportsNative && !isOpen}
   data-slot={contentProps["data-slot"] ?? "popover-content"}
   data-state={isOpen ? "open" : "closed"}

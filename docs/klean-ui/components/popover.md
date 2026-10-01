@@ -260,6 +260,14 @@ Hagfish's share surface and Slipway's operational filters need the same interact
   </template>
 </KleanPreview>
 
+The native `popover` attribute defaults to `auto` and can be passed as `manual` for a composition that owns dismissal (such as ContextMenu). Manual changes the browser’s automatic light-dismiss behavior; Klean’s explicit outside-pointer and Escape handlers still run. It does not turn the surface modal or trap focus. Native toggle event callbacks are preserved.
+
+## Virtual point anchors
+
+`anchor` also accepts a positioning-only virtual object with `getBoundingClientRect()` returning finite viewport coordinates (x/y, left/right/top/bottom, width/height), and a connected `contextElement` for the scroll/resize ancestry. A zero-size rectangle represents a pointer point. This additive form is used by [ContextMenu](/klean-ui/components/context-menu); normal element and element-id anchors keep their existing behavior. Replace the virtual object when the point changes so framework effects recompute positioning.
+
+A virtual anchor is geometry, not an invoker: it supplies no accessible name, keyboard focus or native activation. Keep a real, connected, focusable source for those relationships, or compose Menu/ContextMenu when menu semantics and focus return are needed. Source connection and focus remain the application’s responsibility.
+
 ## Accessibility and Durable UI contract
 
 - The invoker is a real button with native keyboard activation.

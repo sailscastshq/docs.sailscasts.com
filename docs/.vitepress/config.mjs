@@ -147,6 +147,7 @@ function kleanUiGuide() {
         { text: 'Pagination', link: '/klean-ui/components/pagination' },
         { text: 'Popover', link: '/klean-ui/components/popover' },
         { text: 'Menu', link: '/klean-ui/components/menu' },
+        { text: 'ContextMenu', link: '/klean-ui/components/context-menu' },
         { text: 'Select', link: '/klean-ui/components/select' },
         { text: 'Combobox', link: '/klean-ui/components/combobox' },
         { text: 'Command', link: '/klean-ui/components/command' },

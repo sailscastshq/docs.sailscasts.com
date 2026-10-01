@@ -179,6 +179,12 @@ A disabled action uses the native `disabled` attribute and is skipped during key
 
 Vue uses `v-model:open`, React uses `open` with `onOpenChange`, and Svelte uses `bind:open`. Placement and offset are geometry, not appearance. Menu has no `variant`, `tone`, `size`, `inset`, `destructive`, animation, or theme props.
 
+### Imperative invocation
+
+Vue and React refs expose `open(edge = 'first', source?)`, `close({ restoreFocus? })`, and `getContent()`. Svelte component bindings expose `show(edge = 'first', source?)`, `closeMenu({ restoreFocus? })`, and `getContent()`. `edge` is `first` or `last`; an optional connected, focusable source establishes the focus-return and Tab-exit origin for non-button invocations such as [ContextMenu](/klean-ui/components/context-menu). Omit it for the normal native `popovertarget` relationship. `getContent()` returns the current menu DOM element after mount, not a server element.
+
+Menu waits until a native Popover is actually showing before focusing the requested item; a native toggle supplies the readiness signal. In fallback browsers it focuses after the closed `hidden` state is removed. No timing delay or persisted state is required.
+
 ## Keyboard and focus
 
 - Click, Enter, or Space on the real trigger opens and focuses the first enabled item.
