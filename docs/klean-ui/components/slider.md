@@ -10,6 +10,7 @@ import { ref } from 'vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import Slider from '../../.vitepress/theme/components/klean/slider/Slider.vue'
 import sliderSource from '../../.vitepress/theme/components/klean/slider/Slider.vue?raw'
+import EffortSlider from '../../.vitepress/theme/components/klean/slider/EffortSlider.vue'
 const rollout = ref(40)
 const budget = ref([200, 800])
 const effort = ref(3)
@@ -255,6 +256,27 @@ Use ordinary Tailwind classes. For example, `class="text-blue-600"` changes the 
 The root exposes `data-slot="slider"`, `data-disabled`, and `data-dragging`. Descendants expose `slider-track`, `slider-fill`, `slider-thumb`, `slider-mark`, and `slider-mark-label`. Use ordinary descendant selectors for track, fill, and mark styling; the native thumb accepts browser thumb pseudo-element selectors. Extract an application component when a visual treatment repeats.
 
 Keep value movement immediate. Do not add an animation that makes the handle lag behind dragging or keyboard input.
+
+## Large stepped control
+
+A thick track, larger handle, dots, and a changing label are all caller styling and ordinary surrounding markup. This example uses the same Slider with five steps. Its reset button returns to Medium.
+
+<KleanPreview id="large-slider-preview" :source="sliderSource" filename="Slider.vue">
+  <template #preview>
+    <EffortSlider />
+  </template>
+  <template #source>
+
+<<< ../../.vitepress/theme/components/klean/slider/Slider.vue
+
+  </template>
+</KleanPreview>
+
+Install the two decorative icons with `npx klean-ui add icon bolt refresh`, then compose the application-owned control:
+
+<<< ../../.vitepress/theme/components/klean/slider/EffortSlider.vue
+
+The same classes apply to React's `className` and Svelte's `class`. Set the CSS thumb size with `[--thumb-size:3.5rem]`; the track and pointer positioning stay aligned with it. Filled color, marks, and surrounding content do not require a new variant or a theme API. Keep a visible focus indicator and an accessible name when changing the presentation.
 
 ## Accessible labels and errors
 

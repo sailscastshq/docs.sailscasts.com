@@ -47,6 +47,13 @@ const disabled = computed(
   () => props.disabled || bounds.value.min === bounds.value.max
 )
 const dragging = ref(false)
+const thumbSize = ref(20)
+const thumbMeasure = ref()
+let geometryObserver
+function measureThumb() {
+  const width = thumbMeasure.value?.getBoundingClientRect().width
+  if (Number.isFinite(width) && width > 0) thumbSize.value = width
+}
 const initialValue = Array.isArray(props.modelValue)
   ? [...props.modelValue]
   : props.modelValue
@@ -55,7 +62,7 @@ let form
 const lastIndex = ref(0)
 const classes = computed(() =>
   twMerge(
-    'relative block h-11 w-full touch-pan-y select-none text-gray-950 dark:text-white data-disabled:cursor-not-allowed data-disabled:opacity-40',
+    'relative block h-11 w-full touch-pan-y select-none text-gray-950 dark:text-white data-disabled:cursor-not-allowed data-disabled:opacity-40 [--thumb-size:1.25rem]',
     attrs.class
   )
 )
@@ -114,10 +121,15 @@ function rtl() {
   return getComputedStyle(root.value).direction === 'rtl'
 }
 function pointerValue(event) {
+  measureThumb()
   const rect = root.value.getBoundingClientRect()
   const fraction = Math.max(
     0,
-    Math.min(1, (event.clientX - rect.left - 10) / Math.max(1, rect.width - 20))
+    Math.min(
+      1,
+      (event.clientX - rect.left - thumbSize.value / 2) /
+        Math.max(1, rect.width - thumbSize.value)
+    )
   )
   return (
     bounds.value.min +
@@ -227,9 +239,22 @@ function listenForm() {
   form = inputs.value[0]?.form
   form?.addEventListener('reset', reset)
 }
-onMounted(listenForm)
+onMounted(() => {
+  listenForm()
+  measureThumb()
+  geometryObserver = new ResizeObserver(measureThumb)
+  geometryObserver.observe(root.value)
+  geometryObserver.observe(thumbMeasure.value)
+})
+watch(
+  () => attrs.class,
+  () => nextTick(measureThumb)
+)
 watch(() => attrs.form, listenForm, { flush: 'post' })
-onBeforeUnmount(() => form?.removeEventListener('reset', reset))
+onBeforeUnmount(() => {
+  form?.removeEventListener('reset', reset)
+  geometryObserver?.disconnect()
+})
 defineExpose({ inputs })
 </script>
 
@@ -255,6 +280,11 @@ defineExpose({ inputs })
       aria-hidden="true"
       data-slot="slider-track"
       class="pointer-events-none absolute inset-x-2.5 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-gray-200 dark:bg-gray-700"
+      :style="{
+        insetInline: 'calc(var(--thumb-size) / 2)',
+        transform: 'translateY(-50%)',
+        translate: 'none'
+      }"
     >
       <span
         data-slot="slider-fill"
@@ -266,9 +296,19 @@ defineExpose({ inputs })
         :key="mark.value"
         data-slot="slider-mark"
         class="absolute top-1/2 size-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/65 dark:bg-gray-950/65 rtl:translate-x-1/2"
-        :style="{ insetInlineStart: `${sliderPercent(mark.value, bounds)}%` }"
+        :style="{
+          insetInlineStart: `${sliderPercent(mark.value, bounds)}%`,
+          transform: 'translate(calc(-50% * var(--slider-direction, 1)), -50%)',
+          translate: 'none'
+        }"
       />
     </span>
+    <span
+      ref="thumbMeasure"
+      aria-hidden="true"
+      class="pointer-events-none invisible absolute h-0"
+      style="width: var(--thumb-size)"
+    />
     <input
       v-for="(item, index) in values"
       :key="index"
@@ -305,7 +345,7 @@ defineExpose({ inputs })
       data-slot="slider-mark-label"
       class="pointer-events-none absolute top-full -translate-x-1/2 text-xs text-gray-500 dark:text-gray-400 rtl:translate-x-1/2"
       :style="{
-        insetInlineStart: `calc(10px + (100% - 20px) * ${sliderPercent(mark.value, bounds) / 100})`
+        insetInlineStart: `calc(${thumbSize / 2}px + (100% - ${thumbSize}px) * ${sliderPercent(mark.value, bounds) / 100})`
       }"
       >{{ mark.label }}</span
     >
@@ -313,59 +353,66 @@ defineExpose({ inputs })
 </template>
 
 <style scoped>
-.klean-slider-input {
-  pointer-events: none;
-}
-.klean-slider-input::-webkit-slider-runnable-track {
-  height: 6px;
-  background: transparent;
-}
-.klean-slider-input::-moz-range-track {
-  height: 6px;
-  background: transparent;
-}
-.klean-slider-input::-webkit-slider-thumb {
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  margin-top: -7px;
-  border: 1px solid #d1d5db;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 1px 3px #0002;
-  pointer-events: auto;
-}
-.klean-slider-input::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
-  border: 1px solid #d1d5db;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 1px 3px #0002;
-  pointer-events: auto;
-}
-.klean-slider-input:focus-visible::-webkit-slider-thumb {
-  outline: 3px solid currentColor;
-  outline-offset: 3px;
-}
-.klean-slider-input:focus-visible::-moz-range-thumb {
-  outline: 3px solid currentColor;
-  outline-offset: 3px;
-}
-@media (forced-colors: active) {
-  [data-slot='slider-track'] {
-    background: GrayText;
+@layer base {
+  [data-slot='slider']:dir(rtl) {
+    --slider-direction: -1;
   }
-  [data-slot='slider-fill'] {
-    background: Highlight;
+  .klean-slider-input {
+    pointer-events: none;
+  }
+  .klean-slider-input::-webkit-slider-runnable-track {
+    height: 6px;
+    background: transparent;
+  }
+  .klean-slider-input::-moz-range-track {
+    height: 6px;
+    background: transparent;
   }
   .klean-slider-input::-webkit-slider-thumb {
-    border-color: ButtonText;
-    background: ButtonFace;
+    appearance: none;
+    box-sizing: border-box;
+    width: var(--thumb-size);
+    height: var(--thumb-size);
+    margin-top: calc((6px - var(--thumb-size)) / 2);
+    border: 1px solid #d1d5db;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px #0002;
+    pointer-events: auto;
   }
   .klean-slider-input::-moz-range-thumb {
-    border-color: ButtonText;
-    background: ButtonFace;
+    box-sizing: border-box;
+    width: var(--thumb-size);
+    height: var(--thumb-size);
+    border: 1px solid #d1d5db;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px #0002;
+    pointer-events: auto;
+  }
+  .klean-slider-input:focus-visible::-webkit-slider-thumb {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
+  }
+  .klean-slider-input:focus-visible::-moz-range-thumb {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
+  }
+  @media (forced-colors: active) {
+    [data-slot='slider-track'] {
+      background: GrayText;
+    }
+    [data-slot='slider-fill'] {
+      background: Highlight;
+    }
+    .klean-slider-input::-webkit-slider-thumb {
+      border-color: ButtonText;
+      background: ButtonFace;
+    }
+    .klean-slider-input::-moz-range-thumb {
+      border-color: ButtonText;
+      background: ButtonFace;
+    }
   }
 }
 </style>
