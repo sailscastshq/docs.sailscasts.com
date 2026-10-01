@@ -294,9 +294,21 @@ A slider does not decide where its value belongs. Keep shareable filters in the 
 
 ## Source
 
+::: code-group
+
 <<< ../../.vitepress/theme/components/klean/slider/Slider.vue
 
+<<< ../../.vitepress/theme/components/klean/slider/Slider.jsx
+
+<<< ../../.vitepress/theme/components/klean/slider/Slider.svelte
+
+:::
+
+Each implementation uses the accompanying numeric helpers. The React implementation also imports the accompanying stylesheet.
+
 <<< ../../.vitepress/theme/components/klean/slider/slider.js
+
+<<< ../../.vitepress/theme/components/klean/slider/slider.css
 
 ## Related components
 

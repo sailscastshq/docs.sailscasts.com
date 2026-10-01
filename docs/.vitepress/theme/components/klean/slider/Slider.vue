@@ -230,8 +230,13 @@ function keydown(event, index) {
 }
 function reset(event) {
   queueMicrotask(() => {
-    if (!event.defaultPrevented)
-      publish(sliderValue(initialValue, bounds.value))
+    if (event.defaultPrevented) return
+    publish(sliderValue(initialValue, bounds.value))
+    nextTick(() =>
+      inputs.value.forEach((input, index) => {
+        if (input) input.value = values.value[index]
+      })
+    )
   })
 }
 function listenForm() {

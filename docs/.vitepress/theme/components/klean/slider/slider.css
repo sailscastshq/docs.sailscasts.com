@@ -1,0 +1,62 @@
+@layer base {
+  [data-slot='slider']:dir(rtl) {
+    --slider-direction: -1;
+  }
+  .klean-slider-input {
+    pointer-events: none;
+  }
+  .klean-slider-input::-webkit-slider-runnable-track {
+    height: 6px;
+    background: transparent;
+  }
+  .klean-slider-input::-moz-range-track {
+    height: 6px;
+    background: transparent;
+  }
+  .klean-slider-input::-webkit-slider-thumb {
+    appearance: none;
+    box-sizing: border-box;
+    width: var(--thumb-size);
+    height: var(--thumb-size);
+    margin-top: calc((6px - var(--thumb-size)) / 2);
+    border: 1px solid #d1d5db;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px #0002;
+    pointer-events: auto;
+  }
+  .klean-slider-input::-moz-range-thumb {
+    box-sizing: border-box;
+    width: var(--thumb-size);
+    height: var(--thumb-size);
+    border: 1px solid #d1d5db;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px #0002;
+    pointer-events: auto;
+  }
+  .klean-slider-input:focus-visible::-webkit-slider-thumb {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
+  }
+  .klean-slider-input:focus-visible::-moz-range-thumb {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
+  }
+  @media (forced-colors: active) {
+    [data-slot='slider-track'] {
+      background: GrayText;
+    }
+    [data-slot='slider-fill'] {
+      background: Highlight;
+    }
+    .klean-slider-input::-webkit-slider-thumb {
+      border-color: ButtonText;
+      background: ButtonFace;
+    }
+    .klean-slider-input::-moz-range-thumb {
+      border-color: ButtonText;
+      background: ButtonFace;
+    }
+  }
+}
