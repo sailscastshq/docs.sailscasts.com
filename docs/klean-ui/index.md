@@ -1,7 +1,7 @@
 ---
 title: Klean UI
 titleTemplate: Sailscasts
-description: Kelvin's Lean UI — accessible, durable, source-owned components for Vue, React, and Svelte.
+description: World-class UI. Source you own. Tailwind you know. Kelvin's Lean UI for Vue, React, and Svelte.
 outline: [2, 3]
 ---
 
@@ -14,6 +14,10 @@ import quickUsage from './snippets/introduction/usage.vue?raw'
 </script>
 
 # Klean UI
+
+**World-class UI. Source you own. Tailwind you know.**
+
+Framework-native, accessible components for Vue, React, and Svelte. Built for The Boring JavaScript Stack.
 
 Klean UI means **Kelvin's Lean UI**. It is the source-owned component system for The Boring JavaScript Stack: accessible markup, Durable UI behavior, neutral defaults, and Tailwind left directly in your hands.
 
