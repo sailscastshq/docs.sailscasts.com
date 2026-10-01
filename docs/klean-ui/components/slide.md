@@ -109,7 +109,7 @@ Slide confirms an action; it does not choose a value. It therefore renders a rea
 
 That semantic choice gives Enter, Space, focus, disabled behavior, and assistive-technology activation their native meaning. The horizontal slide is a pointer enhancement for mouse, touch, and pen. It is not the only way to complete the action.
 
-A future range-value control would be named Slider and would use native slider semantics. Combining the two contracts would make both harder to understand.
+Use [Slider](/klean-ui/components/slider) to choose a numeric value or range. Slide confirms an action; Slider chooses a value.
 
 ## API
 
@@ -185,6 +185,7 @@ Copy, inspect, and change the complete source for your framework.
 
 ## Related components
 
+- [Slider](/klean-ui/components/slider) — choose a numeric value or range rather than confirm an action.
 - [Button](/klean-ui/components/button) — the ordinary choice for actions that do not need extra friction.
 - [Spinner](/klean-ui/components/spinner) — a decorative pending mark after confirmation starts real work.
 - [Toast](/klean-ui/components/toast) — announce the result after confirmation.

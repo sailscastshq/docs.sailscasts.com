@@ -189,6 +189,10 @@ Accessible notifications with semantic actions, long-running updates, reduced mo
 
 A native-button confirmation control with an optional pointer slide, truthful pending state, resilient cancellation, RTL geometry, and caller-owned progress styling.
 
+### [Slider](/klean-ui/components/slider)
+
+Choose a numeric value or a two-handle range, with steps, meaningful marks, accessible endpoint labels, and caller-owned styling.
+
 ## What belongs in the catalog
 
 A component graduates when it has:
