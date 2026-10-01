@@ -6,7 +6,6 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -17,11 +16,6 @@ import popoverSource from '../../.vitepress/theme/components/klean/popover/Popov
 import calendarSource from '../../.vitepress/theme/components/klean/calendar/Calendar.vue?raw'
 import dateSource from '../../.vitepress/theme/components/klean/calendar/date.js?raw'
 import rangeSource from '../../.vitepress/theme/components/klean/date-range-picker/DateRangePicker.vue?raw'
-import reactSource from '../sources/date-range-picker/DateRangePicker.jsx?raw'
-import svelteSource from '../sources/date-range-picker/DateRangePicker.svelte?raw'
-import vueUsage from '../snippets/date-range-picker/usage.vue?raw'
-import reactUsage from '../snippets/date-range-picker/usage.jsx?raw'
-import svelteUsage from '../snippets/date-range-picker/usage.svelte?raw'
 
 const period = ref({ start: '2026-08-08', end: '2026-08-12' })
 const unavailable = (date) => date >= '2026-08-14' && date <= '2026-08-16'
@@ -117,23 +111,15 @@ when the date surface should remain visible.
 
 ## Usage
 
-<KleanFrameworkCode id="date-range-picker-usage-1" label="date range picker Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="ReportingPeriod.vue" />
+<<< ../snippets/date-range-picker/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/date-range-picker/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="ReportingPeriod.jsx" />
+<<< ../snippets/date-range-picker/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="ReportingPeriod.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Value and form contract
 
@@ -198,20 +184,12 @@ Choose Schedule Picker when time and timezone must resolve to an exact ISO insta
 
 ## Complete framework source
 
-<KleanFrameworkCode id="date-range-picker-complete-framework-source-2" label="date range picker Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="rangeSource" label="DateRangePicker.vue" />
+<<< ../../.vitepress/theme/components/klean/date-range-picker/DateRangePicker.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/date-range-picker/DateRangePicker.jsx [React]
 
-<CopyCode :code="reactSource" label="DateRangePicker.jsx" />
+<<< ../sources/date-range-picker/DateRangePicker.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="DateRangePicker.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::

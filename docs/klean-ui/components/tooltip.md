@@ -6,22 +6,14 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanButton from '../../.vitepress/theme/components/klean/Button.vue'
 import KleanTooltip from '../../.vitepress/theme/components/klean/tooltip/Tooltip.vue'
 import tooltipSource from '../../.vitepress/theme/components/klean/tooltip/Tooltip.vue?raw'
-import reactSource from '../sources/tooltip/Tooltip.jsx?raw'
-import svelteSource from '../sources/tooltip/Tooltip.svelte?raw'
-import vueUsage from '../snippets/tooltip/usage.vue?raw'
-import reactUsage from '../snippets/tooltip/usage.jsx?raw'
-import svelteUsage from '../snippets/tooltip/usage.svelte?raw'
+
 import themeUsage from '../snippets/tooltip/theme.vue?raw'
-import stylingUsage from '../snippets/tooltip/styling.vue?raw'
-import reactStylingUsage from '../snippets/tooltip/styling.jsx?raw'
-import svelteStylingUsage from '../snippets/tooltip/styling.svelte?raw'
 </script>
 
 # Tooltip
@@ -84,23 +76,15 @@ One command detects Vue, React, or Svelte, writes the matching source, and insta
 
 The child is the trigger. Use a real button for an action and a real anchor or Boring Stack Link for navigation.
 
-<KleanFrameworkCode id="tooltip-usage-1" label="tooltip Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="QueryToolbar.vue" />
+<<< ../snippets/tooltip/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/tooltip/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="QueryToolbar.jsx" />
+<<< ../snippets/tooltip/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="QueryToolbar.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 The icon is decorative because the button already has the accessible name “Re-run query.” Tooltip text supplements the control; it does not replace the button's name.
 
@@ -173,23 +157,15 @@ The theme signal handles the ordinary case. If a branded or isolated local surfa
 
 Style the trigger on the trigger. Style the floating surface through Tooltip's ordinary class input:
 
-<KleanFrameworkCode id="tooltip-styling-with-tailwind-2" label="tooltip Styling with Tailwind framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="stylingUsage" label="invoice-tooltip.vue" />
+<<< ../snippets/tooltip/styling.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/tooltip/styling.jsx [React]
 
-<CopyCode :code="reactStylingUsage" label="invoice-tooltip.jsx" />
+<<< ../snippets/tooltip/styling.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteStylingUsage" label="invoice-tooltip.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 The arrow belongs to Tooltip. It inherits the surface colour and follows the collision-resolved side, so it still points to the trigger when the preferred placement flips or shifts near a viewport edge. `data-slot="tooltip"` and `data-slot="tooltip-arrow"` remain stable nearby styling hooks; there is no `arrow`, `tone`, `size`, `radius`, `elevation`, or `variant` prop.
 
@@ -220,23 +196,15 @@ The durable state belongs to the application action or destination—not to whet
 
 Copy, inspect, and change the complete source for your framework.
 
-<KleanFrameworkCode id="tooltip-complete-framework-source-3" label="tooltip Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="tooltipSource" label="Tooltip.vue" />
+<<< ../../.vitepress/theme/components/klean/tooltip/Tooltip.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/tooltip/Tooltip.jsx [React]
 
-<CopyCode :code="reactSource" label="Tooltip.jsx" />
+<<< ../sources/tooltip/Tooltip.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Tooltip.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

@@ -6,18 +6,12 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { onBeforeUnmount, ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanSwitch from '../../.vitepress/theme/components/klean/switch/Switch.vue'
 import switchSource from '../../.vitepress/theme/components/klean/switch/Switch.vue?raw'
-import reactSource from '../sources/switch/Switch.jsx?raw'
-import svelteSource from '../sources/switch/Switch.svelte?raw'
-import vueUsage from '../snippets/switch/usage.vue?raw'
-import reactUsage from '../snippets/switch/usage.jsx?raw'
-import svelteUsage from '../snippets/switch/usage.svelte?raw'
 
 const publicRoadmap = ref(true)
 const automaticDeploys = ref(false)
@@ -99,23 +93,15 @@ source file:
 
 ## Usage
 
-<KleanFrameworkCode id="switch-usage-1" label="switch Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="PublicRoadmapSetting.vue" />
+<<< ../snippets/switch/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/switch/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="PublicRoadmapSetting.jsx" />
+<<< ../snippets/switch/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="PublicRoadmapSetting.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 The binding syntax is idiomatic to each framework. Every version produces the
 same native boolean control and keeps the visible setting row in application
@@ -283,20 +269,12 @@ change with rollback and visible error feedback.
 
 ## Complete framework source
 
-<KleanFrameworkCode id="switch-complete-framework-source-2" label="switch Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="switchSource" label="Switch.vue" />
+<<< ../../.vitepress/theme/components/klean/switch/Switch.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/switch/Switch.jsx [React]
 
-<CopyCode :code="reactSource" label="Switch.jsx" />
+<<< ../sources/switch/Switch.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Switch.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::

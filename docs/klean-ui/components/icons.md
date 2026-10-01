@@ -7,13 +7,9 @@ outline: [2, 3]
 
 <script setup>
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import IconGallery from '../../.vitepress/theme/components/klean/icons/IconGallery.vue'
 import { iconSource, icons } from '../../.vitepress/theme/components/klean/icons/icons.js'
-import vueUsage from '../snippets/icons/usage.vue?raw'
-import reactUsage from '../snippets/icons/usage.jsx?raw'
-import svelteUsage from '../snippets/icons/usage.svelte?raw'
 
 const trash = icons.find(({ slug }) => slug === 'trash')
 const frameworkSources = [
@@ -39,30 +35,6 @@ const frameworkSources = [
     source: iconSource(trash, 'svelte')
   }
 ]
-
-const usageFrameworks = [
-  {
-    id: 'vue',
-    label: 'Vue',
-    filename: 'DeleteInvoice.vue',
-    language: 'vue',
-    code: vueUsage
-  },
-  {
-    id: 'react',
-    label: 'React',
-    filename: 'DeleteInvoice.jsx',
-    language: 'jsx',
-    code: reactUsage
-  },
-  {
-    id: 'svelte',
-    label: 'Svelte',
-    filename: 'DeleteInvoice.svelte',
-    language: 'svelte',
-    code: svelteUsage
-  }
-]
 </script>
 
 # Icons
@@ -71,7 +43,7 @@ Klean Icons is a focused family of 98 original SVGs drawn from the actions and o
 
 <IconGallery />
 
-Search is reflected in the page URL, so a filtered catalog can be reloaded, bookmarked, and shared. Framework choice is remembered across the Klean docs.
+Search is reflected in the page URL, so a filtered catalog can be reloaded, bookmarked, and shared. The catalog remembers your framework choice.
 
 ## Installation
 
@@ -94,11 +66,15 @@ Re-running <code>add</code> preserves changed local source. Use <code>klean-ui c
 
 The component is decorative by default. Put its meaning in visible button or link text, or in the accessible name of the semantic parent control.
 
-<KleanFrameworkCode
-  id="icon-usage"
-  :frameworks="usageFrameworks"
-  label="Icon usage framework"
-/>
+::: code-group
+
+<<< ../snippets/icons/usage.vue [Vue]
+
+<<< ../snippets/icons/usage.jsx [React]
+
+<<< ../snippets/icons/usage.svelte [Svelte]
+
+:::
 
 ## Styling
 

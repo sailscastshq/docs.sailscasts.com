@@ -6,17 +6,13 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import BulkActionsRecipes from '../../.vitepress/theme/components/klean/bulk-actions/BulkActionsRecipes.vue'
 import bulkActionsSource from '../../.vitepress/theme/components/klean/bulk-actions/BulkActions.vue?raw'
-import reactSource from '../sources/bulk-actions/BulkActions.jsx?raw'
-import svelteSource from '../sources/bulk-actions/BulkActions.svelte?raw'
+
 import vueUsage from '../snippets/bulk-actions/usage.vue?raw'
-import reactUsage from '../snippets/bulk-actions/usage.jsx?raw'
-import svelteUsage from '../snippets/bulk-actions/usage.svelte?raw'
 </script>
 
 # Bulk Actions
@@ -51,23 +47,15 @@ The command detects Vue, React, or Svelte and copies the matching source into th
 
 Pass only the number selected. Keep the selected IDs where the table or page already owns them, and write real Links and buttons inside the action region.
 
-<KleanFrameworkCode id="bulk-actions-usage-1" label="bulk actions Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="ServiceBulkActions.vue" />
+<<< ../snippets/bulk-actions/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/bulk-actions/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="ServiceBulkActions.jsx" />
+<<< ../snippets/bulk-actions/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="ServiceBulkActions.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## API
 
@@ -137,23 +125,15 @@ Use Bulk Actions when a user selects multiple rows, invoices, services, members,
 
 ## Complete framework source
 
-<KleanFrameworkCode id="bulk-actions-complete-framework-source-2" label="bulk actions Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="bulkActionsSource" label="BulkActions.vue" />
+<<< ../../.vitepress/theme/components/klean/bulk-actions/BulkActions.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/bulk-actions/BulkActions.jsx [React]
 
-<CopyCode :code="reactSource" label="BulkActions.jsx" />
+<<< ../sources/bulk-actions/BulkActions.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="BulkActions.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

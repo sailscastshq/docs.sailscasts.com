@@ -6,7 +6,6 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -14,11 +13,7 @@ import KleanBadge from '../../.vitepress/theme/components/klean/badge/Badge.vue'
 import KleanButton from '../../.vitepress/theme/components/klean/Button.vue'
 import BadgeRecipes from '../../.vitepress/theme/components/klean/badge/BadgeRecipes.vue'
 import badgeSource from '../../.vitepress/theme/components/klean/badge/Badge.vue?raw'
-import reactSource from '../sources/badge/Badge.jsx?raw'
-import svelteSource from '../sources/badge/Badge.svelte?raw'
-import vueUsage from '../snippets/badge/usage.vue?raw'
-import reactUsage from '../snippets/badge/usage.jsx?raw'
-import svelteUsage from '../snippets/badge/usage.svelte?raw'
+
 import notificationSource from '../snippets/badge/notification.vue?raw'
 import productSource from '../snippets/badge/products.vue?raw'
 </script>
@@ -66,23 +61,15 @@ One command detects Vue, React, or Svelte and writes the matching one-file sourc
 
 Write the visible meaning in the content and put the product treatment directly on Badge with Tailwind.
 
-<KleanFrameworkCode id="badge-usage-1" label="badge Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="ServiceStatus.vue" />
+<<< ../snippets/badge/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/badge/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="ServiceStatus.jsx" />
+<<< ../snippets/badge/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="ServiceStatus.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## API
 
@@ -191,23 +178,15 @@ Use it when the text remains understandable at a glance and when the inline pill
 
 Copy, inspect, and change the complete one-file source for your framework.
 
-<KleanFrameworkCode id="badge-complete-framework-source-2" label="badge Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="badgeSource" label="Badge.vue" />
+<<< ../../.vitepress/theme/components/klean/badge/Badge.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/badge/Badge.jsx [React]
 
-<CopyCode :code="reactSource" label="Badge.jsx" />
+<<< ../sources/badge/Badge.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Badge.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

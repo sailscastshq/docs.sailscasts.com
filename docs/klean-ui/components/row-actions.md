@@ -6,7 +6,6 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -14,11 +13,8 @@ import RowActionsRecipes from '../../.vitepress/theme/components/klean/row-actio
 import rowActionsSource from '../../.vitepress/theme/components/klean/row-actions/RowActions.vue?raw'
 import menuSource from '../../.vitepress/theme/components/klean/menu/Menu.vue?raw'
 import popoverSource from '../../.vitepress/theme/components/klean/popover/Popover.vue?raw'
-import reactSource from '../sources/row-actions/RowActions.jsx?raw'
-import svelteSource from '../sources/row-actions/RowActions.svelte?raw'
+
 import vueUsage from '../snippets/row-actions/usage.vue?raw'
-import reactUsage from '../snippets/row-actions/usage.jsx?raw'
-import svelteUsage from '../snippets/row-actions/usage.svelte?raw'
 
 const vueFiles = [
   {
@@ -72,23 +68,15 @@ The command detects Vue, React, or Svelte, copies the matching source, and adds 
 
 Keep the most frequent action visible when that genuinely saves work. Put secondary commands and destinations in the overflow content.
 
-<KleanFrameworkCode id="row-actions-usage-1" label="row actions Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="ServiceActions.vue" />
+<<< ../snippets/row-actions/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/row-actions/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="ServiceActions.jsx" />
+<<< ../snippets/row-actions/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="ServiceActions.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## API
 
@@ -152,23 +140,15 @@ Use Row Actions for one record in a Table, DataTable, card list, invoice list, m
 
 ## Complete framework source
 
-<KleanFrameworkCode id="row-actions-complete-framework-source-2" label="row actions Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="rowActionsSource" label="RowActions.vue" />
+<<< ../../.vitepress/theme/components/klean/row-actions/RowActions.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/row-actions/RowActions.jsx [React]
 
-<CopyCode :code="reactSource" label="RowActions.jsx" />
+<<< ../sources/row-actions/RowActions.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="RowActions.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

@@ -6,17 +6,14 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import FileUploadRecipes from '../../.vitepress/theme/components/klean/file-upload/FileUploadRecipes.vue'
 import fileUploadSource from '../../.vitepress/theme/components/klean/file-upload/FileUpload.vue?raw'
-import reactSource from '../sources/file-upload/FileUpload.jsx?raw'
-import svelteSource from '../sources/file-upload/FileUpload.svelte?raw'
+
 import vueUsage from '../snippets/file-upload/usage.vue?raw'
-import reactUsage from '../snippets/file-upload/usage.jsx?raw'
-import svelteUsage from '../snippets/file-upload/usage.svelte?raw'
+
 import logoSource from '../snippets/file-upload/logo.vue?raw'
 import receiptSource from '../snippets/file-upload/receipt.vue?raw'
 import attachmentsSource from '../snippets/file-upload/attachments.vue?raw'
@@ -53,23 +50,15 @@ One command detects Vue, React, or Svelte and writes the matching source into th
 
 The framework-native binding contains a `File` or `null`. Add the native `multiple` prop and the binding becomes `File[]`. The content slot or render function receives the same small API in each framework.
 
-<KleanFrameworkCode id="file-upload-usage-1" label="file upload Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="ReceiptField.vue" />
+<<< ../snippets/file-upload/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/file-upload/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="ReceiptField.jsx" />
+<<< ../snippets/file-upload/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="ReceiptField.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## API
 
@@ -204,23 +193,15 @@ When one product repeats the same treatment, keep a small product wrapper such a
 
 Copy, inspect, and change the complete one-file source for your framework.
 
-<KleanFrameworkCode id="file-upload-complete-framework-source-2" label="file upload Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="fileUploadSource" label="FileUpload.vue" />
+<<< ../../.vitepress/theme/components/klean/file-upload/FileUpload.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/file-upload/FileUpload.jsx [React]
 
-<CopyCode :code="reactSource" label="FileUpload.jsx" />
+<<< ../sources/file-upload/FileUpload.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="FileUpload.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

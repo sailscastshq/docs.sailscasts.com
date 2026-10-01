@@ -6,7 +6,6 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -14,13 +13,6 @@ import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanCalendar from '../../.vitepress/theme/components/klean/calendar/Calendar.vue'
 import calendarSource from '../../.vitepress/theme/components/klean/calendar/Calendar.vue?raw'
 import dateSource from '../../.vitepress/theme/components/klean/calendar/date.js?raw'
-import reactSource from '../sources/calendar/Calendar.jsx?raw'
-import reactDateSource from '../sources/calendar/date.react.js?raw'
-import svelteSource from '../sources/calendar/Calendar.svelte?raw'
-import svelteDateSource from '../sources/calendar/date.svelte.js?raw'
-import vueUsage from '../snippets/calendar/usage.vue?raw'
-import reactUsage from '../snippets/calendar/usage.jsx?raw'
-import svelteUsage from '../snippets/calendar/usage.svelte?raw'
 
 const selectedDate = ref('2026-08-12')
 const vueFiles = [
@@ -91,23 +83,15 @@ time, and timezone must become an exact instant.
 
 ## Usage
 
-<KleanFrameworkCode id="calendar-usage-1" label="calendar Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="AvailabilityCalendar.vue" />
+<<< ../snippets/calendar/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/calendar/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="AvailabilityCalendar.jsx" />
+<<< ../snippets/calendar/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="AvailabilityCalendar.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## API
 
@@ -156,23 +140,22 @@ Choose Schedule Picker when time and timezone must resolve to an exact ISO insta
 
 ## Complete framework source
 
-<KleanFrameworkCode id="calendar-complete-framework-source-2" label="calendar Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="calendarSource" label="Calendar.vue" />
-<CopyCode :code="dateSource" label="date.js" />
+<<< ../../.vitepress/theme/components/klean/calendar/Calendar.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/calendar/Calendar.jsx [React]
 
-<CopyCode :code="reactSource" label="Calendar.jsx" />
-<CopyCode :code="reactDateSource" label="date.js" />
+<<< ../sources/calendar/Calendar.svelte [Svelte]
 
-  </template>
-  <template #svelte>
+:::
 
-<CopyCode :code="svelteSource" label="Calendar.svelte" />
-<CopyCode :code="svelteDateSource" label="date.js" />
+::: code-group
 
-  </template>
-</KleanFrameworkCode>
+<<< ../../.vitepress/theme/components/klean/calendar/date.js [Vue]
+
+<<< ../sources/calendar/date.react.js [React]
+
+<<< ../sources/calendar/date.svelte.js [Svelte]
+
+:::

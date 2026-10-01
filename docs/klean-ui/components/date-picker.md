@@ -6,7 +6,6 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { computed, ref, watch } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -18,11 +17,7 @@ import popoverSource from '../../.vitepress/theme/components/klean/popover/Popov
 import calendarSource from '../../.vitepress/theme/components/klean/calendar/Calendar.vue?raw'
 import dateSource from '../../.vitepress/theme/components/klean/calendar/date.js?raw'
 import datePickerSource from '../../.vitepress/theme/components/klean/date-picker/DatePicker.vue?raw'
-import reactSource from '../sources/date-picker/DatePicker.jsx?raw'
-import svelteSource from '../sources/date-picker/DatePicker.svelte?raw'
-import vueUsage from '../snippets/date-picker/usage.vue?raw'
-import reactUsage from '../snippets/date-picker/usage.jsx?raw'
-import svelteUsage from '../snippets/date-picker/usage.svelte?raw'
+
 import invoiceSource from '../snippets/date-picker/invoice-dates.vue?raw'
 
 const selectedDate = ref('2026-08-12')
@@ -127,23 +122,15 @@ when a wall-clock time and timezone must become an exact instant.
 
 ## Usage
 
-<KleanFrameworkCode id="date-picker-usage-1" label="date picker Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="DueDateField.vue" />
+<<< ../snippets/date-picker/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/date-picker/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="DueDateField.jsx" />
+<<< ../snippets/date-picker/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="DueDateField.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 The application owns the visible label and product availability rule. Date
 Picker owns the stable value, field validity, optional floating surface,
@@ -221,20 +208,12 @@ Choose Schedule Picker when time and timezone must resolve to an exact ISO insta
 
 ## Complete framework source
 
-<KleanFrameworkCode id="date-picker-complete-framework-source-2" label="date picker Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="datePickerSource" label="DatePicker.vue" />
+<<< ../../.vitepress/theme/components/klean/date-picker/DatePicker.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/date-picker/DatePicker.jsx [React]
 
-<CopyCode :code="reactSource" label="DatePicker.jsx" />
+<<< ../sources/date-picker/DatePicker.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="DatePicker.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::

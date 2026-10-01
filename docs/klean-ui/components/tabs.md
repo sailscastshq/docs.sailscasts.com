@@ -6,22 +6,15 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanTabs from '../../.vitepress/theme/components/klean/tabs/Tabs.vue'
 import tabsSource from '../../.vitepress/theme/components/klean/tabs/Tabs.vue?raw'
-import reactSource from '../sources/tabs/Tabs.jsx?raw'
-import svelteSource from '../sources/tabs/Tabs.svelte?raw'
-import vueUsage from '../snippets/tabs/usage.vue?raw'
-import reactUsage from '../snippets/tabs/usage.jsx?raw'
-import svelteUsage from '../snippets/tabs/usage.svelte?raw'
+
 import verticalUsage from '../snippets/tabs/vertical.vue?raw'
 import settingsNavigation from '../snippets/tabs/settings-navigation.vue?raw'
-import reactNavigation from '../snippets/tabs/navigation.jsx?raw'
-import svelteNavigation from '../snippets/tabs/navigation.svelte?raw'
 
 const active = ref('overview')
 const verticalActive = ref('profile')
@@ -114,23 +107,15 @@ Klean infers the contract from the real elements you provide:
 
 Keep a group all buttons or all links. A mixed group is ambiguous, so Klean deliberately leaves it unenhanced.
 
-<KleanFrameworkCode id="tabs-usage-1" label="tabs Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="ProjectTabs.vue" />
+<<< ../snippets/tabs/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/tabs/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="ProjectTabs.jsx" />
+<<< ../snippets/tabs/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="ProjectTabs.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 The binding syntax changes, but the visible HTML and `data-value` relationship stay the same.
 
@@ -234,23 +219,15 @@ The visual shape does not decide the semantics. If every settings item has its o
   </template>
 </KleanPreview>
 
-<KleanFrameworkCode id="tabs-horizontal-vertical-and-settings-navigation-2" label="tabs Horizontal, vertical, and settings navigation framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="settingsNavigation" label="SettingsNavigation.vue" />
+<<< ../snippets/tabs/settings-navigation.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/tabs/navigation.jsx [React]
 
-<CopyCode :code="reactNavigation" label="SettingsNavigation.jsx" />
+<<< ../snippets/tabs/navigation.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteNavigation" label="SettingsNavigation.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 Vue and React pass their Inertia Link directly. SvelteKit enhances ordinary anchors, so no Link wrapper is needed. A native `<a>` works in every framework.
 
@@ -410,23 +387,15 @@ Use a concise visible heading near the component when possible. Otherwise provid
 
 Copy, inspect, and change the complete source for your framework.
 
-<KleanFrameworkCode id="tabs-complete-framework-source-3" label="tabs Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="tabsSource" label="Tabs.vue" />
+<<< ../../.vitepress/theme/components/klean/tabs/Tabs.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/tabs/Tabs.jsx [React]
 
-<CopyCode :code="reactSource" label="Tabs.jsx" />
+<<< ../sources/tabs/Tabs.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Tabs.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

@@ -7,7 +7,6 @@ outline: [2, 3]
 
 <script setup>
 import { computed, ref } from 'vue'
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanButton from '../../.vitepress/theme/components/klean/Button.vue'
@@ -15,9 +14,6 @@ import KleanInput from '../../.vitepress/theme/components/klean/input/Input.vue'
 import inputSource from '../../.vitepress/theme/components/klean/input/Input.vue?raw'
 import reactSource from '../sources/input/Input.jsx?raw'
 import svelteSource from '../sources/input/Input.svelte?raw'
-import vueUsage from '../snippets/input/usage.vue?raw'
-import reactUsage from '../snippets/input/usage.jsx?raw'
-import svelteUsage from '../snippets/input/usage.svelte?raw'
 
 const inputFrameworks = [
   {
@@ -41,12 +37,6 @@ const inputFrameworks = [
     filename: 'Input.svelte',
     destination: 'assets/js/components/ui/input/Input.svelte'
   }
-]
-
-const inputUsage = [
-  { id: 'vue', label: 'Vue', code: vueUsage, filename: 'EmailField.vue' },
-  { id: 'react', label: 'React', code: reactUsage, filename: 'EmailField.jsx' },
-  { id: 'svelte', label: 'Svelte', code: svelteUsage, filename: 'EmailField.svelte' }
 ]
 
 const email = ref('kelvin@')
@@ -116,11 +106,15 @@ Klean deliberately does not supply Field, Label, description, or error component
 
 ## Native form recipe
 
-<KleanFrameworkCode
-  id="input-usage"
-  :frameworks="inputUsage"
-  label="Input usage framework"
-/>
+::: code-group
+
+<<< ../snippets/input/usage.vue [Vue]
+
+<<< ../snippets/input/usage.jsx [React]
+
+<<< ../snippets/input/usage.svelte [Svelte]
+
+:::
 
 The application owns the visible label, deterministic IDs, help and error elements, validation timing, and submitted value. Help and error nodes keep stable IDs, so `aria-describedby` never needs conditional string building. `aria-invalid="false"` is valid, and `empty:hidden` collapses an empty error. When an error appears, the existing relationship becomes useful automatically.
 
@@ -157,11 +151,15 @@ If that dense treatment is a recurring product concept, create an application-ow
 
 The live preview demonstrates the shared native form contract. Copy the complete framework-native source for your application:
 
-<KleanFrameworkCode
-  id="input-complete-source"
-  :frameworks="inputFrameworks"
-  label="Input source framework"
-/>
+::: code-group
+
+<<< ../../.vitepress/theme/components/klean/input/Input.vue [Vue]
+
+<<< ../sources/input/Input.jsx [React]
+
+<<< ../sources/input/Input.svelte [Svelte]
+
+:::
 
 ## Related components
 

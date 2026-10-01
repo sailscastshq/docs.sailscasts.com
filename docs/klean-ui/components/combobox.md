@@ -6,7 +6,6 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -14,11 +13,7 @@ import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanCombobox from '../../.vitepress/theme/components/klean/combobox/Combobox.vue'
 import comboboxSource from '../../.vitepress/theme/components/klean/combobox/Combobox.vue?raw'
 import popoverSource from '../../.vitepress/theme/components/klean/popover/Popover.vue?raw'
-import reactSource from '../sources/combobox/Combobox.jsx?raw'
-import svelteSource from '../sources/combobox/Combobox.svelte?raw'
-import vueUsage from '../snippets/combobox/usage.vue?raw'
-import reactUsage from '../snippets/combobox/usage.jsx?raw'
-import svelteUsage from '../snippets/combobox/usage.svelte?raw'
+
 import remoteUsage from '../snippets/combobox/remote.vue?raw'
 
 const customer = ref('cus_kelvin')
@@ -106,23 +101,15 @@ Combobox, and resolves Popover first when it is missing:
 
 ## Usage
 
-<KleanFrameworkCode id="combobox-usage-1" label="combobox Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="ProjectPicker.vue" />
+<<< ../snippets/combobox/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/combobox/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="ProjectPicker.jsx" />
+<<< ../snippets/combobox/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="ProjectPicker.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 The framework binding changes; the value, options, query, and keyboard contract
 do not.
@@ -249,20 +236,12 @@ Unmounting removes observers and pending debounce work.
 
 ## Complete framework source
 
-<KleanFrameworkCode id="combobox-complete-framework-source-2" label="combobox Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="comboboxSource" label="Combobox.vue" />
+<<< ../../.vitepress/theme/components/klean/combobox/Combobox.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/combobox/Combobox.jsx [React]
 
-<CopyCode :code="reactSource" label="Combobox.jsx" />
+<<< ../sources/combobox/Combobox.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Combobox.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::

@@ -6,7 +6,6 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -14,11 +13,7 @@ import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanButton from '../../.vitepress/theme/components/klean/Button.vue'
 import KleanDialog from '../../.vitepress/theme/components/klean/dialog/Dialog.vue'
 import dialogSource from '../../.vitepress/theme/components/klean/dialog/Dialog.vue?raw'
-import reactSource from '../sources/dialog/Dialog.jsx?raw'
-import svelteSource from '../sources/dialog/Dialog.svelte?raw'
-import vueUsage from '../snippets/dialog/usage.vue?raw'
-import reactUsage from '../snippets/dialog/usage.jsx?raw'
-import svelteUsage from '../snippets/dialog/usage.svelte?raw'
+
 import productSource from '../snippets/dialog/products.vue?raw'
 
 const result = ref('No choice yet.')
@@ -98,23 +93,15 @@ must not interrupt the current task.
 
 ## Usage
 
-<KleanFrameworkCode id="dialog-usage-1" label="dialog Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="DeleteProject.vue" />
+<<< ../snippets/dialog/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/dialog/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="DeleteProject.jsx" />
+<<< ../snippets/dialog/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="DeleteProject.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Native contract
 
@@ -201,23 +188,15 @@ Hagfish and Slipway share the native modal contract while keeping their product 
 
 ## Complete framework source
 
-<KleanFrameworkCode id="dialog-complete-framework-source-2" label="dialog Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="dialogSource" label="Dialog.vue" />
+<<< ../../.vitepress/theme/components/klean/dialog/Dialog.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/dialog/Dialog.jsx [React]
 
-<CopyCode :code="reactSource" label="Dialog.jsx" />
+<<< ../sources/dialog/Dialog.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Dialog.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

@@ -6,20 +6,15 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import FilterBarRecipes from '../../.vitepress/theme/components/klean/filter-bar/FilterBarRecipes.vue'
 import filterBarSource from '../../.vitepress/theme/components/klean/filter-bar/FilterBar.vue?raw'
 import filterStateSource from '../../.vitepress/theme/components/klean/filter-bar/filterState.js?raw'
-import reactSource from '../sources/filter-bar/FilterBar.jsx?raw'
-import reactStateSource from '../sources/filter-bar/filterState.react.js?raw'
-import svelteSource from '../sources/filter-bar/FilterBar.svelte?raw'
-import svelteStateSource from '../sources/filter-bar/filterState.svelte.js?raw'
+
 import vueUsage from '../snippets/filter-bar/usage.vue?raw'
-import reactUsage from '../snippets/filter-bar/usage.jsx?raw'
-import svelteUsage from '../snippets/filter-bar/usage.svelte?raw'
+
 import durableUsage from '../snippets/filter-bar/durable.vue?raw'
 
 const installationFiles = [
@@ -69,23 +64,15 @@ Use FilterBar with your existing URL serialization, or use `filterState.js` to m
 
 ## Usage
 
-<KleanFrameworkCode id="filter-bar-usage-1" label="filter bar Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="ServiceFilters.vue" />
+<<< ../snippets/filter-bar/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/filter-bar/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="ServiceFilters.jsx" />
+<<< ../snippets/filter-bar/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="ServiceFilters.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 The framework syntax changes. The contract does not: committed state is caller-owned, the slot or child function receives a separate draft, and the root remains one native search form.
 
@@ -180,29 +167,25 @@ There are no `variant`, `tone`, `density`, `chipClass`, `panelClass`, or filter-
 
 ## Complete framework source
 
-<KleanFrameworkCode id="filter-bar-complete-framework-source-2" label="filter bar Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="filterBarSource" label="FilterBar.vue" />
+<<< ../../.vitepress/theme/components/klean/filter-bar/FilterBar.vue [Vue]
 
-<CopyCode :code="filterStateSource" label="filterState.js" />
+<<< ../sources/filter-bar/FilterBar.jsx [React]
 
-  </template>
-  <template #react>
+<<< ../sources/filter-bar/FilterBar.svelte [Svelte]
 
-<CopyCode :code="reactSource" label="FilterBar.jsx" />
+:::
 
-<CopyCode :code="reactStateSource" label="filterState.js" />
+::: code-group
 
-  </template>
-  <template #svelte>
+<<< ../../.vitepress/theme/components/klean/filter-bar/filterState.js [Vue]
 
-<CopyCode :code="svelteSource" label="FilterBar.svelte" />
+<<< ../sources/filter-bar/filterState.react.js [React]
 
-<CopyCode :code="svelteStateSource" label="filterState.js" />
+<<< ../sources/filter-bar/filterState.svelte.js [Svelte]
 
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

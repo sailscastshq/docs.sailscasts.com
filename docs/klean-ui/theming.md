@@ -5,28 +5,6 @@ description: Theme Klean UI with application-owned CSS and Tailwind instead of p
 outline: [2, 3]
 ---
 
-<script setup>
-import KleanFrameworkCode from '../.vitepress/theme/components/KleanFrameworkCode.vue'
-import localVue from './snippets/theming/local.vue?raw'
-import localReact from './snippets/theming/local.jsx?raw'
-import localSvelte from './snippets/theming/local.svelte?raw'
-import productVue from './snippets/theming/product.vue?raw'
-import productReact from './snippets/theming/product.jsx?raw'
-import productSvelte from './snippets/theming/product.svelte?raw'
-
-const localExamples = [
-  { id: 'vue', label: 'Vue', code: localVue, filename: 'ApproveInvoiceButton.vue' },
-  { id: 'react', label: 'React', code: localReact, filename: 'ApproveInvoiceButton.jsx' },
-  { id: 'svelte', label: 'Svelte', code: localSvelte, filename: 'ApproveInvoiceButton.svelte' }
-]
-
-const productExamples = [
-  { id: 'vue', label: 'Vue', code: productVue, filename: 'DeployButton.vue' },
-  { id: 'react', label: 'React', code: productReact, filename: 'DeployButton.jsx' },
-  { id: 'svelte', label: 'Svelte', code: productSvelte, filename: 'DeployButton.svelte' }
-]
-</script>
-
 # Theming
 
 The application's CSS is the theme.
@@ -37,19 +15,27 @@ Neutral component defaults work without global Klean tokens. Products apply thei
 
 ### One local treatment: use classes
 
-<KleanFrameworkCode
-  id="theming-local-treatment"
-  :frameworks="localExamples"
-  label="Local Tailwind framework"
-/>
+::: code-group
+
+<<< ./snippets/theming/local.vue [Vue]
+
+<<< ./snippets/theming/local.jsx [React]
+
+<<< ./snippets/theming/local.svelte [Svelte]
+
+:::
 
 ### One repeated product concept: create a component
 
-<KleanFrameworkCode
-  id="theming-product-component"
-  :frameworks="productExamples"
-  label="Application-owned component framework"
-/>
+::: code-group
+
+<<< ./snippets/theming/product.vue [Vue]
+
+<<< ./snippets/theming/product.jsx [React]
+
+<<< ./snippets/theming/product.svelte [Svelte]
+
+:::
 
 This is the normal replacement for `variant="primary"`. The product concept receives a product name and stays inside the product. Caller classes still merge last when the product component needs a local adjustment.
 

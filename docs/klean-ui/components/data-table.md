@@ -6,7 +6,6 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -14,13 +13,7 @@ import DataTableRecipes from '../../.vitepress/theme/components/klean/data-table
 import dataTableSource from '../../.vitepress/theme/components/klean/data-table/DataTable.vue?raw'
 import vueQuerySource from '../../.vitepress/theme/components/klean/data-table/useDataTableQuery.js?raw'
 import tableSource from '../../.vitepress/theme/components/klean/table/Table.vue?raw'
-import reactSource from '../sources/data-table/DataTable.jsx?raw'
-import reactQuerySource from '../sources/data-table/useDataTableQuery.react.js?raw'
-import svelteSource from '../sources/data-table/DataTable.svelte?raw'
-import svelteQuerySource from '../sources/data-table/dataTableQuery.svelte.js?raw'
-import vueUsage from '../snippets/data-table/usage.vue?raw'
-import reactUsage from '../snippets/data-table/usage.jsx?raw'
-import svelteUsage from '../snippets/data-table/usage.svelte?raw'
+
 import bridgeSource from '../snippets/data-table/bridge.vue?raw'
 
 const installationFiles = [
@@ -119,23 +112,15 @@ DataTable composes Table rather than replacing it. Migrating a Table keeps the s
 
 ## Usage
 
-<KleanFrameworkCode id="data-table-usage-1" label="data table Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="ServicesTable.vue" />
+<<< ../snippets/data-table/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/data-table/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="ServicesTable.jsx" />
+<<< ../snippets/data-table/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="ServicesTable.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Component API
 
@@ -233,29 +218,25 @@ Build a small product wrapper when several pages share one treatment. Slipway ca
 
 The installer writes both the component and the framework-native query helper. Table is installed as a registry dependency.
 
-<KleanFrameworkCode id="data-table-complete-framework-source-2" label="data table Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="dataTableSource" label="DataTable.vue" />
+<<< ../../.vitepress/theme/components/klean/data-table/DataTable.vue [Vue]
 
-<CopyCode :code="vueQuerySource" label="useDataTableQuery.js" />
+<<< ../sources/data-table/DataTable.jsx [React]
 
-  </template>
-  <template #react>
+<<< ../sources/data-table/DataTable.svelte [Svelte]
 
-<CopyCode :code="reactSource" label="DataTable.jsx" />
+:::
 
-<CopyCode :code="reactQuerySource" label="useDataTableQuery.js" />
+::: code-group
 
-  </template>
-  <template #svelte>
+<<< ../../.vitepress/theme/components/klean/data-table/useDataTableQuery.js [Vue]
 
-<CopyCode :code="svelteSource" label="DataTable.svelte" />
+<<< ../sources/data-table/useDataTableQuery.react.js [React]
 
-<CopyCode :code="svelteQuerySource" label="dataTableQuery.svelte.js" />
+<<< ../sources/data-table/dataTableQuery.svelte.js [Svelte]
 
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 

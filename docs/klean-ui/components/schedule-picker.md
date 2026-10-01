@@ -6,7 +6,6 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -18,16 +17,9 @@ import calendarSource from '../../.vitepress/theme/components/klean/calendar/Cal
 import dateSource from '../../.vitepress/theme/components/klean/calendar/date.js?raw'
 import scheduleSource from '../../.vitepress/theme/components/klean/schedule-picker/SchedulePicker.vue?raw'
 import scheduleHelperSource from '../../.vitepress/theme/components/klean/schedule-picker/schedule.js?raw'
-import reactSource from '../sources/schedule-picker/SchedulePicker.jsx?raw'
-import reactHelperSource from '../sources/schedule-picker/schedule.react.js?raw'
-import svelteSource from '../sources/schedule-picker/SchedulePicker.svelte?raw'
-import svelteHelperSource from '../sources/schedule-picker/schedule.svelte.js?raw'
-import vueUsage from '../snippets/schedule-picker/usage.vue?raw'
-import reactUsage from '../snippets/schedule-picker/usage.jsx?raw'
-import svelteUsage from '../snippets/schedule-picker/usage.svelte?raw'
+
 import vueHistorical from '../snippets/schedule-picker/historical.vue?raw'
-import reactHistorical from '../snippets/schedule-picker/historical.jsx?raw'
-import svelteHistorical from '../snippets/schedule-picker/historical.svelte?raw'
+
 import vueWindow from '../snippets/schedule-picker/window.vue?raw'
 
 const publishAt = ref('')
@@ -137,23 +129,15 @@ do not add a midnight time or timezone to make it fit Schedule Picker.
 
 ## Usage
 
-<KleanFrameworkCode id="schedule-picker-usage-1" label="schedule picker Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="PublishSchedule.vue" />
+<<< ../snippets/schedule-picker/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/schedule-picker/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="PublishSchedule.jsx" />
+<<< ../snippets/schedule-picker/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="PublishSchedule.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Historical dates and times
 
@@ -191,23 +175,15 @@ datetime component to learn.
   </template>
 </KleanPreview>
 
-<KleanFrameworkCode id="schedule-picker-historical-dates-and-times-2" label="schedule picker Historical dates and times framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueHistorical" label="RecordedAt.vue" />
+<<< ../snippets/schedule-picker/historical.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/schedule-picker/historical.jsx [React]
 
-<CopyCode :code="reactHistorical" label="RecordedAt.jsx" />
+<<< ../snippets/schedule-picker/historical.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteHistorical" label="RecordedAt.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Allowed date and time window
 
@@ -360,23 +336,22 @@ Choose the date-only components below when wall-clock time must not exist.
 
 ## Complete framework source
 
-<KleanFrameworkCode id="schedule-picker-complete-framework-source-3" label="schedule picker Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="scheduleSource" label="SchedulePicker.vue" />
-<CopyCode :code="scheduleHelperSource" label="schedule.js" />
+<<< ../../.vitepress/theme/components/klean/schedule-picker/SchedulePicker.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/schedule-picker/SchedulePicker.jsx [React]
 
-<CopyCode :code="reactSource" label="SchedulePicker.jsx" />
-<CopyCode :code="reactHelperSource" label="schedule.js" />
+<<< ../sources/schedule-picker/SchedulePicker.svelte [Svelte]
 
-  </template>
-  <template #svelte>
+:::
 
-<CopyCode :code="svelteSource" label="SchedulePicker.svelte" />
-<CopyCode :code="svelteHelperSource" label="schedule.js" />
+::: code-group
 
-  </template>
-</KleanFrameworkCode>
+<<< ../../.vitepress/theme/components/klean/schedule-picker/schedule.js [Vue]
+
+<<< ../sources/schedule-picker/schedule.react.js [React]
+
+<<< ../sources/schedule-picker/schedule.svelte.js [Svelte]
+
+:::

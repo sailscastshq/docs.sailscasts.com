@@ -6,7 +6,6 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -15,11 +14,7 @@ import KleanButton from '../../.vitepress/theme/components/klean/Button.vue'
 import KleanSheet from '../../.vitepress/theme/components/klean/sheet/Sheet.vue'
 import dialogSource from '../../.vitepress/theme/components/klean/dialog/Dialog.vue?raw'
 import sheetSource from '../../.vitepress/theme/components/klean/sheet/Sheet.vue?raw'
-import reactSource from '../sources/sheet/Sheet.jsx?raw'
-import svelteSource from '../sources/sheet/Sheet.svelte?raw'
-import vueUsage from '../snippets/sheet/usage.vue?raw'
-import reactUsage from '../snippets/sheet/usage.jsx?raw'
-import svelteUsage from '../snippets/sheet/usage.svelte?raw'
+
 import leftNavigationSource from '../snippets/sheet/left-navigation.vue?raw'
 import bottomCommentsSource from '../snippets/sheet/bottom-comments.vue?raw'
 
@@ -136,23 +131,15 @@ non-modal surface. A persistent desktop navigation rail is ordinary
 
 ## Usage
 
-<KleanFrameworkCode id="sheet-usage-1" label="sheet Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="ProjectDetails.vue" />
+<<< ../snippets/sheet/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/sheet/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="ProjectDetails.jsx" />
+<<< ../snippets/sheet/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="ProjectDetails.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 The application supplies the heading, description, scroll region, actions,
 and semantic content. Sheet supplies only the native modal and off-canvas
@@ -307,20 +294,12 @@ treatments belong in a local wrapper or copied source, not a variant prop.
 
 ## Complete framework source
 
-<KleanFrameworkCode id="sheet-complete-framework-source-2" label="sheet Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="sheetSource" label="Sheet.vue" />
+<<< ../../.vitepress/theme/components/klean/sheet/Sheet.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/sheet/Sheet.jsx [React]
 
-<CopyCode :code="reactSource" label="Sheet.jsx" />
+<<< ../sources/sheet/Sheet.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Sheet.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::

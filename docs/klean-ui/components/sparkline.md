@@ -6,17 +6,11 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanSparkline from '../../.vitepress/theme/components/klean/sparkline/Sparkline.vue'
 import sparklineSource from '../../.vitepress/theme/components/klean/sparkline/Sparkline.vue?raw'
-import reactSource from '../sources/sparkline/Sparkline.jsx?raw'
-import svelteSource from '../sources/sparkline/Sparkline.svelte?raw'
-import vueUsage from '../snippets/sparkline/usage.vue?raw'
-import reactUsage from '../snippets/sparkline/usage.jsx?raw'
-import svelteUsage from '../snippets/sparkline/usage.svelte?raw'
 
 const cpu = [
   { label: '12:00', value: 18 },
@@ -70,23 +64,15 @@ Use [Line Chart](/klean-ui/components/line-chart) when the trend deserves its ow
 
 ## Usage
 
-<KleanFrameworkCode id="sparkline-usage-1" label="sparkline Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="CpuUsage.vue" />
+<<< ../snippets/sparkline/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/sparkline/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="CpuUsage.jsx" />
+<<< ../snippets/sparkline/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="CpuUsage.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## API
 
@@ -136,20 +122,12 @@ For repeated product treatment, keep a small application-owned wrapper. Sparklin
 
 ## Complete framework source
 
-<KleanFrameworkCode id="sparkline-complete-framework-source-2" label="sparkline Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="sparklineSource" label="Sparkline.vue" />
+<<< ../../.vitepress/theme/components/klean/sparkline/Sparkline.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/sparkline/Sparkline.jsx [React]
 
-<CopyCode :code="reactSource" label="Sparkline.jsx" />
+<<< ../sources/sparkline/Sparkline.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Sparkline.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::

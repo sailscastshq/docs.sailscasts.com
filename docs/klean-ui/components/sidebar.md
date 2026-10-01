@@ -6,17 +6,12 @@ outline: [2, 3]
 ---
 
 <script setup>
-import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import SidebarRecipes from '../../.vitepress/theme/components/klean/sidebar/SidebarRecipes.vue'
 import sidebarSource from '../../.vitepress/theme/components/klean/sidebar/Sidebar.vue?raw'
-import reactSource from '../sources/sidebar/Sidebar.jsx?raw'
-import svelteSource from '../sources/sidebar/Sidebar.svelte?raw'
-import vueUsage from '../snippets/sidebar/usage.vue?raw'
-import reactUsage from '../snippets/sidebar/usage.jsx?raw'
-import svelteUsage from '../snippets/sidebar/usage.svelte?raw'
+
 import appShellSource from '../snippets/sidebar/app-shell.vue?raw'
 </script>
 
@@ -62,23 +57,15 @@ The desktop Sidebar may be open or closed by preference. The mobile Sheet is tem
 
 The component does not manufacture navigation items. Write honest links directly and connect the external trigger with `aria-controls` and `aria-expanded`.
 
-<KleanFrameworkCode id="sidebar-usage-1" label="sidebar Usage framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="vueUsage" label="AppShell.vue" />
+<<< ../snippets/sidebar/usage.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../snippets/sidebar/usage.jsx [React]
 
-<CopyCode :code="reactUsage" label="AppShell.jsx" />
+<<< ../snippets/sidebar/usage.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteUsage" label="AppShell.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## API
 
@@ -156,23 +143,15 @@ An icon-only rail is not the same closed state because its links remain availabl
 
 Copy, inspect, and change the complete one-file source for your framework.
 
-<KleanFrameworkCode id="sidebar-complete-framework-source-2" label="sidebar Complete framework source framework">
-  <template #vue>
+::: code-group
 
-<CopyCode :code="sidebarSource" label="Sidebar.vue" />
+<<< ../../.vitepress/theme/components/klean/sidebar/Sidebar.vue [Vue]
 
-  </template>
-  <template #react>
+<<< ../sources/sidebar/Sidebar.jsx [React]
 
-<CopyCode :code="reactSource" label="Sidebar.jsx" />
+<<< ../sources/sidebar/Sidebar.svelte [Svelte]
 
-  </template>
-  <template #svelte>
-
-<CopyCode :code="svelteSource" label="Sidebar.svelte" />
-
-  </template>
-</KleanFrameworkCode>
+:::
 
 ## Related components
 
