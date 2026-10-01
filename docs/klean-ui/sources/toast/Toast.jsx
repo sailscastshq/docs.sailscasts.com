@@ -1,6 +1,13 @@
-import { useEffect, useMemo, useRef, useSyncExternalStore } from 'react'
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore
+} from 'react'
 import { twMerge } from 'tailwind-merge'
-import { toast } from './toast.js'
+import { toast } from '../toast.js'
 
 const POSITIONS = {
   'top-left': 'left-4 top-4 items-start',
@@ -53,25 +60,152 @@ function motionDuration(phase, direction, position) {
 }
 
 const MOTION_CSS = `
+[data-slot="toast-viewport"] [data-slot="toast-list"] {
+  position: relative;
+  display: block;
+  pointer-events: auto;
+  max-height: calc(100dvh - 7rem);
+  overscroll-behavior: contain;
+  transition: height 220ms ease;
+}
+[data-slot="toast-viewport"] [data-klean-toast-row] {
+  position: absolute;
+  width: 100%;
+  transition:
+    top 220ms ease,
+    translate 220ms ease,
+    scale 220ms ease,
+    opacity 150ms ease;
+}
+[data-slot="toast-viewport"][data-expanded="false"] [data-slot="toast-list"] {
+  margin-block-end: 1.5rem;
+}
+[data-slot="toast-viewport"][data-expanded="false"][data-position^="bottom"]
+  [data-slot="toast-list"] {
+  margin-block-start: 1.5rem;
+  margin-block-end: 0;
+}
+[data-slot="toast-viewport"][data-expanded="false"][data-stack-count="1"]
+  [data-slot="toast-list"] {
+  margin-block: 0;
+}
+[data-slot="toast-viewport"][data-expanded="false"] [data-klean-toast-row] {
+  align-self: start;
+  transform-origin: center top;
+  translate: 0 calc(var(--klean-toast-depth) * 12px);
+  scale: calc(1 - var(--klean-toast-depth) * 0.04);
+}
+[data-slot="toast-viewport"][data-expanded="false"][data-position^="bottom"]
+  [data-klean-toast-row] {
+  align-self: end;
+  transform-origin: center bottom;
+  translate: 0 calc(var(--klean-toast-depth) * -12px);
+}
+[data-slot="toast-viewport"][data-expanded="false"]
+  [data-klean-toast-row]:not([data-depth="0"]) {
+  pointer-events: none;
+  max-height: var(--klean-toast-front-height);
+  overflow: clip;
+}
+[data-slot="toast-viewport"][data-expanded="false"]
+  [data-klean-toast-row]:not([data-depth="0"])
+  [data-klean-toast-item] {
+  pointer-events: none;
+  max-height: var(--klean-toast-front-height);
+}
+[data-slot="toast-viewport"][data-expanded="false"]
+  [data-klean-toast-row]:not([data-depth="0"]):not([data-depth="1"]):not(
+    [data-depth="2"]
+  ) {
+  opacity: 0;
+}
+[data-slot="toast-viewport"][data-expanded="true"] [data-slot="toast-list"] {
+  overflow-y: auto;
+  padding-inline: 0.25rem;
+  margin-inline: -0.25rem;
+  width: calc(100% + 0.5rem);
+}
+[data-slot="toast-viewport"][data-expanded="true"] [data-klean-toast-row] {
+  width: calc(100% - 0.5rem);
+}
+[data-slot="toast-viewport"][data-focused="true"] [data-klean-toast-row],
+[data-slot="toast-viewport"][data-focused="true"] [data-slot="toast-list"] { transition: none; }
 @keyframes klean-toast-enter {
-  0% { opacity: 0; transform: translate3d(var(--klean-toast-enter-x), var(--klean-toast-enter-y), 0) scale(.98); }
-  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate3d(
+        var(--klean-toast-enter-x),
+        var(--klean-toast-enter-y),
+        0
+      )
+      scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
 }
+
 @keyframes klean-toast-leave {
-  0% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
-  100% { opacity: 0; transform: translate3d(var(--klean-toast-leave-x), var(--klean-toast-leave-y), 0) scale(.98); }
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(
+        var(--klean-toast-leave-x),
+        var(--klean-toast-leave-y),
+        0
+      )
+      scale(0.98);
+  }
 }
+
 @keyframes klean-toast-collapse {
-  0% { grid-template-rows: 1fr; padding-block-end: .75rem; }
-  100% { grid-template-rows: 0fr; padding-block-end: 0; }
+  0% {
+    grid-template-rows: 1fr;
+    padding-block-end: 0.75rem;
+  }
+  100% {
+    grid-template-rows: 0fr;
+    padding-block-end: 0;
+  }
 }
-[data-klean-toast-item][data-state="entering"] { animation: klean-toast-enter var(--klean-toast-enter-duration) ease-out both; }
-[data-klean-toast-item][data-state="closing"] { animation: klean-toast-leave var(--klean-toast-leave-duration) ease-in both; pointer-events: none; }
-[data-klean-toast-row][data-state="closing"] { animation: klean-toast-collapse var(--klean-toast-collapse-duration) ease-in var(--klean-toast-collapse-delay) both; overflow: hidden; }
+
+[data-klean-toast-item][data-state="entering"] {
+  animation: klean-toast-enter var(--klean-toast-enter-duration) ease-out both;
+}
+
+[data-klean-toast-item][data-state="closing"] {
+  animation: klean-toast-leave var(--klean-toast-leave-duration) ease-in both;
+  pointer-events: none;
+}
+
+[data-klean-toast-row][data-state="closing"] {
+  animation: klean-toast-collapse var(--klean-toast-collapse-duration) ease-in
+    var(--klean-toast-collapse-delay) both;
+  overflow: hidden;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  [data-klean-toast-item][data-state] { animation-duration: 1ms; animation-timing-function: linear; }
-  [data-klean-toast-row][data-state="closing"] { animation-delay: 0ms; animation-duration: 1ms; }
-}`
+  [data-slot="toast-viewport"] [data-klean-toast-row] {
+    transition: none;
+  }
+  [data-slot="toast-viewport"] [data-slot="toast-list"] {
+    transition: none;
+  }
+  [data-klean-toast-item][data-state] {
+    animation-duration: 1ms;
+    animation-timing-function: linear;
+  }
+
+  [data-klean-toast-row][data-state="closing"] {
+    animation-delay: 0ms;
+    animation-duration: 1ms;
+  }
+}
+`
 
 function motionStyle(from, to, position, style) {
   const enter = motionVector(from, position)
@@ -99,12 +233,19 @@ export default function Toast({
   from,
   to,
   label = 'Notifications',
+  expanded = false,
   className,
   style,
   children,
   ...viewportProps
 }) {
   const viewportRef = useRef(null)
+  const [hovered, setHovered] = useState(false)
+  const [focused, setFocused] = useState(false)
+  const [pinned, setPinned] = useState(false)
+  const [heights, setHeights] = useState({})
+  const isReading = hovered || focused || pinned
+  const isExpanded = expanded || hovered || focused || pinned
   const promotedItemRef = useRef()
   const defaultDirection = position.endsWith('-left') ? 'left' : 'right'
   const resolvedFrom = from ?? defaultDirection
@@ -114,6 +255,82 @@ export default function Toast({
     controller.getSnapshot,
     controller.getSnapshot
   )
+  const stackCount = items.filter((item) => item.state !== 'closing').length
+  const stackedItems = position.startsWith('top') ? [...items].reverse() : items
+  const stackDepth = (item) =>
+    items.length - 1 - items.findIndex((candidate) => candidate.id === item.id)
+  const frontHeight = heights[items.at(-1)?.id] ?? 0
+  const listHeight = isExpanded
+    ? items.reduce(
+        (total, item) => total + (heights[item.id] ?? frontHeight),
+        0
+      )
+    : frontHeight
+  function rowOffset(item) {
+    const index = stackedItems.findIndex(
+      (candidate) => candidate.id === item.id
+    )
+    return isExpanded
+      ? stackedItems
+          .slice(0, index)
+          .reduce(
+            (total, candidate) =>
+              total + (heights[candidate.id] ?? frontHeight),
+            0
+          )
+      : 0
+  }
+  useLayoutEffect(() => {
+    const cards = [
+      ...(viewportRef.current?.querySelectorAll('[data-klean-toast-item]') ??
+        [])
+    ]
+    function measure() {
+      setHeights((previous) => {
+        const next = Object.fromEntries(
+          cards.map((element) => {
+            const row = element.parentElement
+            return [
+              row.dataset.toastId,
+              row.dataset.state === 'closing'
+                ? (previous[row.dataset.toastId] ?? element.offsetHeight + 12)
+                : element.offsetHeight + 12
+            ]
+          })
+        )
+        return JSON.stringify(previous) === JSON.stringify(next)
+          ? previous
+          : next
+      })
+    }
+    const observer =
+      typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(measure)
+    for (const card of cards) observer?.observe(card)
+    measure()
+    return () => observer?.disconnect()
+  }, [items])
+  useLayoutEffect(() => {
+    const list = viewportRef.current?.querySelector('[data-slot="toast-list"]')
+    if (focused)
+      document.activeElement?.scrollIntoView?.({
+        block: 'nearest',
+        inline: 'nearest'
+      })
+    else if (isExpanded && position.startsWith('bottom') && list)
+      list.scrollTop = list.scrollHeight
+  }, [isExpanded, focused, position])
+  useEffect(() => {
+    if (stackCount === 0) {
+      setPinned(false)
+      setFocused(false)
+      setHovered(false)
+    }
+  }, [stackCount])
+  useEffect(() => {
+    if (isReading) controller.pauseAll('stack-reading')
+    else controller.resumeAll('stack-reading')
+    return () => controller.resumeAll('stack-reading')
+  }, [controller, isReading])
   const resolvedStyle = useMemo(
     () => motionStyle(resolvedFrom, resolvedTo, position, style),
     [position, resolvedFrom, resolvedTo, style]
@@ -142,6 +359,9 @@ export default function Toast({
 
     promotedItemRef.current = enteringItem.id
     const viewport = viewportRef.current
+    const focusedElement = viewport?.contains(document.activeElement)
+      ? document.activeElement
+      : null
     try {
       viewport?.hidePopover?.()
     } catch {
@@ -152,6 +372,7 @@ export default function Toast({
     } catch {
       // Rejected by a partial Popover API implementation.
     }
+    focusedElement?.focus({ preventScroll: true })
   }, [items])
 
   useEffect(() => {
@@ -236,7 +457,7 @@ export default function Toast({
               data-slot="toast-action"
               href={item.action.href}
               className={twMerge(
-                'mt-2 inline-flex min-h-8 items-center text-sm font-semibold text-gray-950 underline decoration-gray-300 underline-offset-4 hover:decoration-current focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 dark:text-white dark:decoration-gray-600 dark:focus-visible:ring-white',
+                'mt-2 inline-flex min-h-8 max-w-full items-center whitespace-normal text-left text-sm font-semibold text-gray-950 underline decoration-gray-300 underline-offset-4 hover:decoration-current focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 dark:text-white dark:decoration-gray-600 dark:focus-visible:ring-white',
                 item.action.class,
                 item.action.className
               )}
@@ -249,7 +470,7 @@ export default function Toast({
               type="button"
               data-slot="toast-action"
               className={twMerge(
-                'mt-2 inline-flex min-h-8 cursor-pointer items-center text-sm font-semibold text-gray-950 hover:text-gray-600 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 dark:text-white dark:hover:text-gray-300 dark:focus-visible:ring-white',
+                'mt-2 inline-flex min-h-8 max-w-full cursor-pointer items-center whitespace-normal text-left text-sm font-semibold text-gray-950 hover:text-gray-600 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 dark:text-white dark:hover:text-gray-300 dark:focus-visible:ring-white',
                 item.action.class,
                 item.action.className
               )}
@@ -285,6 +506,9 @@ export default function Toast({
       data-position={position}
       data-from={resolvedFrom}
       data-to={resolvedTo}
+      data-expanded={isExpanded}
+      data-focused={focused}
+      data-stack-count={stackCount}
       aria-label={label}
       aria-live="polite"
       aria-atomic="false"
@@ -295,19 +519,49 @@ export default function Toast({
         className
       )}
       style={resolvedStyle}
+      onPointerEnter={(event) => {
+        if (event.pointerType === 'mouse') setHovered(true)
+        viewportProps.onPointerEnter?.(event)
+      }}
+      onPointerLeave={(event) => {
+        if (event.pointerType === 'mouse') setHovered(false)
+        viewportProps.onPointerLeave?.(event)
+      }}
+      onFocus={(event) => {
+        setFocused(Boolean(event.target.closest('[data-klean-toast-row]')))
+        viewportProps.onFocus?.(event)
+      }}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget))
+          setFocused(false)
+        viewportProps.onBlur?.(event)
+      }}
     >
       <style>{MOTION_CSS}</style>
       <ol
         data-slot="toast-list"
-        className="m-0 flex w-full list-none flex-col p-0"
+        style={{
+          height: listHeight ? `${listHeight}px` : undefined,
+          '--klean-toast-front-height': frontHeight
+            ? `${frontHeight}px`
+            : undefined
+        }}
+        className="m-0 flex w-full min-w-0 list-none flex-col p-0"
       >
-        {items.map((item) => (
+        {stackedItems.map((item) => (
           <li
             key={item.id}
             data-klean-toast-row=""
             data-state={item.state}
+            data-depth={stackDepth(item)}
+            data-toast-id={item.id}
+            style={{
+              '--klean-toast-depth': Math.min(stackDepth(item), 2),
+              zIndex: items.length - stackDepth(item),
+              top: `${rowOffset(item)}px`
+            }}
             aria-atomic="true"
-            className="grid grid-rows-[1fr] pb-3"
+            className="grid min-w-0 grid-cols-1 grid-rows-[1fr] pb-3"
             onMouseEnter={() => controller.pause(item.id, 'hover')}
             onMouseLeave={() => controller.resume(item.id, 'hover')}
             onFocus={() => controller.pause(item.id, 'focus')}
@@ -324,7 +578,7 @@ export default function Toast({
               data-from={resolvedFrom}
               data-to={resolvedTo}
               className={twMerge(
-                'pointer-events-auto grid min-h-0 w-full grid-cols-[minmax(0,1fr)_auto] items-start gap-3 overflow-hidden rounded-xl bg-white px-4 py-3 text-gray-950 shadow-xl ring-1 ring-gray-950/10 dark:bg-gray-950 dark:text-white dark:ring-white/15',
+                'pointer-events-auto grid min-h-0 w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-3 overflow-hidden rounded-xl bg-white px-4 py-3 wrap-anywhere text-gray-950 shadow-sm ring-1 ring-gray-950/10 dark:bg-gray-950 dark:text-white dark:ring-white/15',
                 item.class,
                 item.className
               )}
@@ -340,6 +594,19 @@ export default function Toast({
           </li>
         ))}
       </ol>
+      {stackCount > 1 ? (
+        <button
+          type="button"
+          data-slot="toast-expand"
+          aria-live="off"
+          aria-expanded={isExpanded}
+          className="pointer-events-auto mt-2 min-h-9 cursor-pointer self-end rounded-full bg-white px-3 text-xs font-medium text-gray-600 shadow-none ring-1 ring-gray-950/10 hover:text-gray-950 focus-visible:outline-2 focus-visible:outline-offset-2 dark:bg-gray-950 dark:text-gray-300 dark:ring-white/15"
+          onClick={() => setPinned(!pinned)}
+        >
+          {pinned ? 'Collapse' : isExpanded ? 'Keep open' : 'View all'} ·{' '}
+          {stackCount}
+        </button>
+      ) : null}
     </section>
   )
 }

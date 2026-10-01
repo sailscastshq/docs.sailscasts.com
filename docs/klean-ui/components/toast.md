@@ -22,6 +22,14 @@ import longRunningUsage from '../snippets/toast/long-running.vue?raw'
 import productUsage from '../snippets/toast/products.vue?raw'
 
 const basicNotifications = createToast()
+const stackNotifications = createToast({ duration: false, max: 0 })
+let stackSequence = 0
+function showStack() {
+  for (let index = 0; index < 4; index++) {
+    stackSequence += 1
+    stackNotifications({ title: `Deployment ${stackSequence}`, message: 'Building the production image.' })
+  }
+}
 const actionNotifications = createToast()
 const motionNotifications = createToast({ duration: 2600 })
 const deploymentNotifications = createToast()
@@ -170,6 +178,7 @@ function showServiceToast() {
 
 onBeforeUnmount(() => {
   basicNotifications.destroy()
+  stackNotifications.destroy()
   actionNotifications.destroy()
   motionNotifications.destroy()
   deploymentNotifications.destroy()
@@ -232,6 +241,63 @@ Mount `<Toast />` near the application root. Then call `toast()` wherever a noti
 
 :::
 
+## Notification stacks
+
+Multiple notifications form a compact stack, with the newest message in front. Hover over the stack or focus a notification to read the others. The count button lets touch and keyboard users keep the stack open. Timers pause while you read, including for notifications that arrive while it is open.
+
+The expanded list scrolls within the viewport. Persistent notifications remain available until you dismiss them or the application completes their work. Use `expanded` when you want the list to stay open; omit it for the compact default.
+
+<div class="my-6 flex flex-wrap gap-3">
+  <KleanButton type="button" @click="showStack">Show four deployments</KleanButton>
+  <KleanButton type="button" class="bg-white text-gray-950 ring-1 ring-gray-300 dark:bg-gray-800 dark:text-white" @click="stackNotifications.clear()">Dismiss deployments</KleanButton>
+  <KleanToast :controller="stackNotifications" position="bottom-right" />
+</div>
+
+::: code-group
+
+```vue [Vue]
+<script setup>
+import Toast from '@/components/ui/toast/Toast.vue'
+import { toast } from '@/components/ui/toast/toast.js'
+</script>
+
+<template>
+  <button type="button" @click="toast('Changes saved')">Save</button>
+  <Toast position="bottom-right" />
+  <!-- Add expanded to keep the list open. -->
+</template>
+```
+
+```jsx [React]
+import Toast from '@/components/ui/toast/Toast.jsx'
+import { toast } from '@/components/ui/toast/toast.js'
+
+export default function Notifications() {
+  return (
+    <>
+      <button type="button" onClick={() => toast('Changes saved')}>
+        Save
+      </button>
+      <Toast position="bottom-right" />
+      {/* Add expanded to keep the list open. */}
+    </>
+  )
+}
+```
+
+```svelte [Svelte]
+<script>
+  import Toast from '@/components/ui/toast/Toast.svelte'
+  import { toast } from '@/components/ui/toast/toast.js'
+</script>
+
+<button type="button" onclick={() => toast('Changes saved')}>Save</button>
+<Toast position="bottom-right" />
+<!-- Add expanded to keep the list open. -->
+```
+
+:::
+
 ## API
 
 ### Calling toast
@@ -279,6 +345,7 @@ toast.clear()
 | `from`                | nearest horizontal edge | Entry direction: `left`, `right`, `top`, `bottom`, `fade`, or `none`.                     |
 | `to`                  | nearest horizontal edge | Exit direction using the same values.                                                     |
 | `label`               | `Notifications`         | Accessible name for the persistent live region.                                           |
+| `expanded`            | `false`                 | Keep the notification list open instead of compacting it.                                 |
 | `class` / `className` | —                       | Tailwind for the viewport shelf. Item styling belongs to `toast({ class })`.              |
 | default content       | built-in body           | Vue scoped slot, React function child, or Svelte snippet receiving `{ item, dismiss }`.   |
 
@@ -349,6 +416,8 @@ Toast enters and leaves toward the nearest edge by default. Use `from` and `to` 
 </KleanPreview>
 
 ## Long-running work
+
+When custom content already draws its own card, keep the wrapper neutral with `class: 'block bg-transparent p-0 shadow-none ring-0 dark:bg-transparent'`. Choose the card's border and shadow in the application so it has one surface, not two.
 
 Use `duration: false` when an external event controls completion. Keep the returned ID and update the same notification instead of adding one toast for every status message.
 

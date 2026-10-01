@@ -1,7 +1,7 @@
 <script>
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
   import { twMerge } from "tailwind-merge";
-  import { toast } from "./toast.js";
+  import { toast } from "../toast.js";
 
   const POSITIONS = {
     "top-left": "left-4 top-4 items-start",
@@ -59,6 +59,7 @@
     from,
     to,
     label = "Notifications",
+    expanded = false,
     class: className = "",
     style = "",
     children,
@@ -67,6 +68,119 @@
 
   let viewport;
   let items = $state([]);
+  let hovered = $state(false);
+  let focused = $state(false);
+  let pinned = $state(false);
+  let heights = $state({});
+  let isReading = $derived(hovered || focused || pinned);
+  let isExpanded = $derived(expanded || hovered || focused || pinned);
+  let stackCount = $derived(
+    items.filter((item) => item.state !== "closing").length,
+  );
+  let stackedItems = $derived(
+    position.startsWith("top") ? [...items].reverse() : items,
+  );
+  function stackDepth(item) {
+    return (
+      items.length -
+      1 -
+      items.findIndex((candidate) => candidate.id === item.id)
+    );
+  }
+  let frontHeight = $derived(heights[items.at(-1)?.id] ?? 0);
+  let listHeight = $derived(
+    isExpanded
+      ? items.reduce(
+          (total, item) => total + (heights[item.id] ?? frontHeight),
+          0,
+        )
+      : frontHeight,
+  );
+  $effect(() => {
+    const expandedNow = isExpanded;
+    const focusedNow = focused;
+    const bottom = position.startsWith("bottom");
+    tick().then(() => {
+      const list = viewport?.querySelector('[data-slot="toast-list"]');
+      if (focusedNow)
+        document.activeElement?.scrollIntoView?.({
+          block: "nearest",
+          inline: "nearest",
+        });
+      else if (expandedNow && bottom && list)
+        list.scrollTop = list.scrollHeight;
+    });
+  });
+  function rowOffset(item) {
+    const index = stackedItems.findIndex(
+      (candidate) => candidate.id === item.id,
+    );
+    return isExpanded
+      ? stackedItems
+          .slice(0, index)
+          .reduce(
+            (total, candidate) =>
+              total + (heights[candidate.id] ?? frontHeight),
+            0,
+          )
+      : 0;
+  }
+  $effect(() => {
+    const snapshot = items;
+    let observer;
+    let active = true;
+    tick().then(() => {
+      if (!active) return;
+      const cards = [
+        ...(viewport?.querySelectorAll("[data-klean-toast-item]") ?? []),
+      ];
+      function measure() {
+        heights = Object.fromEntries(
+          cards.map((element) => {
+            const row = element.parentElement;
+            return [
+              row.dataset.toastId,
+              row.dataset.state === "closing"
+                ? (heights[row.dataset.toastId] ?? element.offsetHeight + 12)
+                : element.offsetHeight + 12,
+            ];
+          }),
+        );
+      }
+      observer =
+        typeof ResizeObserver === "undefined"
+          ? null
+          : new ResizeObserver(measure);
+      for (const card of cards) observer?.observe(card);
+      measure();
+    });
+    return () => {
+      active = false;
+      observer?.disconnect();
+    };
+  });
+  function setHover(event, value) {
+    if (event.pointerType === "mouse") hovered = value;
+  }
+  function focusStack(event) {
+    focused = Boolean(event.target.closest("[data-klean-toast-row]"));
+  }
+  function blurStack(event) {
+    if (!event.currentTarget.contains(event.relatedTarget)) focused = false;
+  }
+  $effect(() => {
+    if (stackCount === 0) {
+      pinned = false;
+      focused = false;
+      hovered = false;
+    }
+  });
+  $effect(() => {
+    const activeController = controller;
+    if (isReading) activeController.pauseAll("stack-reading");
+    else activeController.resumeAll("stack-reading");
+    return () => activeController.resumeAll("stack-reading");
+  });
   let promotedItemId;
   let defaultDirection = $derived(
     position.endsWith("-left") ? "left" : "right",
@@ -111,10 +225,16 @@
     const activeController = controller;
     promotedItemId = undefined;
     const sync = () => {
-      items = activeController.getSnapshot();
-      const enteringItem = items.findLast((item) => item.state === "entering");
+      const snapshot = activeController.getSnapshot();
+      items = snapshot;
+      const enteringItem = snapshot.findLast(
+        (item) => item.state === "entering",
+      );
       if (enteringItem && enteringItem.id !== promotedItemId) {
         promotedItemId = enteringItem.id;
+        const focusedElement = viewport?.contains(document.activeElement)
+          ? document.activeElement
+          : null;
         try {
           viewport?.hidePopover?.();
         } catch {
@@ -125,6 +245,7 @@
         } catch {
           // Rejected by a partial Popover API implementation.
         }
+        focusedElement?.focus({ preventScroll: true });
       }
       syncInstantMotion();
     };
@@ -197,6 +318,9 @@
   data-position={position}
   data-from={resolvedFrom}
   data-to={resolvedTo}
+  data-expanded={isExpanded}
+  data-focused={focused}
+  data-stack-count={stackCount}
   aria-label={label}
   aria-live="polite"
   aria-atomic="false"
@@ -207,14 +331,37 @@
     className,
   )}
   style={motionStyle}
+  onpointerenter={(event) => {
+    setHover(event, true);
+    viewportProps.onpointerenter?.(event);
+  }}
+  onpointerleave={(event) => {
+    setHover(event, false);
+    viewportProps.onpointerleave?.(event);
+  }}
+  onfocusin={(event) => {
+    focusStack(event);
+    viewportProps.onfocusin?.(event);
+  }}
+  onfocusout={(event) => {
+    blurStack(event);
+    viewportProps.onfocusout?.(event);
+  }}
 >
-  <ol data-slot="toast-list" class="m-0 flex w-full list-none flex-col p-0">
-    {#each items as item (item.id)}
+  <ol
+    data-slot="toast-list"
+    style={`height:${listHeight ? `${listHeight}px` : "auto"};--klean-toast-front-height:${frontHeight ? `${frontHeight}px` : "none"}`}
+    class="m-0 flex w-full min-w-0 list-none flex-col p-0"
+  >
+    {#each stackedItems as item (item.id)}
       <li
         data-klean-toast-row
         data-state={item.state}
+        data-depth={stackDepth(item)}
+        data-toast-id={item.id}
+        style={`--klean-toast-depth:${Math.min(stackDepth(item), 2)};z-index:${items.length - stackDepth(item)};top:${rowOffset(item)}px`}
         aria-atomic="true"
-        class="grid grid-rows-[1fr] pb-3"
+        class="grid min-w-0 grid-cols-1 grid-rows-[1fr] pb-3"
         onmouseenter={() => controller.pause(item.id, "hover")}
         onmouseleave={() => controller.resume(item.id, "hover")}
         onfocusin={() => controller.pause(item.id, "focus")}
@@ -227,7 +374,7 @@
           data-from={resolvedFrom}
           data-to={resolvedTo}
           class={twMerge(
-            "pointer-events-auto grid min-h-0 w-full grid-cols-[minmax(0,1fr)_auto] items-start gap-3 overflow-hidden rounded-xl bg-white px-4 py-3 text-gray-950 shadow-xl ring-1 ring-gray-950/10 dark:bg-gray-950 dark:text-white dark:ring-white/15",
+            "pointer-events-auto grid min-h-0 w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-3 overflow-hidden rounded-xl bg-white px-4 py-3 wrap-anywhere text-gray-950 shadow-sm ring-1 ring-gray-950/10 dark:bg-gray-950 dark:text-white dark:ring-white/15",
             item.class,
             item.className,
           )}
@@ -264,7 +411,7 @@
                   data-slot="toast-action"
                   href={item.action.href}
                   class={twMerge(
-                    "mt-2 inline-flex min-h-8 items-center text-sm font-semibold text-gray-950 underline decoration-gray-300 underline-offset-4 hover:decoration-current focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 dark:text-white dark:decoration-gray-600 dark:focus-visible:ring-white",
+                    "mt-2 inline-flex min-h-8 max-w-full items-center whitespace-normal text-left text-sm font-semibold text-gray-950 underline decoration-gray-300 underline-offset-4 hover:decoration-current focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 dark:text-white dark:decoration-gray-600 dark:focus-visible:ring-white",
                     item.action.class,
                     item.action.className,
                   )}
@@ -277,7 +424,7 @@
                   type="button"
                   data-slot="toast-action"
                   class={twMerge(
-                    "mt-2 inline-flex min-h-8 cursor-pointer items-center text-sm font-semibold text-gray-950 hover:text-gray-600 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 dark:text-white dark:hover:text-gray-300 dark:focus-visible:ring-white",
+                    "mt-2 inline-flex min-h-8 max-w-full cursor-pointer items-center whitespace-normal text-left text-sm font-semibold text-gray-950 hover:text-gray-600 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-950 dark:text-white dark:hover:text-gray-300 dark:focus-visible:ring-white",
                     item.action.class,
                     item.action.className,
                   )}
@@ -304,9 +451,92 @@
       </li>
     {/each}
   </ol>
+  {#if stackCount > 1}
+    <button
+      type="button"
+      data-slot="toast-expand"
+      aria-live="off"
+      aria-expanded={isExpanded}
+      class="pointer-events-auto mt-2 min-h-9 cursor-pointer self-end rounded-full bg-white px-3 text-xs font-medium text-gray-600 shadow-none ring-1 ring-gray-950/10 hover:text-gray-950 focus-visible:outline-2 focus-visible:outline-offset-2 dark:bg-gray-950 dark:text-gray-300 dark:ring-white/15"
+      onclick={() => (pinned = !pinned)}
+      >{pinned ? "Collapse" : isExpanded ? "Keep open" : "View all"} · {stackCount}</button
+    >
+  {/if}
 </section>
 
 <style>
+  [data-slot="toast-viewport"] [data-slot="toast-list"] {
+    position: relative;
+    display: block;
+    pointer-events: auto;
+    max-height: calc(100dvh - 7rem);
+    overscroll-behavior: contain;
+    transition: height 220ms ease;
+  }
+  [data-slot="toast-viewport"] [data-klean-toast-row] {
+    position: absolute;
+    width: 100%;
+    transition:
+      top 220ms ease,
+      translate 220ms ease,
+      scale 220ms ease,
+      opacity 150ms ease;
+  }
+  [data-slot="toast-viewport"][data-expanded="false"] [data-slot="toast-list"] {
+    margin-block-end: 1.5rem;
+  }
+  [data-slot="toast-viewport"][data-expanded="false"][data-position^="bottom"]
+    [data-slot="toast-list"] {
+    margin-block-start: 1.5rem;
+    margin-block-end: 0;
+  }
+  [data-slot="toast-viewport"][data-expanded="false"][data-stack-count="1"]
+    [data-slot="toast-list"] {
+    margin-block: 0;
+  }
+  [data-slot="toast-viewport"][data-expanded="false"] [data-klean-toast-row] {
+    align-self: start;
+    transform-origin: center top;
+    translate: 0 calc(var(--klean-toast-depth) * 12px);
+    scale: calc(1 - var(--klean-toast-depth) * 0.04);
+  }
+  [data-slot="toast-viewport"][data-expanded="false"][data-position^="bottom"]
+    [data-klean-toast-row] {
+    align-self: end;
+    transform-origin: center bottom;
+    translate: 0 calc(var(--klean-toast-depth) * -12px);
+  }
+  [data-slot="toast-viewport"][data-expanded="false"]
+    [data-klean-toast-row]:not([data-depth="0"]) {
+    pointer-events: none;
+    max-height: var(--klean-toast-front-height);
+    overflow: clip;
+  }
+  [data-slot="toast-viewport"][data-expanded="false"]
+    [data-klean-toast-row]:not([data-depth="0"])
+    [data-klean-toast-item] {
+    pointer-events: none;
+    max-height: var(--klean-toast-front-height);
+  }
+  [data-slot="toast-viewport"][data-expanded="false"]
+    [data-klean-toast-row]:not([data-depth="0"]):not([data-depth="1"]):not(
+      [data-depth="2"]
+    ) {
+    opacity: 0;
+  }
+  [data-slot="toast-viewport"][data-expanded="true"] [data-slot="toast-list"] {
+    overflow-y: auto;
+    padding-inline: 0.25rem;
+    margin-inline: -0.25rem;
+    width: calc(100% + 0.5rem);
+  }
+  [data-slot="toast-viewport"][data-expanded="true"] [data-klean-toast-row] {
+    width: calc(100% - 0.5rem);
+  }
+  [data-slot="toast-viewport"][data-focused="true"] [data-klean-toast-row],
+  [data-slot="toast-viewport"][data-focused="true"] [data-slot="toast-list"] {
+    transition: none;
+  }
   @keyframes klean-toast-enter {
     0% {
       opacity: 0;
@@ -366,6 +596,12 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    [data-slot="toast-viewport"] [data-klean-toast-row] {
+      transition: none;
+    }
+    [data-slot="toast-viewport"] [data-slot="toast-list"] {
+      transition: none;
+    }
     [data-klean-toast-item][data-state] {
       animation-duration: 1ms;
       animation-timing-function: linear;
