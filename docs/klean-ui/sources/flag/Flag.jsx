@@ -1,6 +1,6 @@
-import { forwardRef, useEffect, useState } from 'react'
+import { forwardRef, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
-import { flagSource } from './flags.js'
+import { countryName, flagSource } from './flags.js'
 
 const BASE_CLASSES =
   'inline-flex aspect-3/2 w-6 shrink-0 items-center justify-center overflow-hidden bg-gray-100 object-cover select-none dark:bg-gray-800'
@@ -9,7 +9,7 @@ const Flag = forwardRef(function Flag(
   {
     country = '',
     src = '',
-    alt = '',
+    alt,
     children,
     className,
     onError,
@@ -20,22 +20,28 @@ const Flag = forwardRef(function Flag(
   },
   ref
 ) {
-  const [failedSource, setFailedSource] = useState(null)
+  const resolvedAlt =
+    alt === undefined ? (src ? '' : countryName(country)) : alt
   const imageSource = flagSource(country, src)
-  const showImage = Boolean(imageSource) && failedSource !== imageSource
+  const [imageState, setImageState] = useState(() => ({
+    source: imageSource,
+    failed: false
+  }))
+  let currentImageState = imageState
+  if (imageState.source !== imageSource) {
+    currentImageState = { source: imageSource, failed: false }
+    setImageState(currentImageState)
+  }
+  const showImage = Boolean(imageSource) && !currentImageState.failed
   const classes = twMerge(BASE_CLASSES, className)
 
-  useEffect(() => {
-    setFailedSource(null)
-  }, [imageSource])
-
   function handleError(event) {
-    setFailedSource(imageSource)
+    setImageState({ source: imageSource, failed: true })
     onError?.(event)
   }
 
   function handleLoad(event) {
-    setFailedSource(null)
+    setImageState({ source: imageSource, failed: false })
     onLoad?.(event)
   }
 
@@ -47,7 +53,7 @@ const Flag = forwardRef(function Flag(
         data-slot="flag"
         data-state="image"
         src={imageSource}
-        alt={alt}
+        alt={resolvedAlt}
         className={classes}
         onError={handleError}
         onLoad={handleLoad}
@@ -73,8 +79,8 @@ const Flag = forwardRef(function Flag(
     props['aria-hidden'] !== undefined
   const fallbackSemantics = hasCallerFallbackSemantics
     ? {}
-    : alt
-      ? { role: 'img', 'aria-label': alt }
+    : resolvedAlt
+      ? { role: 'img', 'aria-label': resolvedAlt }
       : { 'aria-hidden': true }
 
   return (

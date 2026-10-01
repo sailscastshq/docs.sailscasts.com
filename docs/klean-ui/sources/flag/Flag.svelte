@@ -1,6 +1,6 @@
 <script>
   import { twMerge } from "tailwind-merge";
-  import { flagSource } from "./flags.js";
+  import { countryName, flagSource } from "./flags.js";
 
   const BASE_CLASSES =
     "inline-flex aspect-3/2 w-6 shrink-0 items-center justify-center overflow-hidden bg-gray-100 object-cover select-none dark:bg-gray-800";
@@ -19,7 +19,7 @@
   let {
     country = "",
     src = "",
-    alt = "",
+    alt,
     children,
     class: className,
     onerror,
@@ -31,6 +31,9 @@
 
   let element = $state();
   let failedSource = $state(null);
+  let resolvedAlt = $derived(
+    alt === undefined ? (src ? "" : countryName(country)) : alt,
+  );
   let imageSource = $derived(flagSource(country, src));
   let showImage = $derived(
     Boolean(imageSource) && failedSource !== imageSource,
@@ -54,13 +57,17 @@
       props["aria-hidden"] !== undefined,
   );
   let fallbackRole = $derived(
-    hasCallerFallbackSemantics ? props.role : alt ? "img" : undefined,
+    hasCallerFallbackSemantics ? props.role : resolvedAlt ? "img" : undefined,
   );
   let fallbackLabel = $derived(
-    hasCallerFallbackSemantics ? props["aria-label"] : alt || undefined,
+    hasCallerFallbackSemantics ? props["aria-label"] : resolvedAlt || undefined,
   );
   let fallbackHidden = $derived(
-    hasCallerFallbackSemantics ? props["aria-hidden"] : alt ? undefined : true,
+    hasCallerFallbackSemantics
+      ? props["aria-hidden"]
+      : resolvedAlt
+        ? undefined
+        : true,
   );
 
   function handleError(event) {
@@ -85,7 +92,7 @@
     data-slot="flag"
     data-state="image"
     src={imageSource}
-    {alt}
+    alt={resolvedAlt}
     class={twMerge(BASE_CLASSES, className)}
     onerror={handleError}
     onload={handleLoad}

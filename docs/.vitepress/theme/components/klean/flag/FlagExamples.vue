@@ -17,12 +17,16 @@ const options = [
     <Select id="flag-example-country" v-model="country" :options="options">
       <template #value="{ option }"
         ><span class="flex items-center gap-2"
-          ><Flag :country="option.value" class="w-5" />{{ option.label }}</span
+          ><Flag :country="option.value" alt="" class="w-5" />{{
+            option.label
+          }}</span
         ></template
       >
       <template #option="{ option }"
         ><span class="flex items-center gap-2"
-          ><Flag :country="option.value" class="w-5" />{{ option.label }}</span
+          ><Flag :country="option.value" alt="" class="w-5" />{{
+            option.label
+          }}</span
         ></template
       >
     </Select>

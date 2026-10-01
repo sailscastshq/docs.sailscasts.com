@@ -1,19 +1,26 @@
 <script setup>
 import { computed, ref, useAttrs, watch } from 'vue'
 import { twMerge } from 'tailwind-merge'
-import { flagSource } from './flags.js'
+import { countryName, flagSource } from './flags.js'
 
 defineOptions({ inheritAttrs: false })
 
 const props = defineProps({
   country: { type: String, default: '' },
   src: { type: String, default: '' },
-  alt: { type: String, default: '' }
+  alt: { type: String, default: undefined }
 })
 
 const attrs = useAttrs()
 const element = ref()
 const failed = ref(false)
+const resolvedAlt = computed(() =>
+  props.alt === undefined
+    ? props.src
+      ? ''
+      : countryName(props.country)
+    : props.alt
+)
 const imageSource = computed(() => flagSource(props.country, props.src))
 
 const BASE_CLASSES =
@@ -53,7 +60,7 @@ const hasCallerFallbackSemantics = computed(() =>
 
 const fallbackSemantics = computed(() => {
   if (hasCallerFallbackSemantics.value) return {}
-  if (props.alt) return { role: 'img', 'aria-label': props.alt }
+  if (resolvedAlt.value) return { role: 'img', 'aria-label': resolvedAlt.value }
   return { 'aria-hidden': 'true' }
 })
 
@@ -92,7 +99,7 @@ defineExpose({ element })
     data-slot="flag"
     data-state="image"
     :src="imageSource"
-    :alt="props.alt"
+    :alt="resolvedAlt"
     :class="twMerge(BASE_CLASSES, attrs.class)"
     @error="handleError"
   />
