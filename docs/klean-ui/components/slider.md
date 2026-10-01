@@ -259,7 +259,7 @@ Keep value movement immediate. Do not add an animation that makes the handle lag
 
 ## Large stepped control
 
-A thick track, larger handle, dots, and a changing label are all caller styling and ordinary surrounding markup. This example uses the same Slider with five steps. Its reset button returns to Medium.
+A thick track, larger handle, dots, and a changing label are all caller styling and ordinary surrounding markup. This example uses the same Slider with five steps. At Ultra, the label and icon turn violet and the filled track becomes a blue-to-violet gradient. Its reset button returns to Medium and restores the blue styling.
 
 <KleanPreview id="large-slider-preview" :source="sliderSource" filename="Slider.vue">
   <template #preview>
