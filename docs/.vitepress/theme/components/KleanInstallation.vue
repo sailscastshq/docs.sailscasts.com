@@ -35,13 +35,21 @@ const props = defineProps({
   dependencies: {
     type: Array,
     default: () => ['tailwind-merge']
+  },
+  commandAvailable: {
+    type: Boolean,
+    default: true
   }
 })
 
-const methods = [
-  { id: 'command', label: 'Command' },
-  { id: 'manual', label: 'Manual' }
-]
+const methods = computed(() =>
+  props.commandAvailable
+    ? [
+        { id: 'command', label: 'Command' },
+        { id: 'manual', label: 'Manual' }
+      ]
+    : [{ id: 'manual', label: 'Manual' }]
+)
 
 const packageManagers = computed(() => [
   {
@@ -108,7 +116,7 @@ const dependencyCommand = computed(() => {
   return `npm install ${(framework?.dependencies ?? props.dependencies).join(' ')}`
 })
 
-const activeMethod = ref('command')
+const activeMethod = ref(props.commandAvailable ? 'command' : 'manual')
 const activePackageManager = ref('npm')
 const methodRefs = ref([])
 const packageManagerRefs = ref([])
@@ -162,7 +170,7 @@ function handleTabKeydown(event, index, options, activate) {
 
 function selectMethod(method, focusTab = false) {
   activeMethod.value = method
-  selectTab(method, methodRefs, methods, focusTab)
+  selectTab(method, methodRefs, methods.value, focusTab)
 }
 
 function selectPackageManager(packageManager, focusTab = false) {
