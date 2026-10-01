@@ -165,7 +165,8 @@ function kleanUiGuide() {
           link: '/klean-ui/components/schedule-picker'
         },
         { text: 'Toast', link: '/klean-ui/components/toast' },
-        { text: 'Slide', link: '/klean-ui/components/slide' }
+        { text: 'Slide', link: '/klean-ui/components/slide' },
+        { text: 'Slider', link: '/klean-ui/components/slider' }
       ]
     },
     {
