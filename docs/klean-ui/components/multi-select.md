@@ -35,10 +35,6 @@ const usage = [{id:'vue',label:'Vue',code:vueUsage,filename:'Teams.vue'},{id:'re
 
 MultiSelect selects a collection from fixed choices. It does not create tokens or search remote data. Use a visible checkbox group for a short list, [Select](/klean-ui/components/select) for one choice, or [TagsInput](/klean-ui/components/tags-input) for free text.
 
-::: warning Unreleased
-MultiSelect is a draft addition. Published `klean-ui@0.0.6` does not include it. Use the complete manual sources below until a release includes `multi-select`.
-:::
-
 <KleanPreview id="multi-select-preview" :source="source" filename="MultiSelect.vue">
 <template #preview>
 <form class="grid w-full max-w-sm gap-3" @reset="teams = []" @submit.prevent>
@@ -53,9 +49,9 @@ MultiSelect is a draft addition. Published `klean-ui@0.0.6` does not include it.
 
 ## Installation
 
-<KleanInstallation id="multi-select-installation" component="multi-select" :source="source" filename="MultiSelect.vue" destination="assets/js/components/ui/multi-select/MultiSelect.vue" :frameworks="frameworks" :dependencies="['@floating-ui/dom', 'tailwind-merge']" />
+<KleanInstallation id="multi-select-installation" component="multi-select" :source="source" filename="MultiSelect.vue" destination="assets/js/components/ui/multi-select/MultiSelect.vue" :frameworks="frameworks" :dependencies="['@floating-ui/dom', 'tailwind-merge']" :command-available="false" />
 
-The CLI resolves the existing Popover source. There is no provider, runtime dependency on Klean, or new interaction library.
+Copy MultiSelect and Popover from the complete framework sources above. There is no provider, runtime dependency on Klean, or new interaction library.
 
 ## Usage
 
