@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -64,21 +65,27 @@ The command detects Vue, React, or Svelte and copies the component plus its smal
   :dependencies="['tailwind-merge']"
 />
 
-There is no provider, initializer, configuration file, filter-definition format, or runtime Klean dependency. If the page already owns its URL serialization, use the component and ignore `filterState.js`.
+Use FilterBar with your existing URL serialization, or use `filterState.js` to manage it.
 
 ## Usage
 
-### Vue
+<KleanFrameworkCode id="filter-bar-usage-1" label="filter bar Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="ServiceFilters.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="ServiceFilters.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="ServiceFilters.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 The framework syntax changes. The contract does not: committed state is caller-owned, the slot or child function receives a separate draft, and the root remains one native search form.
 
@@ -173,23 +180,29 @@ There are no `variant`, `tone`, `density`, `chipClass`, `panelClass`, or filter-
 
 ## Complete framework source
 
-### Vue
+<KleanFrameworkCode id="filter-bar-complete-framework-source-2" label="filter bar Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="filterBarSource" label="FilterBar.vue" />
 
 <CopyCode :code="filterStateSource" label="filterState.js" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="FilterBar.jsx" />
 
 <CopyCode :code="reactStateSource" label="filterState.js" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="FilterBar.svelte" />
 
 <CopyCode :code="svelteStateSource" label="filterState.js" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 

@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -32,8 +33,6 @@ function navigatePreview(event) {
 # Pagination
 
 Pagination navigates a server-owned list with real framework-native Inertia links. Pass the current page and the total page count; Klean derives every destination from the current URL, keeps the rest of the query and hash intact, and removes `page=1` from the canonical first-page URL.
-
-There is no item schema, link adapter, URL builder, ellipsis setting, visual variant, or router configuration. The Boring Stack already has a Link, so Pagination uses it.
 
 <KleanPreview id="pagination-source" :source="paginationSource" filename="Pagination.vue">
   <template #preview>
@@ -74,23 +73,27 @@ One command detects Vue, React, or Svelte, installs the matching official Inerti
   :dependencies="['@inertiajs/vue3', 'tailwind-merge']"
 />
 
-There is no initializer, provider, `klean-ui.json`, generated class helper, or runtime Klean package to configure.
-
 ## Usage
 
 Render Pagination from the same server pagination object that rendered the visible rows. The server remains authoritative; Klean does not create a second client-side page state.
 
-### Vue
+<KleanFrameworkCode id="pagination-usage-1" label="pagination Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="ProjectPages.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="ProjectPages.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="ProjectPages.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 `only` is optional. Use it when an Inertia partial reload should request only the result and pagination props. Leave it out when changing page should refresh the full page payload.
 
@@ -173,17 +176,23 @@ Use Pagination when a server-backed collection is divided into discrete pages: a
 
 Copy, inspect, and change the complete one-file source for your framework.
 
-### Vue source
+<KleanFrameworkCode id="pagination-complete-framework-source-2" label="pagination Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="paginationSource" label="Pagination.vue" />
 
-### React source
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Pagination.jsx" />
 
-### Svelte source
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Pagination.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 

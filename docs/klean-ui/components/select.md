@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -93,22 +94,25 @@ and resolves Popover first when it is missing:
   :dependencies="['@floating-ui/dom', 'tailwind-merge']"
 />
 
-The installation creates no initializer, provider, `klean-ui.json`, alias
-questionnaire, generated class helper, or Klean runtime dependency.
-
 ## Usage
 
-### Vue
+<KleanFrameworkCode id="select-usage-1" label="select Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="MemberRole.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="MemberRole.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="MemberRole.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 The framework binding changes; the value and option contract does not.
 
@@ -241,14 +245,20 @@ interaction state and are not written to storage or the URL by Klean.
 
 ## Complete framework source
 
-### Vue
+<KleanFrameworkCode id="select-complete-framework-source-2" label="select Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="selectSource" label="Select.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Select.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Select.svelte" />
+
+  </template>
+</KleanFrameworkCode>

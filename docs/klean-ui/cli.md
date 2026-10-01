@@ -109,17 +109,3 @@ Vue installs `Button.vue`; React installs `Button.jsx`; Svelte installs `Button.
 - Missing destination directories are created safely.
 
 Source ownership begins at installation, so update commands inspect exact source before writing. Known earlier Klean source is safely replaceable; locally modified and untracked source is not. Read [Updating](/klean-ui/updating) for status meanings, diffs, exit codes, rollback, and recovery.
-
-## What the CLI does not create
-
-The installer does not create:
-
-- `klean-ui.json` or another project manifest;
-- an `init` result;
-- a generated `cn.js` or shared class helper;
-- a theme provider, preset, or token file;
-- a Klean component runtime;
-- a framework selection prompt;
-- telemetry or an account requirement.
-
-Registry manifests are maintainer metadata inside the published package. They describe files and dependencies without becoming configuration that every consuming application must keep.

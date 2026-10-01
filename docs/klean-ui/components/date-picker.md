@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { computed, ref, watch } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -112,8 +113,6 @@ then adds the framework-native Date Picker:
   :dependencies="['@floating-ui/dom', 'tailwind-merge']"
 />
 
-No provider, configuration file, locale pack, or Date Picker variant is added.
-
 ## When to use
 
 Use Date Picker for issue dates, due dates, birthdays, effective dates, and
@@ -128,17 +127,23 @@ when a wall-clock time and timezone must become an exact instant.
 
 ## Usage
 
-### Vue
+<KleanFrameworkCode id="date-picker-usage-1" label="date picker Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="DueDateField.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="DueDateField.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="DueDateField.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 The application owns the visible label and product availability rule. Date
 Picker owns the stable value, field validity, optional floating surface,
@@ -216,14 +221,20 @@ Choose Schedule Picker when time and timezone must resolve to an exact ISO insta
 
 ## Complete framework source
 
-### Vue
+<KleanFrameworkCode id="date-picker-complete-framework-source-2" label="date picker Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="datePickerSource" label="DatePicker.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="DatePicker.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="DatePicker.svelte" />
+
+  </template>
+</KleanFrameworkCode>

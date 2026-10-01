@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -104,8 +105,6 @@ One command detects Vue, React, or Svelte and writes the matching framework-nati
   :dependencies="['tailwind-merge']"
 />
 
-There is no initializer, provider, item schema, `klean-ui.json`, generated class helper, or runtime package to configure.
-
 ## Usage
 
 Klean infers the contract from the real elements you provide:
@@ -115,17 +114,23 @@ Klean infers the contract from the real elements you provide:
 
 Keep a group all buttons or all links. A mixed group is ambiguous, so Klean deliberately leaves it unenhanced.
 
-### Vue
+<KleanFrameworkCode id="tabs-usage-1" label="tabs Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="ProjectTabs.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="ProjectTabs.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="ProjectTabs.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 The binding syntax changes, but the visible HTML and `data-value` relationship stay the same.
 
@@ -229,17 +234,23 @@ The visual shape does not decide the semantics. If every settings item has its o
   </template>
 </KleanPreview>
 
-### Vue Link navigation
+<KleanFrameworkCode id="tabs-horizontal-vertical-and-settings-navigation-2" label="tabs Horizontal, vertical, and settings navigation framework">
+  <template #vue>
 
 <CopyCode :code="settingsNavigation" label="SettingsNavigation.vue" />
 
-### React Link navigation
+  </template>
+  <template #react>
 
 <CopyCode :code="reactNavigation" label="SettingsNavigation.jsx" />
 
-### SvelteKit navigation
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteNavigation" label="SettingsNavigation.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 Vue and React pass their Inertia Link directly. SvelteKit enhances ordinary anchors, so no Link wrapper is needed. A native `<a>` works in every framework.
 
@@ -399,17 +410,23 @@ Use a concise visible heading near the component when possible. Otherwise provid
 
 Copy, inspect, and change the complete source for your framework.
 
-### Vue source
+<KleanFrameworkCode id="tabs-complete-framework-source-3" label="tabs Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="tabsSource" label="Tabs.vue" />
 
-### React source
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Tabs.jsx" />
 
-### Svelte source
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Tabs.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 

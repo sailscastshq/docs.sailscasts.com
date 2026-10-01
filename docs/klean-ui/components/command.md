@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -131,21 +132,25 @@ One command detects Vue, React, or Svelte and copies the matching framework-nati
   :dependencies="['tailwind-merge']"
 />
 
-That is the whole component. There is no initializer, config file, provider, generated class helper, runtime package, or interaction library.
-
 ## Usage
 
-### Vue
+<KleanFrameworkCode id="command-usage-1" label="command Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="ApplicationCommands.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="ApplicationCommands.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="ApplicationCommands.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 The framework binding changes; the command record and selection outcome do not.
 
@@ -257,8 +262,6 @@ Command reports a record; the application decides what accepting it means. Navig
 
 Query, active command, and palette visibility are ephemeral by default. Do not put them in local storage or the URL merely because they can be persisted. Preserve the resulting route, task, or form state when the product needs durability.
 
-There is no hidden promise queue, toast coupling, deploy API, router adapter, permission model, or persistence policy.
-
 ## When to use Command
 
 Use Command when typed text narrows application actions or destinations: a command palette, quick-create surface, operations launcher, or searchable step in a task.
@@ -280,14 +283,20 @@ Use Command when typed text narrows application actions or destinations: a comma
 
 ## Complete framework source
 
-### Vue
+<KleanFrameworkCode id="command-complete-framework-source-2" label="command Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="commandSource" label="Command.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Command.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Command.svelte" />
+
+  </template>
+</KleanFrameworkCode>

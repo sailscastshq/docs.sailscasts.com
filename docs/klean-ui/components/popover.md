@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -89,15 +90,18 @@ Run the same command in Vue, React, or Svelte. Klean detects the framework and c
 
 ## Usage
 
-### Vue
+<KleanFrameworkCode id="popover-usage-1" label="popover Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="Filters.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="Filters.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="Filters.svelte" />
 
@@ -106,6 +110,9 @@ Run the same command in Vue, React, or Svelte. Klean detects the framework and c
 ```html
 <button type="button" popovertarget="filters">Filters</button>
 ```
+
+  </template>
+</KleanFrameworkCode>
 
 Use a real button because opening interface content is an action. An anchor remains navigation and should not become a Popover invoker merely because it can be styled like a button.
 
@@ -127,17 +134,23 @@ Placement and offset describe geometry, not appearance. Popover has no `variant`
 
 ## Complete framework source
 
-### Vue
+<KleanFrameworkCode id="popover-complete-framework-source-2" label="popover Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="popoverSource" label="Popover.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Popover.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Popover.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Closing the surface
 

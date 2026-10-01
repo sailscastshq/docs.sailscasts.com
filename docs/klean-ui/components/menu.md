@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -111,21 +112,25 @@ Run the same command in Vue, React, or Svelte. Klean detects the framework and c
   :dependencies="['@floating-ui/dom', 'tailwind-merge']"
 />
 
-The dependency is source-level, not configuration: `Menu` imports its sibling `Popover`. The registry resolves that prerequisite before Menu and installs only the direct packages their readable source imports. No initializer, `klean-ui.json`, public `cn.js`, alias prompt, or Klean runtime appears.
-
 ## Usage
 
-### Vue
+<KleanFrameworkCode id="menu-usage-1" label="menu Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="ProjectActions.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="ProjectActions.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="ProjectActions.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 The framework syntax changes; the HTML contract does not. A real button uses native `popovertarget`. Native button and anchor children become menu items automatically, so developers do not repeat roles or tab indices.
 
@@ -260,15 +265,15 @@ Slipway needs compact operational actions; Hagfish needs a stronger border and o
 
 ## Complete framework source
 
-The preview Source tab contains the complete Vue component. The equivalent framework-native React and Svelte sources are copyable here; both import their local Klean Popover and preserve the same behavior contract.
-
-### React source
-
-<CopyCode :code="reactMenuSource" label="Menu.jsx" />
-
-### Svelte source
-
-<CopyCode :code="svelteMenuSource" label="Menu.svelte" />
+<KleanFrameworkCode
+  id="menu-framework-source"
+  :frameworks="[
+    { id: 'vue', label: 'Vue', code: menuSource, filename: 'Menu.vue' },
+    { id: 'react', label: 'React', code: reactMenuSource, filename: 'Menu.jsx' },
+    { id: 'svelte', label: 'Svelte', code: svelteMenuSource, filename: 'Menu.svelte' }
+  ]"
+  label="Menu source framework"
+/>
 
 ## Accessibility and Durable UI contract
 

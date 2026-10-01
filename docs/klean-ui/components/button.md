@@ -80,8 +80,6 @@ There are intentionally no `variant`, `size`, `color`, `tone`, `radius`, `elevat
 
 ## Installation
 
-The standard Boring Stack path requires no `init`, `klean-ui.json`, alias prompt, or generated `cn.js`. The installer detects the framework and conventional source paths.
-
 <KleanInstallation
   id="button-installation"
   component="button"

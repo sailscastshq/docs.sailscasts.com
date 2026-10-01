@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -90,22 +91,25 @@ source into the application:
   :dependencies="['tailwind-merge']"
 />
 
-There is no initializer, provider, `klean-ui.json`, generated class helper, or
-Durable UI runtime package.
-
 ## Usage
 
-### Vue
+<KleanFrameworkCode id="tags-input-usage-1" label="tags input Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="ExpenseTags.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="ExpenseTags.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="ExpenseTags.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 The syntax changes with the framework; the committed tags, pending draft,
 native form, and interaction contract do not.
@@ -209,14 +213,20 @@ the final escape hatch.
 
 ## Complete framework source
 
-### Vue
+<KleanFrameworkCode id="tags-input-complete-framework-source-2" label="tags input Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="tagsInputSource" label="TagsInput.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="TagsInput.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="TagsInput.svelte" />
+
+  </template>
+</KleanFrameworkCode>

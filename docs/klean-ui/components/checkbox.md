@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { computed, ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -100,22 +101,25 @@ source file:
   destination="assets/js/components/ui/checkbox/Checkbox.vue"
 />
 
-The installation creates no initializer, provider, `klean-ui.json`, alias
-questionnaire, generated class helper, or Klean runtime dependency.
-
 ## Usage
 
-### Vue
+<KleanFrameworkCode id="checkbox-usage-1" label="checkbox Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="NotificationsField.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="NotificationsField.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="NotificationsField.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 The binding syntax changes, but every version produces the same native checkbox
 and keeps the visible label in application markup.
@@ -262,14 +266,20 @@ than stored separately.
 
 ## Complete framework source
 
-### Vue
+<KleanFrameworkCode id="checkbox-complete-framework-source-2" label="checkbox Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="checkboxSource" label="Checkbox.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Checkbox.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Checkbox.svelte" />
+
+  </template>
+</KleanFrameworkCode>

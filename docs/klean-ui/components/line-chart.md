@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -79,17 +80,23 @@ Use [Sparkline](/klean-ui/components/sparkline) when an adjacent visible number 
 
 ## Usage
 
-### Vue
+<KleanFrameworkCode id="line-chart-usage-1" label="line chart Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="SignupChart.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="SignupChart.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="SignupChart.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## API
 
@@ -156,8 +163,6 @@ Height, width, color, caption treatment, labels, empty state, line treatment, an
 />
 ```
 
-There is no `variant`, palette, theme object, legend system, animation setting, or global chart provider. Repeated application treatment belongs in a small local wrapper around the copied component.
-
 ## Slipway and Hagfish
 
 Slipway can replace its Lookout line geometry with Line Chart while retaining its exact current readings, dark operational styling, polling, and metric controls in application markup. Its compact CPU and memory rows use [Sparkline](/klean-ui/components/sparkline).
@@ -173,14 +178,20 @@ Hagfish can use the same primitive for small invoice or payment trends without i
 
 ## Complete framework source
 
-### Vue
+<KleanFrameworkCode id="line-chart-complete-framework-source-2" label="line chart Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="lineChartSource" label="LineChart.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="LineChart.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="LineChart.svelte" />
+
+  </template>
+</KleanFrameworkCode>

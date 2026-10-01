@@ -16,7 +16,7 @@ Vue, React, and Svelte share the same outcomes without sharing a lowest-common-d
 ## The non-negotiables
 
 1. **The application owns the source.** Klean copies readable files; it does not retain runtime ownership.
-2. **Conventions are the configuration.** A standard Boring Stack app needs no initializer, manifest, alias questionnaire, or provider hierarchy.
+2. **Conventions are the configuration.** Run the add command from a Boring Stack application; Klean detects its framework and component directory.
 3. **HTML comes first.** Native elements and browser behavior are the starting contract.
 4. **Tailwind is the visual API.** Visual decisions belong in `class` or `className`.
 5. **There are no visual variants.** Klean does not ship `variant`, `size`, `tone`, `color`, `radius`, or elevation props.
@@ -99,7 +99,7 @@ import Button from './ui/button/Button.vue'
 </template>
 ```
 
-Klean does not generate a public `cn.js`. Use each framework's ordinary conditional class syntax. If copied component internals need conflict-aware merging so caller utilities win, that implementation remains inside the source.
+Use each framework's ordinary conditional class syntax. Your classes take precedence over the component defaults.
 
 ## Motion belongs to the product
 

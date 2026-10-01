@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -52,17 +53,23 @@ The examples also use [Button](/klean-ui/components/button). Add it separately w
 
 Use native alert semantics only when a failure appears dynamically and warrants interruption. Static error pages should use ordinary page or section semantics so their heading is not announced twice.
 
-### Vue
+<KleanFrameworkCode id="error-state-usage-1" label="error state Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="ServicesError.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="ServicesError.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="ServicesError.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## API
 
@@ -141,17 +148,23 @@ Use Error State when a page or meaningful content region failed and the user nee
 
 ## Complete framework source
 
-### Vue
+<KleanFrameworkCode id="error-state-complete-framework-source-2" label="error state Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="errorStateSource" label="ErrorState.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="ErrorState.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="ErrorState.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 

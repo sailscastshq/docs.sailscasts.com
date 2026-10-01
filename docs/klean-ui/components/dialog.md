@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -84,9 +85,6 @@ One command detects Vue, React, or Svelte and installs the framework-native sour
   :dependencies="['tailwind-merge']"
 />
 
-There is no provider, portal, focus-trap package, trigger component,
-configuration file, or Klean runtime.
-
 ## When to use
 
 Use Dialog for a modal task, consequential confirmation, or focused interaction
@@ -100,17 +98,23 @@ must not interrupt the current task.
 
 ## Usage
 
-### Vue
+<KleanFrameworkCode id="dialog-usage-1" label="dialog Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="DeleteProject.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="DeleteProject.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="DeleteProject.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Native contract
 
@@ -197,17 +201,23 @@ Hagfish and Slipway share the native modal contract while keeping their product 
 
 ## Complete framework source
 
-### Vue
+<KleanFrameworkCode id="dialog-complete-framework-source-2" label="dialog Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="dialogSource" label="Dialog.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Dialog.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Dialog.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 

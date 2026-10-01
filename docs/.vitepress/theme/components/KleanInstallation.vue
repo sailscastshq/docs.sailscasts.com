@@ -216,11 +216,7 @@ function chooseFramework(framework, focusTab = false) {
       tabindex="0"
       class="klean-installation__panel"
     >
-      <p>
-        Run one command from a Boring Stack application. Klean detects the
-        framework and conventional destination, then adds the framework-native
-        source and its direct dependencies.
-      </p>
+      <p>Run this command from your application's directory.</p>
 
       <div
         class="klean-installation__packages"
@@ -262,12 +258,6 @@ function chooseFramework(framework, focusTab = false) {
       >
         <CopyCode :code="packageManager.command" label="Terminal" />
       </div>
-
-      <ul class="klean-installation__summary">
-        <li>No initializer or configuration file</li>
-        <li>No framework, alias, or theme questions</li>
-        <li>No Klean runtime dependency</li>
-      </ul>
     </section>
 
     <section
@@ -461,22 +451,6 @@ function chooseFramework(framework, focusTab = false) {
 
 .klean-installation__framework-panel {
   outline: none;
-}
-
-.klean-installation__summary {
-  display: grid;
-  gap: 0.55rem;
-  margin: 0.25rem 0 0;
-  padding: 0;
-  color: var(--vp-c-text-2);
-  font-size: 0.875rem;
-  list-style: none;
-}
-
-.klean-installation__summary li::before {
-  margin-right: 0.55rem;
-  color: var(--vp-c-text-1);
-  content: '✓';
 }
 
 .klean-installation__steps {

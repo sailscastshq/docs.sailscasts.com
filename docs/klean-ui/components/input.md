@@ -108,8 +108,6 @@ Klean deliberately does not supply Field, Label, description, or error component
 
 ## Installation
 
-One command installs one framework-native source file. There is no initializer, configuration file, alias prompt, context provider, or Klean runtime.
-
 <KleanInstallation
   id="input-installation"
   component="input"

@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -46,8 +47,6 @@ One command detects Vue, React, or Svelte and copies the matching one-file sourc
   destination="assets/js/components/ui/sidebar/Sidebar.vue"
 />
 
-There is no initializer, `klean-ui.json`, provider, navigation configuration, class helper, barrel file, or Klean runtime.
-
 ## Sidebar or Sheet?
 
 The two components solve different semantic problems. Do not make one pretend to be both.
@@ -63,17 +62,23 @@ The desktop Sidebar may be open or closed by preference. The mobile Sheet is tem
 
 The component does not manufacture navigation items. Write honest links directly and connect the external trigger with `aria-controls` and `aria-expanded`.
 
-### Vue
+<KleanFrameworkCode id="sidebar-usage-1" label="sidebar Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="AppShell.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="AppShell.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="AppShell.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## API
 
@@ -151,17 +156,23 @@ An icon-only rail is not the same closed state because its links remain availabl
 
 Copy, inspect, and change the complete one-file source for your framework.
 
-### Vue source
+<KleanFrameworkCode id="sidebar-complete-framework-source-2" label="sidebar Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="sidebarSource" label="Sidebar.vue" />
 
-### React source
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Sidebar.jsx" />
 
-### Svelte source
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Sidebar.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 

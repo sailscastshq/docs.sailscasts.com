@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -67,23 +68,27 @@ The command detects Vue, React, or Svelte, copies the matching source, and adds 
   :dependencies="['tailwind-merge']"
 />
 
-There is no initializer, provider, `klean-ui.json`, class helper, barrel file, or runtime Klean dependency.
-
 ## Usage
 
 Keep the most frequent action visible when that genuinely saves work. Put secondary commands and destinations in the overflow content.
 
-### Vue
+<KleanFrameworkCode id="row-actions-usage-1" label="row actions Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="ServiceActions.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="ServiceActions.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="ServiceActions.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## API
 
@@ -133,8 +138,6 @@ A destructive menu item should open a [Dialog](/klean-ui/components/dialog) that
 
 Row Actions supplies only a compact inline layout and a neutral trigger. `class` or `className` merges onto the group. The visible actions, overflow items, and optional trigger contents are caller markup, so Tailwind is their entire visual API.
 
-There is no `variant`, `tone`, `size`, `destructive`, `itemClass`, or product theme prop. When several rows share one treatment, create a small application component around the copied source and the product's ordinary classes.
-
 ## When to use
 
 Use Row Actions for one record in a Table, DataTable, card list, invoice list, member list, deployment history, or similar repeated application surface. It is especially useful when one common destination should stay visible and less frequent choices need compact overflow.
@@ -149,17 +152,23 @@ Use Row Actions for one record in a Table, DataTable, card list, invoice list, m
 
 ## Complete framework source
 
-### Vue
+<KleanFrameworkCode id="row-actions-complete-framework-source-2" label="row actions Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="rowActionsSource" label="RowActions.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="RowActions.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="RowActions.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 

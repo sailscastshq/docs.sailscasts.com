@@ -15,8 +15,6 @@ npx klean-ui diff button
 npx klean-ui update button
 ```
 
-There is no initializer, application manifest, provider, lock-in file, or background updater. The versioned CLI knows the source it ships; your application keeps ordinary Vue, React, or Svelte files.
-
 ## Check before changing anything
 
 Run `check` from anywhere inside a conventional Boring Stack application:

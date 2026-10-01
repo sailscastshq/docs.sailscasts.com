@@ -69,8 +69,6 @@ const usageFrameworks = [
 
 Klean Icons is a focused family of 98 original SVGs drawn from the actions and objects that repeat across Slipway and Hagfish. Every mark uses the same 24px canvas, calm 1.5px stroke, rounded joins, and optical rhythm.
 
-There is no icon font, runtime package, provider, icon registry in the browser, size prop, color prop, or variant API. Install only the source you use. Then style ordinary SVG with Tailwind or native attributes.
-
 <IconGallery />
 
 Search is reflected in the page URL, so a filtered catalog can be reloaded, bookmarked, and shared. Framework choice is remembered across the Klean docs.
@@ -126,8 +124,6 @@ Do not make every icon louder to create hierarchy. Start with one color and one 
 | element reference                                    | —                | Framework-native access to the SVG element when genuinely needed.                        |
 | accessible presentation                              | decorative       | Hidden from assistive technology by default; override only for a truly informative mark. |
 
-There is no <code>size</code>, <code>color</code>, <code>tone</code>, <code>variant</code>, <code>label</code>, <code>title</code>, <code>spin</code>, <code>filled</code>, or <code>as</code> prop. CSS and SVG already provide those capabilities without another naming layer.
-
 ## Accessibility
 
 Prefer visible text. In a button that says “Delete”, Trash is decorative and should stay hidden from assistive technology. For an icon-only control, name the button—not the SVG:
@@ -157,7 +153,7 @@ Only make the SVG itself informative when it stands alone and no semantic parent
 
 ## Why source-owned icons
 
-An icon is interface source, not an opaque service. Installing the exact Vue, React, or Svelte component means an application can inspect it, change geometry when its product genuinely needs to, and keep rendering without a Klean runtime.
+You can inspect and edit each installed icon's SVG geometry in your application.
 
 The shared 24px geometry keeps Slipway and Hagfish recognizable as part of the same ecosystem. <code>currentColor</code>, native attributes, and caller-owned classes let each product retain its own density, palette, contrast, and motion without forking an icon library API.
 

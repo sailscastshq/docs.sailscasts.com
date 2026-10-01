@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -103,22 +104,25 @@ Combobox, and resolves Popover first when it is missing:
   :dependencies="['@floating-ui/dom', 'tailwind-merge']"
 />
 
-The installation creates no initializer, provider, `klean-ui.json`, alias
-questionnaire, generated class helper, or Klean runtime dependency.
-
 ## Usage
 
-### Vue
+<KleanFrameworkCode id="combobox-usage-1" label="combobox Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="ProjectPicker.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="ProjectPicker.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="ProjectPicker.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 The framework binding changes; the value, options, query, and keyboard contract
 do not.
@@ -245,14 +249,20 @@ Unmounting removes observers and pending debounce work.
 
 ## Complete framework source
 
-### Vue
+<KleanFrameworkCode id="combobox-complete-framework-source-2" label="combobox Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="comboboxSource" label="Combobox.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Combobox.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Combobox.svelte" />
+
+  </template>
+</KleanFrameworkCode>

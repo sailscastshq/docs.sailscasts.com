@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -116,17 +117,23 @@ when the date surface should remain visible.
 
 ## Usage
 
-### Vue
+<KleanFrameworkCode id="date-range-picker-usage-1" label="date range picker Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="ReportingPeriod.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="ReportingPeriod.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="ReportingPeriod.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Value and form contract
 
@@ -191,14 +198,20 @@ Choose Schedule Picker when time and timezone must resolve to an exact ISO insta
 
 ## Complete framework source
 
-### Vue
+<KleanFrameworkCode id="date-range-picker-complete-framework-source-2" label="date range picker Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="rangeSource" label="DateRangePicker.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="DateRangePicker.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="DateRangePicker.svelte" />
+
+  </template>
+</KleanFrameworkCode>

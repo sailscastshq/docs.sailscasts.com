@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -70,23 +71,27 @@ One command detects Vue, React, or Svelte and writes the matching one-file sourc
   :dependencies="['tailwind-merge']"
 />
 
-There is no initializer, provider, `klean-ui.json`, class helper, barrel file, Avatar anatomy package, image service, or runtime Klean dependency.
-
 ## Usage
 
 The fallback is ordinary slot or child content. It is visible only when the source is absent or unavailable.
 
-### Vue
+<KleanFrameworkCode id="avatar-usage-1" label="avatar Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="CreatorLink.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="CreatorLink.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="CreatorLink.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## API
 
@@ -98,8 +103,6 @@ The fallback is ordinary slot or child content. It is visible only when the sour
 | `class` / `className`          | —        | Ordinary Tailwind merged after the neutral circular baseline.                                    |
 | native image/global attributes | —        | `loading`, `decoding`, `srcset`, `sizes`, IDs, titles, data hooks, and native image event hooks. |
 | element reference              | —        | Framework-native access to the current image or fallback element when genuinely needed.          |
-
-There is no `AvatarImage`, `AvatarFallback`, `AvatarBadge`, `AvatarGroup`, `as`, `variant`, `tone`, `color`, `size`, `shape`, `radius`, `status`, `presence`, or delay API.
 
 The slot already is the fallback. Tailwind already expresses the visuals. A Button, anchor, or framework Link already expresses interaction. Adding more parts would only rename those tools.
 
@@ -227,17 +230,23 @@ Use it when the source and fallback should occupy the same visual space and shar
 
 Copy, inspect, and change the complete one-file source for your framework.
 
-### Vue source
+<KleanFrameworkCode id="avatar-complete-framework-source-2" label="avatar Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="avatarSource" label="Avatar.vue" />
 
-### React source
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Avatar.jsx" />
 
-### Svelte source
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Avatar.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 
