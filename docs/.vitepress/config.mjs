@@ -142,6 +142,7 @@ function kleanUiGuide() {
         { text: 'Error State', link: '/klean-ui/components/error-state' },
         { text: 'Filter Bar', link: '/klean-ui/components/filter-bar' },
         { text: 'FileUpload', link: '/klean-ui/components/file-upload' },
+        { text: 'Flag', link: '/klean-ui/components/flag' },
         { text: 'Sparkline', link: '/klean-ui/components/sparkline' },
         { text: 'Line Chart', link: '/klean-ui/components/line-chart' },
         { text: 'Pagination', link: '/klean-ui/components/pagination' },
