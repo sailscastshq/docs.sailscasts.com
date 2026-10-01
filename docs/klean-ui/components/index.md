@@ -117,6 +117,10 @@ A native filter form with separate draft and committed state, immediate active-f
 
 One native file-selection bridge with honest validation, previews, drop behavior, and caller-owned upload markup.
 
+### [Flag](/klean-ui/components/flag)
+
+One local country flag image with decorative defaults, custom source precedence, a resilient fallback, and caller-owned Tailwind geometry.
+
 ### [Sparkline](/klean-ui/components/sparkline)
 
 A compact trend beside an exact value, with truthful decorative defaults, honest missing-data gaps, and caller-owned Tailwind styling.
