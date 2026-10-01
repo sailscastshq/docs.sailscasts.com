@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -52,17 +53,23 @@ The examples also use [Spinner](/klean-ui/components/spinner). Add it separately
 
 Put `aria-busy` on the region whose content is changing. Loading State provides the persistent polite status; the caller supplies useful words and optional visuals.
 
-### Vue
+<KleanFrameworkCode id="loading-state-usage-1" label="loading state Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="ServicesLoading.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="ServicesLoading.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="ServicesLoading.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## API
 
@@ -122,17 +129,23 @@ Use Loading State when a named region is waiting for content or refreshing exist
 
 ## Complete framework source
 
-### Vue
+<KleanFrameworkCode id="loading-state-complete-framework-source-2" label="loading state Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="loadingStateSource" label="LoadingState.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="LoadingState.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="LoadingState.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 

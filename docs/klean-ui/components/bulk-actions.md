@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -46,23 +47,27 @@ The command detects Vue, React, or Svelte and copies the matching source into th
   :dependencies="['tailwind-merge']"
 />
 
-There is no initializer, provider, `klean-ui.json`, class helper, barrel file, or runtime Klean dependency.
-
 ## Usage
 
 Pass only the number selected. Keep the selected IDs where the table or page already owns them, and write real Links and buttons inside the action region.
 
-### Vue
+<KleanFrameworkCode id="bulk-actions-usage-1" label="bulk actions Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="ServiceBulkActions.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="ServiceBulkActions.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="ServiceBulkActions.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## API
 
@@ -119,8 +124,6 @@ The neutral baseline wraps actions when space narrows. Keep the summary concise,
 
 Bulk Actions supplies a neutral wrapping layout. `class` or `className` merges onto the root, while every action is caller markup and therefore styled with ordinary Tailwind.
 
-There is no `variant`, `tone`, `size`, `sticky`, `floating`, `actionClass`, or product theme prop. If an application repeats one treatment, wrap the copied source in a small product component with that application's classes.
-
 ## When to use
 
 Use Bulk Actions when a user selects multiple rows, invoices, services, members, deployments, or other records and needs actions that apply to that set.
@@ -134,17 +137,23 @@ Use Bulk Actions when a user selects multiple rows, invoices, services, members,
 
 ## Complete framework source
 
-### Vue
+<KleanFrameworkCode id="bulk-actions-complete-framework-source-2" label="bulk actions Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="bulkActionsSource" label="BulkActions.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="BulkActions.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="BulkActions.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 

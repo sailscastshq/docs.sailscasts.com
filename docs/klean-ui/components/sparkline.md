@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -69,17 +70,23 @@ Use [Line Chart](/klean-ui/components/line-chart) when the trend deserves its ow
 
 ## Usage
 
-### Vue
+<KleanFrameworkCode id="sparkline-usage-1" label="sparkline Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="CpuUsage.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="CpuUsage.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="CpuUsage.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## API
 
@@ -89,8 +96,6 @@ Use [Line Chart](/klean-ui/components/line-chart) when the trend deserves its ow
 | `label`                  | —       | Makes the graphic informative and supplies its accessible name.                          |
 | `class` / `className`    | —       | Ordinary Tailwind merged after the compact neutral size. Color follows `currentColor`.   |
 | native/global attributes | —       | IDs, data hooks, event hooks, and framework-native element references when truly needed. |
-
-There is no variant, color scale, tooltip, provider, animation, or chart configuration object.
 
 ## Accessible by default
 
@@ -131,14 +136,20 @@ For repeated product treatment, keep a small application-owned wrapper. Sparklin
 
 ## Complete framework source
 
-### Vue
+<KleanFrameworkCode id="sparkline-complete-framework-source-2" label="sparkline Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="sparklineSource" label="Sparkline.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Sparkline.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Sparkline.svelte" />
+
+  </template>
+</KleanFrameworkCode>

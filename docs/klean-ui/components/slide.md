@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { onBeforeUnmount, ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -96,23 +97,27 @@ One command detects Vue, React, or Svelte and installs the framework-native sour
   :dependencies="['tailwind-merge']"
 />
 
-The installed file belongs to the application. There is no initializer, Klean runtime, configuration file, provider, alias prompt, or generated class helper.
-
 ## Usage
 
 The HTML and behavior stay the same in every framework. Only binding and event syntax change.
 
-### Vue
+<KleanFrameworkCode id="slide-usage-1" label="slide Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="DeployAction.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="DeployAction.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="DeployAction.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Why this is a button
 
@@ -145,17 +150,23 @@ The custom thumb receives `pending` and `progress`, where progress is `start`, `
 
 The default arrow needs no configuration. When a product has a meaningful mark—such as an application mascot—place it in the thumb with the framework-native content hook.
 
-### Vue
+<KleanFrameworkCode id="slide-custom-thumb-content-2" label="slide Custom thumb content framework">
+  <template #vue>
 
 <CopyCode :code="vueThumb" label="DeployAction.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactThumb" label="DeployAction.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteThumb" label="DeployAction.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 The entire thumb is decorative. Keep the image `alt` empty and communicate pending work through the visible action label and the surrounding application status, not through the moving artwork alone.
 
@@ -186,17 +197,23 @@ Color is never the only progress signal: the thumb position moves, the visible l
 
 Copy, inspect, and change the complete source for your framework.
 
-### Vue source
+<KleanFrameworkCode id="slide-complete-framework-source-3" label="slide Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="slideSource" label="Slide.vue" />
 
-### React source
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Slide.jsx" />
 
-### Svelte source
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Slide.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 

@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -120,9 +121,6 @@ framework's Sheet source into the conventional component directory:
   :dependencies="['tailwind-merge']"
 />
 
-There is no provider, portal, focus-trap dependency, configuration file,
-placement prop, or Klean runtime.
-
 ## When to use
 
 Use Sheet for a modal surface attached to a viewport edge: mobile navigation,
@@ -138,17 +136,23 @@ non-modal surface. A persistent desktop navigation rail is ordinary
 
 ## Usage
 
-### Vue
+<KleanFrameworkCode id="sheet-usage-1" label="sheet Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="ProjectDetails.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="ProjectDetails.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="ProjectDetails.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 The application supplies the heading, description, scroll region, actions,
 and semantic content. Sheet supplies only the native modal and off-canvas
@@ -303,14 +307,20 @@ treatments belong in a local wrapper or copied source, not a variant prop.
 
 ## Complete framework source
 
-### Vue
+<KleanFrameworkCode id="sheet-complete-framework-source-2" label="sheet Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="sheetSource" label="Sheet.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Sheet.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Sheet.svelte" />
+
+  </template>
+</KleanFrameworkCode>

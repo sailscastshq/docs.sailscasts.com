@@ -19,7 +19,7 @@ Klean UI means **Kelvin's Lean UI**. It is the source-owned component system for
 
 **Vue, React, and Svelte. Three framework-native sources, one Klean contract.**
 
-They are equal product targets. Each implementation uses its framework's native conventions while preserving the same semantics, states, anatomy, accessibility outcomes, and source-ownership model—without adding a Klean runtime to the application.
+Each framework provides the same component behavior, accessibility, and styling choices through its own conventions.
 
 <KleanPreview id="klean-introduction" :source="quickUsage" filename="usage.vue">
   <template #preview>
@@ -38,9 +38,7 @@ They are equal product targets. Each implementation uses its framework's native 
 
   </template>
   <template #caption>
-    One behavioral contract, styled with ordinary Tailwind. VitePress renders
-    the source shown on the Button page; the installer selects framework-native
-    Vue, React, or Svelte source for the application.
+    Style the component directly with ordinary Tailwind classes.
   </template>
 </KleanPreview>
 
@@ -50,14 +48,14 @@ Add a component with one command. Klean infers the framework and conventional Bo
 
 <KleanInstallation id="klean-installation" :source="buttonSource" />
 
-Already using Klean source? [Check, review, and update it safely](/klean-ui/updating) without adding a manifest or silently replacing local changes.
+Already using Klean source? [Check, review, and update it safely](/klean-ui/updating).
 
 ## The contract
 
 - **Own the source.** Components land in the application as readable files.
 - **Use the platform.** Actions are buttons; navigation is an anchor or the Boring Stack Link.
 - **Style with Tailwind.** There are no visual `variant`, `size`, `tone`, or `radius` props.
-- **Prefer conventions.** A standard Boring Stack app needs no initializer, manifest, alias questionnaire, or public `cn.js`.
+- **Prefer conventions.** Klean detects your Boring Stack framework and component directory.
 - **Treat accessibility as correctness.** Keyboard behavior, focus, naming, state, and reduced motion are release requirements.
 - **Implement Durable UI.** Useful state survives, navigation remains shareable, focus recovers, and failed work rolls back.
 
@@ -67,8 +65,8 @@ Button is the first documented component, not the definition of the library. Its
 
 [Explore Button →](/klean-ui/components/button)
 
-## Source-owned, not runtime-owned
+## Make it yours
 
-Klean takes the useful part of the shadcn model—discoverable examples and source ownership—then removes the required initialization ceremony, visual variant matrix, public class helper, and hidden theme prerequisites.
+Edit the installed source, style it with Tailwind, and compose it with your application's own markup.
 
 Read the [Doctrine](/klean-ui/doctrine) for the boundaries behind those choices, [Updating](/klean-ui/updating) for source-aware upgrades, or the [CLI reference](/klean-ui/cli) for the complete command contract.

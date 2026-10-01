@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -46,23 +47,27 @@ The command detects Vue, React, or Svelte and copies the matching one-file sourc
   :dependencies="['tailwind-merge']"
 />
 
-There is no initializer, provider, `klean-ui.json`, class helper, barrel file, or runtime Klean dependency.
-
 ## Usage
 
 Write the same ordinary document markup you would use without a component. Empty State supplies the surrounding layout and class-merging seam.
 
-### Vue
+<KleanFrameworkCode id="empty-state-usage-1" label="empty state Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="ProjectsEmptyState.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="ProjectsEmptyState.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="ProjectsEmptyState.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## API
 
@@ -132,17 +137,23 @@ Use Empty State when a successfully loaded collection, page, panel, table, or wo
 
 ## Complete framework source
 
-### Vue
+<KleanFrameworkCode id="empty-state-complete-framework-source-2" label="empty state Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="emptyStateSource" label="EmptyState.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="EmptyState.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="EmptyState.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 

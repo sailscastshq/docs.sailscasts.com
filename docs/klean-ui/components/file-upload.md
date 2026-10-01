@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -48,23 +49,27 @@ One command detects Vue, React, or Svelte and writes the matching source into th
   destination="assets/js/components/ui/file-upload/FileUpload.vue"
 />
 
-There is no provider, initializer, `klean-ui.json`, upload SDK, class helper, barrel file, or Klean runtime dependency.
-
 ## Usage
 
 The framework-native binding contains a `File` or `null`. Add the native `multiple` prop and the binding becomes `File[]`. The content slot or render function receives the same small API in each framework.
 
-### Vue
+<KleanFrameworkCode id="file-upload-usage-1" label="file upload Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="ReceiptField.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="ReceiptField.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="ReceiptField.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## API
 
@@ -199,17 +204,23 @@ When one product repeats the same treatment, keep a small product wrapper such a
 
 Copy, inspect, and change the complete one-file source for your framework.
 
-### Vue source
+<KleanFrameworkCode id="file-upload-complete-framework-source-2" label="file upload Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="fileUploadSource" label="FileUpload.vue" />
 
-### React source
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="FileUpload.jsx" />
 
-### Svelte source
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="FileUpload.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 

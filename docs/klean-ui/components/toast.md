@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { onBeforeUnmount, ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -222,23 +223,27 @@ One command detects Vue, React, or Svelte and adds Toast:
   :dependencies="['tailwind-merge']"
 />
 
-The command creates `toast/toast.js` and `toast/Toast.vue`, `Toast.jsx`, or `Toast.svelte` under the conventional components directory. Both files immediately belong to the application. There is no Klean runtime dependency, `klean-ui.json`, provider wrapper, alias questionnaire, or generated `cn.js`.
-
 ## Usage
 
 Mount `<Toast />` near the application root. Then call `toast()` wherever a notification is needed.
 
-### Vue
+<KleanFrameworkCode id="toast-usage-1" label="toast Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="AppLayout.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="AppLayout.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="AppLayout.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## API
 
@@ -502,17 +507,23 @@ Copy, inspect, and change the complete source for your framework.
 
 <CopyCode :code="controllerSource" label="toast.js" />
 
-### Vue source
+<KleanFrameworkCode id="toast-complete-framework-source-2" label="toast Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="toastSource" label="Toast.vue" />
 
-### React source
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Toast.jsx" />
 
-### Svelte source
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Toast.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 

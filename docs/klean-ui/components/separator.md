@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -60,23 +61,27 @@ One command detects Vue, React, or Svelte and writes the matching one-file sourc
   :dependencies="['tailwind-merge']"
 />
 
-There is no initializer, provider, `klean-ui.json`, class helper, barrel file, orientation package, or runtime Klean dependency.
-
 ## Usage
 
 Use Separator between adjacent regions only when the boundary carries meaning that spacing alone does not communicate.
 
-### Vue
+<KleanFrameworkCode id="separator-usage-1" label="separator Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="AccountSettings.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="AccountSettings.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="AccountSettings.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## API
 
@@ -86,8 +91,6 @@ Use Separator between adjacent regions only when the boundary carries meaning th
 | `class` / `className` | —            | Ordinary Tailwind classes merged after the neutral monochrome baseline.                          |
 | native attributes     | —            | IDs, titles, `aria-hidden`, data attributes, test hooks, and other ordinary attributes.          |
 | element reference     | —            | Framework-native access to the actual `hr` or vertical separator when genuinely needed.          |
-
-There is no `variant`, `tone`, `color`, `size`, `thickness`, `length`, `decorative`, `inset`, or theme API. Those decisions are Tailwind classes or native attributes at the call site.
 
 `orientation` is not a visual variant. It determines which semantic element and accessibility attributes are correct.
 
@@ -209,17 +212,23 @@ Use Separator for:
 
 Copy, inspect, and change the complete one-file source for your framework.
 
-### Vue source
+<KleanFrameworkCode id="separator-complete-framework-source-2" label="separator Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="separatorSource" label="Separator.vue" />
 
-### React source
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Separator.jsx" />
 
-### Svelte source
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Separator.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 

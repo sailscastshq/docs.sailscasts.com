@@ -19,10 +19,8 @@ installation.
 npx klean-ui add button
 ```
 
-That command detects a conventional Boring Stack application, selects its
-framework, resolves the expected paths, adds only direct prerequisites, and
-leaves readable application files behind. There is no initializer, provider,
-manifest, alias questionnaire, generated class helper, or Klean runtime.
+That command adds the matching Vue, React, or Svelte component to your
+application. You can edit and style the installed source directly.
 
 ## Why now
 
@@ -158,8 +156,6 @@ caller explicitly chooses overwrite.
 This release does not claim every future application block is finished. It
 also deliberately does not include:
 
-- a Klean runtime or global provider;
-- a permanent consumer configuration file;
 - a mandatory theme or visual variant system;
 - a generic string-based icon registry in the application;
 - product logos and brand artwork; or

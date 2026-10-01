@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -49,29 +50,29 @@ That is the behavioral contract. Width, shape, borders, color, and country-picke
 
 ## Installation
 
-The current npm release, `klean-ui@0.0.6`, does not include Flag. Install it using the framework sources and licensed `flags.js` asset module below. There is no Klean runtime dependency, provider, initializer, or asset-host configuration.
+<KleanInstallation id="flag-installation" component="flag" :frameworks="frameworks" :dependencies="['tailwind-merge']" />
 
-1. Install `tailwind-merge` if your application does not already have it.
-2. Copy the component for your framework to the destination shown below.
-3. [Download the complete licensed flags.js](/klean-ui/flag/flags.js) into the same `flag/` directory. Each component imports `./flags.js`.
-
-Keep the license comment when editing or redistributing the asset module.
-
-<KleanInstallation id="flag-installation" component="flag" :frameworks="frameworks" :dependencies="['tailwind-merge']" :command-available="false" />
+For manual installation, copy the matching framework source and [flags.js](/klean-ui/flag/flags.js) into the same `flag/` directory, and install `tailwind-merge`. Keep the asset module's license notice.
 
 ## Usage
 
-### Vue
+<KleanFrameworkCode id="flag-usage-1" label="flag Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="Countries.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="Countries.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="Countries.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## API
 
@@ -137,15 +138,13 @@ The example deliberately offers four application-selected regions. A real produc
 
 ## Stable names and localization
 
-The shared registry includes checked-in English names. There is no render-time `Intl.DisplayNames`, browser-language lookup or `locale` prop. Identical code and props therefore produce identical default names during server rendering and hydration, regardless of the host ICU version. Applications own translation: pass their localized name as `alt`, or `alt=""` beside an already visible country label.
+Built-in flags use English country names by default. Pass a localized name as `alt`, or use `alt=""` beside a visible country label.
 
 Missing or unsupported codes derive `""`. A custom `src` without a known `country` cannot identify image content: supply a meaningful explicit `alt` or an explicit empty string for decoration. Any nonempty custom `src` disables inferred naming, even with a known `country`, because that source could depict anything. Only an explicit `alt` labels a custom image.
 
-English names are a fixed snapshot, seeded from Node 24.14.1 / ICU 78.2 / CLDR 48.0 and maintained in `scripts/flag-country-names.json`. `XA`, `XC` and `XO` follow the pinned asset package's own names (Abkhazia, Northern Cyprus and South Ossetia), rather than unrelated Unicode pseudo-region names. This names asset coverage, not political status.
-
 ## Assets, licensing and performance
 
-Flag uses original Klean component behavior. No Flux proprietary implementation is included. The art comes from the npm distribution of [country-flag-icons](https://github.com/catamphetamine/country-flag-icons) **1.6.20**, licensed under MIT. Its complete copyright and permission notice travels inside installed `flags.js`. The tarball SHA-1 is `aa6f36104568993f9cd43e7da283f9b7d0a802cc`.
+The flag art comes from [country-flag-icons](https://github.com/catamphetamine/country-flag-icons), licensed under MIT. Its copyright and permission notice is included in `flags.js`.
 
 The pinned registry contains **257 entries**: 249 ISO 3166-1 codes plus `AC`, `EU`, `IC`, `TA`, `XA`, `XC`, `XK`, and `XO`. This describes the asset package's coverage; it is not a Unicode RGI registry or a political-status policy. Unsupported or malformed codes resolve to fallback. Use a custom source for other art.
 
@@ -157,17 +156,23 @@ Allow `data:` in the application's CSP `img-src` when using built-in assets. Cus
 
 Copy the matching component and the [shared licensed asset module](/klean-ui/flag/flags.js). The live Vue preview renders this same source.
 
-### Vue source
+<KleanFrameworkCode id="flag-complete-framework-source-2" label="flag Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="vueSource" label="Flag.vue" />
 
-### React source
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Flag.jsx" />
 
-### Svelte source
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Flag.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 

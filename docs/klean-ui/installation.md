@@ -12,7 +12,7 @@ import buttonSource from '../.vitepress/theme/components/klean/Button.vue?raw'
 
 # Installation
 
-Klean installs readable component source into your application. There is no setup wizard, `init` command, `klean-ui.json`, provider, or Klean runtime to retain.
+Add a component from your Boring Stack application. Klean selects the matching Vue, React, or Svelte source.
 
 <KleanInstallation id="installation-page" :source="buttonSource" />
 
@@ -28,11 +28,11 @@ Klean installs readable component source into your application. There is no setu
 6. copies the component and adds only the direct dependencies it imports;
 7. reports every file and dependency it changed.
 
-The CLI is a delivery tool. The installed component does not import a Klean runtime, and the application owns the copied file.
+The installed files belong to your application and can be edited directly.
 
 Registry items may include prerequisites and more than one source file. Button, Input, and Textarea are deliberately self-contained. Popover installs its focused geometry dependencies, and `npx klean-ui add menu`, `npx klean-ui add select`, or `npx klean-ui add combobox` resolves Popover first before writing the requested component. The full plan stays visible with `--dry-run`; prerequisite handling adds no configuration step.
 
-The registry also delivers focused nonvisual source. `npx klean-ui add durable-ui` writes the framework-native resilience utilities and their browser core beside the components. It follows the same detection, ownership, diff, and safe-update rules without installing a Durable UI runtime package.
+Use `npx klean-ui add durable-ui` to add the [Durable UI utilities](/klean-ui/durable-ui) for drafts, URL state, and other persistent interactions.
 
 ## Conventional paths
 

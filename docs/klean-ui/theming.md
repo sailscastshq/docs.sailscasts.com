@@ -29,7 +29,7 @@ const productExamples = [
 
 # Theming
 
-The application's CSS is the theme. Klean has no `ThemeProvider`, theme object, preset code, named theme catalog, or theme section in a configuration file.
+The application's CSS is the theme.
 
 Neutral component defaults work without global Klean tokens. Products apply their visual language with ordinary Tailwind, and the copied source remains replaceable.
 

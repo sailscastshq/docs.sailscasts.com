@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { onBeforeUnmount, ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -96,22 +97,25 @@ source file:
   destination="assets/js/components/ui/switch/Switch.vue"
 />
 
-The installation creates no initializer, provider, `klean-ui.json`, alias
-questionnaire, generated class helper, or Klean runtime dependency.
-
 ## Usage
 
-### Vue
+<KleanFrameworkCode id="switch-usage-1" label="switch Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="PublicRoadmapSetting.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="PublicRoadmapSetting.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="PublicRoadmapSetting.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 The binding syntax is idiomatic to each framework. Every version produces the
 same native boolean control and keeps the visible setting row in application
@@ -279,14 +283,20 @@ change with rollback and visible error feedback.
 
 ## Complete framework source
 
-### Vue
+<KleanFrameworkCode id="switch-complete-framework-source-2" label="switch Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="switchSource" label="Switch.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Switch.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Switch.svelte" />
+
+  </template>
+</KleanFrameworkCode>

@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -88,23 +89,27 @@ One command detects Vue, React, or Svelte and writes one framework-native source
   :dependencies="['tailwind-merge']"
 />
 
-There is no initializer, configuration file, provider, `TableHeader`, `TableRow`, `TableCell`, barrel file, or runtime package.
-
 ## Usage
 
 Use Table for the root and write ordinary HTML beneath it. This keeps semantics visible in reviews and puts Tailwind exactly where the visual decision belongs.
 
-### Vue
+<KleanFrameworkCode id="table-usage-1" label="table Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="ServicesTable.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="ServicesTable.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="ServicesTable.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## API
 
@@ -186,17 +191,23 @@ Use Table when rows and columns have relationships that users need to compare or
 
 Copy, inspect, and change the complete one-file source for your framework.
 
-### Vue source
+<KleanFrameworkCode id="table-complete-framework-source-2" label="table Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="tableSource" label="Table.vue" />
 
-### React source
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Table.jsx" />
 
-### Svelte source
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Table.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 

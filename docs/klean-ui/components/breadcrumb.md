@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -33,8 +34,6 @@ function stopPreviewNavigation(event) {
 # Breadcrumb
 
 Breadcrumb tells people where the current page lives in an application hierarchy. Pass one ordered list. Klean makes every ancestor with an `href` a real framework-native Inertia Link and infers the final item as the current page.
-
-There is no item component, link adapter, separator prop, collapse setting, visual variant, or route configuration. The Boring Stack already has a Link, and the ordered data already says what the trail means.
 
 <KleanPreview id="breadcrumb-source" :source="breadcrumbSource" filename="Breadcrumb.vue">
   <template #preview>
@@ -68,23 +67,27 @@ One command detects Vue, React, or Svelte, installs the matching official Inerti
   :dependencies="['@inertiajs/vue3', 'tailwind-merge']"
 />
 
-There is no initializer, provider, `klean-ui.json`, generated class helper, or runtime Klean package to configure.
-
 ## Usage
 
 Write the hierarchy your page already knows. Ancestors receive destinations; the final item does not need one.
 
-### Vue
+<KleanFrameworkCode id="breadcrumb-usage-1" label="breadcrumb Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="ProjectBreadcrumb.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="ProjectBreadcrumb.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="ProjectBreadcrumb.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 The object shape is identical in every framework. Only the framework's ordinary component syntax changes.
 
@@ -187,17 +190,23 @@ Use Breadcrumb on deeply nested application pages where parent destinations help
 
 Copy, inspect, and change the complete one-file source for your framework.
 
-### Vue source
+<KleanFrameworkCode id="breadcrumb-complete-framework-source-2" label="breadcrumb Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="breadcrumbSource" label="Breadcrumb.vue" />
 
-### React source
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Breadcrumb.jsx" />
 
-### Svelte source
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Breadcrumb.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 

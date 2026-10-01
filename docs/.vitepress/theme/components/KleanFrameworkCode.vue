@@ -10,7 +10,11 @@ const props = defineProps({
   },
   frameworks: {
     type: Array,
-    required: true
+    default: () => [
+      { id: 'vue', label: 'Vue' },
+      { id: 'react', label: 'React' },
+      { id: 'svelte', label: 'Svelte' }
+    ]
   },
   label: {
     type: String,
@@ -85,11 +89,13 @@ function handleKeydown(event, index) {
       :aria-labelledby="tabId(framework.id)"
       tabindex="0"
     >
-      <CopyCode
-        :code="framework.code"
-        :label="framework.filename"
-        :language="framework.language"
-      />
+      <slot :name="framework.id">
+        <CopyCode
+          :code="framework.code"
+          :label="framework.filename"
+          :language="framework.language"
+        />
+      </slot>
     </section>
   </div>
 </template>

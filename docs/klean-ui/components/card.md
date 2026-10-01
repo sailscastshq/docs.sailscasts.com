@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
@@ -68,23 +69,27 @@ One command detects Vue, React, or Svelte and writes the matching one-file sourc
   :dependencies="['tailwind-merge']"
 />
 
-There is no initializer, provider, `klean-ui.json`, class helper, barrel file, card anatomy package, or runtime Klean dependency.
-
 ## Usage
 
 Choose the native element from what the content is, then write the markup directly.
 
-### Vue
+<KleanFrameworkCode id="card-usage-1" label="card Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="ReleaseCard.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="ReleaseCard.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="ReleaseCard.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## API
 
@@ -95,8 +100,6 @@ Choose the native element from what the content is, then write the markup direct
 | native attributes     | —       | Destinations, IDs, ARIA relationships, events, test hooks, and native element attributes. |
 | default content       | —       | Native application markup, slots, children, or snippets with no inserted wrapper.         |
 | element reference     | —       | Framework-native access to the rendered surface when the application genuinely needs it.  |
-
-There is no `variant`, `tone`, `interactive`, `clickable`, `shadow`, `radius`, `padding`, `size`, `header`, or status API. There is also no `CardHeader`, `CardTitle`, `CardDescription`, `CardContent`, or `CardFooter`.
 
 Those names mostly repeat HTML and move Tailwind away from the element it styles.
 
@@ -227,17 +230,23 @@ Use it when the outer surface is genuinely shared while the content remains ordi
 
 Copy, inspect, and change the complete one-file source for your framework.
 
-### Vue source
+<KleanFrameworkCode id="card-complete-framework-source-2" label="card Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="cardSource" label="Card.vue" />
 
-### React source
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Card.jsx" />
 
-### Svelte source
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Card.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 

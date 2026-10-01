@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -91,22 +92,25 @@ source file:
   destination="assets/js/components/ui/radio/Radio.vue"
 />
 
-The installation creates no provider, initializer, `klean-ui.json`, alias
-questionnaire, generated class helper, or Klean runtime dependency.
-
 ## Usage
 
-### Vue
+<KleanFrameworkCode id="radio-usage-1" label="radio Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="RegionField.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="RegionField.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="RegionField.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 The framework binding changes, but every version produces one native group and
 submits the checked value under `region`.
@@ -335,9 +339,6 @@ For example:
 </label>
 ```
 
-There is no Klean theme token or variant mapping between the application and
-its source.
-
 ## Durable state
 
 Radio preserves the browser's form and reset contract. The owning feature
@@ -361,14 +362,20 @@ itself.
 
 ## Complete framework source
 
-### Vue
+<KleanFrameworkCode id="radio-complete-framework-source-2" label="radio Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="radioSource" label="Radio.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Radio.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Radio.svelte" />
+
+  </template>
+</KleanFrameworkCode>

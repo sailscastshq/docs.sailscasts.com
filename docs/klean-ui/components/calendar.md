@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -90,17 +91,23 @@ time, and timezone must become an exact instant.
 
 ## Usage
 
-### Vue
+<KleanFrameworkCode id="calendar-usage-1" label="calendar Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="AvailabilityCalendar.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="AvailabilityCalendar.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="AvailabilityCalendar.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## API
 
@@ -149,17 +156,23 @@ Choose Schedule Picker when time and timezone must resolve to an exact ISO insta
 
 ## Complete framework source
 
-### Vue
+<KleanFrameworkCode id="calendar-complete-framework-source-2" label="calendar Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="calendarSource" label="Calendar.vue" />
 <CopyCode :code="dateSource" label="date.js" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Calendar.jsx" />
 <CopyCode :code="reactDateSource" label="date.js" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Calendar.svelte" />
 <CopyCode :code="svelteDateSource" label="date.js" />
+
+  </template>
+</KleanFrameworkCode>

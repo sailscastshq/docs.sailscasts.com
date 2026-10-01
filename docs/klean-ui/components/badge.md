@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -61,23 +62,27 @@ One command detects Vue, React, or Svelte and writes the matching one-file sourc
   :dependencies="['tailwind-merge']"
 />
 
-There is no initializer, provider, `klean-ui.json`, class helper, barrel file, variant package, or runtime Klean dependency.
-
 ## Usage
 
 Write the visible meaning in the content and put the product treatment directly on Badge with Tailwind.
 
-### Vue
+<KleanFrameworkCode id="badge-usage-1" label="badge Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="ServiceStatus.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="ServiceStatus.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="ServiceStatus.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## API
 
@@ -87,8 +92,6 @@ Write the visible meaning in the content and put the product treatment directly 
 | native span attributes | —       | IDs, titles, ARIA attributes, data attributes, event hooks, and other native attributes. |
 | default content        | —       | Visible text and optional ordinary inline markup.                                        |
 | element reference      | —       | Framework-native access to the rendered `span` when the application genuinely needs it.  |
-
-There is no `as`, `variant`, `severity`, `tone`, `status`, `color`, `size`, `pill`, or `removable` API. Badge always renders one `span` because its contract is static inline metadata.
 
 If the content must navigate, use a real anchor or framework Link. If it must perform work, use a real Button. Put Badge inside that control only when the metadata belongs to the control.
 
@@ -188,17 +191,23 @@ Use it when the text remains understandable at a glance and when the inline pill
 
 Copy, inspect, and change the complete one-file source for your framework.
 
-### Vue source
+<KleanFrameworkCode id="badge-complete-framework-source-2" label="badge Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="badgeSource" label="Badge.vue" />
 
-### React source
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Badge.jsx" />
 
-### Svelte source
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Badge.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 

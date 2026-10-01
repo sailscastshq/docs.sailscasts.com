@@ -32,7 +32,7 @@ Add the complete resilience layer from any conventional Boring Stack application
 npx klean-ui add durable-ui
 ```
 
-Klean detects Vue, React, or Svelte and writes eight readable files to `assets/js/components/ui/durable-ui`: seven focused framework-native utilities and their small browser core. There is no Durable UI runtime dependency, provider, initializer, manifest, or setup questionnaire.
+Import the utilities you need from `assets/js/components/ui/durable-ui`. The command selects the matching Vue, React, or Svelte source.
 
 ## Two kinds of resilience
 

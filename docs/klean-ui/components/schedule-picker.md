@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -136,17 +137,23 @@ do not add a midnight time or timezone to make it fit Schedule Picker.
 
 ## Usage
 
-### Vue
+<KleanFrameworkCode id="schedule-picker-usage-1" label="schedule picker Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="PublishSchedule.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="PublishSchedule.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="PublishSchedule.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Historical dates and times
 
@@ -184,17 +191,23 @@ datetime component to learn.
   </template>
 </KleanPreview>
 
-### Vue
+<KleanFrameworkCode id="schedule-picker-historical-dates-and-times-2" label="schedule picker Historical dates and times framework">
+  <template #vue>
 
 <CopyCode :code="vueHistorical" label="RecordedAt.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactHistorical" label="RecordedAt.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteHistorical" label="RecordedAt.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Allowed date and time window
 
@@ -347,17 +360,23 @@ Choose the date-only components below when wall-clock time must not exist.
 
 ## Complete framework source
 
-### Vue
+<KleanFrameworkCode id="schedule-picker-complete-framework-source-3" label="schedule picker Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="scheduleSource" label="SchedulePicker.vue" />
 <CopyCode :code="scheduleHelperSource" label="schedule.js" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="SchedulePicker.jsx" />
 <CopyCode :code="reactHelperSource" label="schedule.js" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="SchedulePicker.svelte" />
 <CopyCode :code="svelteHelperSource" label="schedule.js" />
+
+  </template>
+</KleanFrameworkCode>

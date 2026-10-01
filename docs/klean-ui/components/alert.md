@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -81,23 +82,27 @@ One command detects Vue, React, or Svelte and writes the matching source into th
   :dependencies="['tailwind-merge']"
 />
 
-The result works immediately with neutral monochrome defaults. There is no initializer, configuration file, provider, visual preset, severity map, or shared Klean runtime.
-
 ## Usage
 
 The application writes the real content and opts into urgent announcement only when a new failure needs immediate attention.
 
-### Vue
+<KleanFrameworkCode id="alert-usage-1" label="alert Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="DeploymentError.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="DeploymentError.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="DeploymentError.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## API
 
@@ -107,8 +112,6 @@ The application writes the real content and opts into urgent announcement only w
 | `class` / `className` | —       | Ordinary Tailwind classes merged after the neutral defaults.              |
 | native attributes     | —       | IDs, `role`, ARIA relationships, test hooks, and other native attributes. |
 | default content       | —       | Native headings, paragraphs, lists, links, buttons, and application UI.   |
-
-There is no `severity`, `tone`, `variant`, `status`, `color`, `icon`, `dismissible`, `AlertTitle`, `AlertDescription`, or `AlertItem` API. Those ideas are clearer as application markup and state.
 
 ## Choose semantics from the lifecycle
 
@@ -284,17 +287,23 @@ Use Alert for visible information that deserves a distinct surface: a warning, f
 
 Copy, inspect, and change the complete source for your framework.
 
-### Vue source
+<KleanFrameworkCode id="alert-complete-framework-source-2" label="alert Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="alertSource" label="Alert.vue" />
 
-### React source
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Alert.jsx" />
 
-### Svelte source
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Alert.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 

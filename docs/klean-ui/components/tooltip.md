@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
@@ -79,23 +80,27 @@ One command detects Vue, React, or Svelte, writes the matching source, and insta
   :dependencies="['@floating-ui/dom', 'tailwind-merge']"
 />
 
-The installed source belongs to the application. There is no initializer, provider, generated ID to coordinate, configuration file, or shared class helper.
-
 ## Usage
 
 The child is the trigger. Use a real button for an action and a real anchor or Boring Stack Link for navigation.
 
-### Vue
+<KleanFrameworkCode id="tooltip-usage-1" label="tooltip Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="QueryToolbar.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="QueryToolbar.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="QueryToolbar.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 The icon is decorative because the button already has the accessible name “Re-run query.” Tooltip text supplements the control; it does not replace the button's name.
 
@@ -168,17 +173,23 @@ The theme signal handles the ordinary case. If a branded or isolated local surfa
 
 Style the trigger on the trigger. Style the floating surface through Tooltip's ordinary class input:
 
-### Vue
+<KleanFrameworkCode id="tooltip-styling-with-tailwind-2" label="tooltip Styling with Tailwind framework">
+  <template #vue>
 
 <CopyCode :code="stylingUsage" label="invoice-tooltip.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactStylingUsage" label="invoice-tooltip.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteStylingUsage" label="invoice-tooltip.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 The arrow belongs to Tooltip. It inherits the surface colour and follows the collision-resolved side, so it still points to the trigger when the preferred placement flips or shifts near a viewport edge. `data-slot="tooltip"` and `data-slot="tooltip-arrow"` remain stable nearby styling hooks; there is no `arrow`, `tone`, `size`, `radius`, `elevation`, or `variant` prop.
 
@@ -209,17 +220,23 @@ The durable state belongs to the application action or destination—not to whet
 
 Copy, inspect, and change the complete source for your framework.
 
-### Vue source
+<KleanFrameworkCode id="tooltip-complete-framework-source-3" label="tooltip Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="tooltipSource" label="Tooltip.vue" />
 
-### React source
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Tooltip.jsx" />
 
-### Svelte source
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Tooltip.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 

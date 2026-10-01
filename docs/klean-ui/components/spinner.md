@@ -6,6 +6,7 @@ outline: [2, 3]
 ---
 
 <script setup>
+import KleanFrameworkCode from '../../.vitepress/theme/components/KleanFrameworkCode.vue'
 import { onBeforeUnmount, ref } from 'vue'
 import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
@@ -95,23 +96,27 @@ One command detects Vue, React, or Svelte and installs the framework-native sour
   :dependencies="['tailwind-merge']"
 />
 
-The installed file belongs to the application. There is no initializer, Klean runtime, configuration file, provider, alias prompt, generated helper, or animation package.
-
 ## Usage
 
 Keep the status surface mounted before its contents change. Spinner is decorative, so the useful status is announced once rather than as an unnamed image and again as text.
 
-### Vue
+<KleanFrameworkCode id="spinner-usage-1" label="spinner Usage framework">
+  <template #vue>
 
 <CopyCode :code="vueUsage" label="DeploymentStatus.vue" />
 
-### React
+  </template>
+  <template #react>
 
 <CopyCode :code="reactUsage" label="DeploymentStatus.jsx" />
 
-### Svelte
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteUsage" label="DeploymentStatus.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Loading semantics
 
@@ -198,17 +203,23 @@ Long-running server work is different from an in-flight browser request. Restore
 
 Copy, inspect, and change the complete source for your framework.
 
-### Vue source
+<KleanFrameworkCode id="spinner-complete-framework-source-2" label="spinner Complete framework source framework">
+  <template #vue>
 
 <CopyCode :code="spinnerSource" label="Spinner.vue" />
 
-### React source
+  </template>
+  <template #react>
 
 <CopyCode :code="reactSource" label="Spinner.jsx" />
 
-### Svelte source
+  </template>
+  <template #svelte>
 
 <CopyCode :code="svelteSource" label="Spinner.svelte" />
+
+  </template>
+</KleanFrameworkCode>
 
 ## Related components
 
