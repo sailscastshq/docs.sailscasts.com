@@ -36,10 +36,6 @@ ContextMenu opens [Menu](/klean-ui/components/menu) from a right-click point or 
 
 The target stays your markup. No wrapper, item array, custom trigger component, visual props, long-press interception, submenus, provider, or theme object.
 
-::: warning Unreleased component
-ContextMenu is proposed in the [implementation issue](https://github.com/sailscastshq/klean-ui/issues/163). Published `klean-ui@0.0.6` does not include it. Use the complete owned sources below until a release includes this registry item; the CLI command describes that future installation.
-:::
-
 <KleanPreview id="context-menu-preview" :source="exampleSource" filename="ProjectActions.vue">
   <template #preview><ContextMenuExample /></template>
   <template #caption>Right-click the project, focus it and press Shift+F10, or use Actions. Disabled leaves the browser context menu available.</template>
@@ -47,7 +43,7 @@ ContextMenu is proposed in the [implementation issue](https://github.com/sailsca
 
 ## Installation
 
-<KleanInstallation id="context-menu-installation" component="context-menu" :source="vueSource" filename="ContextMenu.vue" destination="assets/js/components/ui/context-menu/ContextMenu.vue" :frameworks="frameworks" :dependencies="['@floating-ui/dom', 'tailwind-merge']" />
+<KleanInstallation id="context-menu-installation" component="context-menu" :source="vueSource" filename="ContextMenu.vue" destination="assets/js/components/ui/context-menu/ContextMenu.vue" :frameworks="frameworks" :dependencies="['@floating-ui/dom', 'tailwind-merge']" :command-available="false" />
 
 Install all three sibling sources: ContextMenu imports Menu, and Menu imports Popover. ContextMenu requires the point-anchor and source-aware invocation versions supplied here. Existing owned Menu/Popover edits must be reviewed before updating. No new runtime package is introduced beyond their existing positioning and class-merging dependencies.
 
