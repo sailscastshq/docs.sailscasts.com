@@ -33,6 +33,7 @@ const Combobox = forwardRef(function Combobox(
     value: controlledValue,
     defaultValue,
     options = [],
+    filter = true,
     query: controlledQuery,
     defaultQuery = '',
     placeholder = 'Search and choose',
@@ -106,9 +107,10 @@ const Combobox = forwardRef(function Combobox(
     return options
       .map((option, index) => ({ option, index }))
       .filter(
-        ({ option }) => !needle || searchableText(option).includes(needle)
+        ({ option }) =>
+          filter === false || !needle || searchableText(option).includes(needle)
       )
-  }, [currentQuery, options])
+  }, [currentQuery, options, filter])
   const groupedEntries = useMemo(() => {
     const groups = new Map()
     for (const entry of filteredEntries) {
@@ -378,8 +380,6 @@ const Combobox = forwardRef(function Combobox(
           disabled={disabled}
           value={visibleValue}
           placeholder={placeholder}
-          popovertarget={contentId}
-          popovertargetaction="show"
           aria-expanded={isOpen}
           aria-controls={listboxId}
           aria-haspopup="listbox"
@@ -394,10 +394,7 @@ const Combobox = forwardRef(function Combobox(
           data-state={isOpen ? 'open' : 'closed'}
           className={twMerge(INPUT_CLASSES, className)}
           style={style}
-          onFocus={(event) => {
-            onFocus?.(event)
-            if (!event.defaultPrevented) openCombobox('selected')
-          }}
+          onFocus={onFocus}
           onClick={(event) => {
             onClick?.(event)
             if (!event.defaultPrevented) openCombobox('selected')
