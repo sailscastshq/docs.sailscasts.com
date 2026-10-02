@@ -1,89 +1,80 @@
 ---
 title: Klean UI
 titleTemplate: Sailscasts
-description: World-class UI. Source you own. Tailwind you know. Accessible, framework-native components for Vue, React, and Svelte.
-outline: [2, 2]
+description: Kelvin's Lean UI — accessible, durable, source-owned components for Vue, React, and Svelte.
+outline: [2, 3]
 ---
 
 <script setup>
+import KleanButton from '../.vitepress/theme/components/klean/Button.vue'
+import KleanInstallation from '../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../.vitepress/theme/components/KleanPreview.vue'
-import KleanWelcome from '../.vitepress/theme/components/KleanWelcome.vue'
-import welcomeSource from '../.vitepress/theme/components/KleanWelcome.vue?raw'
+import buttonSource from '../.vitepress/theme/components/klean/Button.vue?raw'
+import reactSource from './sources/button/Button.jsx?raw'
+import svelteSource from './sources/button/Button.svelte?raw'
+import quickUsage from './snippets/introduction/usage.vue?raw'
+
+const buttonFrameworks = [
+  { id: 'vue', label: 'Vue', source: buttonSource, filename: 'Button.vue', destination: 'assets/js/components/ui/button/Button.vue' },
+  { id: 'react', label: 'React', source: reactSource, filename: 'Button.jsx', destination: 'assets/js/components/ui/button/Button.jsx' },
+  { id: 'svelte', label: 'Svelte', source: svelteSource, filename: 'Button.svelte', destination: 'assets/js/components/ui/button/Button.svelte' }
+]
 </script>
 
-<div class="klean-intro">
+# Klean UI
 
-<p class="klean-intro__eyebrow">KELVIN'S LEAN UI</p>
+**World-class UI. Source you own. Tailwind you know.**
 
-# World-class UI.<br>Source you own.<br>Tailwind you know.
+Klean UI means **Kelvin's Lean UI**. It provides accessible, framework-native components for Vue, React, and Svelte, built for The Boring JavaScript Stack.
 
-<p class="klean-intro__lead">Accessible, framework-native components for Vue, React, and Svelte. Built for The Boring JavaScript Stack. Made to feel like your code.</p>
+Copy the source into your application and style it with Tailwind. Native HTML, keyboard behavior, focus, and Durable UI keep the interaction dependable while you make the design your own.
 
-<div class="klean-intro__actions">
-  <a class="klean-intro__primary" href="/klean-ui/installation">Get started <span aria-hidden="true">→</span></a>
-  <a class="klean-intro__secondary" href="/klean-ui/components/">Explore components <span aria-hidden="true">↗</span></a>
-</div>
+<KleanPreview id="klean-introduction" :source="quickUsage" filename="usage.vue">
+  <template #preview>
+    <KleanButton>Continue</KleanButton>
+    <KleanButton
+      as="a"
+      href="/klean-ui/components/button"
+      class="bg-white text-gray-950 ring-1 ring-inset ring-gray-300 hover:bg-gray-100 dark:bg-gray-900 dark:text-white dark:ring-gray-700 dark:hover:bg-gray-800"
+    >
+      Read Button docs
+    </KleanButton>
+  </template>
+  <template #source>
 
-<div class="klean-intro__frameworks" aria-label="Supported frameworks"><span>Vue</span><span>React</span><span>Svelte</span><span>Native source. No Klean runtime.</span></div>
+<<< ./snippets/introduction/usage.vue
 
-</div>
-
-<KleanPreview id="klean-welcome" :source="welcomeSource" filename="NotificationPreferences.vue">
-  <template #preview><KleanWelcome /></template>
-  <template #caption>Real components, ordinary markup. Choose the emails you want, then save your preferences in this demo.</template>
+  </template>
+  <template #caption>
+    Style the component directly with ordinary Tailwind classes.
+  </template>
 </KleanPreview>
 
-## Start small. Make it yours.
+## Installation
 
-Add just the component you need. The CLI detects your framework, copies readable source into your application, and installs its direct dependencies.
+Add a component with one command. Klean infers the framework and conventional Boring Stack paths; the files it adds become application source.
 
-```sh
-npx klean-ui add button
-```
+<KleanInstallation id="klean-installation" :frameworks="buttonFrameworks" />
 
-<div class="klean-start-grid">
-  <a href="/klean-ui/installation"><span>01</span><strong>Add a component</strong><p>Use the CLI or copy the matching framework source.</p><b aria-hidden="true">↗</b></a>
-  <a href="/klean-ui/theming"><span>02</span><strong>Write your design</strong><p>Use Tailwind classes, familiar markup, and your product's own language.</p><b aria-hidden="true">↗</b></a>
-  <a href="/klean-ui/updating"><span>03</span><strong>Keep ownership</strong><p>Edit the source. Review upstream changes when you're ready.</p><b aria-hidden="true">↗</b></a>
-</div>
+Already using Klean source? [Check, review, and update it safely](/klean-ui/updating).
 
-## A lean contract
+## The contract
 
-Klean means **Kelvin's Lean UI**. The name reflects a simple approach: give the platform the work it already does well, and keep the rest easy to understand.
+- **Own the source.** Components land in the application as readable files.
+- **Use the platform.** Actions are buttons; navigation is an anchor or the Boring Stack Link.
+- **Style with Tailwind.** There are no visual `variant`, `size`, `tone`, or `radius` props.
+- **Prefer conventions.** Klean detects your Boring Stack framework and component directory.
+- **Treat accessibility as correctness.** Keyboard behavior, focus, naming, state, and reduced motion are part of the component contract.
+- **Implement Durable UI.** Useful state survives, navigation remains shareable, focus recovers, and failed work rolls back.
 
-- **Source you own.** Vue, React, and Svelte each get native, readable files. There is no shared Klean runtime between your app and your framework.
-- **HTML first.** A button is an action. A link is navigation. Forms and dialogs keep their native semantics.
-- **Tailwind is the visual API.** Appearance lives in your classes. Props earn their place through behavior.
-- **Accessibility is correctness.** Naming, keyboard control, focus, state, and reduced motion are part of the component contract.
-- **Durable interaction.** Useful state survives interruptions, navigation stays shareable, and failed work can recover.
+## Start with Button
 
-[Read the doctrine →](/klean-ui/doctrine)
+Button is a useful starting point for learning the Klean contract. Its API is intentionally small: choose the truthful element, pass behavioral state, and write the product's design in `class`.
 
-## Build the next screen
+[Explore Button →](/klean-ui/components/button)
 
-Start with [Button](/klean-ui/components/button), compose a form with [Input](/klean-ui/components/input) and [Select](/klean-ui/components/select), or add a focused workflow with [Dialog](/klean-ui/components/dialog).
+## Make it yours
 
-[Explore the component library →](/klean-ui/components/)
+Edit the installed source, style it with Tailwind, and compose it with your application's own markup.
 
-<style>
-.klean-docs .klean-intro { padding-top: 7px; }
-.klean-docs .klean-intro__eyebrow { margin: 0 0 18px; font-size: 10px; font-weight: 650; letter-spacing: 0.14em; color: var(--vp-c-brand-1); }
-.klean-docs .klean-intro h1 { font-size: clamp(34px, 3.8vw, 49px); line-height: 1.13; font-weight: 650; letter-spacing: -0.055em; }
-.klean-docs .klean-intro__lead { max-width: 34rem; margin: 22px 0; font-size: 16px; line-height: 1.75; color: var(--vp-c-text-2); }
-.klean-intro__actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 25px 0; }
-.klean-docs .klean-intro__actions a { display: flex; align-items: center; gap: 16px; min-height: 43px; padding: 0 16px; border: 1px solid var(--vp-c-divider); border-radius: 7px; font-size: 12px; font-weight: 600; text-decoration: none; }
-.klean-docs .klean-intro__primary { color: #fff; background: #07162d; border-color: #07162d !important; }
-.dark .klean-docs .klean-intro__primary { color: #07162d; background: #fecb05; border-color: #fecb05 !important; }
-.klean-docs .klean-intro__secondary { color: var(--vp-c-text-1); }
-.klean-docs .klean-intro__actions a:hover { box-shadow: 0 0 0 2px var(--vp-c-brand-soft); }
-.klean-intro__frameworks { display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 4px 0 12px; font-size: 11px; font-weight: 600; color: var(--vp-c-text-2); }
-.klean-intro__frameworks > span:last-child { color: var(--vp-c-text-3); font-weight: 400; }
-.klean-start-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 25px 0; }
-.klean-docs .klean-start-grid a { position: relative; padding: 18px; border: 1px solid var(--vp-c-divider); border-radius: 8px; text-decoration: none; }
-.klean-start-grid a:hover { background: var(--vp-c-bg-soft); }
-.klean-start-grid span { display: block; font-size: 11px; color: var(--vp-c-text-3); font-family: var(--vp-font-family-mono); }
-.klean-start-grid strong { display: block; margin: 16px 0 6px; color: var(--vp-c-text-1); font-size: 13px; }
-.klean-docs .klean-start-grid p { margin: 0; color: var(--vp-c-text-2); font-size: 12px; line-height: 1.7; font-weight: 400; }
-.klean-start-grid b { position: absolute; top: 14px; right: 14px; font-weight: 400; color: var(--vp-c-text-3); }
-@media (max-width: 639px) { .klean-start-grid { grid-template-columns: 1fr; } .klean-start-grid strong { margin-top: 8px; } }
-</style>
+Read the [Doctrine](/klean-ui/doctrine) for the boundaries behind those choices, [Updating](/klean-ui/updating) for source-aware upgrades, or the [CLI reference](/klean-ui/cli) for the complete command contract.
