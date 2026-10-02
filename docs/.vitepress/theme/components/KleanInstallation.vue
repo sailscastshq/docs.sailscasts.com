@@ -45,7 +45,7 @@ const props = defineProps({
 const methods = computed(() =>
   props.commandAvailable
     ? [
-        { id: 'command', label: 'Command' },
+        { id: 'command', label: 'CLI' },
         { id: 'manual', label: 'Manual' }
       ]
     : [{ id: 'manual', label: 'Manual' }]
@@ -109,14 +109,19 @@ const frameworkOptions = computed(() =>
       ]
 )
 
-const dependencyCommand = computed(() => {
+const frameworkDependencies = computed(() => {
   const framework = frameworkOptions.value.find(
     ({ id }) => id === activeFramework.value
   )
-  return `npm install ${(framework?.dependencies ?? props.dependencies).join(' ')}`
+  return framework?.dependencies ?? props.dependencies
 })
 
+const dependencyCommand = computed(
+  () => `npm install ${frameworkDependencies.value.join(' ')}`
+)
+
 const activeMethod = ref(props.commandAvailable ? 'command' : 'manual')
+const manualLoaded = ref(!props.commandAvailable)
 const activePackageManager = ref('npm')
 const methodRefs = ref([])
 const packageManagerRefs = ref([])
@@ -169,6 +174,7 @@ function handleTabKeydown(event, index, options, activate) {
 }
 
 function selectMethod(method, focusTab = false) {
+  if (method === 'manual') manualLoaded.value = true
   activeMethod.value = method
   selectTab(method, methodRefs, methods.value, focusTab)
 }
@@ -185,7 +191,7 @@ function chooseFramework(framework, focusTab = false) {
 </script>
 
 <template>
-  <div class="klean-installation">
+  <div :id="id" class="klean-installation">
     <div
       class="klean-installation__methods"
       role="tablist"
@@ -209,14 +215,20 @@ function chooseFramework(framework, focusTab = false) {
     </div>
 
     <section
-      v-if="activeMethod === 'command'"
+      v-if="commandAvailable"
+      v-show="activeMethod === 'command'"
       :id="methodPanelId('command')"
       role="tabpanel"
       :aria-labelledby="methodTabId('command')"
       tabindex="0"
       class="klean-installation__panel"
     >
-      <p>Run this command from your application's directory.</p>
+      <p class="klean-installation__intro">
+        Run from your application’s directory.
+        <span
+          >Klean detects your framework and copies the matching source.</span
+        >
+      </p>
 
       <div
         class="klean-installation__packages"
@@ -261,82 +273,122 @@ function chooseFramework(framework, focusTab = false) {
     </section>
 
     <section
-      v-else
+      v-show="activeMethod === 'manual'"
       :id="methodPanelId('manual')"
       role="tabpanel"
       :aria-labelledby="methodTabId('manual')"
       tabindex="0"
       class="klean-installation__panel"
     >
-      <div
-        v-if="frameworkOptions.length > 1"
-        class="klean-installation__frameworks"
-        role="tablist"
-        aria-label="Manual installation framework"
-      >
-        <button
-          v-for="(framework, index) in frameworkOptions"
-          :id="frameworkTabId(framework.id)"
-          :key="framework.id"
-          :ref="(element) => (frameworkRefs[index] = element)"
-          type="button"
-          role="tab"
-          :aria-selected="activeFramework === framework.id"
-          :aria-controls="frameworkPanelId(framework.id)"
-          :tabindex="activeFramework === framework.id ? 0 : -1"
-          @click="chooseFramework(framework.id)"
-          @keydown="
-            handleTabKeydown($event, index, frameworkOptions, chooseFramework)
-          "
+      <template v-if="manualLoaded">
+        <p class="klean-installation__intro">
+          Copy the source into your application.
+          <span>Install its dependencies, then create the files below.</span>
+        </p>
+        <div
+          v-if="frameworkOptions.length > 1"
+          class="klean-installation__frameworks"
+          role="tablist"
+          aria-label="Manual installation framework"
         >
-          {{ framework.label }}
-        </button>
-      </div>
+          <button
+            v-for="(framework, index) in frameworkOptions"
+            :id="frameworkTabId(framework.id)"
+            :key="framework.id"
+            :ref="(element) => (frameworkRefs[index] = element)"
+            type="button"
+            role="tab"
+            :aria-selected="activeFramework === framework.id"
+            :aria-controls="frameworkPanelId(framework.id)"
+            :tabindex="activeFramework === framework.id ? 0 : -1"
+            @click="chooseFramework(framework.id)"
+            @keydown="
+              handleTabKeydown($event, index, frameworkOptions, chooseFramework)
+            "
+          >
+            {{ framework.label }}
+          </button>
+        </div>
 
-      <div
-        v-for="framework in frameworkOptions"
-        v-show="activeFramework === framework.id"
-        :id="frameworkPanelId(framework.id)"
-        :key="framework.id"
-        :role="frameworkOptions.length > 1 ? 'tabpanel' : undefined"
-        :aria-labelledby="
-          frameworkOptions.length > 1 ? frameworkTabId(framework.id) : undefined
-        "
-        :tabindex="frameworkOptions.length > 1 ? 0 : undefined"
-        class="klean-installation__framework-panel"
-      >
-        <ol class="klean-installation__steps">
-          <li v-if="dependencies.length">
-            <h3>Install direct dependencies</h3>
-            <CopyCode :code="dependencyCommand" label="Terminal" />
-          </li>
-          <li v-for="file in framework.files" :key="file.destination">
-            <h3>Copy {{ file.filename }}</h3>
-            <CopyCode :code="file.source" :label="file.filename" />
-            <CopyCode :code="file.destination" label="Destination" />
-          </li>
-        </ol>
-      </div>
+        <div
+          v-for="framework in frameworkOptions"
+          v-show="activeFramework === framework.id"
+          :id="frameworkPanelId(framework.id)"
+          :key="framework.id"
+          :role="frameworkOptions.length > 1 ? 'tabpanel' : undefined"
+          :aria-labelledby="
+            frameworkOptions.length > 1
+              ? frameworkTabId(framework.id)
+              : undefined
+          "
+          :tabindex="frameworkOptions.length > 1 ? 0 : undefined"
+          class="klean-installation__framework-panel"
+        >
+          <ol class="klean-installation__steps">
+            <li v-if="frameworkDependencies.length">
+              <h3>Install direct dependencies</h3>
+              <CopyCode :code="dependencyCommand" label="Terminal" />
+            </li>
+            <li v-for="file in framework.files" :key="file.destination">
+              <h3>Add {{ file.filename }}</h3>
+              <CopyCode
+                :code="file.destination"
+                label="File path"
+                language="text"
+              />
+              <details class="klean-installation__file">
+                <summary :aria-label="`View and copy ${file.filename} source`">
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    stroke="currentColor"
+                  >
+                    <path d="m6 4 4 4-4 4" />
+                  </svg>
+                  View and copy source
+                  <span>{{ file.filename }}</span>
+                </summary>
+                <CopyCode :code="file.source" :label="file.filename" />
+              </details>
+            </li>
+          </ol>
+        </div>
+      </template>
     </section>
+    <footer class="klean-installation__ownership">
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 20 20"
+        fill="none"
+        stroke="currentColor"
+      >
+        <path d="m7 6-4 4 4 4m6-8 4 4-4 4m-2-11-2 14" />
+      </svg>
+      <p>
+        <strong>Source you own.</strong> Edit the installed files to make them
+        yours.
+      </p>
+    </footer>
   </div>
 </template>
 
 <style scoped>
 .klean-installation {
-  margin: 1.25rem 0 2.75rem;
+  margin: 1.25rem 0 2.25rem;
   overflow: hidden;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 0.875rem;
+  border-radius: 0.75rem;
   background: var(--vp-c-bg);
 }
 
 .klean-installation__methods {
   display: flex;
-  min-height: 3.25rem;
+  min-height: 2.875rem;
   align-items: stretch;
   gap: 0.25rem;
   border-bottom: 1px solid var(--vp-c-divider);
-  padding: 0 0.75rem;
+  padding: 0 0.625rem;
 }
 
 .klean-installation__methods button,
@@ -347,12 +399,12 @@ function chooseFramework(framework, focusTab = false) {
   background: transparent;
   color: var(--vp-c-text-2);
   font: inherit;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
 }
 
 .klean-installation__methods button {
-  min-width: 5.25rem;
+  min-width: 4rem;
   padding: 0 0.75rem;
   font-size: 0.8125rem;
 }
@@ -363,10 +415,10 @@ function chooseFramework(framework, focusTab = false) {
   bottom: -1px;
   left: 0.75rem;
   height: 2px;
-  background: var(--vp-c-text-1);
+  background: var(--vp-c-brand-1);
   content: '';
   transform: scaleX(0);
-  transition: transform 140ms ease;
+  transition: transform 120ms ease;
 }
 
 .klean-installation__methods button[aria-selected='true'] {
@@ -378,75 +430,74 @@ function chooseFramework(framework, focusTab = false) {
 }
 
 .klean-installation__panel {
-  padding: 1.5rem;
+  padding: 1.25rem;
   outline: none;
 }
 
 .klean-installation__panel:focus-visible {
-  box-shadow: inset 0 0 0 2px var(--vp-c-text-3);
+  box-shadow: inset 0 0 0 2px var(--vp-c-brand-1);
 }
 
-.klean-installation__panel > p {
-  max-width: 42rem;
-  margin: 0 0 1.25rem;
+.klean-installation__intro {
+  margin: 0 0 1rem;
+  color: var(--vp-c-text-1);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.klean-installation__intro span {
+  display: block;
+  margin-top: 0.15rem;
   color: var(--vp-c-text-2);
-  line-height: 1.7;
+  font-size: 0.75rem;
+  font-weight: 400;
 }
 
-.klean-installation__packages {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
-  margin-bottom: 0.75rem;
-}
-
+.klean-installation__packages,
 .klean-installation__frameworks {
   display: flex;
   width: fit-content;
   max-width: 100%;
-  gap: 0.25rem;
+  gap: 0.125rem;
   overflow-x: auto;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 0.65rem;
+  border-radius: 0.5rem;
   background: var(--vp-c-bg-soft);
-  padding: 0.25rem;
-  margin-bottom: 1.5rem;
+  padding: 0.1875rem;
+  margin-bottom: 0.75rem;
+}
+
+.klean-installation__frameworks {
+  margin-bottom: 1.25rem;
 }
 
 .klean-installation__packages button,
 .klean-installation__frameworks button {
-  min-height: 2.5rem;
-  border-radius: 0.5rem;
-  padding: 0 0.8rem;
+  min-height: 2rem;
+  border-radius: 0.3125rem;
+  padding: 0 0.75rem;
   font-size: 0.75rem;
 }
 
-.klean-installation__packages button:hover {
-  background: var(--vp-c-bg-soft);
-  color: var(--vp-c-text-1);
-}
-
+.klean-installation__packages button:hover,
 .klean-installation__frameworks button:hover {
   color: var(--vp-c-text-1);
 }
 
-.klean-installation__packages button[aria-selected='true'] {
-  background: var(--vp-c-bg-mute);
-  color: var(--vp-c-text-1);
-}
-
+.klean-installation__packages button[aria-selected='true'],
 .klean-installation__frameworks button[aria-selected='true'] {
   background: var(--vp-c-bg);
   color: var(--vp-c-text-1);
-  box-shadow: 0 1px 2px rgb(0 0 0 / 8%);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 6%);
 }
 
 .klean-installation__methods button:focus-visible,
 .klean-installation__packages button:focus-visible,
 .klean-installation__frameworks button:focus-visible,
 .klean-installation__framework-panel:focus-visible {
-  outline: 2px solid var(--vp-c-text-2);
-  outline-offset: 2px;
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: -2px;
 }
 
 .klean-installation__framework-panel {
@@ -455,34 +506,150 @@ function chooseFramework(framework, focusTab = false) {
 
 .klean-installation__steps {
   display: grid;
-  gap: 2rem;
+  gap: 1.5rem;
   margin: 0;
-  padding-left: 1.4rem;
+  padding-left: 1.25rem;
+}
+
+.klean-installation__steps > li {
+  padding-left: 0.25rem;
+}
+
+.klean-installation__steps > li::marker {
+  color: var(--vp-c-text-3);
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
 .klean-installation__steps h3 {
   margin: 0;
   border: 0;
   padding: 0;
-  font-size: 0.95rem;
+  font-size: 0.8125rem;
+  font-weight: 550;
 }
 
 .klean-installation :deep(.copy-code) {
-  margin-bottom: 0;
+  margin: 0.75rem 0 0;
+}
+
+.klean-installation__file {
+  margin-top: 0.5rem;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.klean-installation__file > summary {
+  display: flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  color: var(--vp-c-text-2);
+  font-size: 0.75rem;
+  font-weight: 500;
+  list-style: none;
+  cursor: pointer;
+}
+
+.klean-installation__file > summary::-webkit-details-marker {
+  display: none;
+}
+
+.klean-installation__file > summary:hover {
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-1);
+}
+
+.klean-installation__file > summary:focus-visible {
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: -3px;
+}
+
+.klean-installation__file > summary svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+  stroke-width: 1.5;
+  transition: transform 120ms ease;
+}
+
+.klean-installation__file[open] > summary svg {
+  transform: rotate(90deg);
+}
+
+.klean-installation__file > summary span {
+  min-width: 0;
+  margin-left: auto;
+  overflow: hidden;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.6875rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.klean-installation__file :deep(.copy-code) {
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--vp-c-divider);
+  border-radius: 0;
+}
+
+.klean-installation__ownership {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  border-top: 1px solid var(--vp-c-divider);
+  padding: 0.875rem 1.25rem;
+  color: var(--vp-c-text-2);
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+.klean-installation__ownership svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+  stroke-width: 1.3;
+}
+
+.klean-installation__ownership p {
+  margin: 0;
+  line-height: inherit;
+}
+
+.klean-installation__ownership strong {
+  color: var(--vp-c-text-1);
+  font-weight: 500;
 }
 
 @media (max-width: 520px) {
-  .klean-installation__panel {
+  .klean-installation__panel,
+  .klean-installation__ownership {
     padding: 1rem;
   }
 
   .klean-installation__methods {
     padding: 0 0.25rem;
   }
+
+  .klean-installation__file > summary span {
+    display: none;
+  }
+}
+
+@media (pointer: coarse) {
+  .klean-installation__packages button,
+  .klean-installation__frameworks button {
+    min-height: 2.75rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .klean-installation__methods button::after {
+  .klean-installation__methods button::after,
+  .klean-installation__file > summary svg {
     transition: none;
   }
 }

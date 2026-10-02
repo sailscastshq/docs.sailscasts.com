@@ -22,6 +22,33 @@ function navigatePreview(event) {
   event.preventDefault()
   previewPage.value = Number(link.dataset.page)
 }
+
+import reactInstallPaginationjsx from '../sources/pagination/Pagination.jsx?raw'
+import svelteInstallPaginationsvelte from '../sources/pagination/Pagination.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["@inertiajs/vue3", "tailwind-merge"],
+    files: [
+      { filename: 'Pagination.vue', destination: 'assets/js/components/ui/pagination/Pagination.vue', source: paginationSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["@inertiajs/react", "tailwind-merge"],
+    files: [
+      { filename: 'Pagination.jsx', destination: 'assets/js/components/ui/pagination/Pagination.jsx', source: reactInstallPaginationjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["@inertiajs/svelte", "tailwind-merge"],
+    files: [
+      { filename: 'Pagination.svelte', destination: 'assets/js/components/ui/pagination/Pagination.svelte', source: svelteInstallPaginationsvelte },
+    ]
+  },
+]
 </script>
 
 # Pagination
@@ -44,6 +71,19 @@ Pagination navigates a server-owned list with real framework-native Inertia link
       />
     </div>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/pagination/usage.vue [Vue]
+
+<<< ../snippets/pagination/usage.jsx [React]
+
+<<< ../snippets/pagination/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/pagination/Pagination.vue
@@ -61,25 +101,14 @@ One command detects Vue, React, or Svelte, installs the matching official Inerti
 <KleanInstallation
   id="pagination-installation"
   component="pagination"
-  :source="paginationSource"
-  filename="Pagination.vue"
-  destination="assets/js/components/ui/pagination/Pagination.vue"
-  :dependencies="['@inertiajs/vue3', 'tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## Usage
 
 Render Pagination from the same server pagination object that rendered the visible rows. The server remains authoritative; Klean does not create a second client-side page state.
 
-::: code-group
-
-<<< ../snippets/pagination/usage.vue [Vue]
-
-<<< ../snippets/pagination/usage.jsx [React]
-
-<<< ../snippets/pagination/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#pagination-source) for your framework.
 
 `only` is optional. Use it when an Inertia partial reload should request only the result and pagination props. Leave it out when changing page should refresh the full page payload.
 
@@ -128,7 +157,7 @@ Do not persist the current page in local storage. If the list can be shared or r
 
 ## Server-list recipe
 
-Slipway-style lists usually combine pagination with search, sorting, filters, and a server response:
+Combine pagination with search, sorting, and filters from the same server response:
 
 ```vue
 <Pagination

@@ -29,6 +29,33 @@ function toggleAll(event) {
     ? events.map((item) => item.id)
     : []
 }
+
+import reactInstallCheckboxjsx from '../sources/checkbox/Checkbox.jsx?raw'
+import svelteInstallCheckboxsvelte from '../sources/checkbox/Checkbox.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Checkbox.vue', destination: 'assets/js/components/ui/checkbox/Checkbox.vue', source: checkboxSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Checkbox.jsx', destination: 'assets/js/components/ui/checkbox/Checkbox.jsx', source: reactInstallCheckboxjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Checkbox.svelte', destination: 'assets/js/components/ui/checkbox/Checkbox.svelte', source: svelteInstallCheckboxsvelte },
+    ]
+  },
+]
 </script>
 
 # Checkbox
@@ -72,6 +99,19 @@ native fieldset. Partial list selection uses the same component with
       </output>
     </fieldset>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/checkbox/usage.vue [Vue]
+
+<<< ../snippets/checkbox/usage.jsx [React]
+
+<<< ../snippets/checkbox/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/checkbox/Checkbox.vue
@@ -90,22 +130,12 @@ source file:
 <KleanInstallation
   id="checkbox-installation"
   component="checkbox"
-  :source="checkboxSource"
-  filename="Checkbox.vue"
-  destination="assets/js/components/ui/checkbox/Checkbox.vue"
+  :frameworks="installationFrameworks"
 />
 
 ## Usage
 
-::: code-group
-
-<<< ../snippets/checkbox/usage.vue [Vue]
-
-<<< ../snippets/checkbox/usage.jsx [React]
-
-<<< ../snippets/checkbox/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#checkbox-source) for your framework.
 
 The binding syntax changes, but every version produces the same native checkbox
 and keeps the visible label in application markup.

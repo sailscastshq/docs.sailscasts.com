@@ -13,11 +13,38 @@ import EmptyStateRecipes from '../../.vitepress/theme/components/klean/empty-sta
 import emptyStateSource from '../../.vitepress/theme/components/klean/empty-state/EmptyState.vue?raw'
 
 import vueUsage from '../snippets/empty-state/usage.vue?raw'
+
+import reactInstallEmptyStatejsx from '../sources/empty-state/EmptyState.jsx?raw'
+import svelteInstallEmptyStatesvelte from '../sources/empty-state/EmptyState.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'EmptyState.vue', destination: 'assets/js/components/ui/empty-state/EmptyState.vue', source: emptyStateSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'EmptyState.jsx', destination: 'assets/js/components/ui/empty-state/EmptyState.jsx', source: reactInstallEmptyStatejsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'EmptyState.svelte', destination: 'assets/js/components/ui/empty-state/EmptyState.svelte', source: svelteInstallEmptyStatesvelte },
+    ]
+  },
+]
 </script>
 
 # Empty State
 
-Empty State gives a valid surface a calm layout when it currently has nothing to show. The application writes the semantic heading, the specific reason, and the real next action. Klean does not hide those decisions behind component anatomy.
+Help people understand an empty page or list and what they can do next. Add a heading, a specific explanation, and a useful action.
 
 It is one component, not a family of `EmptyHeader`, `EmptyMedia`, `EmptyTitle`, `EmptyDescription`, or `EmptyContent` wrappers. There is no media variant, action schema, loading prop, error prop, illustration package, or product copy.
 
@@ -28,24 +55,7 @@ It is one component, not a family of `EmptyHeader`, `EmptyMedia`, `EmptyTitle`, 
   <template #caption>
     First use, filtered zero results, and different product voices share a layout boundary without becoming the same message.
   </template>
-</KleanPreview>
-
-## Installation
-
-The command detects Vue, React, or Svelte and copies the matching one-file source into the conventional UI directory.
-
-<KleanInstallation
-  id="empty-state-installation"
-  component="empty-state"
-  :source="emptyStateSource"
-  filename="EmptyState.vue"
-  destination="assets/js/components/ui/empty-state/EmptyState.vue"
-  :dependencies="['tailwind-merge']"
-/>
-
-## Usage
-
-Write the same ordinary document markup you would use without a component. Empty State supplies the surrounding layout and class-merging seam.
+  <template #usage>
 
 ::: code-group
 
@@ -56,6 +66,25 @@ Write the same ordinary document markup you would use without a component. Empty
 <<< ../snippets/empty-state/usage.svelte [Svelte]
 
 :::
+
+  </template>
+</KleanPreview>
+
+## Installation
+
+The command detects Vue, React, or Svelte and copies the matching one-file source into the conventional UI directory.
+
+<KleanInstallation
+  id="empty-state-installation"
+  component="empty-state"
+  :frameworks="installationFrameworks"
+/>
+
+## Usage
+
+Write the same ordinary document markup you would use without a component. Empty State supplies the surrounding layout and class-merging seam.
+
+Copy the [example above](#empty-state-products) for your framework.
 
 ## API
 

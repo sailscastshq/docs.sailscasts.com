@@ -46,7 +46,7 @@ const noteError = ref('')
 
 # Textarea
 
-Textarea is a styled native control with one durable behavior: its presentation is derived from the value it currently renders and its responsive width. Restored and controlled values therefore receive the right height without a second persistence layer.
+Let people enter multiple lines of text in a native textarea that grows with its content. Its height responds to restored values and changes in available width.
 
 <KleanPreview id="textarea-source" :source="textareaSource" filename="Textarea.vue">
   <template #preview>
@@ -73,6 +73,19 @@ Textarea is a styled native control with one durable behavior: its presentation 
       </p>
     </div>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/textarea/usage.vue [Vue]
+
+<<< ../snippets/textarea/usage.jsx [React]
+
+<<< ../snippets/textarea/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/textarea/Textarea.vue
@@ -90,15 +103,7 @@ Textarea is a styled native control with one durable behavior: its presentation 
 
 ## Native form recipe
 
-::: code-group
-
-<<< ../snippets/textarea/usage.vue [Vue]
-
-<<< ../snippets/textarea/usage.jsx [React]
-
-<<< ../snippets/textarea/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#textarea-source) for your framework.
 
 The surrounding label, help, error, IDs, validation, and value source remain ordinary application markup. Keep help and error nodes stable, bind `aria-invalid` to the boolean error state, and hide an empty error with `empty:hidden`. There is no Field context, accessibility helper, or `autoGrow` switch.
 

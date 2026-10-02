@@ -3,3 +3,5 @@ docs/.vitepress/cache
 docs/.vitepress/dist
 .vscode/
 .claude
+
+docs/.vitepress/.temp

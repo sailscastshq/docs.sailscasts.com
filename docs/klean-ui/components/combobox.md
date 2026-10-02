@@ -35,17 +35,38 @@ const customers = [
     keywords: ['compiler']
   }
 ]
-const vueFiles = [
+
+
+import reactInstallPopoverjsx from '../sources/popover/Popover.jsx?raw'
+import reactInstallComboboxjsx from '../sources/combobox/Combobox.jsx?raw'
+import svelteInstallPopoversvelte from '../sources/popover/Popover.svelte?raw'
+import svelteInstallComboboxsvelte from '../sources/combobox/Combobox.svelte?raw'
+
+const installationFrameworks = [
   {
-    filename: 'Popover.vue',
-    destination: 'assets/js/components/ui/popover/Popover.vue',
-    source: popoverSource
+    id: 'vue', label: 'Vue',
+    dependencies: ["@floating-ui/dom", "tailwind-merge"],
+    files: [
+      { filename: 'Popover.vue', destination: 'assets/js/components/ui/popover/Popover.vue', source: popoverSource },
+      { filename: 'Combobox.vue', destination: 'assets/js/components/ui/combobox/Combobox.vue', source: comboboxSource },
+    ]
   },
   {
-    filename: 'Combobox.vue',
-    destination: 'assets/js/components/ui/combobox/Combobox.vue',
-    source: comboboxSource
-  }
+    id: 'react', label: 'React',
+    dependencies: ["@floating-ui/dom", "tailwind-merge"],
+    files: [
+      { filename: 'Popover.jsx', destination: 'assets/js/components/ui/popover/Popover.jsx', source: reactInstallPopoverjsx },
+      { filename: 'Combobox.jsx', destination: 'assets/js/components/ui/combobox/Combobox.jsx', source: reactInstallComboboxjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["@floating-ui/dom", "tailwind-merge"],
+    files: [
+      { filename: 'Popover.svelte', destination: 'assets/js/components/ui/popover/Popover.svelte', source: svelteInstallPopoversvelte },
+      { filename: 'Combobox.svelte', destination: 'assets/js/components/ui/combobox/Combobox.svelte', source: svelteInstallComboboxsvelte },
+    ]
+  },
 ]
 </script>
 
@@ -74,6 +95,19 @@ trigger, input, content, or item-component ceremony.
       </output>
     </div>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/combobox/usage.vue [Vue]
+
+<<< ../snippets/combobox/usage.jsx [React]
+
+<<< ../snippets/combobox/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/combobox/Combobox.vue
@@ -92,24 +126,12 @@ Combobox, and resolves Popover first when it is missing:
 <KleanInstallation
   id="combobox-installation"
   component="combobox"
-  :source="comboboxSource"
-  filename="Combobox.vue"
-  destination="assets/js/components/ui/combobox/Combobox.vue"
-  :files="vueFiles"
-  :dependencies="['@floating-ui/dom', 'tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## Usage
 
-::: code-group
-
-<<< ../snippets/combobox/usage.vue [Vue]
-
-<<< ../snippets/combobox/usage.jsx [React]
-
-<<< ../snippets/combobox/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#combobox-source) for your framework.
 
 The framework binding changes; the value, options, query, and keyboard contract
 do not.

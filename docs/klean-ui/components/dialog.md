@@ -21,14 +21,38 @@ const result = ref('No choice yet.')
 function recordResult(event) {
   result.value = event.target.returnValue || 'Dismissed'
 }
+
+import reactInstallDialogjsx from '../sources/dialog/Dialog.jsx?raw'
+import svelteInstallDialogsvelte from '../sources/dialog/Dialog.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Dialog.vue', destination: 'assets/js/components/ui/dialog/Dialog.vue', source: dialogSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Dialog.jsx', destination: 'assets/js/components/ui/dialog/Dialog.jsx', source: reactInstallDialogjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Dialog.svelte', destination: 'assets/js/components/ui/dialog/Dialog.svelte', source: svelteInstallDialogsvelte },
+    ]
+  },
+]
 </script>
 
 # Dialog
 
-Dialog is one native `<dialog>`, not a family of trigger, portal, overlay,
-content, title, description, and action components. A real Button targets its
-`id` with the platform's `command="show-modal"` relationship. The application
-writes the truthful heading, description, form, actions, and Tailwind classes.
+Open a native modal dialog for a focused task. A Button targets its `id` with `command="show-modal"`; you supply the heading, description, form, actions, and Tailwind classes.
 
 <KleanPreview id="dialog-source" :source="dialogSource" filename="Dialog.vue">
   <template #preview>
@@ -60,6 +84,19 @@ writes the truthful heading, description, form, actions, and Tailwind classes.
       <output class="text-sm text-gray-600 dark:text-gray-400">{{ result }}</output>
     </div>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/dialog/usage.vue [Vue]
+
+<<< ../snippets/dialog/usage.jsx [React]
+
+<<< ../snippets/dialog/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/dialog/Dialog.vue
@@ -74,10 +111,7 @@ One command detects Vue, React, or Svelte and installs the framework-native sour
 <KleanInstallation
   id="dialog-installation"
   component="dialog"
-  :source="dialogSource"
-  filename="Dialog.vue"
-  destination="assets/js/components/ui/dialog/Dialog.vue"
-  :dependencies="['tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## When to use
@@ -93,15 +127,7 @@ must not interrupt the current task.
 
 ## Usage
 
-::: code-group
-
-<<< ../snippets/dialog/usage.vue [Vue]
-
-<<< ../snippets/dialog/usage.jsx [React]
-
-<<< ../snippets/dialog/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#dialog-source) for your framework.
 
 ## Native contract
 
@@ -145,7 +171,7 @@ completion; observe state only when application behavior genuinely needs it.
 
 ## Product recipes
 
-Hagfish and Slipway share the native modal contract while keeping their product language in visible Tailwind classes. The heading, consequence, safest initial action, and completion value remain ordinary application markup.
+Use Tailwind to match the surrounding interface. Keep the heading, consequence, safest initial action, and completion value explicit in your markup.
 
 <KleanPreview id="dialog-products" :source="productSource" filename="product-dialogs.vue">
   <template #preview>

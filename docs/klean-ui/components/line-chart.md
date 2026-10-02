@@ -11,6 +11,14 @@ import KleanInstallation from '../../.vitepress/theme/components/KleanInstallati
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import KleanLineChart from '../../.vitepress/theme/components/klean/line-chart/LineChart.vue'
 import lineChartSource from '../../.vitepress/theme/components/klean/line-chart/LineChart.vue?raw'
+import reactSource from '../sources/line-chart/LineChart.jsx?raw'
+import svelteSource from '../sources/line-chart/LineChart.svelte?raw'
+
+const frameworks = [
+  { id: 'vue', label: 'Vue', filename: 'LineChart.vue', destination: 'assets/js/components/ui/line-chart/LineChart.vue', source: lineChartSource },
+  { id: 'react', label: 'React', filename: 'LineChart.jsx', destination: 'assets/js/components/ui/line-chart/LineChart.jsx', source: reactSource },
+  { id: 'svelte', label: 'Svelte', filename: 'LineChart.svelte', destination: 'assets/js/components/ui/line-chart/LineChart.svelte', source: svelteSource }
+]
 
 const signups = [
   { label: 'Fri', value: 4, detail: 'Friday, 4 signups' },
@@ -22,12 +30,14 @@ const signups = [
   { label: 'Thu', value: 5, detail: 'Thursday, 5 signups' }
 ]
 
+const totalSignups = signups.reduce((total, point) => total + point.value, 0)
+
 const formatPercent = (value) => `${value}%`
 </script>
 
 # Line Chart
 
-Line Chart gives one ordered trend a visible caption, a readable scale, calm responsive geometry, and points that disclose the same exact values on hover, touch, or keyboard focus. It is deliberately small enough for real application dashboards without bringing a charting system into the product.
+Plot an ordered trend with exact values available on hover, touch, and keyboard focus.
 
 <KleanPreview id="line-chart-source" :source="lineChartSource" filename="LineChart.vue">
   <template #preview>
@@ -35,9 +45,8 @@ Line Chart gives one ordered trend a visible caption, a readable scale, calm res
       <header class="flex items-end justify-between gap-6">
         <div>
           <p class="text-sm text-gray-500 dark:text-gray-400">Last 7 days</p>
-          <p class="mt-1 text-4xl font-semibold tracking-tight tabular-nums">38</p>
+          <p class="mt-1 text-4xl font-semibold tracking-tight tabular-nums">{{ totalSignups }}</p>
         </div>
-        <p class="pb-1 text-right text-sm text-gray-500 dark:text-gray-400">+8 from<br />the week before</p>
       </header>
       <KleanLineChart
         :data="signups"
@@ -45,6 +54,19 @@ Line Chart gives one ordered trend a visible caption, a readable scale, calm res
         class="mt-8 h-56 text-gray-950 dark:text-gray-100"
       />
     </section>
+  </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/line-chart/usage.vue [Vue]
+
+<<< ../snippets/line-chart/usage.jsx [React]
+
+<<< ../snippets/line-chart/usage.svelte [Svelte]
+
+:::
+
   </template>
   <template #source>
 
@@ -60,9 +82,7 @@ One command detects Vue, React, or Svelte and copies the matching one-file compo
 <KleanInstallation
   id="line-chart-installation"
   component="line-chart"
-  :source="lineChartSource"
-  filename="LineChart.vue"
-  destination="assets/js/components/ui/line-chart/LineChart.vue"
+  :frameworks="frameworks"
   :dependencies="['tailwind-merge']"
 />
 
@@ -74,15 +94,7 @@ Use [Sparkline](/klean-ui/components/sparkline) when an adjacent visible number 
 
 ## Usage
 
-::: code-group
-
-<<< ../snippets/line-chart/usage.vue [Vue]
-
-<<< ../snippets/line-chart/usage.jsx [React]
-
-<<< ../snippets/line-chart/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#line-chart-source) for your framework.
 
 ## API
 
@@ -149,11 +161,11 @@ Height, width, color, caption treatment, labels, empty state, line treatment, an
 />
 ```
 
-## Slipway and Hagfish
+## Dashboard composition {#slipway-and-hagfish}
 
-Slipway can replace its Lookout line geometry with Line Chart while retaining its exact current readings, dark operational styling, polling, and metric controls in application markup. Its compact CPU and memory rows use [Sparkline](/klean-ui/components/sparkline).
+Place the chart beside its current value and time range. Keep metric selection, polling, loading state, and filters in your application, then pass the resulting series to Line Chart.
 
-Hagfish can use the same primitive for small invoice or payment trends without inheriting Slipway colors or dashboard assumptions. Tailwind preserves each product's visual language; the data and accessibility contract stays the same.
+Use [Sparkline](/klean-ui/components/sparkline) for a compact trend beside a number, or [Table](/klean-ui/components/table) when people need to compare exact values.
 
 ## Related components
 

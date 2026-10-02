@@ -10,16 +10,24 @@ import KleanButton from '../.vitepress/theme/components/klean/Button.vue'
 import KleanInstallation from '../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../.vitepress/theme/components/KleanPreview.vue'
 import buttonSource from '../.vitepress/theme/components/klean/Button.vue?raw'
+import reactSource from './sources/button/Button.jsx?raw'
+import svelteSource from './sources/button/Button.svelte?raw'
 import quickUsage from './snippets/introduction/usage.vue?raw'
+
+const buttonFrameworks = [
+  { id: 'vue', label: 'Vue', source: buttonSource, filename: 'Button.vue', destination: 'assets/js/components/ui/button/Button.vue' },
+  { id: 'react', label: 'React', source: reactSource, filename: 'Button.jsx', destination: 'assets/js/components/ui/button/Button.jsx' },
+  { id: 'svelte', label: 'Svelte', source: svelteSource, filename: 'Button.svelte', destination: 'assets/js/components/ui/button/Button.svelte' }
+]
 </script>
 
 # Klean UI
 
-Klean UI means **Kelvin's Lean UI**. It is the source-owned component system for The Boring JavaScript Stack: accessible markup, Durable UI behavior, neutral defaults, and Tailwind left directly in your hands.
+**World-class UI. Source you own. Tailwind you know.**
 
-**Vue, React, and Svelte. Three framework-native sources, one Klean contract.**
+Klean UI means **Kelvin's Lean UI**. It provides accessible, framework-native components for Vue, React, and Svelte, built for The Boring JavaScript Stack.
 
-Each framework provides the same component behavior, accessibility, and styling choices through its own conventions.
+Copy the source into your application and style it with Tailwind. Native HTML, keyboard behavior, focus, and Durable UI keep the interaction dependable while you make the design your own.
 
 <KleanPreview id="klean-introduction" :source="quickUsage" filename="usage.vue">
   <template #preview>
@@ -46,7 +54,7 @@ Each framework provides the same component behavior, accessibility, and styling 
 
 Add a component with one command. Klean infers the framework and conventional Boring Stack paths; the files it adds become application source.
 
-<KleanInstallation id="klean-installation" :source="buttonSource" />
+<KleanInstallation id="klean-installation" :frameworks="buttonFrameworks" />
 
 Already using Klean source? [Check, review, and update it safely](/klean-ui/updating).
 
@@ -56,12 +64,12 @@ Already using Klean source? [Check, review, and update it safely](/klean-ui/upda
 - **Use the platform.** Actions are buttons; navigation is an anchor or the Boring Stack Link.
 - **Style with Tailwind.** There are no visual `variant`, `size`, `tone`, or `radius` props.
 - **Prefer conventions.** Klean detects your Boring Stack framework and component directory.
-- **Treat accessibility as correctness.** Keyboard behavior, focus, naming, state, and reduced motion are release requirements.
+- **Treat accessibility as correctness.** Keyboard behavior, focus, naming, state, and reduced motion are part of the component contract.
 - **Implement Durable UI.** Useful state survives, navigation remains shareable, focus recovers, and failed work rolls back.
 
 ## Start with Button
 
-Button is the first documented component, not the definition of the library. Its API is intentionally small: choose the truthful element, pass behavioral state, and write the product's design in `class`.
+Button is a useful starting point for learning the Klean contract. Its API is intentionally small: choose the truthful element, pass behavioral state, and write the product's design in `class`.
 
 [Explore Button →](/klean-ui/components/button)
 

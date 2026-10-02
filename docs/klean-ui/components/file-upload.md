@@ -17,11 +17,38 @@ import vueUsage from '../snippets/file-upload/usage.vue?raw'
 import logoSource from '../snippets/file-upload/logo.vue?raw'
 import receiptSource from '../snippets/file-upload/receipt.vue?raw'
 import attachmentsSource from '../snippets/file-upload/attachments.vue?raw'
+
+import reactInstallFileUploadjsx from '../sources/file-upload/FileUpload.jsx?raw'
+import svelteInstallFileUploadsvelte from '../sources/file-upload/FileUpload.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: [],
+    files: [
+      { filename: 'FileUpload.vue', destination: 'assets/js/components/ui/file-upload/FileUpload.vue', source: fileUploadSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: [],
+    files: [
+      { filename: 'FileUpload.jsx', destination: 'assets/js/components/ui/file-upload/FileUpload.jsx', source: reactInstallFileUploadjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: [],
+    files: [
+      { filename: 'FileUpload.svelte', destination: 'assets/js/components/ui/file-upload/FileUpload.svelte', source: svelteInstallFileUploadsvelte },
+    ]
+  },
+]
 </script>
 
 # FileUpload
 
-FileUpload turns one native file picker into calm application state. It chooses or drops one file by default, opts into the platform's `multiple` selection when the product needs it, keeps accepted values when another candidate is rejected, and supplies previews that disappear when their files are removed.
+Choose or drop files and display local previews. FileUpload supports single or multiple selection, keeps accepted files when others are rejected, and releases previews when files are removed.
 
 The application writes every visible element: the real choose button, drop surface, filename, preview, remove action, error, and Tailwind classes. It also owns the eventual upload request. There is no visual variant, upload runtime, anatomy package, or hidden storage decision.
 
@@ -32,23 +59,7 @@ The application writes every visible element: the real choose button, drop surfa
   <template #caption>
     Browse and drop feed the same one-file contract. The visible button remains the keyboard and screen-reader path.
   </template>
-</KleanPreview>
-
-## Installation
-
-One command detects Vue, React, or Svelte and writes the matching source into the conventional component directory:
-
-<KleanInstallation
-  id="file-upload-installation"
-  component="file-upload"
-  :source="fileUploadSource"
-  filename="FileUpload.vue"
-  destination="assets/js/components/ui/file-upload/FileUpload.vue"
-/>
-
-## Usage
-
-The framework-native binding contains a `File` or `null`. Add the native `multiple` prop and the binding becomes `File[]`. The content slot or render function receives the same small API in each framework.
+  <template #usage>
 
 ::: code-group
 
@@ -59,6 +70,25 @@ The framework-native binding contains a `File` or `null`. Add the native `multip
 <<< ../snippets/file-upload/usage.svelte [Svelte]
 
 :::
+
+  </template>
+</KleanPreview>
+
+## Installation
+
+One command detects Vue, React, or Svelte and writes the matching source into the conventional component directory:
+
+<KleanInstallation
+  id="file-upload-installation"
+  component="file-upload"
+  :frameworks="installationFrameworks"
+/>
+
+## Usage
+
+The framework-native binding contains a `File` or `null`. Add the native `multiple` prop and the binding becomes `File[]`. The content slot or render function receives the same small API in each framework.
+
+Copy the [example above](#file-upload-basic) for your framework.
 
 ## API
 
@@ -126,7 +156,7 @@ Use `multiple` when the product evidence is genuinely plural: feedback screensho
 
 The component appends an accepted browse or drop selection. If the product supports paste, read the clipboard files in the application and update the same bound array. If the product supports drag-to-reorder, write that ordering UI around the array; FileUpload is selection state, not a gallery manager.
 
-## Hagfish business logo
+## Business logo {#hagfish-business-logo}
 
 The persisted logo remains server-owned. FileUpload owns only the new local candidate; the wrapper decides whether “Remove” clears that candidate or requests deletion of the current server asset.
 
@@ -141,7 +171,7 @@ The persisted logo remains server-owned. FileUpload owns only the new local cand
 
 The square tile, initials, remote fallback, border, and actions are ordinary markup. Avatar is not used here because an invoice logo is editable content, not compact person-or-team identity.
 
-## Hagfish receipt
+## Receipt upload {#hagfish-receipt}
 
 The receipt flow accepts camera-friendly images and PDF documents, validates the product size limit, previews only images, and leaves multipart submission to the expense form.
 
@@ -177,7 +207,7 @@ Persisted assets become durable only after the server accepts them and returns a
 
 ## Styling with Tailwind
 
-FileUpload renders no opinionated visible surface. Style the application markup directly: a quiet rounded dropzone, a wrapping attachment grid, a compact logo tile, a Hagfish border and shadow, or a dense receipt row are all Tailwind recipes.
+FileUpload renders no opinionated visible surface. Style the application markup directly: a quiet rounded dropzone, a wrapping attachment grid, a compact logo tile, a strong border and shadow, or a dense receipt row are all Tailwind recipes.
 
 When one product repeats the same treatment, keep a small product wrapper such as `ReceiptField.vue`. That wrapper may own copy and policy without turning them into global Klean variants.
 

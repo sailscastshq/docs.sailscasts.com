@@ -39,7 +39,7 @@ const frameworkSources = [
 
 # Icons
 
-Klean Icons is a focused family of 98 original SVGs drawn from the actions and objects that repeat across Slipway and Hagfish. Every mark uses the same 24px canvas, calm 1.5px stroke, rounded joins, and optical rhythm.
+Klean Icons includes 98 original SVGs for common application actions and objects. Every mark uses the same 24px canvas, calm 1.5px stroke, rounded joins, and optical rhythm.
 
 <IconGallery />
 
@@ -131,7 +131,7 @@ Only make the SVG itself informative when it stands alone and no semantic parent
 
 You can inspect and edit each installed icon's SVG geometry in your application.
 
-The shared 24px geometry keeps Slipway and Hagfish recognizable as part of the same ecosystem. <code>currentColor</code>, native attributes, and caller-owned classes let each product retain its own density, palette, contrast, and motion without forking an icon library API.
+The shared 24px geometry keeps icons consistent. Use <code>currentColor</code>, native attributes, and Tailwind classes to match your application's density, palette, contrast, and motion.
 
 Updates are deliberate. Klean never silently replaces local geometry. The CLI shows whether an installed icon differs, and the application chooses when to inspect and accept a new source version.
 
@@ -160,7 +160,7 @@ Use Klean Icons for repeated application actions, navigation, statuses, dates, i
 - Use a logo or product mark for brand identity; do not force a general interface icon to become one.
 - Use an illustration for editorial, empty-state, onboarding, or marketing storytelling.
 - Use [Spinner](/klean-ui/components/spinner) for indeterminate progress and [Avatar](/klean-ui/components/avatar) for resilient identity images.
-- Keep highly specialized domain glyphs in the application until repeated use proves that they belong in the shared family.
+- Keep specialized domain icons alongside the application code that uses them.
 
 ## Related components
 

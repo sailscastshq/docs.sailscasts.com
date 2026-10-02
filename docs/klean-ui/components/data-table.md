@@ -16,23 +16,7 @@ import tableSource from '../../.vitepress/theme/components/klean/table/Table.vue
 
 import bridgeSource from '../snippets/data-table/bridge.vue?raw'
 
-const installationFiles = [
-  {
-    filename: 'Table.vue',
-    destination: 'assets/js/components/ui/table/Table.vue',
-    source: tableSource
-  },
-  {
-    filename: 'DataTable.vue',
-    destination: 'assets/js/components/ui/data-table/DataTable.vue',
-    source: dataTableSource
-  },
-  {
-    filename: 'useDataTableQuery.js',
-    destination: 'assets/js/components/ui/data-table/useDataTableQuery.js',
-    source: vueQuerySource
-  }
-]
+
 
 const durableQueryUsage = `import { computed } from 'vue'
 import { useDataTableQuery } from '@/components/ui/data-table/useDataTableQuery.js'
@@ -71,11 +55,48 @@ const sortUsage = `<Input
 >
   Failed services
 </button>`
+
+import reactInstallTablejsx from '../sources/table/Table.jsx?raw'
+import reactInstallDataTablejsx from '../sources/data-table/DataTable.jsx?raw'
+import reactInstalluseDataTableQueryjs from '../sources/data-table/useDataTableQuery.react.js?raw'
+import svelteInstallTablesvelte from '../sources/table/Table.svelte?raw'
+import svelteInstallDataTablesvelte from '../sources/data-table/DataTable.svelte?raw'
+import svelteInstalldataTableQuerysveltejs from '../sources/data-table/dataTableQuery.svelte.js?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge", "@inertiajs/vue3"],
+    files: [
+      { filename: 'Table.vue', destination: 'assets/js/components/ui/table/Table.vue', source: tableSource },
+      { filename: 'DataTable.vue', destination: 'assets/js/components/ui/data-table/DataTable.vue', source: dataTableSource },
+      { filename: 'useDataTableQuery.js', destination: 'assets/js/components/ui/data-table/useDataTableQuery.js', source: vueQuerySource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge", "@inertiajs/react"],
+    files: [
+      { filename: 'Table.jsx', destination: 'assets/js/components/ui/table/Table.jsx', source: reactInstallTablejsx },
+      { filename: 'DataTable.jsx', destination: 'assets/js/components/ui/data-table/DataTable.jsx', source: reactInstallDataTablejsx },
+      { filename: 'useDataTableQuery.js', destination: 'assets/js/components/ui/data-table/useDataTableQuery.js', source: reactInstalluseDataTableQueryjs },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge", "@inertiajs/svelte"],
+    files: [
+      { filename: 'Table.svelte', destination: 'assets/js/components/ui/table/Table.svelte', source: svelteInstallTablesvelte },
+      { filename: 'DataTable.svelte', destination: 'assets/js/components/ui/data-table/DataTable.svelte', source: svelteInstallDataTablesvelte },
+      { filename: 'dataTableQuery.svelte.js', destination: 'assets/js/components/ui/data-table/dataTableQuery.svelte.js', source: svelteInstalldataTableQuerysveltejs },
+    ]
+  },
+]
 </script>
 
 # DataTable
 
-DataTable coordinates a real native table for server-driven application work. It keeps selection honest across the current page, exposes a truthful busy state, and offers an optional Inertia query helper so search, sort, filters, and pagination survive refresh, sharing, and Back/Forward.
+Build a server-driven table with page-scoped selection and a visible busy state. The optional Inertia query helper keeps search, sorting, filters, and pagination usable across refresh, sharing, and Back/Forward.
 
 The application still writes the caption, headers, rows, cells, links, actions, empty state, and every Tailwind class. There is no column schema, visual variant API, client-side data engine, or hidden link abstraction.
 
@@ -84,7 +105,20 @@ The application still writes the caption, headers, rows, cells, links, actions, 
     <DataTableRecipes />
   </template>
   <template #caption>
-    A Slipway-style operational surface built from one native table. Search, selection, sorting, destinations, and row actions remain ordinary application markup.
+    A compact operational surface built from one native table. Search, selection, sorting, destinations, and row actions remain ordinary application markup.
+  </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/data-table/usage.vue [Vue]
+
+<<< ../snippets/data-table/usage.jsx [React]
+
+<<< ../snippets/data-table/usage.svelte [Svelte]
+
+:::
+
   </template>
 </KleanPreview>
 
@@ -95,11 +129,7 @@ The command detects Vue, React, or Svelte, installs the framework's Inertia adap
 <KleanInstallation
   id="data-table-installation"
   component="data-table"
-  :source="dataTableSource"
-  filename="DataTable.vue"
-  destination="assets/js/components/ui/data-table/DataTable.vue"
-  :files="installationFiles"
-  :dependencies="['@inertiajs/vue3', 'tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 The query helper is included because DataTable is intended for Boring Stack applications. Ignore it when the page already owns an equivalent server-query contract; the component itself does not require the helper at render time.
@@ -112,15 +142,7 @@ DataTable composes Table rather than replacing it. Migrating a Table keeps the s
 
 ## Usage
 
-::: code-group
-
-<<< ../snippets/data-table/usage.vue [Vue]
-
-<<< ../snippets/data-table/usage.jsx [React]
-
-<<< ../snippets/data-table/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#data-table-bridge) for your framework.
 
 ## Component API
 
@@ -204,7 +226,7 @@ This keeps Cmd/Ctrl-click, open-in-new-tab, copied URLs, Inertia navigation, and
 
 The wrapper, table, caption, headers, cells, statuses, links, actions, empty state, and pagination are styled where they are written. There is no `variant`, density prop, column style object, Klean color, or global DataTable theme.
 
-Build a small product wrapper when several pages share one treatment. Slipway can preserve Bridge's dense dark operational surface; Hagfish can use its editorial borders and typography from the same component contract.
+Build a small application wrapper when several pages share one treatment. Use Tailwind for compact rows, stronger borders, different typography, or a dark surface.
 
 ## When not to use
 

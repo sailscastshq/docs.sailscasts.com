@@ -114,7 +114,7 @@ npx klean-ui update button --overwrite
 
 It replaces locally modified files with the invoked CLI's registry source. Review `diff`, commit or otherwise preserve the application source, and use the flag only when discarding those local changes is intentional. It is never implied by `update` or `update --all`.
 
-## Slipway and Hagfish adoption
+## Updating customized components {#slipway-and-hagfish-adoption}
 
 Existing application components may predate Klean or intentionally express a distinct product treatment. Start their migration with read-only commands:
 
@@ -123,15 +123,15 @@ npx klean-ui check
 npx klean-ui diff alert
 ```
 
-If a Slipway or Hagfish file is reported as locally modified, treat its diff as migration evidence—not permission to overwrite it. Preserve the application's markup requirements, Tailwind language, server behavior, and visual regression coverage while adopting the shared Klean contract.
+If a file is reported as locally modified, review the diff and apply the changes you need. Preserve your markup, Tailwind classes, and application behavior, then check the updated component in context.
 
-Once an application has adopted an exact Klean revision, later safe updates become automatic candidates. The application never becomes a selectable Klean theme and never gives runtime ownership back to the CLI.
+Once a file matches a known Klean revision, later updates can recognize it and apply safely. Any further local edits remain protected.
 
 ## Stability policy
 
 - Patch releases fix implementation, accessibility, and browser compatibility without intentional API breaks.
 - Minor releases are additive.
-- Breaking anatomy or behavior requires migration notes, a deliberate transition path, and proving-application evidence even before `1.0`.
+- Breaking changes to component structure or behavior include migration notes, including before `1.0`.
 - Native semantics, caller Tailwind classes, public slots, and useful `data-*` hooks are compatibility surfaces.
 
 This restrained policy makes source updates progressive and component-scoped rather than periodic redesigns.
@@ -154,5 +154,3 @@ Flags describe an exceptional invocation. Klean still does not create consumer c
 - [CLI](/klean-ui/cli) — command and detection reference.
 - [Doctrine](/klean-ui/doctrine) — source ownership, platform-first behavior, and Tailwind boundaries.
 - [Durable UI](/klean-ui/durable-ui) — resilience, recovery, and correct state ownership.
-
-Implementation tracking: [Klean UI issue #61](https://github.com/sailscastshq/klean-ui/issues/61).

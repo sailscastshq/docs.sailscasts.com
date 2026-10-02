@@ -8,13 +8,41 @@ outline: [2, 3]
 <script setup>
 import KleanInstallation from '../.vitepress/theme/components/KleanInstallation.vue'
 import buttonSource from '../.vitepress/theme/components/klean/Button.vue?raw'
+
+import reactInstallButtonjsx from './sources/button/Button.jsx?raw'
+import svelteInstallButtonsvelte from './sources/button/Button.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Button.vue', destination: 'assets/js/components/ui/button/Button.vue', source: buttonSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Button.jsx', destination: 'assets/js/components/ui/button/Button.jsx', source: reactInstallButtonjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Button.svelte', destination: 'assets/js/components/ui/button/Button.svelte', source: svelteInstallButtonsvelte },
+    ]
+  },
+]
 </script>
 
 # Installation
 
 Add a component from your Boring Stack application. Klean selects the matching Vue, React, or Svelte source.
 
-<KleanInstallation id="installation-page" :source="buttonSource" />
+<KleanInstallation id="installation-page"   :frameworks="installationFrameworks"
+/>
 
 ## What the command does
 

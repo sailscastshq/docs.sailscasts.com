@@ -1,7 +1,7 @@
 <script>
   import { onMount, tick } from "svelte";
   import { twMerge } from "tailwind-merge";
-  import { toast } from "../toast.js";
+  import { toast } from "./toast.js";
 
   const POSITIONS = {
     "top-left": "left-4 top-4 items-start",

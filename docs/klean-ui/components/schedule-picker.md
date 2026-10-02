@@ -25,37 +25,58 @@ import vueWindow from '../snippets/schedule-picker/window.vue?raw'
 const publishAt = ref('')
 const recordedAt = ref('2020-02-29T13:35:00.000Z')
 const reviewAt = ref('2020-02-29T13:35:00.000Z')
-const vueFiles = [
+
+
+import reactInstallInputjsx from '../sources/input/Input.jsx?raw'
+import reactInstallPopoverjsx from '../sources/popover/Popover.jsx?raw'
+import reactInstalldatejs from '../sources/calendar/date.react.js?raw'
+import reactInstallCalendarjsx from '../sources/calendar/Calendar.jsx?raw'
+import reactInstallschedulejs from '../sources/schedule-picker/schedule.react.js?raw'
+import reactInstallSchedulePickerjsx from '../sources/schedule-picker/SchedulePicker.jsx?raw'
+import svelteInstallInputsvelte from '../sources/input/Input.svelte?raw'
+import svelteInstallPopoversvelte from '../sources/popover/Popover.svelte?raw'
+import svelteInstalldatejs from '../sources/calendar/date.svelte.js?raw'
+import svelteInstallCalendarsvelte from '../sources/calendar/Calendar.svelte?raw'
+import svelteInstallschedulejs from '../sources/schedule-picker/schedule.svelte.js?raw'
+import svelteInstallSchedulePickersvelte from '../sources/schedule-picker/SchedulePicker.svelte?raw'
+
+const installationFrameworks = [
   {
-    filename: 'Input.vue',
-    destination: 'assets/js/components/ui/input/Input.vue',
-    source: inputSource
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge", "@floating-ui/dom", "@internationalized/date", "chrono-node"],
+    files: [
+      { filename: 'Input.vue', destination: 'assets/js/components/ui/input/Input.vue', source: inputSource },
+      { filename: 'Popover.vue', destination: 'assets/js/components/ui/popover/Popover.vue', source: popoverSource },
+      { filename: 'date.js', destination: 'assets/js/components/ui/calendar/date.js', source: dateSource },
+      { filename: 'Calendar.vue', destination: 'assets/js/components/ui/calendar/Calendar.vue', source: calendarSource },
+      { filename: 'schedule.js', destination: 'assets/js/components/ui/schedule-picker/schedule.js', source: scheduleHelperSource },
+      { filename: 'SchedulePicker.vue', destination: 'assets/js/components/ui/schedule-picker/SchedulePicker.vue', source: scheduleSource },
+    ]
   },
   {
-    filename: 'Popover.vue',
-    destination: 'assets/js/components/ui/popover/Popover.vue',
-    source: popoverSource
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge", "@floating-ui/dom", "@internationalized/date", "chrono-node"],
+    files: [
+      { filename: 'Input.jsx', destination: 'assets/js/components/ui/input/Input.jsx', source: reactInstallInputjsx },
+      { filename: 'Popover.jsx', destination: 'assets/js/components/ui/popover/Popover.jsx', source: reactInstallPopoverjsx },
+      { filename: 'date.js', destination: 'assets/js/components/ui/calendar/date.js', source: reactInstalldatejs },
+      { filename: 'Calendar.jsx', destination: 'assets/js/components/ui/calendar/Calendar.jsx', source: reactInstallCalendarjsx },
+      { filename: 'schedule.js', destination: 'assets/js/components/ui/schedule-picker/schedule.js', source: reactInstallschedulejs },
+      { filename: 'SchedulePicker.jsx', destination: 'assets/js/components/ui/schedule-picker/SchedulePicker.jsx', source: reactInstallSchedulePickerjsx },
+    ]
   },
   {
-    filename: 'date.js',
-    destination: 'assets/js/components/ui/calendar/date.js',
-    source: dateSource
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge", "@floating-ui/dom", "@internationalized/date", "chrono-node"],
+    files: [
+      { filename: 'Input.svelte', destination: 'assets/js/components/ui/input/Input.svelte', source: svelteInstallInputsvelte },
+      { filename: 'Popover.svelte', destination: 'assets/js/components/ui/popover/Popover.svelte', source: svelteInstallPopoversvelte },
+      { filename: 'date.js', destination: 'assets/js/components/ui/calendar/date.js', source: svelteInstalldatejs },
+      { filename: 'Calendar.svelte', destination: 'assets/js/components/ui/calendar/Calendar.svelte', source: svelteInstallCalendarsvelte },
+      { filename: 'schedule.js', destination: 'assets/js/components/ui/schedule-picker/schedule.js', source: svelteInstallschedulejs },
+      { filename: 'SchedulePicker.svelte', destination: 'assets/js/components/ui/schedule-picker/SchedulePicker.svelte', source: svelteInstallSchedulePickersvelte },
+    ]
   },
-  {
-    filename: 'Calendar.vue',
-    destination: 'assets/js/components/ui/calendar/Calendar.vue',
-    source: calendarSource
-  },
-  {
-    filename: 'schedule.js',
-    destination: 'assets/js/components/ui/schedule-picker/schedule.js',
-    source: scheduleHelperSource
-  },
-  {
-    filename: 'SchedulePicker.vue',
-    destination: 'assets/js/components/ui/schedule-picker/SchedulePicker.vue',
-    source: scheduleSource
-  }
 ]
 </script>
 
@@ -89,6 +110,19 @@ historical records or choosing a time on either side of today.
       </button>
     </div>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/schedule-picker/usage.vue [Vue]
+
+<<< ../snippets/schedule-picker/usage.jsx [React]
+
+<<< ../snippets/schedule-picker/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/schedule-picker/SchedulePicker.vue
@@ -104,11 +138,7 @@ historical records or choosing a time on either side of today.
 <KleanInstallation
   id="schedule-picker-installation"
   component="schedule-picker"
-  :source="scheduleSource"
-  filename="SchedulePicker.vue"
-  destination="assets/js/components/ui/schedule-picker/SchedulePicker.vue"
-  :files="vueFiles"
-  :dependencies="['@floating-ui/dom', '@internationalized/date', 'chrono-node', 'tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## When to use
@@ -129,15 +159,7 @@ do not add a midnight time or timezone to make it fit Schedule Picker.
 
 ## Usage
 
-::: code-group
-
-<<< ../snippets/schedule-picker/usage.vue [Vue]
-
-<<< ../snippets/schedule-picker/usage.jsx [React]
-
-<<< ../snippets/schedule-picker/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#schedule-picker-source) for your framework.
 
 ## Historical dates and times
 

@@ -20,6 +20,33 @@ const services = [
   { name: 'worker', dependency: 'Redis 8', status: 'Deploying', memory: '192 MB' },
   { name: 'web', dependency: '—', status: 'Healthy', memory: '256 MB' }
 ]
+
+import reactInstallTablejsx from '../sources/table/Table.jsx?raw'
+import svelteInstallTablesvelte from '../sources/table/Table.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Table.vue', destination: 'assets/js/components/ui/table/Table.vue', source: tableSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Table.jsx', destination: 'assets/js/components/ui/table/Table.jsx', source: reactInstallTablejsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Table.svelte', destination: 'assets/js/components/ui/table/Table.svelte', source: svelteInstallTablesvelte },
+    ]
+  },
+]
 </script>
 
 # Table
@@ -60,6 +87,19 @@ That is the complete API. Klean does not replace the browser's table model with 
       </KleanTable>
     </div>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/table/usage.vue [Vue]
+
+<<< ../snippets/table/usage.jsx [React]
+
+<<< ../snippets/table/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/table/Table.vue
@@ -77,25 +117,14 @@ One command detects Vue, React, or Svelte and writes one framework-native source
 <KleanInstallation
   id="table-installation"
   component="table"
-  :source="tableSource"
-  filename="Table.vue"
-  destination="assets/js/components/ui/table/Table.vue"
-  :dependencies="['tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## Usage
 
 Use Table for the root and write ordinary HTML beneath it. This keeps semantics visible in reviews and puts Tailwind exactly where the visual decision belongs.
 
-::: code-group
-
-<<< ../snippets/table/usage.vue [Vue]
-
-<<< ../snippets/table/usage.jsx [React]
-
-<<< ../snippets/table/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#table-source) for your framework.
 
 ## API
 
@@ -140,9 +169,9 @@ Tables describe two-dimensional relationships. Preserve that structure at narrow
 
 The focusable wrapper makes keyboard scrolling available where the browser does not already expose it. Do not turn rows or cells into `display: block`; that can obscure the relationships that made a table appropriate.
 
-## Slipway and Hagfish recipes
+## Report and results recipes {#slipway-and-hagfish-recipes}
 
-The same Table can carry Slipway's dense operational results and Hagfish's editorial reporting voice because neither treatment is hidden behind a product variant.
+Use compact rows for operational results or stronger typography and borders for a report. Both are ordinary Tailwind treatments.
 
 <KleanPreview id="table-products" :source="productSource" filename="ProductTables.vue">
   <template #preview>
@@ -150,7 +179,7 @@ The same Table can carry Slipway's dense operational results and Hagfish's edito
 
   </template>
   <template #caption>
-    Hagfish's editable invoice items remain a responsive form/list. A report ledger is tabular; a collection of editable controls is not.
+    Use a table when rows and columns help people compare data. A form or list may suit editable invoice items better than a report layout.
   </template>
 </KleanPreview>
 

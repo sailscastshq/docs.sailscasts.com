@@ -35,11 +35,38 @@ function refresh() {
 }
 
 onBeforeUnmount(() => clearTimeout(finishTimer))
+
+import reactInstallSpinnerjsx from '../sources/spinner/Spinner.jsx?raw'
+import svelteInstallSpinnersvelte from '../sources/spinner/Spinner.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Spinner.vue', destination: 'assets/js/components/ui/spinner/Spinner.vue', source: spinnerSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Spinner.jsx', destination: 'assets/js/components/ui/spinner/Spinner.jsx', source: reactInstallSpinnerjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Spinner.svelte', destination: 'assets/js/components/ui/spinner/Spinner.svelte', source: svelteInstallSpinnersvelte },
+    ]
+  },
+]
 </script>
 
 # Spinner
 
-Spinner is a small decorative wrapper for indeterminate work. It includes a neutral fallback ring, accepts an application-owned loading mark, inherits the caller's text color, and leaves loading state and meaningful language with the application.
+Indicate work in progress with a decorative ring or your own loading mark. Spinner inherits the current text color; describe the work in a separate visible label or status.
 
 <KleanPreview id="spinner-source" :source="spinnerSource" filename="Spinner.vue">
   <template #preview>
@@ -71,6 +98,19 @@ Spinner is a small decorative wrapper for indeterminate work. It includes a neut
       </div>
     </section>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/spinner/usage.vue [Vue]
+
+<<< ../snippets/spinner/usage.jsx [React]
+
+<<< ../snippets/spinner/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/spinner/Spinner.vue
@@ -85,25 +125,14 @@ One command detects Vue, React, or Svelte and installs the framework-native sour
 <KleanInstallation
   id="spinner-installation"
   component="spinner"
-  :source="spinnerSource"
-  filename="Spinner.vue"
-  destination="assets/js/components/ui/spinner/Spinner.vue"
-  :dependencies="['tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## Usage
 
 Keep the status surface mounted before its contents change. Spinner is decorative, so the useful status is announced once rather than as an unnamed image and again as text.
 
-::: code-group
-
-<<< ../snippets/spinner/usage.vue [Vue]
-
-<<< ../snippets/spinner/usage.jsx [React]
-
-<<< ../snippets/spinner/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#spinner-source) for your framework.
 
 ## Loading semantics
 
@@ -123,7 +152,7 @@ The neutral ring works without setup. When an application's identity belongs in 
 
 <CopyCode :code="customUsage" label="SlippySpinner.vue" />
 
-The wrapper owns one size class and makes its direct child fill that space. A supplied mark keeps its own animation; Spinner does not rotate it a second time. This is how Slipway retains the animated Slippy mascot while adopting Klean's shared loading contract. Slippy remains Slipway source—it does not become a `mascot`, `icon`, or `variant` prop.
+The wrapper owns one size class and makes its direct child fill that space. A supplied mark keeps its own animation; Spinner does not rotate it a second time. Use this slot for your own animated product mark; its source and styling stay in your application.
 
 ## Buttons and regions
 

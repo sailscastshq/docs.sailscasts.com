@@ -84,9 +84,9 @@ If the stored preference is `system`, application-owned code resolves the media 
 
 The mode preference is a Durable UI concern because a person chose it. Store that preference with the framework-native `useStoredState` or `createStoredState` source from the [Durable UI bundle](/klean-ui/durable-ui), resolve it before paint, and leave component source unaware of the storage mechanism.
 
-## Proving applications, not themes
+## Your visual identity {#proving-applications-not-themes}
 
-Hagfish and Slipway intentionally keep different typography, spacing, color, density, shadow, and motion. They prove that Klean's semantic and behavioral source accepts radically different application-owned Tailwind. They are not named themes and do not appear in a theme selector.
+Choose your own typography, spacing, color, density, shadow, and motion. The same component can support a compact operational interface or an expressive editorial layout through ordinary Tailwind classes.
 
 ## Accessibility invariants
 

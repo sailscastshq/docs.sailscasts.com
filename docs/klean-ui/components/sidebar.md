@@ -13,11 +13,38 @@ import SidebarRecipes from '../../.vitepress/theme/components/klean/sidebar/Side
 import sidebarSource from '../../.vitepress/theme/components/klean/sidebar/Sidebar.vue?raw'
 
 import appShellSource from '../snippets/sidebar/app-shell.vue?raw'
+
+import reactInstallSidebarjsx from '../sources/sidebar/Sidebar.jsx?raw'
+import svelteInstallSidebarsvelte from '../sources/sidebar/Sidebar.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Sidebar.vue', destination: 'assets/js/components/ui/sidebar/Sidebar.vue', source: sidebarSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Sidebar.jsx', destination: 'assets/js/components/ui/sidebar/Sidebar.jsx', source: reactInstallSidebarjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Sidebar.svelte', destination: 'assets/js/components/ui/sidebar/Sidebar.svelte', source: svelteInstallSidebarsvelte },
+    ]
+  },
+]
 </script>
 
 # Sidebar
 
-Sidebar is one persistent native `<aside>` for application navigation. It remembers whether the user left it open, keeps closed links out of the focus order, and exposes a small imperative handle for an application-owned trigger.
+Add persistent application navigation with a native `aside`. Sidebar remembers whether it was left open, keeps closed links out of the focus order, and exposes controls for your own toggle button.
 
 The application still writes every `<nav>`, list, real `<a>` or Boring Stack `<Link>`, current-page marker, logo, menu, permission check, and Tailwind class. There is no item schema, router adapter, provider, collapse icon, breakpoint, visual variant, or application-shell package.
 
@@ -28,6 +55,19 @@ The application still writes every `<nav>`, list, real `<a>` or Boring Stack `<L
   <template #caption>
     Resize the page: Sidebar is persistent desktop navigation; the same app-owned navigation becomes a native modal Sheet on narrow screens.
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/sidebar/usage.vue [Vue]
+
+<<< ../snippets/sidebar/usage.jsx [React]
+
+<<< ../snippets/sidebar/usage.svelte [Svelte]
+
+:::
+
+  </template>
 </KleanPreview>
 
 ## Installation
@@ -37,9 +77,7 @@ One command detects Vue, React, or Svelte and copies the matching one-file sourc
 <KleanInstallation
   id="sidebar-installation"
   component="sidebar"
-  :source="sidebarSource"
-  filename="Sidebar.vue"
-  destination="assets/js/components/ui/sidebar/Sidebar.vue"
+  :frameworks="installationFrameworks"
 />
 
 ## Sidebar or Sheet?
@@ -57,15 +95,7 @@ The desktop Sidebar may be open or closed by preference. The mobile Sheet is tem
 
 The component does not manufacture navigation items. Write honest links directly and connect the external trigger with `aria-controls` and `aria-expanded`.
 
-::: code-group
-
-<<< ../snippets/sidebar/usage.vue [Vue]
-
-<<< ../snippets/sidebar/usage.jsx [React]
-
-<<< ../snippets/sidebar/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#sidebar-app-shell) for your framework.
 
 ## API
 
@@ -82,7 +112,7 @@ The content slot, render function, or snippet also receives `{ open, show, hide,
 
 Use a stable, unique `id` whenever an application has more than one shell, such as `primary-navigation` and `bridge-navigation`. That gives each Sidebar an independent remembered choice without another configuration prop.
 
-Set `remember={false}` only when persistence would be dishonest: an embedded preview, test fixture, kiosk, or other intentionally transient shell.
+Set `remember={false}` only when persistence would be dishonest: an embedded surface, kiosk, or other intentionally transient shell.
 
 ## Durable behavior
 

@@ -41,6 +41,33 @@ function deploy() {
 }
 
 onBeforeUnmount(() => clearTimeout(resetTimer))
+
+import reactInstallSlidejsx from '../sources/slide/Slide.jsx?raw'
+import svelteInstallSlidesvelte from '../sources/slide/Slide.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Slide.vue', destination: 'assets/js/components/ui/slide/Slide.vue', source: slideSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Slide.jsx', destination: 'assets/js/components/ui/slide/Slide.jsx', source: reactInstallSlidejsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Slide.svelte', destination: 'assets/js/components/ui/slide/Slide.svelte', source: svelteInstallSlidesvelte },
+    ]
+  },
+]
 </script>
 
 # Slide
@@ -69,6 +96,19 @@ Slide confirms an action while making accidental pointer activation difficult. D
       </div>
     </section>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/slide/usage.vue [Vue]
+
+<<< ../snippets/slide/usage.jsx [React]
+
+<<< ../snippets/slide/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/slide/Slide.vue
@@ -83,25 +123,14 @@ One command detects Vue, React, or Svelte and installs the framework-native sour
 <KleanInstallation
   id="slide-installation"
   component="slide"
-  :source="slideSource"
-  filename="Slide.vue"
-  destination="assets/js/components/ui/slide/Slide.vue"
-  :dependencies="['tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## Usage
 
 The HTML and behavior stay the same in every framework. Only binding and event syntax change.
 
-::: code-group
-
-<<< ../snippets/slide/usage.vue [Vue]
-
-<<< ../snippets/slide/usage.jsx [React]
-
-<<< ../snippets/slide/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#slide-source) for your framework.
 
 ## Why this is a button
 

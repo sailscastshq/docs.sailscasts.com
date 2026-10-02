@@ -26,13 +26,40 @@ const portraitMarkup = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160
   <path d="M70 89c8 6 16 6 23 0" fill="none" stroke="#4c291f" stroke-width="3" stroke-linecap="round"/>
 </svg>`
 const portrait = `data:image/svg+xml,${encodeURIComponent(portraitMarkup)}`
+
+import reactInstallAvatarjsx from '../sources/avatar/Avatar.jsx?raw'
+import svelteInstallAvatarsvelte from '../sources/avatar/Avatar.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Avatar.vue', destination: 'assets/js/components/ui/avatar/Avatar.vue', source: avatarSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Avatar.jsx', destination: 'assets/js/components/ui/avatar/Avatar.jsx', source: reactInstallAvatarjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Avatar.svelte', destination: 'assets/js/components/ui/avatar/Avatar.svelte', source: svelteInstallAvatarsvelte },
+    ]
+  },
+]
 </script>
 
 # Avatar
 
-Avatar represents one person, team, or other application identity. Give it a source, an explicit accessible name, and fallback content. It uses the image when available and the fallback when the source is absent or fails.
+Show a person, team, or application identity with an image and a fallback. Pass an accessible name and fallback content; Avatar switches to the fallback when the image is missing or fails.
 
-That is the whole contract. Size, shape, color, typography, borders, rings, presence, grouping, and upload state remain visible Tailwind and application markup.
+Set size, shape, color, and borders with Tailwind. Compose presence indicators, groups, and upload controls around the avatar.
 
 <KleanPreview id="avatar-source" :source="avatarSource" filename="Avatar.vue">
   <template #preview>
@@ -45,6 +72,19 @@ That is the whole contract. Size, shape, color, typography, borders, rings, pres
         SW
       </KleanAvatar>
     </div>
+  </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/avatar/usage.vue [Vue]
+
+<<< ../snippets/avatar/usage.jsx [React]
+
+<<< ../snippets/avatar/usage.svelte [Svelte]
+
+:::
+
   </template>
   <template #source>
 
@@ -60,25 +100,14 @@ One command detects Vue, React, or Svelte and writes the matching one-file sourc
 <KleanInstallation
   id="avatar-installation"
   component="avatar"
-  :source="avatarSource"
-  filename="Avatar.vue"
-  destination="assets/js/components/ui/avatar/Avatar.vue"
-  :dependencies="['tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## Usage
 
 The fallback is ordinary slot or child content. It is visible only when the source is absent or unavailable.
 
-::: code-group
-
-<<< ../snippets/avatar/usage.vue [Vue]
-
-<<< ../snippets/avatar/usage.jsx [React]
-
-<<< ../snippets/avatar/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#avatar-source) for your framework.
 
 ## API
 
@@ -141,7 +170,7 @@ The default is intentionally neutral: `size-10`, circular, monochrome fallback, 
 </Avatar>
 ```
 
-Small comment marks, square team logos, bordered profile images, and high-contrast Hagfish initials are class recipes—not component variants. If a recipe repeats throughout one application, keep a tiny application-owned wrapper or shared class next to that product.
+Small comment marks, square team logos, bordered profile images, and high-contrast initials are class recipes—not component variants. If a recipe repeats throughout one application, keep a tiny application-owned wrapper or shared class next to that product.
 
 ## Presence and progress are composition
 
@@ -160,20 +189,20 @@ Presence and upload progress describe application state around identity. They do
 
 Use visible text or screen-reader text to name a meaningful presence mark. During upload, the application owns a `role="status"` region and [Spinner](/klean-ui/components/spinner); Avatar continues to show the current server value or local preview.
 
-## Hagfish and Slipway recipes
+## Profile and team recipes {#hagfish-and-slipway-recipes}
 
-These examples come from the actual adoption seams. They prove that one primitive can preserve both products without acquiring either product's vocabulary.
+Use expressive initials in a comment thread or a quiet team mark in navigation. The same fallback behavior supports both.
 
 <KleanPreview id="avatar-products" :source="productSource" filename="ProductAvatars.vue">
   <template #preview>
     <AvatarRecipes />
   </template>
   <template #caption>
-    <span>Hagfish owns comment color, density, and creator presence. Slipway owns team switching and upload progress. Avatar owns only resilient identity.</span>
+    <span>Compose comment identity, team switching, and upload progress with the same image and fallback behavior.</span>
   </template>
 </KleanPreview>
 
-Hagfish can replace its Volt Avatar, creator mark, and repeated comment fallback branches while retaining its deterministic color classes and neo-brutalist treatment. Slipway can replace repeated team image-or-initial branches while retaining its quiet sidebar, current-team logic, and profile upload overlay.
+Keep team selection, upload progress, and presence in the surrounding application. Avatar handles the image and fallback, so the same source works in comments, profiles, and navigation.
 
 ## Accessibility
 

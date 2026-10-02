@@ -15,6 +15,8 @@ import KleanToast from '../../.vitepress/theme/components/klean/toast/Toast.vue'
 import { createToast } from '../../.vitepress/theme/components/klean/toast/toast.js'
 import toastSource from '../../.vitepress/theme/components/klean/toast/Toast.vue?raw'
 import controllerSource from '../../.vitepress/theme/components/klean/toast/toast.js?raw'
+import reactSource from '../sources/toast/Toast.jsx?raw'
+import svelteSource from '../sources/toast/Toast.svelte?raw'
 
 import actionUsage from '../snippets/toast/actions.vue?raw'
 import motionUsage from '../snippets/toast/motion.vue?raw'
@@ -78,6 +80,24 @@ const vueFiles = [
     filename: 'Toast.vue',
     destination: 'assets/js/components/ui/toast/Toast.vue',
     source: toastSource
+  }
+]
+
+const installationFrameworks = [
+  { id: 'vue', label: 'Vue', files: vueFiles },
+  {
+    id: 'react', label: 'React',
+    files: [
+      { filename: 'toast.js', destination: 'assets/js/components/ui/toast/toast.js', source: controllerSource },
+      { filename: 'Toast.jsx', destination: 'assets/js/components/ui/toast/Toast.jsx', source: reactSource }
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    files: [
+      { filename: 'toast.js', destination: 'assets/js/components/ui/toast/toast.js', source: controllerSource },
+      { filename: 'Toast.svelte', destination: 'assets/js/components/ui/toast/Toast.svelte', source: svelteSource }
+    ]
   }
 ]
 
@@ -206,6 +226,19 @@ Toast shows short, non-blocking messages for confirmations, failures, and long-r
       />
     </div>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/toast/usage.vue [Vue]
+
+<<< ../snippets/toast/usage.jsx [React]
+
+<<< ../snippets/toast/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/toast/Toast.vue
@@ -220,10 +253,7 @@ One command detects Vue, React, or Svelte and adds Toast:
 <KleanInstallation
   id="toast-installation"
   component="toast"
-  :source="toastSource"
-  filename="Toast.vue"
-  destination="assets/js/components/ui/toast/Toast.vue"
-  :files="vueFiles"
+  :frameworks="installationFrameworks"
   :dependencies="['tailwind-merge']"
 />
 
@@ -231,15 +261,7 @@ One command detects Vue, React, or Svelte and adds Toast:
 
 Mount `<Toast />` near the application root. Then call `toast()` wherever a notification is needed.
 
-::: code-group
-
-<<< ../snippets/toast/usage.vue [Vue]
-
-<<< ../snippets/toast/usage.jsx [React]
-
-<<< ../snippets/toast/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#toast-source) for your framework.
 
 ## Notification stacks
 
@@ -334,7 +356,7 @@ toast.dismiss(id)
 toast.clear()
 ```
 
-`createToast({ duration, max })` creates an independent toast instance for tests or embedded surfaces. The exported `toast` remains the zero-configuration application default.
+`createToast({ duration, max })` creates an independent toast instance for an embedded or isolated surface. The exported `toast` remains the zero-configuration application default.
 
 ### Toast props
 

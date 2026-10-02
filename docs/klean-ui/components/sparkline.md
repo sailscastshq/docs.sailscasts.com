@@ -20,11 +20,38 @@ const cpu = [
   { label: '12:20', value: 31 },
   { label: '12:25', value: 42 }
 ]
+
+import reactInstallSparklinejsx from '../sources/sparkline/Sparkline.jsx?raw'
+import svelteInstallSparklinesvelte from '../sources/sparkline/Sparkline.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Sparkline.vue', destination: 'assets/js/components/ui/sparkline/Sparkline.vue', source: sparklineSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Sparkline.jsx', destination: 'assets/js/components/ui/sparkline/Sparkline.jsx', source: reactInstallSparklinejsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Sparkline.svelte', destination: 'assets/js/components/ui/sparkline/Sparkline.svelte', source: svelteInstallSparklinesvelte },
+    ]
+  },
+]
 </script>
 
 # Sparkline
 
-Sparkline is the small trend that sits beside an exact value. The number remains the truth; the line adds quick direction and shape without turning a compact status row into a chart dashboard.
+Show a compact trend beside an exact value. The line adds direction and shape while the visible number provides the detail.
 
 <KleanPreview id="sparkline-source" :source="sparklineSource" filename="Sparkline.vue">
   <template #preview>
@@ -35,6 +62,19 @@ Sparkline is the small trend that sits beside an exact value. The number remains
         <KleanSparkline :data="cpu" class="mb-1 h-7 w-32 text-emerald-600 dark:text-emerald-400" />
       </p>
     </section>
+  </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/sparkline/usage.vue [Vue]
+
+<<< ../snippets/sparkline/usage.jsx [React]
+
+<<< ../snippets/sparkline/usage.svelte [Svelte]
+
+:::
+
   </template>
   <template #source>
 
@@ -50,10 +90,7 @@ One command detects Vue, React, or Svelte and copies the matching one-file compo
 <KleanInstallation
   id="sparkline-installation"
   component="sparkline"
-  :source="sparklineSource"
-  filename="Sparkline.vue"
-  destination="assets/js/components/ui/sparkline/Sparkline.vue"
-  :dependencies="['tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## When to use
@@ -64,15 +101,7 @@ Use [Line Chart](/klean-ui/components/line-chart) when the trend deserves its ow
 
 ## Usage
 
-::: code-group
-
-<<< ../snippets/sparkline/usage.vue [Vue]
-
-<<< ../snippets/sparkline/usage.jsx [React]
-
-<<< ../snippets/sparkline/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#sparkline-source) for your framework.
 
 ## API
 

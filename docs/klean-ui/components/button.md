@@ -46,7 +46,7 @@ const buttonFrameworks = [
 
 # Button
 
-Button is a native-first action primitive. It owns truthful element selection, safe button type, disabled semantics, attribute forwarding, a stable `data-slot`, and conflict-aware class composition. Your application owns loading state, navigation decisions, business language, and the visual recipe.
+Use Button for actions and links. It renders the appropriate native element, handles disabled behavior, and lets your Tailwind classes take precedence.
 
 There are intentionally no `variant`, `size`, `color`, `tone`, `radius`, `elevated`, or `loading` props.
 
@@ -61,6 +61,19 @@ There are intentionally no `variant`, `size`, `color`, `tone`, `radius`, `elevat
     >
       Button as a link
     </KleanButton>
+  </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/button/usage.vue [Vue]
+
+<<< ../snippets/button/usage.jsx [React]
+
+<<< ../snippets/button/usage.svelte [Svelte]
+
+:::
+
   </template>
   <template #source>
 
@@ -79,23 +92,13 @@ There are intentionally no `variant`, `size`, `color`, `tone`, `radius`, `elevat
 
 ## Usage
 
-Choose the example for your framework.
-
-::: code-group
-
-<<< ../snippets/button/usage.vue [Vue]
-
-<<< ../snippets/button/usage.jsx [React]
-
-<<< ../snippets/button/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#button-source) for your framework.
 
 Visual styling stays in the framework's ordinary class API. If the same product treatment repeats, create an application-owned component such as `PrimaryButton.vue` using Button as its semantic base.
 
 ## Pending actions
 
-Button intentionally has no `loading` prop. The real request state owns `disabled` and `aria-busy`, the visible label says what is happening, and Spinner supplies a decorative mark. A product such as Slipway can pass its own animated mascot through Spinner without changing Button's API.
+Bind `disabled` and `aria-busy` to the request state, describe the work in the visible label, and add a decorative Spinner. You can pass your own loading mark to Spinner.
 
 <KleanPreview id="button-pending" :source="pendingUsage" filename="pending-button.vue">
   <template #preview>
@@ -158,7 +161,7 @@ Do not wrap a Button inside an anchor. Render Button **as** the anchor or Link.
 
 ## Product recipes
 
-Klean's neutral default stays motionless and uses tonal feedback. Hagfish deliberately adds an offset-shadow press; Slipway keeps its dense operational controls quiet. Those opinions are explicit Tailwind classes, not Klean variants.
+Add an offset shadow for an expressive action or reduce padding for a compact toolbar. These treatments use ordinary Tailwind classes.
 
 <KleanPreview id="button-product-recipes" :source="productRecipes" filename="product-buttons.vue">
   <template #preview>

@@ -13,11 +13,38 @@ import BulkActionsRecipes from '../../.vitepress/theme/components/klean/bulk-act
 import bulkActionsSource from '../../.vitepress/theme/components/klean/bulk-actions/BulkActions.vue?raw'
 
 import vueUsage from '../snippets/bulk-actions/usage.vue?raw'
+
+import reactInstallBulkActionsjsx from '../sources/bulk-actions/BulkActions.jsx?raw'
+import svelteInstallBulkActionssvelte from '../sources/bulk-actions/BulkActions.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'BulkActions.vue', destination: 'assets/js/components/ui/bulk-actions/BulkActions.vue', source: bulkActionsSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'BulkActions.jsx', destination: 'assets/js/components/ui/bulk-actions/BulkActions.jsx', source: reactInstallBulkActionsjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'BulkActions.svelte', destination: 'assets/js/components/ui/bulk-actions/BulkActions.svelte', source: svelteInstallBulkActionssvelte },
+    ]
+  },
+]
 </script>
 
 # Bulk Actions
 
-Bulk Actions gives a selected set of application records one clear action region. It announces the current count, provides a default way to clear selection, and leaves every real destination and command in caller markup.
+Give selected records a shared set of actions. Bulk Actions announces the count and provides a way to clear selection while your application supplies the buttons and links.
 
 It accepts the count, never the selected IDs. Selection, authorization, requests, confirmation, success messages, and positioning remain application concerns. There is no action schema, visual variant, mutation client, permission callback, or toolbar state machine.
 
@@ -26,26 +53,9 @@ It accepts the count, never the selected IDs. Selection, authorization, requests
     <BulkActionsRecipes />
   </template>
   <template #caption>
-    Hagfish can keep its graphic invoice treatment while Slipway Bridge keeps its compact operational menu. Both use the same semantic contract.
+    Select records, review the count, and choose an action. Use Tailwind to suit the density of the surrounding table.
   </template>
-</KleanPreview>
-
-## Installation
-
-The command detects Vue, React, or Svelte and copies the matching source into the conventional UI directory.
-
-<KleanInstallation
-  id="bulk-actions-installation"
-  component="bulk-actions"
-  :source="bulkActionsSource"
-  filename="BulkActions.vue"
-  destination="assets/js/components/ui/bulk-actions/BulkActions.vue"
-  :dependencies="['tailwind-merge']"
-/>
-
-## Usage
-
-Pass only the number selected. Keep the selected IDs where the table or page already owns them, and write real Links and buttons inside the action region.
+  <template #usage>
 
 ::: code-group
 
@@ -56,6 +66,25 @@ Pass only the number selected. Keep the selected IDs where the table or page alr
 <<< ../snippets/bulk-actions/usage.svelte [Svelte]
 
 :::
+
+  </template>
+</KleanPreview>
+
+## Installation
+
+The command detects Vue, React, or Svelte and copies the matching source into the conventional UI directory.
+
+<KleanInstallation
+  id="bulk-actions-installation"
+  component="bulk-actions"
+  :frameworks="installationFrameworks"
+/>
+
+## Usage
+
+Pass only the number selected. Keep the selected IDs where the table or page already owns them, and write real Links and buttons inside the action region.
+
+Copy the [example above](#bulk-actions-products) for your framework.
 
 ## API
 

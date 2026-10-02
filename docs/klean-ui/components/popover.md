@@ -18,11 +18,38 @@ import observedSource from '../snippets/popover/observed.vue?raw'
 import productSource from '../snippets/popover/products.vue?raw'
 
 const observedOpen = ref(false)
+
+import reactInstallPopoverjsx from '../sources/popover/Popover.jsx?raw'
+import svelteInstallPopoversvelte from '../sources/popover/Popover.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["@floating-ui/dom", "tailwind-merge"],
+    files: [
+      { filename: 'Popover.vue', destination: 'assets/js/components/ui/popover/Popover.vue', source: popoverSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["@floating-ui/dom", "tailwind-merge"],
+    files: [
+      { filename: 'Popover.jsx', destination: 'assets/js/components/ui/popover/Popover.jsx', source: reactInstallPopoverjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["@floating-ui/dom", "tailwind-merge"],
+    files: [
+      { filename: 'Popover.svelte', destination: 'assets/js/components/ui/popover/Popover.svelte', source: svelteInstallPopoversvelte },
+    ]
+  },
+]
 </script>
 
 # Popover
 
-Popover is Klean UI's non-modal floating surface. The browser owns top-layer display, the native `popovertarget` relationship, light dismissal, and Escape behavior. Klean fills the remaining gaps: collision-aware placement, an older-browser fallback, reliable focus return, and framework-native observable state.
+Show a non-modal panel beside a button. Popover uses the native `popovertarget` relationship and handles viewport collision, light dismissal, Escape, focus return, and an older-browser fallback.
 
 The application owns the truthful content and every visual decision. There is no `PopoverTrigger`, `asChild`, `triggerClass`, visual variant, provider, or theme object.
 
@@ -61,6 +88,19 @@ The application owns the truthful content and every visual decision. There is no
       </section>
     </KleanPopover>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/popover/usage.vue [Vue]
+
+<<< ../snippets/popover/usage.jsx [React]
+
+<<< ../snippets/popover/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/popover/Popover.vue
@@ -75,25 +115,14 @@ Run the same command in Vue, React, or Svelte. Klean detects the framework and c
 <KleanInstallation
   id="popover-installation"
   component="popover"
-  :source="popoverSource"
-  filename="Popover.vue"
-  destination="assets/js/components/ui/popover/Popover.vue"
-  :dependencies="['@floating-ui/dom', 'tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 `@floating-ui/dom` performs geometry only: logical placement, collision flipping, viewport shifting, and position updates. It is not a component runtime or styling system.
 
 ## Usage
 
-::: code-group
-
-<<< ../snippets/popover/usage.vue [Vue]
-
-<<< ../snippets/popover/usage.jsx [React]
-
-<<< ../snippets/popover/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#popover-source) for your framework.
 
 `popovertarget` and `id` are native HTML. A native button works too:
 
@@ -111,7 +140,7 @@ Use a real button because opening interface content is an action. An anchor rema
 | `placement`            | `bottom-start` | Preferred logical placement. It may flip or shift to remain visible.                     |
 | `offset`               | `8`            | Pixel distance between the invoker and surface.                                          |
 | framework open binding | uncontrolled   | Observe or control visibility only when application behavior genuinely needs it.         |
-| `defaultOpen`          | `false`        | Initial uncontrolled state, useful for composition and testing.                          |
+| `defaultOpen`          | `false`        | Initial visibility when open state is uncontrolled.                                      |
 | `class` / `className`  | —              | Ordinary Tailwind classes merged last on the surface.                                    |
 | default content        | —              | Ordinary semantic application markup with framework-native access to `open` and `close`. |
 
@@ -196,7 +225,7 @@ Do not add `role="menu"` merely because a Popover contains several links or butt
 
 ## Product recipes
 
-Hagfish's share surface and Slipway's operational filters need the same interaction behavior but intentionally different visual language. Their Tailwind stays visible at the call site.
+A share panel and a filter panel can use the same interaction behavior with different spacing, borders, and colors. Style each at the call site.
 
 <KleanPreview id="popover-products" :source="productSource" filename="product-popovers.vue">
   <template #preview>

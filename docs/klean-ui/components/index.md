@@ -9,200 +9,190 @@ outline: [2, 3]
 
 Klean components provide semantic markup, accessible behavior, durable interaction, and neutral defaults. Install the framework-native source, then style it with ordinary Tailwind.
 
-Components do not share a visual variant API. Each page shows the behavioral contract, live preview, exact source, installation command, semantic recipes, and accessibility requirements.
+Each page includes a working example, Vue, React, and Svelte usage, installation steps, and accessibility guidance.
 
 ## Available components
 
 ### [Alert](/klean-ui/components/alert)
 
-A shallow notice surface with silent defaults, explicit announcement semantics, native headings and lists, real actions, and caller-owned Tailwind styling.
+Contextual notices with explicit announcement semantics.
 
 ### [Avatar](/klean-ui/components/avatar)
 
-One resilient identity image with an accessible fallback, explicit informative or decorative naming, browser-native image behavior, and caller-owned Tailwind styling.
+Identity images with resilient fallbacks.
 
 ### [Badge](/klean-ui/components/badge)
 
-One static inline metadata span for visible labels, counts, and compact statuses, with caller-owned Tailwind and truthful notification composition.
+Compact labels, counts, and status.
 
 ### [Button](/klean-ui/components/button)
 
-A native-first action primitive that can render a truthful button, anchor, or Boring Stack Link. It handles safe type defaults, disabled semantics, attribute forwarding, and caller-owned Tailwind classes.
+Actions and links with native semantics.
 
 ### [Icons](/klean-ui/components/icons)
 
-Original source-owned SVG marks on one calm 24px grid, with exact Vue, React, and Svelte components, native attribute forwarding, and caller-owned Tailwind styling.
+Source-owned SVG icons on a calm 24px grid.
 
 ### [Card](/klean-ui/components/card)
 
-One shallow semantic surface with native application content, truthful whole-card links or actions, explicit multiple-action composition, and caller-owned Tailwind styling.
+A simple surface for related content.
 
 ### [Input](/klean-ui/components/input)
 
-A styled native input that forwards native attributes and framework-native value binding. Labels, help, errors, IDs, validation, and layout remain visible application markup.
+Native inputs with framework-native binding.
+
+### [Tags Input](/klean-ui/components/tags-input)
+
+Add and remove a collection of values.
 
 ### [Textarea](/klean-ui/components/textarea)
 
-A styled native textarea whose durable presentation grows from its current value and responsive width. Caller Tailwind can take ownership of height and resizing without a component prop.
+Multiline text that grows with its content.
 
 ### [RichText](/klean-ui/components/rich-text)
 
-One authoring field for formatted HTML or Markdown, with a compact toolbar, editable source, native form participation, and application-owned image uploads and draft recovery.
+Edit formatted HTML or Markdown.
 
 ### [Checkbox](/klean-ui/components/checkbox)
 
-A native-first checked value for booleans, collection membership, and real indeterminate selection. Browser form and accessibility behavior stay intact while labels, groups, validation, and product styling remain visible application markup.
+Boolean, multiple, and indeterminate choices.
 
 ### [Radio](/klean-ui/components/radio)
 
-A native-first mutually exclusive choice for short visible lists. Shared names, fieldsets, legends, labels, keyboard behavior, validation, and form submission remain browser semantics while caller Tailwind owns the presentation.
+One choice from a visible set of options.
 
 ### [Switch](/klean-ui/components/switch)
 
-A native-first boolean setting that takes effect immediately, with real checked state, browser keyboard and form behavior, honest optimistic rollback recipes, and caller-owned Tailwind styling.
+A setting that takes effect immediately.
 
 ### [Separator](/klean-ui/components/separator)
 
-One native-first semantic boundary: a native horizontal rule, a correct vertical ARIA bridge, and caller-owned Tailwind for the rare places where spacing is not enough.
+A semantic boundary between sections.
 
 ### [Spinner](/klean-ui/components/spinner)
 
-A calm decorative mark for indeterminate work, with caller-owned Tailwind styling and truthful busy and status semantics left in visible application markup.
+A decorative mark for work in progress.
 
 ### [Tooltip](/klean-ui/components/tooltip)
 
-Short supplementary text for one semantic button or link, with accessible hover, focus, dismissal, collision handling, and caller-owned Tailwind styling.
+Short, supplementary context on hover or focus.
 
 ### [Breadcrumb](/klean-ui/components/breadcrumb)
 
-Durable location hierarchy with framework-native Inertia links, truthful current-page semantics, one responsive ordered trail, and caller-owned Tailwind styling.
+A clear path through your application.
 
 ### [Tabs](/klean-ui/components/tabs)
 
-Accessible peer panels with roving focus, automatic or manual activation, dynamic removal, overflow reveal, and caller-owned native buttons and Tailwind styling.
+Related panels with accessible keyboard navigation.
 
 ### [Table](/klean-ui/components/table)
 
-A native table with a neutral baseline, caller-written captions, sections, headers, rows, cells, and actions, plus an explicit boundary before stateful Data Table behavior.
+A native table with application-owned markup.
 
 ### [DataTable](/klean-ui/components/data-table)
 
-A durable server-driven table block with one native table, page-scoped selection, clean Inertia URL queries, truthful pending state, and caller-owned application markup.
+Server-driven data, selection, and query state.
 
 ### [Row Actions](/klean-ui/components/row-actions)
 
-A compact group of real row links and buttons with optional accessible overflow, truthful busy state, row-click isolation, and caller-owned Tailwind styling.
+Actions for an individual record.
 
 ### [Bulk Actions](/klean-ui/components/bulk-actions)
 
-A selected-record action region with a polite count, real caller-authored links and buttons, truthful busy state, and deliberate focus recovery.
+Actions for selected records.
 
 ### [Empty State](/klean-ui/components/empty-state)
 
-One shallow empty-result layout with caller-owned semantic headings, explicit reasons, real next actions, and ordinary Tailwind.
+Explain an empty result and offer a next step.
 
 ### [Loading State](/klean-ui/components/loading-state)
 
-One truthful pending-content status layout with caller-owned busy regions, useful copy, product marks, skeleton markup, and ordinary Tailwind.
+Communicate that content is on its way.
 
 ### [Error State](/klean-ui/components/error-state)
 
-One shallow failed-content layout with caller-owned announcement semantics, recovery controls, safe diagnostics, and ordinary Tailwind.
+Explain a failure and make recovery clear.
 
 ### [Filter Bar](/klean-ui/components/filter-bar)
 
-A native filter form with separate draft and committed state, immediate active-filter removal, pending safety, deterministic URLs, and caller-owned controls and Tailwind.
+Draft and committed filters with shareable URLs.
 
 ### [FileUpload](/klean-ui/components/file-upload)
 
-One native file-selection bridge with honest validation, previews, drop behavior, and caller-owned upload markup.
+Select files with honest validation and previews.
 
 ### [Flag](/klean-ui/components/flag)
 
-One local country flag image with decorative defaults, custom source precedence, a resilient fallback, and caller-owned Tailwind geometry.
+Local flag images with accessible country names.
 
 ### [Sparkline](/klean-ui/components/sparkline)
 
-A compact trend beside an exact value, with truthful decorative defaults, honest missing-data gaps, and caller-owned Tailwind styling.
+A compact trend beside an exact value.
 
 ### [Line Chart](/klean-ui/components/line-chart)
 
-A calm captioned trend with exact accessible values from the same data, resilient empty and missing states, and caller-owned Tailwind styling.
+A readable trend with exact accessible values.
 
 ### [Pagination](/klean-ui/components/pagination)
 
-Durable server-list navigation with framework-native Inertia links, canonical page URLs, truthful edges, compact mobile output, and application-owned query state.
+Shareable navigation through server-rendered results.
 
 ### [Popover](/klean-ui/components/popover)
 
-A native-first non-modal floating surface with light dismissal, focus return, collision-aware positioning, and ordinary semantic content. A real button invokes it through the browser's `popovertarget` relationship.
+Non-modal content anchored to a trigger.
 
 ### [Menu](/klean-ui/components/menu)
 
-An accessible list of truthful button actions and link destinations built on Klean Popover. It adds roving focus, Arrow keys, Home/End, typeahead, disabled-item behavior, selection, and durable focus return while caller Tailwind owns the product treatment.
+Keyboard-friendly actions and destinations.
 
 ### [Select](/klean-ui/components/select)
 
-A one-component fixed-list value picker with typed values, grouped and disabled options, full keyboard behavior, ordinary form participation, and caller-owned Tailwind. Editable search remains a separate Combobox contract.
+Choose one value from a fixed list.
 
 ### [Combobox](/klean-ui/components/combobox)
 
-An editable search-and-choose input for long or remotely loaded lists, with typed values, local filtering, stable loading and error states, full keyboard behavior, and application-owned request policy.
+Search and choose from a long list.
 
 ### [Command](/klean-ui/components/command)
 
-A pragmatic searchable composition for application actions and destinations, with stable input focus, active-descendant keyboard behavior, explicit keywords, nested-flow seams, and application-owned routes and work.
+Searchable actions and destinations.
 
 ### [Dialog](/klean-ui/components/dialog)
 
-A native modal surface with platform focus containment, inert background behavior, native commands and dialog forms, durable dismissal policy, and application-owned semantic content.
+Focused tasks in a native modal.
 
 ### [Sheet](/klean-ui/components/sheet)
 
-A native off-canvas dialog for mobile navigation, comments, inspectors, and focused edge workflows, with caller-owned placement, semantic content, and Tailwind styling.
+An off-canvas dialog for focused workflows.
 
 ### [Sidebar](/klean-ui/components/sidebar)
 
-A durable native desktop aside with remembered visibility, honest closed-state semantics, and application-owned links, navigation, and Tailwind styling.
+A remembered home for application navigation.
 
 ### [Calendar](/klean-ui/components/calendar)
 
-An always-visible, locale-aware date-only surface with complete keyboard navigation, caller-owned availability, and stable `YYYY-MM-DD` values.
+An accessible, locale-aware date-only calendar.
 
 ### [Date Picker](/klean-ui/components/date-picker)
 
-An editable date-only form field composed with Calendar and native-first Popover. Use ordinary `min`, `max`, and availability rules for product constraints.
+Type or pick a single date.
 
 ### [Date Range Picker](/klean-ui/components/date-range-picker)
 
-One related start-and-end decision with inclusive date boundaries, native form names, and a contiguous Calendar selection.
+Choose a related start and end date.
 
 ### [Schedule Picker](/klean-ui/components/schedule-picker)
 
-Choose a date and time together, with natural input, a visible timezone, and localized hour and minute controls. Schedule future work by default, or allow past dates for record editing.
+Choose a date and time in a visible timezone.
 
 ### [Toast](/klean-ui/components/toast)
 
-Accessible notifications with semantic actions, long-running updates, reduced motion, and caller-owned Tailwind.
+Notifications with actions and truthful updates.
 
 ### [Slide](/klean-ui/components/slide)
 
-A native-button confirmation control with an optional pointer slide, truthful pending state, resilient cancellation, RTL geometry, and caller-owned progress styling.
+Confirm an action with an optional pointer slide.
 
 ### [Slider](/klean-ui/components/slider)
 
-Choose a numeric value or a two-handle range, with steps, meaningful marks, accessible endpoint labels, and caller-owned styling.
-
-## What belongs in the catalog
-
-A component graduates when it has:
-
-- the same semantic and accessibility outcomes in Vue, React, and Svelte;
-- framework-native, readable source;
-- keyboard and focus proof where relevant;
-- source-application evidence from Hagfish, Slipway, or another Boring Stack app;
-- safe installation, re-installation, and dependency metadata;
-- a neutral default that does not fight product styling;
-- documented Durable UI behavior where state or interaction must recover.
-
-The catalog grows by proving contracts, not by maximizing component count.
+Choose a number or a two-handle range.
