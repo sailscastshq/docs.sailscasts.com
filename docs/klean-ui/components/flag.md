@@ -6,7 +6,6 @@ outline: [2, 3]
 ---
 
 <script setup>
-import CopyCode from '../../.vitepress/theme/components/CopyCode.vue'
 import KleanInstallation from '../../.vitepress/theme/components/KleanInstallation.vue'
 import KleanPreview from '../../.vitepress/theme/components/KleanPreview.vue'
 import Flag from '../../.vitepress/theme/components/klean/flag/Flag.vue'
@@ -25,9 +24,7 @@ const frameworks = [
 
 # Flag
 
-Flag displays one chosen region as a native image. A case-insensitive two-letter `country` resolves to local flag art; a nonempty `src` overrides that registry. When `alt` is omitted, the image receives the registry's stable English country name. An explicitly supplied string always wins, including `alt=""` for decoration. Missing, invalid, or failed images reveal application-owned fallback content.
-
-That is the behavioral contract. Width, shape, borders, color, and country-picker layout remain ordinary Tailwind and application markup. Country is explicit application data, never inferred ethnicity or nationality.
+Display a country flag, style it with Tailwind, and add fallback content for missing images.
 
 <KleanPreview id="flag-source" :source="vueSource" filename="Flag.vue">
   <template #preview>
@@ -37,6 +34,19 @@ That is the behavioral contract. Width, shape, borders, color, and country-picke
       <Flag country="GH" class="size-12 aspect-square rounded-full" />
       <Flag country="ZZ" alt="Country unavailable" class="w-12 text-gray-500 dark:text-gray-400">?</Flag>
     </div>
+  </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/flag/usage.vue [Vue]
+
+<<< ../snippets/flag/usage.jsx [React]
+
+<<< ../snippets/flag/usage.svelte [Svelte]
+
+:::
+
   </template>
   <template #source>
 
@@ -53,15 +63,7 @@ For manual installation, copy the matching framework source and [flags.js](/klea
 
 ## Usage
 
-::: code-group
-
-<<< ../snippets/flag/usage.vue [Vue]
-
-<<< ../snippets/flag/usage.jsx [React]
-
-<<< ../snippets/flag/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#flag-source) for your framework.
 
 ## API
 
@@ -121,9 +123,7 @@ Flag supplies an image, not a country-select widget. Use [Select](/klean-ui/comp
   <template #preview><FlagExamples /></template>
 </KleanPreview>
 
-<CopyCode :code="selectSource" label="CountryPicker.vue" />
-
-The example deliberately offers four application-selected regions. A real product can derive localized names with `Intl.DisplayNames`, sort with `Intl.Collator`, and choose its own eligible list. A selected region must not be used to infer ethnicity, citizenship, or founder nationality.
+The example deliberately offers four application-selected regions. A real product can derive localized names with `Intl.DisplayNames`, sort with `Intl.Collator`, and choose its own eligible list.
 
 ## Stable names and localization
 

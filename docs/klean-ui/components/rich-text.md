@@ -82,6 +82,19 @@ or choose Markdown for a Markdown-backed workflow.
     </form>
   </template>
   <template #caption>Try formatting a sentence, adding a link, or switching to Source. The form keeps one value.</template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/rich-text/usage.vue [Vue]
+
+<<< ../snippets/rich-text/usage.jsx [React]
+
+<<< ../snippets/rich-text/usage.svelte [Svelte]
+
+:::
+
+  </template>
 </KleanPreview>
 
 ## When to use
@@ -102,15 +115,7 @@ manual tab includes the editor, its helper, Popover, and the two toolbar icons.
 
 ## Usage
 
-::: code-group
-
-<<< ../snippets/rich-text/usage.vue [Vue]
-
-<<< ../snippets/rich-text/usage.jsx [React]
-
-<<< ../snippets/rich-text/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#rich-text-proposal) for your framework.
 
 Keep the label, help text, error message, and surrounding layout in your form.
 The bound value is a string—not an editor instance or a document object.

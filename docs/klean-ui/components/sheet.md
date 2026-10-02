@@ -20,17 +20,38 @@ import bottomCommentsSource from '../snippets/sheet/bottom-comments.vue?raw'
 
 const open = ref(false)
 
-const vueFiles = [
+
+
+import reactInstallDialogjsx from '../sources/dialog/Dialog.jsx?raw'
+import reactInstallSheetjsx from '../sources/sheet/Sheet.jsx?raw'
+import svelteInstallDialogsvelte from '../sources/dialog/Dialog.svelte?raw'
+import svelteInstallSheetsvelte from '../sources/sheet/Sheet.svelte?raw'
+
+const installationFrameworks = [
   {
-    filename: 'Dialog.vue',
-    destination: 'assets/js/components/ui/dialog/Dialog.vue',
-    source: dialogSource
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Dialog.vue', destination: 'assets/js/components/ui/dialog/Dialog.vue', source: dialogSource },
+      { filename: 'Sheet.vue', destination: 'assets/js/components/ui/sheet/Sheet.vue', source: sheetSource },
+    ]
   },
   {
-    filename: 'Sheet.vue',
-    destination: 'assets/js/components/ui/sheet/Sheet.vue',
-    source: sheetSource
-  }
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Dialog.jsx', destination: 'assets/js/components/ui/dialog/Dialog.jsx', source: reactInstallDialogjsx },
+      { filename: 'Sheet.jsx', destination: 'assets/js/components/ui/sheet/Sheet.jsx', source: reactInstallSheetjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Dialog.svelte', destination: 'assets/js/components/ui/dialog/Dialog.svelte', source: svelteInstallDialogsvelte },
+      { filename: 'Sheet.svelte', destination: 'assets/js/components/ui/sheet/Sheet.svelte', source: svelteInstallSheetsvelte },
+    ]
+  },
 ]
 </script>
 
@@ -94,6 +115,19 @@ variant API.
       </KleanSheet>
     </div>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/sheet/usage.vue [Vue]
+
+<<< ../snippets/sheet/usage.jsx [React]
+
+<<< ../snippets/sheet/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/sheet/Sheet.vue
@@ -109,11 +143,7 @@ framework's Sheet source into the conventional component directory:
 <KleanInstallation
   id="sheet-installation"
   component="sheet"
-  :source="sheetSource"
-  filename="Sheet.vue"
-  destination="assets/js/components/ui/sheet/Sheet.vue"
-  :files="vueFiles"
-  :dependencies="['tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## When to use
@@ -131,15 +161,7 @@ non-modal surface. A persistent desktop navigation rail is ordinary
 
 ## Usage
 
-::: code-group
-
-<<< ../snippets/sheet/usage.vue [Vue]
-
-<<< ../snippets/sheet/usage.jsx [React]
-
-<<< ../snippets/sheet/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#sheet-source) for your framework.
 
 The application supplies the heading, description, scroll region, actions,
 and semantic content. Sheet supplies only the native modal and off-canvas
@@ -193,9 +215,9 @@ The complete transform must cover both the closed and `starting:open` states so
 entry and exit originate from the same edge. Caller classes win through
 `tailwind-merge`.
 
-## Slipway mobile navigation
+## Mobile navigation {#slipway-mobile-navigation}
 
-Slipway's desktop rail stays in normal document layout. Only its narrow-screen
+Keep a desktop rail in normal document layout. Only its narrow-screen
 presentation is a Sheet. Both presentations can render the same application-owned
 links, permissions, active state, and team context.
 
@@ -231,10 +253,9 @@ links, permissions, active state, and team context.
   </template>
 </KleanPreview>
 
-## Hagfish mobile comments
+## Mobile comments {#hagfish-mobile-comments}
 
-Hagfish uses the same contract as a bottom Sheet. The invoice thread, draft,
-submission, and comment count remain ordinary Hagfish markup and state.
+Use a bottom Sheet for an invoice conversation. Keep the thread, draft, submission, and comment count in application markup and state.
 
 <KleanPreview id="sheet-hagfish-comments" :source="bottomCommentsSource" filename="InvoiceComments.vue">
   <template #preview>
@@ -290,7 +311,7 @@ treatments belong in a local wrapper or copied source, not a variant prop.
 - [Popover](/klean-ui/components/popover) — an anchored non-modal surface.
 - [Menu](/klean-ui/components/menu) — compact actions or destinations.
 - [Button](/klean-ui/components/button) — native commands for opening and closing.
-- Sidebar — persistent application navigation; its future mobile recipe can compose Sheet.
+- [Sidebar](/klean-ui/components/sidebar) — persistent navigation for wider layouts; use Sheet for a modal mobile drawer.
 
 ## Complete framework source
 

@@ -42,11 +42,38 @@ const checklist = [
 function runChecklistAction(label) {
   lastChecklistAction.value = `${label} selected`
 }
+
+import reactInstallAlertjsx from '../sources/alert/Alert.jsx?raw'
+import svelteInstallAlertsvelte from '../sources/alert/Alert.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Alert.vue', destination: 'assets/js/components/ui/alert/Alert.vue', source: alertSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Alert.jsx', destination: 'assets/js/components/ui/alert/Alert.jsx', source: reactInstallAlertjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Alert.svelte', destination: 'assets/js/components/ui/alert/Alert.svelte', source: svelteInstallAlertsvelte },
+    ]
+  },
+]
 </script>
 
 # Alert
 
-Alert is one shallow surface for visible guidance, warnings, operation results, and recoverable failures. Put native headings, paragraphs, lists, links, and buttons inside it, then choose announcement semantics from when the message appears.
+Show guidance, warnings, operation results, and recoverable failures in an Alert. Add your own headings, text, links, and buttons, then choose whether the message needs an announcement.
 
 Klean does not infer urgency from color or from the component name. Alert renders no role and no live region by default.
 
@@ -58,6 +85,19 @@ Klean does not infer urgency from color or from the component name. Alert render
         You can leave this page and return whenever you are ready.
       </p>
     </KleanAlert>
+  </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/alert/usage.vue [Vue]
+
+<<< ../snippets/alert/usage.jsx [React]
+
+<<< ../snippets/alert/usage.svelte [Svelte]
+
+:::
+
   </template>
   <template #source>
 
@@ -73,25 +113,14 @@ One command detects Vue, React, or Svelte and writes the matching source into th
 <KleanInstallation
   id="alert-installation"
   component="alert"
-  :source="alertSource"
-  filename="Alert.vue"
-  destination="assets/js/components/ui/alert/Alert.vue"
-  :dependencies="['tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## Usage
 
 The application writes the real content and opts into urgent announcement only when a new failure needs immediate attention.
 
-::: code-group
-
-<<< ../snippets/alert/usage.vue [Vue]
-
-<<< ../snippets/alert/usage.jsx [React]
-
-<<< ../snippets/alert/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#alert-source) for your framework.
 
 ## API
 
@@ -199,7 +228,7 @@ The list preserves item count and navigation for screen-reader users. Visible wo
 
 ## Style products, not variants
 
-The same Alert source can serve Hagfish's editorial visual language and Slipway's operational density without naming either treatment in the API.
+Use Tailwind to make an alert expressive or compact while keeping its content and announcement behavior appropriate to the message.
 
 <KleanPreview id="alert-products" :source="vueUsage" filename="AlertRecipes.vue">
   <template #preview>

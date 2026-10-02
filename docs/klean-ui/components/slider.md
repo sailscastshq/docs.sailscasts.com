@@ -42,26 +42,7 @@ Choose a number, a level, or the endpoints of a numeric range. Pass one number f
       </section>
     </div>
   </template>
-  <template #source>
-
-<<< ../../.vitepress/theme/components/klean/slider/Slider.vue
-
-  </template>
-</KleanPreview>
-
-## When to use
-
-Use Slider when relative adjustment is easier than typing: rollout percentages, volume, playback speed, price filters, or a small ordered set of levels. Show the current value beside its label.
-
-For an exact amount, pair it with [Input](/klean-ui/components/input), bound to the same value. For actions such as deploying a release, use [Slide](/klean-ui/components/slide), not Slider.
-
-## Installation
-
-```sh
-npx klean-ui add slider
-```
-
-## Single value
+  <template #usage>
 
 ::: code-group
 
@@ -123,6 +104,30 @@ export default function ReleaseRollout() {
 ```
 
 :::
+
+  </template>
+  <template #source>
+
+<<< ../../.vitepress/theme/components/klean/slider/Slider.vue
+
+  </template>
+</KleanPreview>
+
+## When to use
+
+Use Slider when relative adjustment is easier than typing: rollout percentages, volume, playback speed, price filters, or a small ordered set of levels. Show the current value beside its label.
+
+For an exact amount, pair it with [Input](/klean-ui/components/input), bound to the same value. For actions such as deploying a release, use [Slide](/klean-ui/components/slide), not Slider.
+
+## Installation
+
+```sh
+npx klean-ui add slider
+```
+
+## Single value
+
+Copy the [example above](#slider-preview) for your framework.
 
 ## Numeric range
 

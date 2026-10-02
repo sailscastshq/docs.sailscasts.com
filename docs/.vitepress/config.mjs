@@ -1,3 +1,5 @@
+import { componentGroups } from './kleanNavigation.mjs'
+
 export default {
   lang: 'en-US',
   title: 'Sailscasts Docs',
@@ -92,12 +94,11 @@ function nav() {
 function kleanUiGuide() {
   return [
     {
-      text: 'Getting Started',
-      collapsed: false,
+      text: 'Get started',
       items: [
         { text: 'Introduction', link: '/klean-ui/' },
-        { text: 'Launch', link: '/klean-ui/launch' },
         { text: 'Installation', link: '/klean-ui/installation' },
+        { text: 'Components', link: '/klean-ui/components/' },
         { text: 'Updating', link: '/klean-ui/updating' }
       ]
     },
@@ -110,69 +111,20 @@ function kleanUiGuide() {
         { text: 'Theming', link: '/klean-ui/theming' }
       ]
     },
-    {
-      text: 'Components',
+    ...componentGroups.map((group) => ({
+      text: group.title,
       collapsed: false,
-      items: [
-        { text: 'Overview', link: '/klean-ui/components/' },
-        { text: 'Alert', link: '/klean-ui/components/alert' },
-        { text: 'Avatar', link: '/klean-ui/components/avatar' },
-        { text: 'Badge', link: '/klean-ui/components/badge' },
-        { text: 'Button', link: '/klean-ui/components/button' },
-        { text: 'Icons', link: '/klean-ui/components/icons' },
-        { text: 'Card', link: '/klean-ui/components/card' },
-        { text: 'Input', link: '/klean-ui/components/input' },
-        { text: 'Tags Input', link: '/klean-ui/components/tags-input' },
-        { text: 'Textarea', link: '/klean-ui/components/textarea' },
-        { text: 'RichText', link: '/klean-ui/components/rich-text' },
-        { text: 'Checkbox', link: '/klean-ui/components/checkbox' },
-        { text: 'Radio', link: '/klean-ui/components/radio' },
-        { text: 'Switch', link: '/klean-ui/components/switch' },
-        { text: 'Separator', link: '/klean-ui/components/separator' },
-        { text: 'Spinner', link: '/klean-ui/components/spinner' },
-        { text: 'Tooltip', link: '/klean-ui/components/tooltip' },
-        { text: 'Breadcrumb', link: '/klean-ui/components/breadcrumb' },
-        { text: 'Tabs', link: '/klean-ui/components/tabs' },
-        { text: 'Table', link: '/klean-ui/components/table' },
-        { text: 'DataTable', link: '/klean-ui/components/data-table' },
-        { text: 'Row Actions', link: '/klean-ui/components/row-actions' },
-        { text: 'Bulk Actions', link: '/klean-ui/components/bulk-actions' },
-        { text: 'Empty State', link: '/klean-ui/components/empty-state' },
-        { text: 'Loading State', link: '/klean-ui/components/loading-state' },
-        { text: 'Error State', link: '/klean-ui/components/error-state' },
-        { text: 'Filter Bar', link: '/klean-ui/components/filter-bar' },
-        { text: 'FileUpload', link: '/klean-ui/components/file-upload' },
-        { text: 'Flag', link: '/klean-ui/components/flag' },
-        { text: 'Sparkline', link: '/klean-ui/components/sparkline' },
-        { text: 'Line Chart', link: '/klean-ui/components/line-chart' },
-        { text: 'Pagination', link: '/klean-ui/components/pagination' },
-        { text: 'Popover', link: '/klean-ui/components/popover' },
-        { text: 'Menu', link: '/klean-ui/components/menu' },
-        { text: 'Select', link: '/klean-ui/components/select' },
-        { text: 'Combobox', link: '/klean-ui/components/combobox' },
-        { text: 'Command', link: '/klean-ui/components/command' },
-        { text: 'Dialog', link: '/klean-ui/components/dialog' },
-        { text: 'Sheet', link: '/klean-ui/components/sheet' },
-        { text: 'Sidebar', link: '/klean-ui/components/sidebar' },
-        { text: 'Calendar', link: '/klean-ui/components/calendar' },
-        { text: 'Date Picker', link: '/klean-ui/components/date-picker' },
-        {
-          text: 'Date Range Picker',
-          link: '/klean-ui/components/date-range-picker'
-        },
-        {
-          text: 'Schedule Picker',
-          link: '/klean-ui/components/schedule-picker'
-        },
-        { text: 'Toast', link: '/klean-ui/components/toast' },
-        { text: 'Slide', link: '/klean-ui/components/slide' },
-        { text: 'Slider', link: '/klean-ui/components/slider' }
-      ]
-    },
+      items: group.items.map(({ name, slug }) => ({
+        text: name,
+        link: `/klean-ui/components/${slug}`
+      }))
+    })),
     {
       text: 'Reference',
-      collapsed: false,
-      items: [{ text: 'CLI', link: '/klean-ui/cli' }]
+      items: [
+        { text: 'CLI', link: '/klean-ui/cli' },
+        { text: 'Launch', link: '/klean-ui/launch' }
+      ]
     }
   ]
 }

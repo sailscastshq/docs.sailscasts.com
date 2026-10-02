@@ -16,28 +16,49 @@ import popoverSource from '../../.vitepress/theme/components/klean/popover/Popov
 
 import vueUsage from '../snippets/row-actions/usage.vue?raw'
 
-const vueFiles = [
+
+
+import reactInstallPopoverjsx from '../sources/popover/Popover.jsx?raw'
+import reactInstallMenujsx from '../sources/menu/Menu.jsx?raw'
+import reactInstallRowActionsjsx from '../sources/row-actions/RowActions.jsx?raw'
+import svelteInstallPopoversvelte from '../sources/popover/Popover.svelte?raw'
+import svelteInstallMenusvelte from '../sources/menu/Menu.svelte?raw'
+import svelteInstallRowActionssvelte from '../sources/row-actions/RowActions.svelte?raw'
+
+const installationFrameworks = [
   {
-    filename: 'Popover.vue',
-    destination: 'assets/js/components/ui/popover/Popover.vue',
-    source: popoverSource
+    id: 'vue', label: 'Vue',
+    dependencies: ["@floating-ui/dom", "tailwind-merge"],
+    files: [
+      { filename: 'Popover.vue', destination: 'assets/js/components/ui/popover/Popover.vue', source: popoverSource },
+      { filename: 'Menu.vue', destination: 'assets/js/components/ui/menu/Menu.vue', source: menuSource },
+      { filename: 'RowActions.vue', destination: 'assets/js/components/ui/row-actions/RowActions.vue', source: rowActionsSource },
+    ]
   },
   {
-    filename: 'Menu.vue',
-    destination: 'assets/js/components/ui/menu/Menu.vue',
-    source: menuSource
+    id: 'react', label: 'React',
+    dependencies: ["@floating-ui/dom", "tailwind-merge"],
+    files: [
+      { filename: 'Popover.jsx', destination: 'assets/js/components/ui/popover/Popover.jsx', source: reactInstallPopoverjsx },
+      { filename: 'Menu.jsx', destination: 'assets/js/components/ui/menu/Menu.jsx', source: reactInstallMenujsx },
+      { filename: 'RowActions.jsx', destination: 'assets/js/components/ui/row-actions/RowActions.jsx', source: reactInstallRowActionsjsx },
+    ]
   },
   {
-    filename: 'RowActions.vue',
-    destination: 'assets/js/components/ui/row-actions/RowActions.vue',
-    source: rowActionsSource
-  }
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["@floating-ui/dom", "tailwind-merge"],
+    files: [
+      { filename: 'Popover.svelte', destination: 'assets/js/components/ui/popover/Popover.svelte', source: svelteInstallPopoversvelte },
+      { filename: 'Menu.svelte', destination: 'assets/js/components/ui/menu/Menu.svelte', source: svelteInstallMenusvelte },
+      { filename: 'RowActions.svelte', destination: 'assets/js/components/ui/row-actions/RowActions.svelte', source: svelteInstallRowActionssvelte },
+    ]
+  },
 ]
 </script>
 
 # Row Actions
 
-Row Actions keeps the commands and destinations for one application record together. Frequent destinations can remain visible. Secondary actions can sit behind one compact overflow trigger. Every item is still the real anchor, Boring Stack Link, or button that the application intended.
+Keep actions for one record together. Show frequent actions directly and place secondary actions behind an overflow trigger, using real buttons and links throughout.
 
 It is one component, not a family of `RowAction`, `RowActionItem`, or `RowActionTrigger` wrappers. There is no action schema, permission callback, visual variant, mutation client, or confirmation prop. The caller writes ordinary semantic markup and styles it with Tailwind.
 
@@ -46,27 +67,9 @@ It is one component, not a family of `RowAction`, `RowActionItem`, or `RowAction
     <RowActionsRecipes />
   </template>
   <template #caption>
-    Hagfish keeps invoice actions graphic and direct. Slipway keeps service actions quiet and operational. The component contract stays the same.
+    Keep frequent actions visible and move less common choices into the overflow menu.
   </template>
-</KleanPreview>
-
-## Installation
-
-The command detects Vue, React, or Svelte, copies the matching source, and adds its Menu and Popover dependencies into the same conventional UI directory.
-
-<KleanInstallation
-  id="row-actions-installation"
-  component="row-actions"
-  :source="rowActionsSource"
-  filename="RowActions.vue"
-  destination="assets/js/components/ui/row-actions/RowActions.vue"
-  :files="vueFiles"
-  :dependencies="['tailwind-merge']"
-/>
-
-## Usage
-
-Keep the most frequent action visible when that genuinely saves work. Put secondary commands and destinations in the overflow content.
+  <template #usage>
 
 ::: code-group
 
@@ -77,6 +80,25 @@ Keep the most frequent action visible when that genuinely saves work. Put second
 <<< ../snippets/row-actions/usage.svelte [Svelte]
 
 :::
+
+  </template>
+</KleanPreview>
+
+## Installation
+
+The command detects Vue, React, or Svelte, copies the matching source, and adds its Menu and Popover dependencies into the same conventional UI directory.
+
+<KleanInstallation
+  id="row-actions-installation"
+  component="row-actions"
+  :frameworks="installationFrameworks"
+/>
+
+## Usage
+
+Keep the most frequent action visible when that genuinely saves work. Put secondary commands and destinations in the overflow content.
+
+Copy the [example above](#row-actions-products) for your framework.
 
 ## API
 

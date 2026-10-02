@@ -86,6 +86,19 @@ Klean deliberately does not supply Field, Label, description, or error component
       <KleanButton type="submit">Check form</KleanButton>
     </form>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/input/usage.vue [Vue]
+
+<<< ../snippets/input/usage.jsx [React]
+
+<<< ../snippets/input/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/input/Input.vue
@@ -106,15 +119,7 @@ Klean deliberately does not supply Field, Label, description, or error component
 
 ## Native form recipe
 
-::: code-group
-
-<<< ../snippets/input/usage.vue [Vue]
-
-<<< ../snippets/input/usage.jsx [React]
-
-<<< ../snippets/input/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#input-source) for your framework.
 
 The application owns the visible label, deterministic IDs, help and error elements, validation timing, and submitted value. Help and error nodes keep stable IDs, so `aria-describedby` never needs conditional string building. `aria-invalid="false"` is valid, and `empty:hidden` collapses an empty error. When an error appears, the existing relationship becomes useful automatically.
 

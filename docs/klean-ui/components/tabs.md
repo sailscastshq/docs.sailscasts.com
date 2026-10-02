@@ -29,13 +29,40 @@ const navigationSections = [
   { value: 'billing', label: 'Billing', href: '#billing' },
   { value: 'schedule', label: 'Schedule', href: '#schedule' }
 ]
+
+import reactInstallTabsjsx from '../sources/tabs/Tabs.jsx?raw'
+import svelteInstallTabssvelte from '../sources/tabs/Tabs.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Tabs.vue', destination: 'assets/js/components/ui/tabs/Tabs.vue', source: tabsSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Tabs.jsx', destination: 'assets/js/components/ui/tabs/Tabs.jsx', source: reactInstallTabsjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Tabs.svelte', destination: 'assets/js/components/ui/tabs/Tabs.svelte', source: svelteInstallTabssvelte },
+    ]
+  },
+]
 </script>
 
 # Tabs
 
 Tabs gives one durable contract to two things applications routinely need: buttons that switch mounted peer panels, and links that navigate among related pages. The caller writes the real elements; Klean reads their semantics instead of asking for a mode, item schema, or router adapter.
 
-With `button[data-value]`, Klean supplies the missing ARIA tab contract: relationships, selected and hidden state, roving focus, Arrow keys, Home/End, disabled skipping, overflow reveal, and safe fallback when a dynamic tab disappears. With `as="nav"` and direct `a[href][data-value]` children—including a framework Link that renders an anchor—Tabs becomes the navigation landmark, preserves native navigation, and adds only active-state and styling hooks. Tailwind, routing, persistence, loading, and close policy remain application code.
+Use `button[data-value]` for panels with keyboard navigation and focus management. Use `as="nav"` with direct `a[href][data-value]` children for related pages; framework Links that render anchors work too. Your application owns styling, routing, persistence, loading, and closing tabs.
 
 <KleanPreview id="tabs-source" :source="tabsSource" filename="Tabs.vue">
   <template #preview>
@@ -75,6 +102,19 @@ With `button[data-value]`, Klean supplies the missing ARIA tab contract: relatio
       </section>
     </KleanTabs>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/tabs/usage.vue [Vue]
+
+<<< ../snippets/tabs/usage.jsx [React]
+
+<<< ../snippets/tabs/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/tabs/Tabs.vue
@@ -92,10 +132,7 @@ One command detects Vue, React, or Svelte and writes the matching framework-nati
 <KleanInstallation
   id="tabs-installation"
   component="tabs"
-  :source="tabsSource"
-  filename="Tabs.vue"
-  destination="assets/js/components/ui/tabs/Tabs.vue"
-  :dependencies="['tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## Usage
@@ -107,15 +144,7 @@ Klean infers the contract from the real elements you provide:
 
 Keep a group all buttons or all links. A mixed group is ambiguous, so Klean deliberately leaves it unenhanced.
 
-::: code-group
-
-<<< ../snippets/tabs/usage.vue [Vue]
-
-<<< ../snippets/tabs/usage.jsx [React]
-
-<<< ../snippets/tabs/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#tabs-source) for your framework.
 
 The binding syntax changes, but the visible HTML and `data-value` relationship stay the same.
 
@@ -303,7 +332,7 @@ The same state selector styles navigation without a second styling API:
 
 ## Dynamic workspace tabs
 
-Slipway workspaces add, rename, reorder, overflow, and close result tabs. Keep a close action adjacent to its tab—never nest a button inside another button:
+A workspace may add, rename, reorder, overflow, and close result tabs. Keep a close action adjacent to its tab—never nest a button inside another button:
 
 ```vue
 <Tabs v-model="active" class="relative" aria-label="Open results">

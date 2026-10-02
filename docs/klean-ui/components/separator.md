@@ -14,6 +14,33 @@ import SeparatorRecipes from '../../.vitepress/theme/components/klean/separator/
 import separatorSource from '../../.vitepress/theme/components/klean/separator/Separator.vue?raw'
 
 import verticalSource from '../snippets/separator/vertical.vue?raw'
+
+import reactInstallSeparatorjsx from '../sources/separator/Separator.jsx?raw'
+import svelteInstallSeparatorsvelte from '../sources/separator/Separator.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Separator.vue', destination: 'assets/js/components/ui/separator/Separator.vue', source: separatorSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Separator.jsx', destination: 'assets/js/components/ui/separator/Separator.jsx', source: reactInstallSeparatorjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Separator.svelte', destination: 'assets/js/components/ui/separator/Separator.svelte', source: svelteInstallSeparatorsvelte },
+    ]
+  },
+]
 </script>
 
 # Separator
@@ -36,6 +63,19 @@ Use ordinary Tailwind for length, thickness, color, spacing, opacity, and respon
       </section>
     </div>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/separator/usage.vue [Vue]
+
+<<< ../snippets/separator/usage.jsx [React]
+
+<<< ../snippets/separator/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/separator/Separator.vue
@@ -50,25 +90,14 @@ One command detects Vue, React, or Svelte and writes the matching one-file sourc
 <KleanInstallation
   id="separator-installation"
   component="separator"
-  :source="separatorSource"
-  filename="Separator.vue"
-  destination="assets/js/components/ui/separator/Separator.vue"
-  :dependencies="['tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## Usage
 
 Use Separator between adjacent regions only when the boundary carries meaning that spacing alone does not communicate.
 
-::: code-group
-
-<<< ../snippets/separator/usage.vue [Vue]
-
-<<< ../snippets/separator/usage.jsx [React]
-
-<<< ../snippets/separator/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#separator-source) for your framework.
 
 ## API
 
@@ -145,9 +174,9 @@ The neutral baseline is one monochrome pixel. Caller classes merge after it and 
 
 Repeated application treatments can become an application-owned wrapper or shared class recipe. They do not become Klean variants.
 
-## Hagfish and Slipway recipes
+## Layout recipes {#hagfish-and-slipway-recipes}
 
-Hagfish can replace its PrimeVue-backed Divider with native Klean source and preserve its expressive contrast. Slipway can keep compact command and operational boundaries. Most existing borders in both applications should remain ordinary Tailwind markup.
+Use Separator between distinct regions in an account panel or command surface. Keep borders on cards, fields, and rows as ordinary Tailwind classes.
 
 <KleanPreview id="separator-products" :source="separatorSource" filename="Separator.vue">
   <template #preview>
@@ -158,7 +187,7 @@ Hagfish can replace its PrimeVue-backed Divider with native Klean source and pre
   </template>
 </KleanPreview>
 
-The component is not a migration target for every `border-t`, `border-b`, `divide-y`, table row, field underline, card edge, or Tabs indicator. Those lines belong to the element whose shape they describe.
+Use `border-t`, `border-b`, or `divide-y` for row boundaries, field underlines, card edges, and tab indicators. Those lines describe the elements they belong to.
 
 ## Accessibility
 

@@ -22,6 +22,33 @@ const rejection = ref('')
 function validateTag(tag) {
   return tag.length <= 24 || 'Keep tags to 24 characters or fewer.'
 }
+
+import reactInstallTagsInputjsx from '../sources/tags-input/TagsInput.jsx?raw'
+import svelteInstallTagsInputsvelte from '../sources/tags-input/TagsInput.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'TagsInput.vue', destination: 'assets/js/components/ui/tags-input/TagsInput.vue', source: tagsInputSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'TagsInput.jsx', destination: 'assets/js/components/ui/tags-input/TagsInput.jsx', source: reactInstallTagsInputjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'TagsInput.svelte', destination: 'assets/js/components/ui/tags-input/TagsInput.svelte', source: svelteInstallTagsInputsvelte },
+    ]
+  },
+]
 </script>
 
 # Tags Input
@@ -62,6 +89,19 @@ remove, or input subcomponents.
       </output>
     </div>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/tags-input/usage.vue [Vue]
+
+<<< ../snippets/tags-input/usage.jsx [React]
+
+<<< ../snippets/tags-input/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/tags-input/TagsInput.vue
@@ -80,23 +120,12 @@ source into the application:
 <KleanInstallation
   id="tags-input-installation"
   component="tags-input"
-  :source="tagsInputSource"
-  filename="TagsInput.vue"
-  destination="assets/js/components/ui/tags-input/TagsInput.vue"
-  :dependencies="['tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## Usage
 
-::: code-group
-
-<<< ../snippets/tags-input/usage.vue [Vue]
-
-<<< ../snippets/tags-input/usage.jsx [React]
-
-<<< ../snippets/tags-input/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#tags-input-source) for your framework.
 
 The syntax changes with the framework; the committed tags, pending draft,
 native form, and interaction contract do not.

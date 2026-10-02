@@ -54,18 +54,39 @@ const commands = [
   }
 ]
 
-const vueFiles = [
+
+
+import reactInstallCommandjsx from '../sources/command/Command.jsx?raw'
+import svelteInstallCommandsvelte from '../sources/command/Command.svelte?raw'
+
+const installationFrameworks = [
   {
-    filename: 'Command.vue',
-    destination: 'assets/js/components/ui/command/Command.vue',
-    source: commandSource
-  }
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Command.vue', destination: 'assets/js/components/ui/command/Command.vue', source: commandSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Command.jsx', destination: 'assets/js/components/ui/command/Command.jsx', source: reactInstallCommandjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Command.svelte', destination: 'assets/js/components/ui/command/Command.svelte', source: svelteInstallCommandsvelte },
+    ]
+  },
 ]
 </script>
 
 # Command
 
-Command turns ordinary application records into one searchable, keyboard-complete command surface. Give it `commands`; it renders the real input, groups and options, keeps focus stable, filters titles and keywords, and gives the selected record back unchanged.
+Let people search and run application commands with the keyboard. Pass a list of records; Command filters titles and keywords, manages focus, and returns the selected record unchanged.
 
 There is one component to install and use. Routes, icons, permissions, async work, nested flows, and product-specific fields remain on your records and in your application code.
 
@@ -103,6 +124,19 @@ There is one component to install and use. Routes, icons, permissions, async wor
       <output class="text-sm text-gray-500 dark:text-gray-400">Selected: {{ selected }}</output>
     </div>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/command/usage.vue [Vue]
+
+<<< ../snippets/command/usage.jsx [React]
+
+<<< ../snippets/command/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/command/Command.vue
@@ -120,24 +154,12 @@ One command detects Vue, React, or Svelte and copies the matching framework-nati
 <KleanInstallation
   id="command-installation"
   component="command"
-  :source="commandSource"
-  filename="Command.vue"
-  destination="assets/js/components/ui/command/Command.vue"
-  :files="vueFiles"
-  :dependencies="['tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## Usage
 
-::: code-group
-
-<<< ../snippets/command/usage.vue [Vue]
-
-<<< ../snippets/command/usage.jsx [React]
-
-<<< ../snippets/command/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#command-source) for your framework.
 
 The framework binding changes; the command record and selection outcome do not.
 

@@ -13,11 +13,38 @@ import ErrorStateRecipes from '../../.vitepress/theme/components/klean/error-sta
 import errorStateSource from '../../.vitepress/theme/components/klean/error-state/ErrorState.vue?raw'
 
 import vueUsage from '../snippets/error-state/usage.vue?raw'
+
+import reactInstallErrorStatejsx from '../sources/error-state/ErrorState.jsx?raw'
+import svelteInstallErrorStatesvelte from '../sources/error-state/ErrorState.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'ErrorState.vue', destination: 'assets/js/components/ui/error-state/ErrorState.vue', source: errorStateSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'ErrorState.jsx', destination: 'assets/js/components/ui/error-state/ErrorState.jsx', source: reactInstallErrorStatejsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'ErrorState.svelte', destination: 'assets/js/components/ui/error-state/ErrorState.svelte', source: svelteInstallErrorStatesvelte },
+    ]
+  },
+]
 </script>
 
 # Error State
 
-Error State gives a failed page or content region a calm layout for a truthful explanation and a safe way forward. The application writes the heading, copy, recovery controls, announcement semantics, focus behavior, and ordinary Tailwind.
+Explain a failed page or content region and offer a safe way forward. Add your own recovery controls, choose appropriate announcement semantics, and style the layout with Tailwind.
 
 It is one component, not a family of title, description, icon, action, or details wrappers. It does not catch exceptions, normalize errors, retry requests, move focus, navigate, log, or expose diagnostic data.
 
@@ -26,28 +53,9 @@ It is one component, not a family of title, description, icon, action, or detail
     <ErrorStateRecipes />
   </template>
   <template #caption>
-    Slipway and Hagfish keep distinct product treatments, while a dynamically appearing failure opts into a native alert only when the caller needs it.
+    Show a clear explanation and a recovery action. Use a native alert when a newly appearing failure needs immediate announcement.
   </template>
-</KleanPreview>
-
-## Installation
-
-The command detects Vue, React, or Svelte and copies the matching one-file source into the conventional UI directory.
-
-<KleanInstallation
-  id="error-state-installation"
-  component="error-state"
-  :source="errorStateSource"
-  filename="ErrorState.vue"
-  destination="assets/js/components/ui/error-state/ErrorState.vue"
-  :dependencies="['tailwind-merge']"
-/>
-
-The examples also use [Button](/klean-ui/components/button). Add it separately with `npx klean-ui add button`, or use an existing native button or framework-native Link.
-
-## Usage
-
-Use native alert semantics only when a failure appears dynamically and warrants interruption. Static error pages should use ordinary page or section semantics so their heading is not announced twice.
+  <template #usage>
 
 ::: code-group
 
@@ -58,6 +66,27 @@ Use native alert semantics only when a failure appears dynamically and warrants 
 <<< ../snippets/error-state/usage.svelte [Svelte]
 
 :::
+
+  </template>
+</KleanPreview>
+
+## Installation
+
+The command detects Vue, React, or Svelte and copies the matching one-file source into the conventional UI directory.
+
+<KleanInstallation
+  id="error-state-installation"
+  component="error-state"
+  :frameworks="installationFrameworks"
+/>
+
+The examples also use [Button](/klean-ui/components/button). Add it separately with `npx klean-ui add button`, or use an existing native button or framework-native Link.
+
+## Usage
+
+Use native alert semantics only when a failure appears dynamically and warrants interruption. Static error pages should use ordinary page or section semantics so their heading is not announced twice.
+
+Copy the [example above](#error-state-apps) for your framework.
 
 ## API
 
@@ -120,7 +149,7 @@ This separation keeps the user's input intact and avoids turning every red messa
 
 The neutral baseline centers a wrapping column with comfortable space. `class` or `className` merges onto the root. Every icon, heading, paragraph, Link, button, and details disclosure is caller markup styled with ordinary Tailwind.
 
-Slipway can use a calm dark region, Hagfish can keep its sharp monochrome borders, and a status page can become a left-aligned editorial layout. There is no visual-variant API.
+Use Tailwind for a compact dark region, a bordered panel, or a left-aligned status page.
 
 ## When to use
 

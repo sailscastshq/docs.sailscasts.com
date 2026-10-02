@@ -21,6 +21,33 @@ const regions = [
 const region = ref('lagos')
 const participation = ref(false)
 const category = ref('all')
+
+import reactInstallRadiojsx from '../sources/radio/Radio.jsx?raw'
+import svelteInstallRadiosvelte from '../sources/radio/Radio.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Radio.vue', destination: 'assets/js/components/ui/radio/Radio.vue', source: radioSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Radio.jsx', destination: 'assets/js/components/ui/radio/Radio.jsx', source: reactInstallRadiojsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Radio.svelte', destination: 'assets/js/components/ui/radio/Radio.svelte', source: svelteInstallRadiosvelte },
+    ]
+  },
+]
 </script>
 
 # Radio
@@ -63,6 +90,19 @@ not duplicate HTML's group contract.
       </output>
     </fieldset>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/radio/usage.vue [Vue]
+
+<<< ../snippets/radio/usage.jsx [React]
+
+<<< ../snippets/radio/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/radio/Radio.vue
@@ -81,22 +121,12 @@ source file:
 <KleanInstallation
   id="radio-installation"
   component="radio"
-  :source="radioSource"
-  filename="Radio.vue"
-  destination="assets/js/components/ui/radio/Radio.vue"
+  :frameworks="installationFrameworks"
 />
 
 ## Usage
 
-::: code-group
-
-<<< ../snippets/radio/usage.vue [Vue]
-
-<<< ../snippets/radio/usage.jsx [React]
-
-<<< ../snippets/radio/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#radio-source) for your framework.
 
 The framework binding changes, but every version produces one native group and
 submits the checked value under `region`.
@@ -175,8 +205,7 @@ Radio:
 </fieldset>
 ```
 
-Vue retains typed values, including the real boolean participation choice used
-by Slipway. The application owns deterministic IDs, validation timing, and
+Vue retains typed values, including boolean choices. The application owns deterministic IDs, validation timing, and
 error copy.
 
 ## Native behavior
@@ -192,10 +221,9 @@ error copy.
 Klean does not add key handlers, roving focus, `role="radio"`, or
 `aria-checked`; all would duplicate the native input.
 
-## Slipway recipes
+## Choice layouts {#slipway-recipes}
 
-Slipway uses the same native control in three useful presentations. Klean keeps
-all three possible without adding visual variants.
+Present the same native control as a familiar list, a choice card, or a compact selector using Tailwind.
 
 ### Conventional provider list
 

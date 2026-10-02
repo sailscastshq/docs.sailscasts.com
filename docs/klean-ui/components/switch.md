@@ -34,6 +34,33 @@ function demonstrateRollback(event) {
 }
 
 onBeforeUnmount(() => clearTimeout(rollbackTimer))
+
+import reactInstallSwitchjsx from '../sources/switch/Switch.jsx?raw'
+import svelteInstallSwitchsvelte from '../sources/switch/Switch.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Switch.vue', destination: 'assets/js/components/ui/switch/Switch.vue', source: switchSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Switch.jsx', destination: 'assets/js/components/ui/switch/Switch.jsx', source: reactInstallSwitchjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Switch.svelte', destination: 'assets/js/components/ui/switch/Switch.svelte', source: svelteInstallSwitchsvelte },
+    ]
+  },
+]
 </script>
 
 # Switch
@@ -68,6 +95,19 @@ configure.
       </div>
     </div>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/switch/usage.vue [Vue]
+
+<<< ../snippets/switch/usage.jsx [React]
+
+<<< ../snippets/switch/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/switch/Switch.vue
@@ -86,22 +126,12 @@ source file:
 <KleanInstallation
   id="switch-installation"
   component="switch"
-  :source="switchSource"
-  filename="Switch.vue"
-  destination="assets/js/components/ui/switch/Switch.vue"
+  :frameworks="installationFrameworks"
 />
 
 ## Usage
 
-::: code-group
-
-<<< ../snippets/switch/usage.vue [Vue]
-
-<<< ../snippets/switch/usage.jsx [React]
-
-<<< ../snippets/switch/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#switch-source) for your framework.
 
 The binding syntax is idiomatic to each framework. Every version produces the
 same native boolean control and keeps the visible setting row in application

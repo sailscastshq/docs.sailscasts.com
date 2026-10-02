@@ -16,11 +16,38 @@ import badgeSource from '../../.vitepress/theme/components/klean/badge/Badge.vue
 
 import notificationSource from '../snippets/badge/notification.vue?raw'
 import productSource from '../snippets/badge/products.vue?raw'
+
+import reactInstallBadgejsx from '../sources/badge/Badge.jsx?raw'
+import svelteInstallBadgesvelte from '../sources/badge/Badge.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Badge.vue', destination: 'assets/js/components/ui/badge/Badge.vue', source: badgeSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Badge.jsx', destination: 'assets/js/components/ui/badge/Badge.jsx', source: reactInstallBadgejsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Badge.svelte', destination: 'assets/js/components/ui/badge/Badge.svelte', source: svelteInstallBadgesvelte },
+    ]
+  },
+]
 </script>
 
 # Badge
 
-Badge is one static inline label for compact metadata: a visible status, count, plan, environment, version, or category. It renders a `span`, stays out of the tab order, and says nothing to assistive technology beyond its content unless the application deliberately supplies native ARIA attributes.
+Display a compact status, count, plan, or category. Badge renders a static `span` and stays out of the tab order. Add native ARIA attributes only when the label needs additional meaning.
 
 The Badge is never the action. When a count belongs to notifications, messages, or logs, the enclosing Button or Link owns the destination, interaction, focus, and complete accessible name.
 
@@ -37,6 +64,19 @@ The Badge is never the action. When a count belongs to notifications, messages, 
       </KleanBadge>
     </div>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/badge/usage.vue [Vue]
+
+<<< ../snippets/badge/usage.jsx [React]
+
+<<< ../snippets/badge/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/badge/Badge.vue
@@ -51,25 +91,14 @@ One command detects Vue, React, or Svelte and writes the matching one-file sourc
 <KleanInstallation
   id="badge-installation"
   component="badge"
-  :source="badgeSource"
-  filename="Badge.vue"
-  destination="assets/js/components/ui/badge/Badge.vue"
-  :dependencies="['tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## Usage
 
 Write the visible meaning in the content and put the product treatment directly on Badge with Tailwind.
 
-::: code-group
-
-<<< ../snippets/badge/usage.vue [Vue]
-
-<<< ../snippets/badge/usage.jsx [React]
-
-<<< ../snippets/badge/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#badge-source) for your framework.
 
 ## API
 
@@ -130,16 +159,16 @@ The default is deliberately neutral: a compact monochrome pill with a transparen
 
 Keep repeated status-to-class maps in the application, next to the domain values they describe. A financial product may distinguish draft, sent, and paid; an infrastructure product may distinguish healthy, deploying, and failed. Klean does not pretend those taxonomies are universal variants.
 
-## Hagfish and Slipway recipes
+## Status recipes {#hagfish-and-slipway-recipes}
 
-The same Badge can keep Hagfish expressive and Slipway operational without teaching Klean either product's status model.
+Choose classes that match the meaning of each status in your application.
 
 <KleanPreview id="badge-products" :source="productSource" filename="ProductBadges.vue">
   <template #preview>
     <BadgeRecipes />
   </template>
   <template #caption>
-    <span>Hagfish owns invoice classes. Slipway owns service health and the surrounding logs button. The Badge remains one static span.</span>
+    <span>Invoice status, service health, and notification counts share the same static label. A surrounding button or link owns any action.</span>
   </template>
 </KleanPreview>
 

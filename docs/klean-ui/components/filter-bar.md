@@ -17,23 +17,44 @@ import vueUsage from '../snippets/filter-bar/usage.vue?raw'
 
 import durableUsage from '../snippets/filter-bar/durable.vue?raw'
 
-const installationFiles = [
+
+
+import reactInstallFilterBarjsx from '../sources/filter-bar/FilterBar.jsx?raw'
+import reactInstallfilterStatejs from '../sources/filter-bar/filterState.react.js?raw'
+import svelteInstallFilterBarsvelte from '../sources/filter-bar/FilterBar.svelte?raw'
+import svelteInstallfilterStatejs from '../sources/filter-bar/filterState.svelte.js?raw'
+
+const installationFrameworks = [
   {
-    filename: 'FilterBar.vue',
-    destination: 'assets/js/components/ui/filter-bar/FilterBar.vue',
-    source: filterBarSource
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'FilterBar.vue', destination: 'assets/js/components/ui/filter-bar/FilterBar.vue', source: filterBarSource },
+      { filename: 'filterState.js', destination: 'assets/js/components/ui/filter-bar/filterState.js', source: filterStateSource },
+    ]
   },
   {
-    filename: 'filterState.js',
-    destination: 'assets/js/components/ui/filter-bar/filterState.js',
-    source: filterStateSource
-  }
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'FilterBar.jsx', destination: 'assets/js/components/ui/filter-bar/FilterBar.jsx', source: reactInstallFilterBarjsx },
+      { filename: 'filterState.js', destination: 'assets/js/components/ui/filter-bar/filterState.js', source: reactInstallfilterStatejs },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'FilterBar.svelte', destination: 'assets/js/components/ui/filter-bar/FilterBar.svelte', source: svelteInstallFilterBarsvelte },
+      { filename: 'filterState.js', destination: 'assets/js/components/ui/filter-bar/filterState.js', source: svelteInstallfilterStatejs },
+    ]
+  },
 ]
 </script>
 
 # Filter Bar
 
-Filter Bar coordinates the controls that shape a server-owned result. It keeps unfinished edits separate from the filters currently applied to the page, then uses one native form submission to commit the draft. Cancel is a native form reset. Active filters can be removed one at a time or cleared together without losing useful keyboard focus.
+Let people edit, apply, cancel, and clear filters on a server-backed list. Filter Bar keeps unfinished edits separate from active filters and preserves useful keyboard focus.
 
 The application still writes every Input, Select, Combobox, Checkbox, Popover, Sheet, label, button, summary, and Tailwind class. Filter Bar does not ask for a column schema, filter registry, visual variant, route, or server query language.
 
@@ -42,27 +63,9 @@ The application still writes every Input, Select, Combobox, Checkbox, Popover, S
     <FilterBarRecipes />
   </template>
   <template #caption>
-    A Slipway Bridge-style filter surface. Change a control before applying, cancel it, remove an active filter, clear everything, and use the same controls from the keyboard.
+    A filter form for a server-backed list. Change a control before applying, cancel it, remove an active filter, clear everything, and use the same controls from the keyboard.
   </template>
-</KleanPreview>
-
-## Installation
-
-The command detects Vue, React, or Svelte and copies the component plus its small deterministic URL helper into the conventional UI directory.
-
-<KleanInstallation
-  id="filter-bar-installation"
-  component="filter-bar"
-  :source="filterBarSource"
-  filename="FilterBar.vue"
-  destination="assets/js/components/ui/filter-bar/FilterBar.vue"
-  :files="installationFiles"
-  :dependencies="['tailwind-merge']"
-/>
-
-Use FilterBar with your existing URL serialization, or use `filterState.js` to manage it.
-
-## Usage
+  <template #usage>
 
 ::: code-group
 
@@ -73,6 +76,25 @@ Use FilterBar with your existing URL serialization, or use `filterState.js` to m
 <<< ../snippets/filter-bar/usage.svelte [Svelte]
 
 :::
+
+  </template>
+</KleanPreview>
+
+## Installation
+
+The command detects Vue, React, or Svelte and copies the component plus its small deterministic URL helper into the conventional UI directory.
+
+<KleanInstallation
+  id="filter-bar-installation"
+  component="filter-bar"
+  :frameworks="installationFrameworks"
+/>
+
+Use FilterBar with your existing URL serialization, or use `filterState.js` to manage it.
+
+## Usage
+
+Copy the [example above](#filter-bar-bridge) for your framework.
 
 The framework syntax changes. The contract does not: committed state is caller-owned, the slot or child function receives a separate draft, and the root remains one native search form.
 

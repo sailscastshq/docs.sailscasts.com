@@ -23,17 +23,38 @@ const roleOptions = [
   { value: 'editor', label: 'Editor', disabled: true },
   { value: 'administrator', label: 'Administrator' }
 ]
-const vueFiles = [
+
+
+import reactInstallPopoverjsx from '../sources/popover/Popover.jsx?raw'
+import reactInstallSelectjsx from '../sources/select/Select.jsx?raw'
+import svelteInstallPopoversvelte from '../sources/popover/Popover.svelte?raw'
+import svelteInstallSelectsvelte from '../sources/select/Select.svelte?raw'
+
+const installationFrameworks = [
   {
-    filename: 'Popover.vue',
-    destination: 'assets/js/components/ui/popover/Popover.vue',
-    source: popoverSource
+    id: 'vue', label: 'Vue',
+    dependencies: ["@floating-ui/dom", "tailwind-merge"],
+    files: [
+      { filename: 'Popover.vue', destination: 'assets/js/components/ui/popover/Popover.vue', source: popoverSource },
+      { filename: 'Select.vue', destination: 'assets/js/components/ui/select/Select.vue', source: selectSource },
+    ]
   },
   {
-    filename: 'Select.vue',
-    destination: 'assets/js/components/ui/select/Select.vue',
-    source: selectSource
-  }
+    id: 'react', label: 'React',
+    dependencies: ["@floating-ui/dom", "tailwind-merge"],
+    files: [
+      { filename: 'Popover.jsx', destination: 'assets/js/components/ui/popover/Popover.jsx', source: reactInstallPopoverjsx },
+      { filename: 'Select.jsx', destination: 'assets/js/components/ui/select/Select.jsx', source: reactInstallSelectjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["@floating-ui/dom", "tailwind-merge"],
+    files: [
+      { filename: 'Popover.svelte', destination: 'assets/js/components/ui/popover/Popover.svelte', source: svelteInstallPopoversvelte },
+      { filename: 'Select.svelte', destination: 'assets/js/components/ui/select/Select.svelte', source: svelteInstallSelectsvelte },
+    ]
+  },
 ]
 </script>
 
@@ -64,6 +85,19 @@ The common path is one component and one option array. There is no required
       </output>
     </div>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/select/usage.vue [Vue]
+
+<<< ../snippets/select/usage.jsx [React]
+
+<<< ../snippets/select/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/select/Select.vue
@@ -82,24 +116,12 @@ and resolves Popover first when it is missing:
 <KleanInstallation
   id="select-installation"
   component="select"
-  :source="selectSource"
-  filename="Select.vue"
-  destination="assets/js/components/ui/select/Select.vue"
-  :files="vueFiles"
-  :dependencies="['@floating-ui/dom', 'tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## Usage
 
-::: code-group
-
-<<< ../snippets/select/usage.vue [Vue]
-
-<<< ../snippets/select/usage.jsx [React]
-
-<<< ../snippets/select/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#select-source) for your framework.
 
 The framework binding changes; the value and option contract does not.
 
@@ -203,16 +225,14 @@ hatch.
 
 ### Product recipes
 
-This compact treatment comes directly from Slipway's Bearing feedback composer.
-Source-app recipes appear here only when they map to an interface that actually
-exists; Klean does not invent a product look to fill a comparison.
+Use a compact trigger and popup in a feedback form or toolbar.
 
 <KleanPreview id="select-products" :source="productSource" filename="slipway-select.vue">
   <template #preview>
     <SlipwaySelectRecipe />
   </template>
   <template #caption>
-    Slipway's compact trigger and popup are ordinary caller Tailwind. They do not require a variant or theme selector.
+    The compact trigger and popup use ordinary Tailwind classes.
   </template>
 </KleanPreview>
 

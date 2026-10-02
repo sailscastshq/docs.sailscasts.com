@@ -23,6 +23,33 @@ const previewItems = [
 function stopPreviewNavigation(event) {
   if (event.target.closest?.('a')) event.preventDefault()
 }
+
+import reactInstallBreadcrumbjsx from '../sources/breadcrumb/Breadcrumb.jsx?raw'
+import svelteInstallBreadcrumbsvelte from '../sources/breadcrumb/Breadcrumb.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["@inertiajs/vue3", "tailwind-merge"],
+    files: [
+      { filename: 'Breadcrumb.vue', destination: 'assets/js/components/ui/breadcrumb/Breadcrumb.vue', source: breadcrumbSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["@inertiajs/react", "tailwind-merge"],
+    files: [
+      { filename: 'Breadcrumb.jsx', destination: 'assets/js/components/ui/breadcrumb/Breadcrumb.jsx', source: reactInstallBreadcrumbjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["@inertiajs/svelte", "tailwind-merge"],
+    files: [
+      { filename: 'Breadcrumb.svelte', destination: 'assets/js/components/ui/breadcrumb/Breadcrumb.svelte', source: svelteInstallBreadcrumbsvelte },
+    ]
+  },
+]
 </script>
 
 # Breadcrumb
@@ -37,6 +64,19 @@ Breadcrumb tells people where the current page lives in an application hierarchy
     >
       <KleanBreadcrumb :items="previewItems" />
     </div>
+  </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/breadcrumb/usage.vue [Vue]
+
+<<< ../snippets/breadcrumb/usage.jsx [React]
+
+<<< ../snippets/breadcrumb/usage.svelte [Svelte]
+
+:::
+
   </template>
   <template #source>
 
@@ -55,25 +95,14 @@ One command detects Vue, React, or Svelte, installs the matching official Inerti
 <KleanInstallation
   id="breadcrumb-installation"
   component="breadcrumb"
-  :source="breadcrumbSource"
-  filename="Breadcrumb.vue"
-  destination="assets/js/components/ui/breadcrumb/Breadcrumb.vue"
-  :dependencies="['@inertiajs/vue3', 'tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## Usage
 
 Write the hierarchy your page already knows. Ancestors receive destinations; the final item does not need one.
 
-::: code-group
-
-<<< ../snippets/breadcrumb/usage.vue [Vue]
-
-<<< ../snippets/breadcrumb/usage.jsx [React]
-
-<<< ../snippets/breadcrumb/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#breadcrumb-source) for your framework.
 
 The object shape is identical in every framework. Only the framework's ordinary component syntax changes.
 
@@ -139,9 +168,9 @@ The installed file is application source, so edit its baseline classes when the 
 
 The available hooks are `breadcrumb`, `list`, `item`, `link`, `label`, `separator`, `ellipsis`, and `current`; the final item also has `data-state="current"`. These are styling seams, not a visual-variant API.
 
-## Slipway migration recipe
+## Nested application routes {#slipway-migration-recipe}
 
-Slipway pages already know their route hierarchy, so migration is data replacement rather than a routing abstraction:
+Build the breadcrumb from the same records that identify the current route:
 
 ```vue
 <Breadcrumb

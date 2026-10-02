@@ -19,32 +19,53 @@ import rangeSource from '../../.vitepress/theme/components/klean/date-range-pick
 
 const period = ref({ start: '2026-08-08', end: '2026-08-12' })
 const unavailable = (date) => date >= '2026-08-14' && date <= '2026-08-16'
-const vueFiles = [
+
+
+import reactInstallInputjsx from '../sources/input/Input.jsx?raw'
+import reactInstallPopoverjsx from '../sources/popover/Popover.jsx?raw'
+import reactInstalldatejs from '../sources/calendar/date.react.js?raw'
+import reactInstallCalendarjsx from '../sources/calendar/Calendar.jsx?raw'
+import reactInstallDateRangePickerjsx from '../sources/date-range-picker/DateRangePicker.jsx?raw'
+import svelteInstallInputsvelte from '../sources/input/Input.svelte?raw'
+import svelteInstallPopoversvelte from '../sources/popover/Popover.svelte?raw'
+import svelteInstalldatejs from '../sources/calendar/date.svelte.js?raw'
+import svelteInstallCalendarsvelte from '../sources/calendar/Calendar.svelte?raw'
+import svelteInstallDateRangePickersvelte from '../sources/date-range-picker/DateRangePicker.svelte?raw'
+
+const installationFrameworks = [
   {
-    filename: 'Input.vue',
-    destination: 'assets/js/components/ui/input/Input.vue',
-    source: inputSource
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge", "@floating-ui/dom"],
+    files: [
+      { filename: 'Input.vue', destination: 'assets/js/components/ui/input/Input.vue', source: inputSource },
+      { filename: 'Popover.vue', destination: 'assets/js/components/ui/popover/Popover.vue', source: popoverSource },
+      { filename: 'date.js', destination: 'assets/js/components/ui/calendar/date.js', source: dateSource },
+      { filename: 'Calendar.vue', destination: 'assets/js/components/ui/calendar/Calendar.vue', source: calendarSource },
+      { filename: 'DateRangePicker.vue', destination: 'assets/js/components/ui/date-range-picker/DateRangePicker.vue', source: rangeSource },
+    ]
   },
   {
-    filename: 'Popover.vue',
-    destination: 'assets/js/components/ui/popover/Popover.vue',
-    source: popoverSource
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge", "@floating-ui/dom"],
+    files: [
+      { filename: 'Input.jsx', destination: 'assets/js/components/ui/input/Input.jsx', source: reactInstallInputjsx },
+      { filename: 'Popover.jsx', destination: 'assets/js/components/ui/popover/Popover.jsx', source: reactInstallPopoverjsx },
+      { filename: 'date.js', destination: 'assets/js/components/ui/calendar/date.js', source: reactInstalldatejs },
+      { filename: 'Calendar.jsx', destination: 'assets/js/components/ui/calendar/Calendar.jsx', source: reactInstallCalendarjsx },
+      { filename: 'DateRangePicker.jsx', destination: 'assets/js/components/ui/date-range-picker/DateRangePicker.jsx', source: reactInstallDateRangePickerjsx },
+    ]
   },
   {
-    filename: 'date.js',
-    destination: 'assets/js/components/ui/calendar/date.js',
-    source: dateSource
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge", "@floating-ui/dom"],
+    files: [
+      { filename: 'Input.svelte', destination: 'assets/js/components/ui/input/Input.svelte', source: svelteInstallInputsvelte },
+      { filename: 'Popover.svelte', destination: 'assets/js/components/ui/popover/Popover.svelte', source: svelteInstallPopoversvelte },
+      { filename: 'date.js', destination: 'assets/js/components/ui/calendar/date.js', source: svelteInstalldatejs },
+      { filename: 'Calendar.svelte', destination: 'assets/js/components/ui/calendar/Calendar.svelte', source: svelteInstallCalendarsvelte },
+      { filename: 'DateRangePicker.svelte', destination: 'assets/js/components/ui/date-range-picker/DateRangePicker.svelte', source: svelteInstallDateRangePickersvelte },
+    ]
   },
-  {
-    filename: 'Calendar.vue',
-    destination: 'assets/js/components/ui/calendar/Calendar.vue',
-    source: calendarSource
-  },
-  {
-    filename: 'DateRangePicker.vue',
-    destination: 'assets/js/components/ui/date-range-picker/DateRangePicker.vue',
-    source: rangeSource
-  }
 ]
 </script>
 
@@ -74,6 +95,19 @@ visible in Calendar.
       </p>
     </div>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/date-range-picker/usage.vue [Vue]
+
+<<< ../snippets/date-range-picker/usage.jsx [React]
+
+<<< ../snippets/date-range-picker/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/date-range-picker/DateRangePicker.vue
@@ -89,11 +123,7 @@ framework-native range composition:
 <KleanInstallation
   id="date-range-installation"
   component="date-range-picker"
-  :source="rangeSource"
-  filename="DateRangePicker.vue"
-  destination="assets/js/components/ui/date-range-picker/DateRangePicker.vue"
-  :files="vueFiles"
-  :dependencies="['@floating-ui/dom', 'tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## When to use
@@ -111,15 +141,7 @@ when the date surface should remain visible.
 
 ## Usage
 
-::: code-group
-
-<<< ../snippets/date-range-picker/usage.vue [Vue]
-
-<<< ../snippets/date-range-picker/usage.jsx [React]
-
-<<< ../snippets/date-range-picker/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#date-range-source) for your framework.
 
 ## Value and form contract
 

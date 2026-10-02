@@ -16,23 +16,44 @@ import popoverSource from '../../.vitepress/theme/components/klean/popover/Popov
 
 import productSource from '../snippets/menu/products.vue?raw'
 
-const vueFiles = [
+
+
+import reactInstallPopoverjsx from '../sources/popover/Popover.jsx?raw'
+import reactInstallMenujsx from '../sources/menu/Menu.jsx?raw'
+import svelteInstallPopoversvelte from '../sources/popover/Popover.svelte?raw'
+import svelteInstallMenusvelte from '../sources/menu/Menu.svelte?raw'
+
+const installationFrameworks = [
   {
-    filename: 'Popover.vue',
-    destination: 'assets/js/components/ui/popover/Popover.vue',
-    source: popoverSource
+    id: 'vue', label: 'Vue',
+    dependencies: ["@floating-ui/dom", "tailwind-merge"],
+    files: [
+      { filename: 'Popover.vue', destination: 'assets/js/components/ui/popover/Popover.vue', source: popoverSource },
+      { filename: 'Menu.vue', destination: 'assets/js/components/ui/menu/Menu.vue', source: menuSource },
+    ]
   },
   {
-    filename: 'Menu.vue',
-    destination: 'assets/js/components/ui/menu/Menu.vue',
-    source: menuSource
-  }
+    id: 'react', label: 'React',
+    dependencies: ["@floating-ui/dom", "tailwind-merge"],
+    files: [
+      { filename: 'Popover.jsx', destination: 'assets/js/components/ui/popover/Popover.jsx', source: reactInstallPopoverjsx },
+      { filename: 'Menu.jsx', destination: 'assets/js/components/ui/menu/Menu.jsx', source: reactInstallMenujsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["@floating-ui/dom", "tailwind-merge"],
+    files: [
+      { filename: 'Popover.svelte', destination: 'assets/js/components/ui/popover/Popover.svelte', source: svelteInstallPopoversvelte },
+      { filename: 'Menu.svelte', destination: 'assets/js/components/ui/menu/Menu.svelte', source: svelteInstallMenusvelte },
+    ]
+  },
 ]
 </script>
 
 # Menu
 
-Menu is an accessible list of actions and navigation destinations. It composes Klean [Popover](/klean-ui/components/popover), so the browser still owns native top-layer display and light dismissal. Menu adds the missing composite behavior: `menu` and `menuitem` semantics, one roving focus stop, Arrow keys, Home/End, printable-key typeahead, disabled-item handling, selection, and reliable cleanup.
+Group actions and destinations in a keyboard-accessible menu. Built on [Popover](/klean-ui/components/popover), Menu supports Arrow keys, Home/End, typeahead, disabled items, selection, and focus return.
 
 The application supplies real buttons and links plus ordinary Tailwind. There is no `MenuTrigger`, `MenuItem`, item-data schema, `asChild`, visual variant, provider, or theme object.
 
@@ -83,6 +104,19 @@ The application supplies real buttons and links plus ordinary Tailwind. There is
       </button>
     </KleanMenu>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/menu/usage.vue [Vue]
+
+<<< ../snippets/menu/usage.jsx [React]
+
+<<< ../snippets/menu/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/menu/Menu.vue
@@ -100,24 +134,12 @@ Run the same command in Vue, React, or Svelte. Klean detects the framework and c
 <KleanInstallation
   id="menu-installation"
   component="menu"
-  :source="menuSource"
-  filename="Menu.vue"
-  destination="assets/js/components/ui/menu/Menu.vue"
-  :files="vueFiles"
-  :dependencies="['@floating-ui/dom', 'tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## Usage
 
-::: code-group
-
-<<< ../snippets/menu/usage.vue [Vue]
-
-<<< ../snippets/menu/usage.jsx [React]
-
-<<< ../snippets/menu/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#menu-source) for your framework.
 
 The framework syntax changes; the HTML contract does not. A real button uses native `popovertarget`. Native button and anchor children become menu items automatically, so developers do not repeat roles or tab indices.
 
@@ -165,7 +187,7 @@ A disabled action uses the native `disabled` attribute and is skipped during key
 | `placement`            | `bottom-start` | Preferred logical placement. It may flip or shift to remain visible.             |
 | `offset`               | `8`            | Pixel distance between the invoker and menu.                                     |
 | framework open binding | uncontrolled   | Observe or control visibility only when application behavior genuinely needs it. |
-| `defaultOpen`          | `false`        | Initial uncontrolled visibility, mainly useful for examples and tests.           |
+| `defaultOpen`          | `false`        | Initial visibility when open state is uncontrolled.                              |
 | `class` / `className`  | —              | Ordinary Tailwind classes merged last on the menu surface.                       |
 | default content        | —              | Native buttons, anchors, or framework links.                                     |
 
@@ -198,7 +220,7 @@ Website navigation remains a semantic `nav` and list of links with ordinary Tab 
 
 ## Product recipes
 
-Slipway needs compact operational actions; Hagfish needs a stronger border and offset shadow. Those are caller recipes, not Klean themes.
+Use compact spacing for operational actions or a stronger border and offset shadow for a more expressive menu.
 
 <KleanPreview id="menu-products" :source="productSource" filename="product-menus.vue">
   <template #preview>

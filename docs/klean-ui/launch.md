@@ -1,7 +1,7 @@
 ---
 title: Klean UI is ready
 titleTemplate: Klean UI
-description: Why we built Kelvin's Lean UI, what shipped, and what Slipway and Hagfish proved before launch.
+description: Meet Kelvin's Lean UI, the source-owned components behind distinctive Boring Stack interfaces.
 outline: [2, 3]
 ---
 
@@ -54,8 +54,7 @@ source**. The difference is the default path and the public API.
 - Updates begin with `check` and `diff`; local edits are never silently
   replaced.
 
-This is not a selectable Slipway or Hagfish theme. Klean provides neutral,
-audited source. The application supplies its own visual voice.
+Klean provides neutral defaults. Your application supplies its own visual voice.
 
 ## One contract, three native implementations
 
@@ -63,13 +62,9 @@ Vue, React, and Svelte do not share a runtime wrapper. Each registry item uses
 the framework's own conventions while preserving the same semantics,
 accessibility outcomes, states, useful slots, and caller-owned styling hooks.
 
-All three targets build and mount in their own Storybook renderer. The composed
-workbench makes parity visible without pretending the implementations are the
-same file.
-
 ## What shipped
 
-Klean UI 0.0.3 contains:
+The 0.0.3 launch included:
 
 - **42 documented components**, from Button, Field controls, Dialog, Popover,
   Menu, Select, Combobox, and Command through Calendar, Date Picker, Schedule
@@ -78,13 +73,11 @@ Klean UI 0.0.3 contains:
 - **Durable UI source** for stored state, URL state, drafts, scroll recovery,
   optimistic work, and abortable search;
 - a zero-configuration CLI with dry runs, dependency planning, revision-aware
-  diffs, and rollback-safe updates; and
-- Vue, React, and Svelte Storybooks, builds, interaction coverage, accessibility
-  checks, and clean-package installation smoke tests.
+  diffs, and rollback-safe updates.
 
 [Explore every component →](/klean-ui/components/)
 
-## Proven in products, not just stories
+## Distinctive product interfaces {#proven-in-products-not-just-stories}
 
 ### Slipway: dense operational UI
 
@@ -103,9 +96,8 @@ source removed duplication; it did not redesign Slipway.
 ### Hagfish: expressive application UI
 
 Hagfish uses thicker borders, stronger contrast, playful details, document
-workflows, invoice scheduling, and both light and dark treatments. It now
-renders 215 Klean icon instances from application-owned Vue source while its
-own artwork and visual emphasis remain Hagfish.
+workflows, invoice scheduling, and both light and dark treatments. Its own
+artwork and visual emphasis sit alongside source-owned Klean components.
 
 ![Hagfish delete dialog using Klean source in light mode](/klean-ui/launch/hagfish-delete-dialog-light.png)
 
@@ -113,10 +105,7 @@ own artwork and visual emphasis remain Hagfish.
 
 ![Hagfish scheduling workflow using Klean controls](/klean-ui/launch/hagfish-schedule-picker.png)
 
-The final Hagfish inventory reports zero PrimeIcons, zero PrimeVue icon
-imports, and zero unclassified interface SVGs. Logos, marketing art, video
-artwork, product illustrations, and its squiggly dividers remain deliberately
-owned exceptions.
+Logos, illustrations, and Hagfish's squiggly dividers keep their own character.
 
 ## Durable UI is the implementation philosophy
 
@@ -153,18 +142,16 @@ caller explicitly chooses overwrite.
 
 ## Deliberate omissions
 
-This release does not claim every future application block is finished. It
-also deliberately does not include:
+Klean leaves these choices with the application:
 
-- a mandatory theme or visual variant system;
-- a generic string-based icon registry in the application;
-- product logos and brand artwork; or
-- silent source replacement.
+- themes and visual treatments;
+- icon selection;
+- product logos and brand artwork; and
+- decisions about replacing locally edited source.
 
 Patch releases may fix implementation, accessibility, or browser compatibility
 without intentional API breaks. Minor releases are additive. Any breaking
-anatomy or behavior needs migration notes, a deliberate transition path, and
-proof in the applications that depend on it—even before 1.0.
+structure or behavior comes with migration guidance, including before 1.0.
 
 ## Start owning the source
 
@@ -187,8 +174,7 @@ npx skills add sailscastshq/klean-ui --skill klean-ui
 ```
 
 Then open the files. Change the classes. Wrap repeated product treatments in
-your own components. Keep the native semantics. Add the real application
-tests. The source is yours—that is the feature.
+your own components. Keep the native semantics. The source is yours.
 
 ## Links
 
@@ -198,8 +184,4 @@ tests. The source is yours—that is the feature.
 - [Installation guide](/klean-ui/installation)
 - [Update guide](/klean-ui/updating)
 - [Doctrine](/klean-ui/doctrine)
-- [Storybook workbench instructions](https://github.com/sailscastshq/klean-ui#component-workbench)
-- [Roadmap](https://github.com/sailscastshq/klean-ui/issues/3)
 - [Klean UI skill](https://github.com/sailscastshq/klean-ui/tree/main/skills/klean-ui)
-- [Slipway adoption evidence](https://github.com/sailscastshq/slipway/pull/506)
-- [Hagfish adoption evidence](https://github.com/sailscastshq/hagfish/pull/279)

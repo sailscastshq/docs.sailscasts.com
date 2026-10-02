@@ -14,6 +14,33 @@ import KleanTooltip from '../../.vitepress/theme/components/klean/tooltip/Toolti
 import tooltipSource from '../../.vitepress/theme/components/klean/tooltip/Tooltip.vue?raw'
 
 import themeUsage from '../snippets/tooltip/theme.vue?raw'
+
+import reactInstallTooltipjsx from '../sources/tooltip/Tooltip.jsx?raw'
+import svelteInstallTooltipsvelte from '../sources/tooltip/Tooltip.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["@floating-ui/dom", "tailwind-merge"],
+    files: [
+      { filename: 'Tooltip.vue', destination: 'assets/js/components/ui/tooltip/Tooltip.vue', source: tooltipSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["@floating-ui/dom", "tailwind-merge"],
+    files: [
+      { filename: 'Tooltip.jsx', destination: 'assets/js/components/ui/tooltip/Tooltip.jsx', source: reactInstallTooltipjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["@floating-ui/dom", "tailwind-merge"],
+    files: [
+      { filename: 'Tooltip.svelte', destination: 'assets/js/components/ui/tooltip/Tooltip.svelte', source: svelteInstallTooltipsvelte },
+    ]
+  },
+]
 </script>
 
 # Tooltip
@@ -52,6 +79,19 @@ Klean supplies the accessible description, hover and keyboard behavior, collisio
       </p>
     </div>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/tooltip/usage.vue [Vue]
+
+<<< ../snippets/tooltip/usage.jsx [React]
+
+<<< ../snippets/tooltip/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/tooltip/Tooltip.vue
@@ -66,25 +106,14 @@ One command detects Vue, React, or Svelte, writes the matching source, and insta
 <KleanInstallation
   id="tooltip-installation"
   component="tooltip"
-  :source="tooltipSource"
-  filename="Tooltip.vue"
-  destination="assets/js/components/ui/tooltip/Tooltip.vue"
-  :dependencies="['@floating-ui/dom', 'tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## Usage
 
 The child is the trigger. Use a real button for an action and a real anchor or Boring Stack Link for navigation.
 
-::: code-group
-
-<<< ../snippets/tooltip/usage.vue [Vue]
-
-<<< ../snippets/tooltip/usage.jsx [React]
-
-<<< ../snippets/tooltip/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#tooltip-source) for your framework.
 
 The icon is decorative because the button already has the accessible name “Re-run query.” Tooltip text supplements the control; it does not replace the button's name.
 
@@ -171,7 +200,7 @@ The arrow belongs to Tooltip. It inherits the surface colour and follows the col
 
 Keep the arrow visible. It communicates which control the supplementary text describes while ordinary Tailwind classes remain free to restyle the surface.
 
-Repeated product treatment can become a small application-owned wrapper. Hagfish and Slipway can therefore share the accessible behavior and inverse neutral default without sharing a visual identity.
+Use a small application-owned wrapper when a tooltip treatment repeats. Keep its accessible behavior while styling it to match your interface.
 
 ## Accessible behavior
 

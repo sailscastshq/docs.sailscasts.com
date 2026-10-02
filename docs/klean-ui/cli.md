@@ -26,7 +26,7 @@ It has one job: keep the right framework-native source in the right application 
 
 The published `klean-ui` npm package exposes a `klean-ui` executable. `npx` resolves and runs that executable for the command; it does not add Klean as an application runtime dependency.
 
-The CLI performs a deterministic pipeline:
+The command handles setup and checks existing files before making changes:
 
 1. **Locate the application root.** Walk upward to the Sails `package.json`.
 2. **Detect the framework.** Inspect dependencies and the conventional frontend entry for reliable Vue, React, or Svelte evidence.
@@ -39,7 +39,7 @@ The CLI performs a deterministic pipeline:
 
 Bundling versioned registry metadata with the CLI keeps one invocation deterministic: the executable and the source it installs come from the same package version.
 
-Button, Input, and Textarea each contain one source file. Registry items can still describe prerequisite and multi-file transactions when a future compound interaction genuinely needs them. One conflicting target blocks the complete transaction before mutation.
+Button, Input, and Textarea each contain one source file. Components such as Menu also install their prerequisites. If any destination conflicts with your local source, the command stops before changing any files.
 
 ## Detection
 

@@ -35,32 +35,53 @@ watch(dueAt, () => {
   if (issuedAt.value > maximumIssueDate.value) issuedAt.value = maximumIssueDate.value
 })
 
-const vueFiles = [
+
+
+import reactInstallInputjsx from '../sources/input/Input.jsx?raw'
+import reactInstallPopoverjsx from '../sources/popover/Popover.jsx?raw'
+import reactInstalldatejs from '../sources/calendar/date.react.js?raw'
+import reactInstallCalendarjsx from '../sources/calendar/Calendar.jsx?raw'
+import reactInstallDatePickerjsx from '../sources/date-picker/DatePicker.jsx?raw'
+import svelteInstallInputsvelte from '../sources/input/Input.svelte?raw'
+import svelteInstallPopoversvelte from '../sources/popover/Popover.svelte?raw'
+import svelteInstalldatejs from '../sources/calendar/date.svelte.js?raw'
+import svelteInstallCalendarsvelte from '../sources/calendar/Calendar.svelte?raw'
+import svelteInstallDatePickersvelte from '../sources/date-picker/DatePicker.svelte?raw'
+
+const installationFrameworks = [
   {
-    filename: 'Input.vue',
-    destination: 'assets/js/components/ui/input/Input.vue',
-    source: inputSource
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge", "@floating-ui/dom"],
+    files: [
+      { filename: 'Input.vue', destination: 'assets/js/components/ui/input/Input.vue', source: inputSource },
+      { filename: 'Popover.vue', destination: 'assets/js/components/ui/popover/Popover.vue', source: popoverSource },
+      { filename: 'date.js', destination: 'assets/js/components/ui/calendar/date.js', source: dateSource },
+      { filename: 'Calendar.vue', destination: 'assets/js/components/ui/calendar/Calendar.vue', source: calendarSource },
+      { filename: 'DatePicker.vue', destination: 'assets/js/components/ui/date-picker/DatePicker.vue', source: datePickerSource },
+    ]
   },
   {
-    filename: 'Popover.vue',
-    destination: 'assets/js/components/ui/popover/Popover.vue',
-    source: popoverSource
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge", "@floating-ui/dom"],
+    files: [
+      { filename: 'Input.jsx', destination: 'assets/js/components/ui/input/Input.jsx', source: reactInstallInputjsx },
+      { filename: 'Popover.jsx', destination: 'assets/js/components/ui/popover/Popover.jsx', source: reactInstallPopoverjsx },
+      { filename: 'date.js', destination: 'assets/js/components/ui/calendar/date.js', source: reactInstalldatejs },
+      { filename: 'Calendar.jsx', destination: 'assets/js/components/ui/calendar/Calendar.jsx', source: reactInstallCalendarjsx },
+      { filename: 'DatePicker.jsx', destination: 'assets/js/components/ui/date-picker/DatePicker.jsx', source: reactInstallDatePickerjsx },
+    ]
   },
   {
-    filename: 'date.js',
-    destination: 'assets/js/components/ui/calendar/date.js',
-    source: dateSource
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge", "@floating-ui/dom"],
+    files: [
+      { filename: 'Input.svelte', destination: 'assets/js/components/ui/input/Input.svelte', source: svelteInstallInputsvelte },
+      { filename: 'Popover.svelte', destination: 'assets/js/components/ui/popover/Popover.svelte', source: svelteInstallPopoversvelte },
+      { filename: 'date.js', destination: 'assets/js/components/ui/calendar/date.js', source: svelteInstalldatejs },
+      { filename: 'Calendar.svelte', destination: 'assets/js/components/ui/calendar/Calendar.svelte', source: svelteInstallCalendarsvelte },
+      { filename: 'DatePicker.svelte', destination: 'assets/js/components/ui/date-picker/DatePicker.svelte', source: svelteInstallDatePickersvelte },
+    ]
   },
-  {
-    filename: 'Calendar.vue',
-    destination: 'assets/js/components/ui/calendar/Calendar.vue',
-    source: calendarSource
-  },
-  {
-    filename: 'DatePicker.vue',
-    destination: 'assets/js/components/ui/date-picker/DatePicker.vue',
-    source: datePickerSource
-  }
 ]
 </script>
 
@@ -86,6 +107,19 @@ editable, Calendar is an enhancement, and the submitted value is always
       </p>
     </div>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/date-picker/usage.vue [Vue]
+
+<<< ../snippets/date-picker/usage.jsx [React]
+
+<<< ../snippets/date-picker/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/date-picker/DatePicker.vue
@@ -101,11 +135,7 @@ then adds the framework-native Date Picker:
 <KleanInstallation
   id="date-picker-installation"
   component="date-picker"
-  :source="datePickerSource"
-  filename="DatePicker.vue"
-  destination="assets/js/components/ui/date-picker/DatePicker.vue"
-  :files="vueFiles"
-  :dependencies="['@floating-ui/dom', 'tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## When to use
@@ -122,15 +152,7 @@ when a wall-clock time and timezone must become an exact instant.
 
 ## Usage
 
-::: code-group
-
-<<< ../snippets/date-picker/usage.vue [Vue]
-
-<<< ../snippets/date-picker/usage.jsx [React]
-
-<<< ../snippets/date-picker/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#date-picker-source) for your framework.
 
 The application owns the visible label and product availability rule. Date
 Picker owns the stable value, field validity, optional floating surface,

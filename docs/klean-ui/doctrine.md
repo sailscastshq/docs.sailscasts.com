@@ -21,7 +21,7 @@ Vue, React, and Svelte share the same outcomes without sharing a lowest-common-d
 4. **Tailwind is the visual API.** Visual decisions belong in `class` or `className`.
 5. **There are no visual variants.** Klean does not ship `variant`, `size`, `tone`, `color`, `radius`, or elevation props.
 6. **Behavior earns props.** A prop must express semantics or interaction that native attributes, slots, and classes cannot express clearly.
-7. **Accessibility is a release gate.** Keyboard, focus, naming, state, contrast, and reduced-motion behavior are correctness.
+7. **Accessibility is correctness.** Keyboard, focus, naming, state, contrast, and reduced-motion behavior are correctness.
 8. **Application classes win.** Neutral defaults stay easy to replace and caller classes merge last.
 9. **Anatomy stays obvious.** Slots, parts, state, and rendered elements remain visible in the copied source.
 10. **Durability is part of correctness.** Useful state survives, navigation context is shareable, focus recovers, and failed optimistic work rolls back.
@@ -47,13 +47,13 @@ The application owns:
 - server interaction and navigation decisions;
 - the final composition of primitives into product UI.
 
-That boundary lets Hagfish, Slipway, and future applications share behavior without being forced into one visual personality.
+Shared behavior leaves your application free to choose its own visual identity.
 
 ## Ownership survives updates
 
 Source ownership is meaningful only when an updater respects it. Klean's [update workflow](/klean-ui/updating) distinguishes exact Klean source from local changes before writing. Known historical source can adopt an upstream fix safely; locally modified and untracked source remains untouched for human review.
 
-Updates stay progressive and component-scoped. Patch releases repair correctness, minor releases add capability, and any necessary breaking change carries migration guidance and proving-application evidence. Klean does not use an update command to smuggle in redesigns, a runtime package, or new visual variants.
+Updates stay progressive and component-scoped. Patch releases repair correctness, minor releases add capability, and breaking changes come with migration guidance. Updates preserve source ownership and keep visual decisions in your application.
 
 ## Use the platform
 
@@ -103,11 +103,11 @@ Use each framework's ordinary conditional class syntax. Your classes take preced
 
 ## Motion belongs to the product
 
-Base components do not bounce, scale, lift, or depress. Their default feedback is tonal and their focus is visible. Hagfish may add its offset-shadow press with explicit Tailwind classes; Slipway may stay still. Neither treatment becomes a universal Button variant.
+Components use tonal feedback and visible focus by default. Add motion with Tailwind where it helps your interface, and respect reduced-motion preferences.
 
-## Accessibility is the release gate
+## Accessibility {#accessibility-is-the-release-gate}
 
-A component is unfinished until the relevant contract is proven:
+Keep these behaviors intact when styling or editing a component:
 
 - truthful native element or equivalent semantics;
 - accessible name and required description;
@@ -130,17 +130,17 @@ Durability also covers interaction recovery: predictable dismissal, focus restor
 
 ## The dependency ladder
 
-Klean chooses the smallest layer that can prove the complete behavior:
+Components build on the browser and add only the behavior they need:
 
 1. native HTML;
 2. small, readable framework behavior;
 3. a focused unstyled primitive when keyboard navigation, focus management, dismissal, or positioning becomes substantial.
 
-Button needs no headless interaction dependency. Popover and the components composed with it use only their focused geometry dependency; a future Combobox or Tooltip must prove any additional need independently. Dependencies are selected per component, remain visible in the installed source and registry metadata, and never become an automatic platform beneath everything.
+Button needs no interaction dependency. Floating components such as Popover use focused positioning utilities. Each installation lists its direct dependencies, and the copied source shows where they are used.
 
-## The test
+## Customizing a component {#the-test}
 
-Before adding a Klean API, ask:
+Before extending your installed source, consider:
 
 - Is this already native HTML?
 - Is this ordinary framework composition?
@@ -149,4 +149,4 @@ Before adding a Klean API, ask:
 - Does this prop change real behavior or only choose CSS?
 - Can a developer understand the installed source in one careful pass?
 
-If the platform, framework, Tailwind, or application already owns the idea, Klean should not invent another configuration language for it.
+Use native attributes for browser behavior, framework composition for application logic, and Tailwind classes for appearance.

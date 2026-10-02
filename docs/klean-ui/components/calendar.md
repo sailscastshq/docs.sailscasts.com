@@ -15,17 +15,38 @@ import calendarSource from '../../.vitepress/theme/components/klean/calendar/Cal
 import dateSource from '../../.vitepress/theme/components/klean/calendar/date.js?raw'
 
 const selectedDate = ref('2026-08-12')
-const vueFiles = [
+
+
+import reactInstalldatejs from '../sources/calendar/date.react.js?raw'
+import reactInstallCalendarjsx from '../sources/calendar/Calendar.jsx?raw'
+import svelteInstalldatejs from '../sources/calendar/date.svelte.js?raw'
+import svelteInstallCalendarsvelte from '../sources/calendar/Calendar.svelte?raw'
+
+const installationFrameworks = [
   {
-    filename: 'date.js',
-    destination: 'assets/js/components/ui/calendar/date.js',
-    source: dateSource
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'date.js', destination: 'assets/js/components/ui/calendar/date.js', source: dateSource },
+      { filename: 'Calendar.vue', destination: 'assets/js/components/ui/calendar/Calendar.vue', source: calendarSource },
+    ]
   },
   {
-    filename: 'Calendar.vue',
-    destination: 'assets/js/components/ui/calendar/Calendar.vue',
-    source: calendarSource
-  }
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'date.js', destination: 'assets/js/components/ui/calendar/date.js', source: reactInstalldatejs },
+      { filename: 'Calendar.jsx', destination: 'assets/js/components/ui/calendar/Calendar.jsx', source: reactInstallCalendarjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'date.js', destination: 'assets/js/components/ui/calendar/date.js', source: svelteInstalldatejs },
+      { filename: 'Calendar.svelte', destination: 'assets/js/components/ui/calendar/Calendar.svelte', source: svelteInstallCalendarsvelte },
+    ]
+  },
 ]
 </script>
 
@@ -43,6 +64,19 @@ timezone.
         {{ selectedDate }}
       </output>
     </div>
+  </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/calendar/usage.vue [Vue]
+
+<<< ../snippets/calendar/usage.jsx [React]
+
+<<< ../snippets/calendar/usage.svelte [Svelte]
+
+:::
+
   </template>
   <template #source>
 
@@ -62,11 +96,7 @@ calendar plus its small date-only helper:
 <KleanInstallation
   id="calendar-installation"
   component="calendar"
-  :source="calendarSource"
-  filename="Calendar.vue"
-  destination="assets/js/components/ui/calendar/Calendar.vue"
-  :files="vueFiles"
-  :dependencies="['tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## When to use
@@ -83,15 +113,7 @@ time, and timezone must become an exact instant.
 
 ## Usage
 
-::: code-group
-
-<<< ../snippets/calendar/usage.vue [Vue]
-
-<<< ../snippets/calendar/usage.jsx [React]
-
-<<< ../snippets/calendar/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#calendar-source) for your framework.
 
 ## API
 

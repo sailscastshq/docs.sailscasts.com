@@ -13,11 +13,38 @@ import LoadingStateRecipes from '../../.vitepress/theme/components/klean/loading
 import loadingStateSource from '../../.vitepress/theme/components/klean/loading-state/LoadingState.vue?raw'
 
 import vueUsage from '../snippets/loading-state/usage.vue?raw'
+
+import reactInstallLoadingStatejsx from '../sources/loading-state/LoadingState.jsx?raw'
+import svelteInstallLoadingStatesvelte from '../sources/loading-state/LoadingState.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'LoadingState.vue', destination: 'assets/js/components/ui/loading-state/LoadingState.vue', source: loadingStateSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'LoadingState.jsx', destination: 'assets/js/components/ui/loading-state/LoadingState.jsx', source: reactInstallLoadingStatejsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'LoadingState.svelte', destination: 'assets/js/components/ui/loading-state/LoadingState.svelte', source: svelteInstallLoadingStatesvelte },
+    ]
+  },
+]
 </script>
 
 # Loading State
 
-Loading State gives pending content one calm, useful status surface. The application marks the region that is busy, names the work in plain language, and decides whether to show a product mark, caller-written skeletons, or content that is already useful.
+Show a useful status while content is loading. Name the work, mark the busy region, and choose a loading mark, skeleton, or existing content to keep visible.
 
 It is one component. There is no request prop, timer, data-fetching hook, skeleton component, visual variant, full-page mode, or product copy hidden behind its API.
 
@@ -28,26 +55,7 @@ It is one component. There is no request prop, timer, data-fetching hook, skelet
   <template #caption>
     An initial load, a caller-shaped skeleton, and a refresh that preserves useful rows share the same truthful status contract.
   </template>
-</KleanPreview>
-
-## Installation
-
-The command detects Vue, React, or Svelte and copies the matching one-file source into the conventional UI directory.
-
-<KleanInstallation
-  id="loading-state-installation"
-  component="loading-state"
-  :source="loadingStateSource"
-  filename="LoadingState.vue"
-  destination="assets/js/components/ui/loading-state/LoadingState.vue"
-  :dependencies="['tailwind-merge']"
-/>
-
-The examples also use [Spinner](/klean-ui/components/spinner). Add it separately with `npx klean-ui add spinner`, or place an application-owned mark or skeleton inside Loading State.
-
-## Usage
-
-Put `aria-busy` on the region whose content is changing. Loading State provides the persistent polite status; the caller supplies useful words and optional visuals.
+  <template #usage>
 
 ::: code-group
 
@@ -58,6 +66,27 @@ Put `aria-busy` on the region whose content is changing. Loading State provides 
 <<< ../snippets/loading-state/usage.svelte [Svelte]
 
 :::
+
+  </template>
+</KleanPreview>
+
+## Installation
+
+The command detects Vue, React, or Svelte and copies the matching one-file source into the conventional UI directory.
+
+<KleanInstallation
+  id="loading-state-installation"
+  component="loading-state"
+  :frameworks="installationFrameworks"
+/>
+
+The examples also use [Spinner](/klean-ui/components/spinner). Add it separately with `npx klean-ui add spinner`, or place an application-owned mark or skeleton inside Loading State.
+
+## Usage
+
+Put `aria-busy` on the region whose content is changing. Loading State provides the persistent polite status; the caller supplies useful words and optional visuals.
+
+Copy the [example above](#loading-state-apps) for your framework.
 
 ## API
 
@@ -101,7 +130,7 @@ The application decides when pending work starts and ends. Loading State does no
 
 The baseline is a centered, wrapping column with a useful minimum height. `class` or `className` merges onto the root, so applications can create compact refresh text, a full content-region loader, or a left-aligned skeleton with ordinary Tailwind.
 
-The visual content remains caller markup. Slipway can keep its animated Slippy mark, Hagfish can keep its sharp invoice skeletons, and neither product treatment becomes a Klean prop.
+Write the visual content directly: a loading mark, an invoice skeleton, or a compact progress message. Use the same status semantics for each treatment.
 
 ## When to use
 

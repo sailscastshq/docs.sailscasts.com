@@ -24,11 +24,38 @@ const lastAction = ref('')
 function keepPreview(event) {
   event.preventDefault()
 }
+
+import reactInstallCardjsx from '../sources/card/Card.jsx?raw'
+import svelteInstallCardsvelte from '../sources/card/Card.svelte?raw'
+
+const installationFrameworks = [
+  {
+    id: 'vue', label: 'Vue',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Card.vue', destination: 'assets/js/components/ui/card/Card.vue', source: cardSource },
+    ]
+  },
+  {
+    id: 'react', label: 'React',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Card.jsx', destination: 'assets/js/components/ui/card/Card.jsx', source: reactInstallCardjsx },
+    ]
+  },
+  {
+    id: 'svelte', label: 'Svelte',
+    dependencies: ["tailwind-merge"],
+    files: [
+      { filename: 'Card.svelte', destination: 'assets/js/components/ui/card/Card.svelte', source: svelteInstallCardsvelte },
+    ]
+  },
+]
 </script>
 
 # Card
 
-Card is one shallow visual surface. It renders one element, puts no anatomy around your content, and lets the application choose what that element truthfully means.
+Group related content in a simple surface. Choose the appropriate HTML element and use Tailwind to style it.
 
 Use native headings, paragraphs, figures, lists, links, buttons, headers, and footers inside it. Use ordinary Tailwind for the product design. Card does not turn content into a “card schema.”
 
@@ -44,6 +71,19 @@ Use native headings, paragraphs, figures, lists, links, buttons, headers, and fo
       </p>
     </KleanCard>
   </template>
+  <template #usage>
+
+::: code-group
+
+<<< ../snippets/card/usage.vue [Vue]
+
+<<< ../snippets/card/usage.jsx [React]
+
+<<< ../snippets/card/usage.svelte [Svelte]
+
+:::
+
+  </template>
   <template #source>
 
 <<< ../../.vitepress/theme/components/klean/card/Card.vue
@@ -58,25 +98,14 @@ One command detects Vue, React, or Svelte and writes the matching one-file sourc
 <KleanInstallation
   id="card-installation"
   component="card"
-  :source="cardSource"
-  filename="Card.vue"
-  destination="assets/js/components/ui/card/Card.vue"
-  :dependencies="['tailwind-merge']"
+  :frameworks="installationFrameworks"
 />
 
 ## Usage
 
 Choose the native element from what the content is, then write the markup directly.
 
-::: code-group
-
-<<< ../snippets/card/usage.vue [Vue]
-
-<<< ../snippets/card/usage.jsx [React]
-
-<<< ../snippets/card/usage.svelte [Svelte]
-
-:::
+Copy the [example above](#card-source) for your framework.
 
 ## API
 
@@ -158,20 +187,20 @@ The neutral Card is deliberately calm: one light border, white surface, ordinary
 
 If a treatment repeats inside one application, make a small application-owned component or shared class recipe. Do not turn it into a Klean variant.
 
-## Hagfish and Slipway recipes
+## Dashboard recipes {#hagfish-and-slipway-recipes}
 
-These treatments are proof that one source can serve different products. They are not Klean themes.
+Use the same Card for an expressive summary or a compact operational panel.
 
 <KleanPreview id="card-products" :source="productSource" filename="ProductCards.vue">
   <template #preview>
     <CardRecipes />
   </template>
   <template #caption>
-    <span>Hagfish keeps multiple controls explicit on a non-interactive article. Slipway keeps a compact operational section. Neither expands the Card API.</span>
+    <span>Keep multiple controls inside a non-interactive article or section so each action remains separately accessible.</span>
   </template>
 </KleanPreview>
 
-Hagfish's existing summary-card behavior—currency cycling, compact financial formatting, tooltips, and invoice filters—remains product logic around Card. Slipway's health state, deployment work, density, and dark application chrome remain Slipway logic.
+Format currency, apply filters, display health, and handle actions in the surrounding application. Card provides the surface without deciding what the data means.
 
 ## Accessibility
 
