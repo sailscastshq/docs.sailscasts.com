@@ -17,7 +17,7 @@ editLink: true
 
 # Commands Reference
 
-Use this reference after the [CLI workflow](/slipway/cli). Use `slipway --help` to list commands on your installed CLI. The current help dispatcher shows global help even when you ask for command help; the options below follow the registered source contract.
+Use this reference after the [CLI workflow](/slipway/cli). Use `slipway --help` to list commands on your installed CLI. The current dispatcher handles help and version globally even when invoked after a command; the reference below follows the registered source contract.
 
 Most commands require saved credentials and a linked `.slipway.json` project. `--env` selects an environment; it does not select a server. `--project` is currently limited to the next `logs` and `run` commands. `--server` belongs to `login` only.
 
@@ -210,10 +210,10 @@ slipway services [--env <env>]
 Create a new database service.
 
 ```bash
-slipway db:create <name> [--type <type>] [--version <version>] [--env <env>]
+slipway db:create <name> [--type <type>] [--env <env>]
 ```
 
-`--type` defaults to `postgresql`. `--env` defaults to `production`.
+`--type` defaults to `postgresql`. `--env` defaults to `production`. The registered `--version` option is intercepted by the current global dispatcher; select a specific database version in the dashboard instead.
 
 ### db:url
 

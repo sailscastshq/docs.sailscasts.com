@@ -546,14 +546,14 @@ await sails.helpers.payments.calculateTotal({ orderId: 123 })
 ### Inspecting Configuration
 
 ```javascript
-// View custom config
-sails.config.custom
-
-// Check environment
+// Check the environment without returning credentials
 sails.config.environment
 
-// View datastore config
-sails.config.datastores
+// Inspect datastore names, not connection strings
+Object.keys(sails.config.datastores)
+
+// Inspect a non-secret runtime setting
+sails.config.port
 ```
 
 ### Advanced Queries
