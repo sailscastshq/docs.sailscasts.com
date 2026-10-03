@@ -145,6 +145,10 @@ Non-modal content anchored to a trigger.
 
 Keyboard-friendly actions and destinations.
 
+### [ContextMenu](/klean-ui/components/context-menu)
+
+A right-click and keyboard action menu paired with an existing focusable target. It composes Menu and Popover, handles viewport collision, and leaves touch actions to a regular application button.
+
 ### [Select](/klean-ui/components/select)
 
 Choose one value from a fixed list.
