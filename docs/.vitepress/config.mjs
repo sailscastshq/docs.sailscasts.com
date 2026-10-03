@@ -149,6 +149,7 @@ function kleanUiGuide() {
         { text: 'Popover', link: '/klean-ui/components/popover' },
         { text: 'Menu', link: '/klean-ui/components/menu' },
         { text: 'Select', link: '/klean-ui/components/select' },
+        { text: 'MultiSelect', link: '/klean-ui/components/multi-select' },
         { text: 'Combobox', link: '/klean-ui/components/combobox' },
         { text: 'Command', link: '/klean-ui/components/command' },
         { text: 'Dialog', link: '/klean-ui/components/dialog' },

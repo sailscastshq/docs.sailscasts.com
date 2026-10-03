@@ -149,6 +149,10 @@ Keyboard-friendly actions and destinations.
 
 Choose one value from a fixed list.
 
+### [MultiSelect](/klean-ui/components/multi-select)
+
+A fixed-choice collection picker with multi-listbox semantics, native repeated form values, and caller-owned Tailwind styling.
+
 ### [Combobox](/klean-ui/components/combobox)
 
 Search and choose from a long list.
