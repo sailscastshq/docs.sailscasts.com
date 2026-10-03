@@ -35,6 +35,7 @@ async function search(query) {
     id="repository"
     v-model="repository"
     :options="repositories"
+    :filter="false"
     :loading="loading"
     :error="error"
     @search="search"
