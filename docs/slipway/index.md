@@ -10,7 +10,7 @@ head:
 hero:
   name: Slipway
   text: Deploy and operate Sails apps
-  tagline: Deploy, manage, monitor, and debug Sails apps on your own infrastructure. Built for Sails, on infrastructure you control.
+  tagline: Deploy, manage, monitor, and debug Sails applications on your own server.
   image:
     src: /slipway-logo.svg
     alt: Slipway
@@ -57,7 +57,8 @@ features:
     link: /slipway/wake
   - icon: ⏰
     title: Job Scheduling
-    details: Schedule and manage background jobs with Quest. Cron tasks, recurring scripts, and deferred work.
+    details: Define background jobs in your app and inspect deployed job telemetry. Check runtime compatibility before using operational controls.
+    link: /slipway/quest
   - icon: 💾
     title: Backups & Recovery
     details: Private S3-compatible and Azure backups for managed databases, plus logical backups for external PostgreSQL.

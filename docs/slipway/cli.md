@@ -2,6 +2,12 @@
 title: CLI Workflow
 titleTemplate: Slipway
 description: Inspect a target, diagnose a problem, make a reviewed change, and verify the result.
+prev:
+  text: Authentication
+  link: /slipway/cli-authentication
+next:
+  text: Commands Reference
+  link: /slipway/cli-commands
 editLink: true
 ---
 

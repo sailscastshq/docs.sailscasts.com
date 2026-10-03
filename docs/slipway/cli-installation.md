@@ -7,8 +7,8 @@ title: CLI Installation
 titleTemplate: Slipway
 description: Install the Slipway CLI to deploy and manage your Sails applications from the command line.
 prev:
-  text: Settings
-  link: /slipway/settings
+  text: CLI Workflow
+  link: /slipway/cli
 next:
   text: Authentication
   link: /slipway/cli-authentication
