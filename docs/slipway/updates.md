@@ -36,7 +36,7 @@ Back up the instance database consistently, retain its encryption keys, and pres
 
 ## Historical upgrade: v0.0.65 {#upgrading-to-v0-0-65}
 
-[See everything new in this release](/slipway/whats-new), including Wake, Bridge support views, private backup providers, external PostgreSQL and custom-service routing and updates.
+[Read the v0.0.65 changelog on GitHub Releases](https://github.com/sailscastshq/slipway/releases/tag/v0.0.65) for that release's changes. All Slipway changelogs live in [GitHub Releases](https://github.com/sailscastshq/slipway/releases).
 
 **No manual SQL is required in Bosun before deploying this version.** Startup creates missing tables and adds missing columns for existing installations. Keep production migration mode at `safe`; do not set `SLIPWAY_MIGRATE=alter` or `drop` to perform this upgrade. These are Slipway's own schema changes, not migrations of your deployed apps' databases.
 

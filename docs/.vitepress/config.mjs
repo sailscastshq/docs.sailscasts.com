@@ -1036,7 +1036,10 @@ function slipwayGuide() {
       collapsed: false,
       items: [
         { text: 'Overview', link: '/slipway/' },
-        { text: 'Release notes: v0.0.65', link: '/slipway/whats-new' },
+        {
+          text: 'Changelog',
+          link: 'https://github.com/sailscastshq/slipway/releases'
+        },
         { text: 'What is Slipway?', link: '/slipway/what-is-slipway' },
         { text: 'Why Slipway?', link: '/slipway/why-slipway' },
         { text: 'The Name', link: '/slipway/the-name' },
