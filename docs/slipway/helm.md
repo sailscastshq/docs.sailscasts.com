@@ -58,9 +58,64 @@ execution. Scratchpads preserve source, not a live JavaScript context.
 1. Go to your project in Slipway
 2. Select an environment and click the app name from the Apps list
 3. Click the ellipsis dropdown menu and select **Helm**
-4. Start typing in the REPL interface
+4. Choose **JavaScript** for the REPL or **Command** for a non-interactive executable
 
 Your app must be running for Helm to work — it executes code inside the running container.
+
+## JavaScript and Command modes
+
+::: info Unreleased command workspace
+The command workspace described here is merged into Slipway `main` after
+v0.0.86 and has not yet shipped in a public release. Use a reviewed build of
+that revision to try it; a v0.0.86 installation may show the earlier interface.
+:::
+
+**JavaScript** is the default mode. Use its editor and named scratchpads for
+Waterline queries, Sails helpers, completion, inline inspection, query tracing,
+and structured results. <kbd>⌘ Enter</kbd> or <kbd>Ctrl Enter</kbd> runs the
+selection or whole editor.
+
+**Command** runs one executable with arguments inside the selected running app.
+It is available to team owners and administrators. Type a single-line command
+into the borderless native input at the top, then press <kbd>Enter</kbd> or use
+the return-key control. The input preserves ordinary text selection and cursor
+editing. The help icon beside **History** opens contextual command guidance;
+there is no idle **Ready** status. Status appears while preparing or running,
+or when there is an outcome to inspect.
+
+For a bounded first check, try:
+
+```text
+node --version
+```
+
+Quoting groups arguments. Shell operators, expansion, pipes, redirects, TTYs,
+and interactive input are unsupported. Pasting or dropping multiple lines is
+rejected. Helm does not install missing packages or executables. Avoid commands
+that start daemons; this mode supports foreground commands.
+
+In production, every command needs a fresh, single-use write confirmation.
+Pressing Enter opens the confirmation; arming returns focus to the input without
+executing. Press Enter again to run the approved attempt. Editing the command or
+changing deployment invalidates the arm. Repeating a completed command requires
+another confirmation. **Stop** requests cancellation; an **Unconfirmed** outcome
+means inspect the app before retrying, since side effects may already have occurred.
+
+Command history stores command source and target metadata, never output. Choosing
+history restores a command for editing without running it. Output streams into a
+bounded console; editing after a run shows **Draft changed · not run**, while the
+previous output remains labelled with the command that produced it. Keep secrets
+in environment variables, since command arguments are retained in history.
+
+Command mode requires `sails-hook-slipway` 0.0.11 or later and a redeployment that
+publishes a verified runtime contract. It uses the resident app's startup environment,
+working directory, executable, and process identity. `sails run` currently supports
+Sails 1.5.18 with whelk 6.0.2; other versions fail explicitly. It preserves native
+script input validation while enforcing safe migrations and disabling a second
+Quest scheduler. Ordinary module loading and hook initialization still occur.
+
+JavaScript execution remains isolated per run. Switching modes does not turn
+scratchpads into a persistent shell or shared JavaScript process.
 
 ## How It Works
 
