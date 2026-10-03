@@ -9,6 +9,12 @@ const failures = []
 const seen = new Set()
 for (const name of readdirSync(root).filter((name) => name.endsWith('.md'))) {
   const text = readFileSync(join(root, name), 'utf8')
+  for (const aliasLine of text.matchAll(/Aliases?: ([^\n]+)/g)) {
+    for (const alias of aliasLine[1].matchAll(/`([\w:-]+)`/g)) {
+      if (!(alias[1] in fixture.aliases))
+        failures.push(`${name}: unsupported alias ${alias[1]}`)
+    }
+  }
   for (const match of text.matchAll(/```[^\n]*\n([\s\S]*?)```/g)) {
     for (const line of match[1].replace(/\\\n\s*/g, ' ').split('\n')) {
       const invocation = line.match(

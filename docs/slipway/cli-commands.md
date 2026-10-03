@@ -311,7 +311,7 @@ Environment defaults to `production`; tail defaults to 100 and accepts 0–10000
 slipway run [<command...>] [--project <slug>] [--env <slug>] [--app <slug>] [--stdin] [--file <path>] [--write-arm-file <path>] [--json] [--ndjson]
 ```
 
-Alias: `exec`. Environment defaults to `production`. Short targeting forms: `-p`, `-e`, `-a`. Provide one command source: positionals, stdin, or a file. The command source is bounded to 128 KiB. Every production command requires a valid exact-command/deployment arm; this CLI cannot create one.
+Environment defaults to `production`. Short targeting forms: `-p`, `-e`, `-a`. Provide one command source: positionals, stdin, or a file. The command source is bounded to 128 KiB. Every production command requires a valid exact-command/deployment arm; this CLI cannot create one.
 
 Read the [workflow](/slipway/cli#wait-for-an-outcome) for completion receipts, structured errors, exit codes, and unconfirmed interruptions. There is no automatic replay, idempotency option, execution lookup, resume, or cancel command.
 
