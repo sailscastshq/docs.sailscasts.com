@@ -24,6 +24,16 @@ credentials inside the private Docker network.
 Dock is not an ORM abstraction. SQL, MongoDB expressions, Redis commands,
 imports, and generated migrations execute against the selected live service.
 
+## Inspect before changing data
+
+Choose the intended environment and service, open Dock, and start with a bounded query against your own table:
+
+```sql
+SELECT id FROM orders ORDER BY id DESC LIMIT 20;
+```
+
+Review the returned rows and target before making a change. Take a [recoverable backup](/slipway/database-services#backups) before a migration or import, then verify the actual database state after completion. A transport error can leave earlier statements committed; do not repeat the same change blindly. See [Operations and API](/slipway/operations).
+
 ## Supported services
 
 | Service    | Console              | Browse                    | Schema              | Model diff                 | Import and export                   |

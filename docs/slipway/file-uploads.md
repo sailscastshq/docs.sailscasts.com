@@ -41,33 +41,7 @@ npm install sails-hook-uploads skipper-s3
 
 Set your storage credentials once in Slipway (shared across all apps):
 
-::: code-group
-
-```bash [Cloudflare R2]
-slipway config:set \
-  R2_ACCESS_KEY=your-access-key \
-  R2_SECRET_KEY=your-secret-key \
-  R2_BUCKET=your-bucket \
-  R2_ENDPOINT=https://account-id.r2.cloudflarestorage.com
-```
-
-```bash [DigitalOcean Spaces]
-slipway config:set \
-  SPACES_ACCESS_KEY=your-access-key \
-  SPACES_SECRET_KEY=your-secret-key \
-  SPACES_BUCKET=your-bucket \
-  SPACES_ENDPOINT=https://nyc3.digitaloceanspaces.com
-```
-
-```bash [Amazon S3]
-slipway config:set \
-  S3_ACCESS_KEY=your-access-key \
-  S3_SECRET_KEY=your-secret-key \
-  S3_BUCKET=your-bucket \
-  S3_REGION=us-east-1
-```
-
-:::
+Open **Settings → Global Environment** to set the provider variables used by your app, or configure the app's own environment variables. Do not put storage credentials in command history or source files. Follow [Global Environment Variables](/slipway/global-environment-variables) and your upload adapter's configuration guide.
 
 ### 3. Configure Your Sails App
 

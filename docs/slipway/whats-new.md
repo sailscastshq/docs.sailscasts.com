@@ -7,6 +7,8 @@ editLink: true
 
 # What’s new in v0.0.65
 
+These are historical release notes. See [Updates](/slipway/updates#release-compatibility) for the latest verified release and unreleased capability boundaries.
+
 Slipway v0.0.65 brings product analytics, read-only customer support, private backup providers, external database connections and reviewed custom-service operations. [Upgrade instructions](/slipway/updates#upgrading-to-v0-0-65) explain the automatic schema changes and app hook requirements.
 
 ## Wake product analytics

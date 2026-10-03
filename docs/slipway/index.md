@@ -1,7 +1,7 @@
 ---
 layout: home
 title: Slipway
-titleTemplate: The complete platform for Sails.js
+titleTemplate: Deploy and operate Sails apps
 description: Deploy, manage, monitor, and debug your Sails.js applications on your own infrastructure. Self-hosted, simple, and built specifically for Sails.
 head:
   - - meta
@@ -9,8 +9,8 @@ head:
       content: https://docs.sailscasts.com/slipway-social.png
 hero:
   name: Slipway
-  text: The complete platform for Sails.js
-  tagline: Deploy, manage, monitor, and debug Sails apps on your own infrastructure. One command. Zero complexity.
+  text: Deploy and operate Sails apps
+  tagline: Deploy, manage, monitor, and debug Sails apps on your own infrastructure. Built for Sails, on infrastructure you control.
   image:
     src: /slipway-logo.svg
     alt: Slipway
@@ -65,6 +65,7 @@ features:
     title: Team Collaboration
     details: Manage projects and team members. Control access and permissions across your organization.
   - icon: 🔑
-    title: CLI & Deploy Tokens
-    details: Deploy from CI/CD pipelines with secure tokens. Full CLI for scripting and automation.
+    title: Command-Line Workflows
+    details: Use the CLI for source deployment and supported operational tasks.
+    link: /slipway/cli
 ---

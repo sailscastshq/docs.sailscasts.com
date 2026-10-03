@@ -138,7 +138,7 @@ enables it and opens the matching host and provider firewall rules.
 
 ### How Deployments Work
 
-Slipway uses **blue-green deployments** for zero downtime:
+Slipway uses candidate deployment and verified traffic cutover:
 
 ```
 1. Build image from your Dockerfile
@@ -215,7 +215,7 @@ Slipway backs up your database services (PostgreSQL, MySQL, MongoDB) to S3-compa
 2. Uploads the dump to your configured S3 bucket (supports AWS S3, Cloudflare R2, DigitalOcean Spaces)
 3. Tracks backup metadata (size, duration, storage location) for one-click restore
 
-Backup storage is configured via [global environment variables](/slipway/global-environment-variables) — set your S3 credentials once and all projects can use them.
+Configure providers with [Private Backup Storage](/slipway/backup-storage). Verify backup completion and recovery; application upload storage and database backup storage are separate configurations.
 
 ## Technology Choices
 

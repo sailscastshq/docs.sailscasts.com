@@ -19,6 +19,16 @@ editLink: true
 
 Helm is a production REPL for your Sails applications.
 
+## Start with bounded inspection
+
+Open Helm for the intended app and environment, then inspect a count before returning records:
+
+```javascript
+await User.count()
+```
+
+Use a model from your own app. For records, select only the fields you need and use a limit. Review the [production target and write-arm rules](#production-target-and-write-arming) before a mutation. Use the [CLI workflow](/slipway/cli) for the separate command-execution interface and its release boundary.
+
 ## What is Helm?
 
 Helm gives you a live REPL connected to your running Sails application:
@@ -502,7 +512,7 @@ All your Sails models are available globally:
 
 ```javascript
 // Find all users
-await User.find()
+await User.find().limit(10)
 
 // Find with criteria
 await User.find({ role: 'admin' })
