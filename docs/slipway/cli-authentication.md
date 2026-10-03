@@ -37,7 +37,7 @@ Login chooses the server in this order:
 
 `--server` is a **login option**, not a global override for deployments. Other commands use saved credentials. To switch servers, run login for the new server and check `whoami` before changing anything. Named profiles are not available.
 
-`whoami` displays saved account, team, and server information. It helps check local configuration; a successful API request is still needed to confirm that the credential remains valid.
+`whoami` displays saved account, team, and server information. It helps check local configuration; a successful API request is still needed to confirm that the credential remains valid. The unreleased next CLI provides `slipway doctor --json` to check server health and validate the saved CLI token; cached `whoami` output is not that validation.
 
 ## Credential storage
 

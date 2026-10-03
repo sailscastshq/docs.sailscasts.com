@@ -47,4 +47,4 @@ Use the tool-specific contract rather than guessing a URL from a CLI command:
 - [Deploy tokens](/slipway/deploy-tokens) for scoped pipeline deployment.
 - [CLI workflow](/slipway/cli) for structured logs/run output, exit codes, and unconfirmed outcomes.
 
-These transports have different capabilities. The CLI has no general operation lookup, automatic replay, resume, or cancel interface.
+These transports have different capabilities. The next CLI adds `app:inspect`, exact-target-approved `app:restart`, private command receipts, `run:arm`, `run:cancel`, and metadata-only `run:history` through existing server APIs. See the [CLI workflow](/slipway/cli) for their unreleased boundary, completion evidence, and cancellation limits. It has no general operation lookup, automatic replay, or resume interface.

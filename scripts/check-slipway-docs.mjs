@@ -90,7 +90,24 @@ if (process.env.SLIPWAY_CLI_SOURCE) {
   )
   for (const command of Object.keys(actual.commands))
     assert.ok(help.includes(command), `Help omits ${command}`)
+  for (const name of [
+    ...Object.keys(actual.commands),
+    ...Object.keys(actual.aliases)
+  ]) {
+    const primary = actual.aliases[name] || name
+    const commandHelp = execFileSync(
+      process.execPath,
+      [join(source, 'src/index.js'), name, '--help'],
+      { encoding: 'utf8' }
+    )
+    assert.ok(commandHelp.includes(primary), `Command help omits ${primary}`)
+    for (const flag of Object.keys(actual.commands[primary].options))
+      assert.ok(
+        commandHelp.includes(`--${flag}`),
+        `${name} help omits --${flag}`
+      )
+  }
   console.log(
-    'Exact-source registry and global help match all 29 documented commands.'
+    `Exact-source registry, global help, and command help match ${Object.keys(actual.commands).length} commands and ${Object.keys(actual.aliases).length} aliases.`
   )
 }

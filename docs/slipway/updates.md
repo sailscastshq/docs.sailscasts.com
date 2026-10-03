@@ -23,12 +23,12 @@ Slipway includes built-in update detection and one-click updates from the dashbo
 
 The latest verified public Slipway server release is [v0.0.86](https://github.com/sailscastshq/slipway/releases/tag/v0.0.86). Read the release notes before upgrading; documentation of current development source does not mean a feature is included in that release.
 
-| Capability                           | Availability                                                                                           |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------ |
-| Latest verified server release       | v0.0.86                                                                                                |
-| New Helm workspace documented here   | Development source after v0.0.86; see [Helm](/slipway/helm#javascript-and-command-modes)               |
-| Live CLI logs and guarded remote run | Unreleased next CLI and server; see [CLI Workflow](/slipway/cli)                                       |
-| Resident Quest controls              | Unreleased coordinated server and app-hook contract; see [Quest](/slipway/quest#release-compatibility) |
+| Capability                            | Availability                                                                                           |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Latest verified server release        | v0.0.86                                                                                                |
+| New Helm workspace documented here    | Development source after v0.0.86; see [Helm](/slipway/helm#javascript-and-command-modes)               |
+| CLI logs, guarded run, and operations | Unreleased next CLI and server; see [CLI Workflow](/slipway/cli)                                       |
+| Resident Quest controls               | Unreleased coordinated server and app-hook contract; see [Quest](/slipway/quest#release-compatibility) |
 
 Upgrade server, CLI, and relevant application hooks deliberately. They have separate version numbers. Updating the server does not update dependencies inside deployed apps. No released minimum versions have been assigned to the resident Quest contract; published Quest 0.0.5 and Slipway hook 0.0.11 are not sufficient.
 

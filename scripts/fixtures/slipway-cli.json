@@ -1,8 +1,180 @@
 {
   "source": "sailscastshq/slipway",
   "releasedRef": "v0.0.86",
-  "nextRef": "25b78ba525aa9ee689eeee3ccdfe26f922765e6e",
+  "nextRef": "0fb573776551106a91a4d0f67f6a2be3712d5513",
   "commands": {
+    "doctor": {
+      "description": "Check server health, saved CLI authentication, and optional target readiness",
+      "options": {
+        "project": {
+          "type": "string",
+          "short": "p"
+        },
+        "env": {
+          "type": "string",
+          "short": "e",
+          "default": "production"
+        },
+        "app": {
+          "type": "string",
+          "short": "a"
+        },
+        "json": {
+          "type": "boolean"
+        },
+        "ndjson": {
+          "type": "boolean"
+        }
+      }
+    },
+    "apps": {
+      "description": "List apps without printing environment variables or credentials",
+      "options": {
+        "project": {
+          "type": "string",
+          "short": "p"
+        },
+        "env": {
+          "type": "string",
+          "short": "e",
+          "default": "production"
+        },
+        "app": {
+          "type": "string",
+          "short": "a"
+        },
+        "json": {
+          "type": "boolean"
+        },
+        "ndjson": {
+          "type": "boolean"
+        }
+      }
+    },
+    "app:inspect": {
+      "description": "Inspect one explicit app target",
+      "options": {
+        "project": {
+          "type": "string",
+          "short": "p"
+        },
+        "env": {
+          "type": "string",
+          "short": "e",
+          "default": "production"
+        },
+        "app": {
+          "type": "string",
+          "short": "a"
+        },
+        "json": {
+          "type": "boolean"
+        },
+        "ndjson": {
+          "type": "boolean"
+        }
+      }
+    },
+    "app:restart": {
+      "description": "Restart one reviewed target through the existing server API",
+      "options": {
+        "project": {
+          "type": "string",
+          "short": "p"
+        },
+        "env": {
+          "type": "string",
+          "short": "e",
+          "default": "production"
+        },
+        "app": {
+          "type": "string",
+          "short": "a"
+        },
+        "json": {
+          "type": "boolean"
+        },
+        "ndjson": {
+          "type": "boolean"
+        },
+        "approve-target": {
+          "type": "string"
+        }
+      }
+    },
+    "run:cancel": {
+      "description": "Request cancellation of an owned active execution; report confirmation truthfully",
+      "args": "<execution-id>",
+      "options": {
+        "json": {
+          "type": "boolean"
+        },
+        "ndjson": {
+          "type": "boolean"
+        }
+      }
+    },
+    "run:history": {
+      "description": "List retained command metadata, without source, output, or UUID lookup",
+      "options": {
+        "project": {
+          "type": "string",
+          "short": "p"
+        },
+        "env": {
+          "type": "string",
+          "short": "e",
+          "default": "production"
+        },
+        "app": {
+          "type": "string",
+          "short": "a"
+        },
+        "json": {
+          "type": "boolean"
+        },
+        "ndjson": {
+          "type": "boolean"
+        }
+      }
+    },
+    "run:arm": {
+      "description": "Arm an approved exact production command using a private single-use token file",
+      "args": "[command]",
+      "options": {
+        "project": {
+          "type": "string",
+          "short": "p"
+        },
+        "env": {
+          "type": "string",
+          "short": "e",
+          "default": "production"
+        },
+        "app": {
+          "type": "string",
+          "short": "a"
+        },
+        "json": {
+          "type": "boolean"
+        },
+        "ndjson": {
+          "type": "boolean"
+        },
+        "approve-target": {
+          "type": "string"
+        },
+        "output": {
+          "type": "string"
+        },
+        "stdin": {
+          "type": "boolean"
+        },
+        "file": {
+          "type": "string"
+        }
+      }
+    },
     "service:review": {
       "description": "Review a private custom image before creation",
       "args": "<image>",
@@ -337,7 +509,7 @@
       }
     },
     "terminal": {
-      "description": "Open a terminal session in the running container",
+      "description": "Show direct Docker shell instructions; no interactive CLI terminal transport",
       "options": {
         "env": {
           "type": "string",
@@ -352,6 +524,7 @@
     },
     "run": {
       "description": "Run a bounded command through guarded Helm",
+      "aliases": ["exec"],
       "args": "<command...>",
       "options": {
         "project": {
@@ -373,6 +546,9 @@
         "write-arm-file": {
           "type": "string"
         },
+        "receipt-file": {
+          "type": "string"
+        },
         "env": {
           "type": "string",
           "short": "e",
@@ -387,7 +563,8 @@
   },
   "aliases": {
     "deploy": "slide",
-    "launch": "slide"
+    "launch": "slide",
+    "exec": "run"
   },
   "released": {
     "service:review": {

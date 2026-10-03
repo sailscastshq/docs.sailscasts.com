@@ -29,7 +29,7 @@ slipway db:create cache --type redis --env staging
 slipway services --env staging
 ```
 
-Use `--type` and `--env` to choose the service and environment. The current CLI dispatcher intercepts the registered `--version` option globally, so choose a specific version through the dashboard's service creation controls. Do not assume a major version is available because an arbitrary image tag exists.
+Use `--type` and `--env` to choose the service and environment. The unreleased next CLI parses `db:create --version` as the database version. Earlier clients intercept it as the global CLI version flag; use the dashboard's service creation controls on those clients. Do not assume a major version is available because an arbitrary image tag exists.
 
 For connection details:
 
