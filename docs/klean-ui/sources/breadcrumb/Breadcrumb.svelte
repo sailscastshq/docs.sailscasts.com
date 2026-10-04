@@ -56,7 +56,10 @@
     aria-label={ariaLabel}
     class={twMerge("@container min-w-0", className)}
   >
-    <ol data-slot="list" class="flex min-w-0 items-center gap-1.5 overflow-hidden text-sm">
+    <ol
+      data-slot="list"
+      class="flex min-w-0 items-center gap-1.5 overflow-hidden text-sm"
+    >
       {#each items as item, index (`${index}-${item.label}`)}
         {#if collapses && index === lastIndex - 1}
           <li
@@ -64,7 +67,9 @@
             class="flex shrink-0 items-center gap-1.5 @lg:hidden"
           >
             {@render Separator()}
-            <span class="inline-flex min-h-11 items-center px-1 text-gray-400 dark:text-gray-500">
+            <span
+              class="inline-flex min-h-11 items-center px-1 text-gray-400 dark:text-gray-500"
+            >
               <span aria-hidden="true">…</span>
               <span class="sr-only">Collapsed breadcrumb items</span>
             </span>
