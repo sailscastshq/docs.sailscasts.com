@@ -7,8 +7,8 @@ title: CLI Installation
 titleTemplate: Slipway
 description: Install the Slipway CLI to deploy and manage your Sails applications from the command line.
 prev:
-  text: Settings
-  link: /slipway/settings
+  text: CLI Workflow
+  link: /slipway/cli
 next:
   text: Authentication
   link: /slipway/cli-authentication
@@ -17,73 +17,34 @@ editLink: true
 
 # CLI Installation
 
-The Slipway CLI lets you deploy and manage your Sails applications from the command line.
-
-## Installation
-
-### Using npm (Global)
+Install the CLI on the machine where you keep your application source. The npm package is `slipway-cli`; the executable is `slipway`.
 
 ```bash
-npm install -g slipway
-```
-
-After installation, the `slipway` command is available globally:
-
-```bash
+npm install -g slipway-cli
+slipway --version
 slipway --help
 ```
 
-### Using npx (No Installation)
+## Requirements
 
-You can use the CLI without installing it globally:
+Use Node.js 22 or newer. Source packaging uses Git when the directory is a repository, or `tar` otherwise. You do not need a local Docker daemon to upload source; the Slipway server builds and runs the image.
+
+For a one-off invocation:
 
 ```bash
 npx slipway-cli --help
 ```
 
-This downloads and runs the CLI once. For regular use, we recommend installing globally.
+## Choose a compatible version
 
-## Requirements
+The CLI, Slipway server, and application hooks have separate versions. A CLI version number is not the server release number. Check [release compatibility](/slipway/updates#release-compatibility) before using commands from an unreleased build.
 
-| Requirement | Version      |
-| ----------- | ------------ |
-| Node.js     | 22 or higher |
-| npm         | 10 or higher |
+The live application logs and remote command examples in this guide require the **unreleased next CLI and server**. Installing the current npm package does not establish that those capabilities are available.
 
-::: info Zero Dependencies
-The Slipway CLI has **zero npm dependencies**. It uses only Node.js built-in modules, which means:
-
-- **Instant startup** — No node_modules to load
-- **No supply chain risk** — Nothing to audit
-- **Simpler maintenance** — No dependency updates
-  :::
-
-## Verify Installation
-
-Check that the CLI is installed correctly:
+## Update
 
 ```bash
-slipway --version
+npm install -g slipway-cli@latest
 ```
 
-You should see the version number:
-
-```
-slipway v0.0.1
-```
-
-## Update the CLI
-
-To update to the latest version:
-
-```bash
-npm update -g slipway
-```
-
-## Shell Completions
-
-The CLI supports shell completions for faster command entry. Coming soon.
-
-## What's Next?
-
-After installing the CLI, [authenticate with your Slipway server](/slipway/cli-authentication).
+Verify the installed version and help again, then [authenticate](/slipway/cli-authentication) and follow the [CLI workflow](/slipway/cli).

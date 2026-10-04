@@ -62,7 +62,7 @@ This will:
 1. Prompt you for a project name (defaults to your package.json name)
 2. Create the project in Slipway
 3. Save a `.slipway.json` config file locally
-4. Show the initial server-owned deployment readiness report
+4. Show the initial deployment readiness report
 
 ```
   Initialize Slipway Project
@@ -201,36 +201,23 @@ slipway environment:update production --domain myapp.example.com
 
 Point DNS to your Slipway server's public IP and allow ports 80 and 443. Saving verifies the proxy route, not DNS propagation or certificate issuance. Open the HTTPS URL to verify it. See [Custom Domain & SSL](/slipway/custom-domain) for removal, fallback access, and troubleshooting.
 
-## View Logs
+## Diagnose and inspect
 
-Check your application logs:
+Use the actual deployment ID to inspect build and startup output:
 
 ```bash
-# View recent logs
-slipway logs --env production
-
-# Tail logs in real-time
-slipway logs --env production --follow
+slipway logs --deployment DEPLOYMENT_ID
 ```
 
-## Open the Helm (REPL)
+Open the app's logs in the dashboard for runtime output. Live CLI app logs require the [unreleased compatible build](/slipway/deployment-logs#application-logs).
 
-Need to debug or query your production data? Open the Helm:
-
-Open the deployed app in the dashboard and choose **Helm** from its tools menu.
+For bounded model inspection, open **Helm** from the app's tools menu and start with a read-only expression:
 
 ```javascript
-Slipway Helm (myapp production)
-Type .help for available commands
-
-> await User.count()
-42
-
-> await User.find({ role: 'admin' })
-[
-  { id: 1, email: 'admin@example.com', role: 'admin' }
-]
+await User.count()
 ```
+
+Use your own model name. Review [Helm availability and production controls](/slipway/helm) before running queries or mutations.
 
 ## Deploy from Dashboard
 
@@ -246,7 +233,7 @@ The dashboard shows deployment history, logs, and status.
 
 Congratulations! Your first Sails app is deployed. Next steps:
 
-- [Set up a database](/slipway/creating-projects) with one-click provisioning
+- [Set up a database](/slipway/database-services) with one-click provisioning
 - [Configure rollbacks](/slipway/rollbacks) for quick recovery
 - [Explore the Bridge](/slipway/bridge) for data management
 - [Learn more CLI commands](/slipway/cli-commands)

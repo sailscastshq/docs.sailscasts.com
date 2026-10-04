@@ -63,7 +63,7 @@ See [Custom Domain & SSL](/slipway/custom-domain) for detailed instructions on s
 To deploy applications from your local machine, install the Slipway CLI:
 
 ```bash
-npm install -g slipway
+npm install -g slipway-cli
 ```
 
 ## Authenticate the CLI

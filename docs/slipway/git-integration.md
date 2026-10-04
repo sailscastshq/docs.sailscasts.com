@@ -23,7 +23,7 @@ Slipway integrates with GitHub for source code management and automatic deployme
 
 Slipway supports two deployment methods:
 
-1. **Push-to-deploy** — Connect a GitHub repository and Slipway deploys automatically on every push
+1. **Push-to-deploy** — Connect a GitHub repository and Slipway deploys pushes to the configured branches
 2. **CLI deploy** — Push code directly from your machine with `slipway slide`
 
 Both methods track Git commit information (branch, commit hash, message) and enable [rollbacks](/slipway/rollbacks).
@@ -107,75 +107,11 @@ slipway slide
 
 See the [deploy command](/slipway/deploy-command) docs for more details.
 
-## CI/CD Integration
+## Pipeline authentication
 
-If you prefer to deploy from a CI/CD pipeline instead of push-to-deploy, you can use the Slipway CLI with deploy tokens.
+GitHub push-to-deploy uses the connected repository's verified webhook and deploy key. The CLI does not authenticate with `SLIPWAY_TOKEN`; it reads saved account credentials from browser login. Do not copy an interactive token into pipeline output or assume an environment variable makes a pipeline authenticated.
 
-### Generate a deploy token
-
-In **Settings > Git**, create a deploy token. You can scope it to a specific project for security.
-
-### GitHub Actions
-
-```yaml
-# .github/workflows/deploy.yml
-name: Deploy to Slipway
-
-on:
-  push:
-    branches: [main]
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Slipway CLI
-        run: npm install -g slipway
-
-      - name: Deploy
-        env:
-          SLIPWAY_TOKEN: ${{ secrets.SLIPWAY_TOKEN }}
-          SLIPWAY_SERVER: ${{ secrets.SLIPWAY_SERVER }}
-        run: slipway slide --message "Deploy from GitHub Actions"
-```
-
-### GitLab CI/CD
-
-```yaml
-# .gitlab-ci.yml
-deploy:
-  stage: deploy
-  image: node:22
-  only:
-    - main
-  script:
-    - npm install -g slipway
-    - slipway slide --message "Deploy from GitLab CI"
-  variables:
-    SLIPWAY_TOKEN: $SLIPWAY_TOKEN
-    SLIPWAY_SERVER: $SLIPWAY_SERVER
-```
-
-### Bitbucket Pipelines
-
-```yaml
-# bitbucket-pipelines.yml
-pipelines:
-  branches:
-    main:
-      - step:
-          name: Deploy to Slipway
-          image: node:22
-          script:
-            - npm install -g slipway
-            - slipway slide --message "Deploy from Bitbucket"
-```
-
-::: info
-CI/CD deployment works with any Git provider — GitHub, GitLab, Bitbucket, or self-hosted. Push-to-deploy webhooks currently support GitHub only.
-:::
+[Deploy Tokens](/slipway/deploy-tokens) describes the current token-management and endpoint-authentication boundary. Until that authentication contract is available in your server release, use the configured GitHub auto-deploy workflow rather than a speculative token-based CLI example.
 
 ## Commit Information
 

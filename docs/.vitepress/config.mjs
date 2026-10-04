@@ -1036,7 +1036,10 @@ function slipwayGuide() {
       collapsed: false,
       items: [
         { text: 'Overview', link: '/slipway/' },
-        { text: 'What’s new in v0.0.65', link: '/slipway/whats-new' },
+        {
+          text: 'Changelog',
+          link: 'https://github.com/sailscastshq/slipway/releases'
+        },
         { text: 'What is Slipway?', link: '/slipway/what-is-slipway' },
         { text: 'Why Slipway?', link: '/slipway/why-slipway' },
         { text: 'The Name', link: '/slipway/the-name' },
@@ -1077,6 +1080,7 @@ function slipwayGuide() {
       text: 'CLI',
       collapsed: false,
       items: [
+        { text: 'Workflow', link: '/slipway/cli' },
         { text: 'Installation', link: '/slipway/cli-installation' },
         { text: 'Authentication', link: '/slipway/cli-authentication' },
         { text: 'Commands Reference', link: '/slipway/cli-commands' }
@@ -1131,9 +1135,10 @@ function slipwayGuide() {
       ]
     },
     {
-      text: 'Platform',
+      text: 'Operations',
       collapsed: false,
       items: [
+        { text: 'Choose a tool', link: '/slipway/operations' },
         { text: 'Helm', link: '/slipway/helm' },
         { text: 'Bridge', link: '/slipway/bridge' },
         { text: 'Support Views', link: '/slipway/bridge-support' },

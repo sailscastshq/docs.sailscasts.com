@@ -9,7 +9,9 @@
     "serve": "vitepress serve docs --port 8080",
     "lint": "prettier --check .",
     "lint:fix": "prettier --write .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "check:slipway-docs": "node scripts/check-slipway-docs.mjs",
+    "check:slipway-build": "node scripts/check-slipway-build.mjs"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.1.0",

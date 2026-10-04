@@ -17,135 +17,45 @@ editLink: true
 
 # What is Slipway?
 
-Slipway is an open-source, self-hosted deployment platform for **Sails.js** and **The Boring JavaScript Stack** applications. It combines deployment, database management, admin access, customer feedback, REPL access, and Quest monitoring in one platform.
+Slipway is an open-source, self-hosted platform for deploying and operating Sails.js and The Boring JavaScript Stack applications. It runs on your server and brings source deployment, databases, application inspection, and operational tools into one dashboard.
 
-## The Goal
+## Start with one deployed app
 
-Slipway's goal is to deploy, manage, monitor, and administer Sails applications and their databases from one place.
+Install Slipway, complete the instance setup, then deploy the committed source from your application directory:
 
-Slipway provides:
-
-- **Deployment** — Deploy Sails apps with a single command
-- **Database management** — Provision PostgreSQL, MySQL, Redis with one click
-- **Admin panel** — Auto-generated CRUD for your Sails models (Bridge)
-- **Production REPL** — Query your production data safely (Helm)
-- **Queue monitoring** — Sails Quest integration (Quest Dashboard)
-- **Customer feedback** — App-owned feedback, roadmap, updates, and widget (Bearing)
-
-## The Slipway Suite
-
-Slipway includes these tools:
-
-| Component           | Equivalent To   | Description                      |
-| ------------------- | --------------- | -------------------------------- |
-| **Slipway Deploy**  | Forge/Coolify   | Deployment & infrastructure      |
-| **Slipway Helm**    | Tinkerwell      | Production REPL for Sails        |
-| **Slipway Bridge**  | Nova/AdminJS    | Auto-generated data management   |
-| **Slipway Bearing** | UserJot/Canny   | Feedback, roadmap, and updates   |
-| **Quest Dashboard** | Laravel Horizon | Queue monitoring for Sails Quest |
-
-### Helm
-
-Helm is a production REPL accessible from the Slipway dashboard that understands your Sails environment:
-
-```javascript
-// Query models directly
-await User.find({ role: 'admin' })
-// → [{ id: 1, email: 'admin@example.com', role: 'admin' }]
-
-// Use helpers
-await sails.helpers.email.send({ to: 'test@example.com', subject: 'Test' })
-// → { success: true }
-
-// Check config
-sails.config.custom.stripeKey
-// → 'sk_live_xxx...'
+```bash
+slipway login --server https://slipway.example.com
+slipway init --name harbor
+slipway push
+slipway readiness --env production
+slipway slide --env production
 ```
 
-### Bridge
+Follow [Your First Deploy](/slipway/first-deploy) for the Dockerfile, listening address, health path, and verification. The server builds and runs the container; the CLI packages and uploads source.
 
-Bridge auto-generates an admin panel from your Sails models:
+## Choose a tool for the task
 
-- CRUD operations for all your models
-- Relationship management (hasMany, belongsTo)
-- Customizable list views with filtering and sorting
-- File upload handling
-- Role-based access control
+| Need                                                      | Tool                                           |
+| --------------------------------------------------------- | ---------------------------------------------- |
+| Deploy code, configure routes, or recover an app revision | App deployment history and [CLI](/slipway/cli) |
+| Query Sails models and call helpers                       | [Helm](/slipway/helm)                          |
+| Query a database, inspect schema, or review a migration   | [Dock](/slipway/dock)                          |
+| Manage model data through an app-owned interface          | [Bridge](/slipway/bridge)                      |
+| Inspect background jobs and operational compatibility     | [Quest](/slipway/quest)                        |
+| Inspect resources, failures, and telemetry                | [Lookout](/slipway/lookout)                    |
+| Collect feedback, publish a roadmap, and share updates    | [Bearing](/slipway/bearing)                    |
+| Understand product activity and revenue                   | [Wake](/slipway/wake)                          |
 
-### Bearing
+These tools have different runtime and permission requirements. Opening Helm or Dock does not make a query read-only; review the target and side effects before executing it. Quest is a job scheduler integration, not a queue dashboard with automatic retry guarantees.
 
-Bearing gives every app a feedback loop on its own domain:
+## Your infrastructure
 
-- Public Feedback, Roadmap, and Updates pages
-- Host-app identity without another customer account
-- Server-enforced identified or anonymous participation
-- A Slipway-controlled in-app updates widget
+Docker runs applications and services. Caddy handles public routes and automatic HTTPS when DNS and network access are configured correctly. Slipway stores its own state in SQLite and serves its dashboard with Sails, Vue, and Inertia.
 
-### Quest Dashboard
+You operate the host, its capacity, database recovery, encryption keys, DNS, and provider firewall. Start with [Requirements](/slipway/requirements) and [Ingress and Firewall](/slipway/ingress-and-firewall).
 
-If your app uses [Sails Quest](https://docs.sailscasts.com/sails-quest) for job queues, Slipway automatically provides a queue dashboard:
+## Check release availability
 
-- View job status (pending, processing, completed, failed)
-- Retry failed jobs with one click
-- Monitor worker status
-- Queue throughput metrics
+Documentation may describe development capabilities beyond the latest public release. Use [Updates](/slipway/updates#release-compatibility) to distinguish released deployment features from the next CLI, Helm command workspace, and resident Quest controls. The tools do not have complete dashboard/CLI parity.
 
-## How It Works
-
-1. **Install Slipway on your VPS** — One command to bootstrap
-2. **Connect your Sails app** — Via Git or CLI deploy
-3. **Slipway detects your app** — Reads your models, config, and hooks
-4. **Deploy with one command** — `slipway slide` deploys your app
-5. **Manage everything from the dashboard** — Bridge, Bearing, Helm, logs, domains
-
-## Architecture
-
-Under the hood, Slipway uses:
-
-- **Docker** for container isolation
-- **Caddy** for automatic HTTPS and reverse proxying
-- **SQLite** for Slipway's own data (lightweight)
-- **Sails.js + Vue + Inertia** for the dashboard
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                    SLIPWAY PLATFORM                       │
-├─────────────────────────────────────────────────────────┤
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────┐  │
-│  │   Web UI    │  │   CLI Tool  │  │    REST API     │  │
-│  │ (Dashboard) │  │  (slipway)  │  │  (Sails Actions)│  │
-│  └──────┬──────┘  └──────┬──────┘  └────────┬────────┘  │
-│         │                │                   │           │
-│  ┌──────────────────────────────────────────────────┐   │
-│  │                 SLIPWAY CORE                      │   │
-│  │  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐  │   │
-│  │  │ Deployer│ │Database │ │  Proxy  │ │ Monitor │  │   │
-│  │  │ Service │ │ Manager │ │ Manager │ │ Service │  │   │
-│  │  └─────────┘ └─────────┘ └─────────┘ └─────────┘  │   │
-│  └──────────────────────────────────────────────────┘   │
-│                          │                               │
-│  ┌──────────────────────────────────────────────────┐   │
-│  │           CONTAINER RUNTIME (Docker)              │   │
-│  │                                                    │   │
-│  │  ┌───────┐  ┌───────┐  ┌───────┐  ┌───────────┐   │   │
-│  │  │ caddy │  │ myapp │  │ redis │  │ postgres  │   │   │
-│  │  └───────┘  └───────┘  └───────┘  └───────────┘   │   │
-│  └──────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────┘
-```
-
-## When to Use Slipway
-
-Use Slipway for:
-
-- **Sails.js applications** — Sails-specific deployment, admin, and operations tooling
-- **The Boring JavaScript Stack** — Vue/React + Inertia + Sails
-- **Self-hosted deployments** — Run on your own VPS or bare metal
-- **Small to medium teams** — No Kubernetes complexity needed
-- **Developers who want control** — Own your infrastructure and data
-
-Slipway is _not_ for:
-
-- **Non-Sails applications** — Use Coolify or Dokku for generic apps
-- **Serverless-first architectures** — Use Vercel or Railway
-- **Large-scale enterprise** — Consider Kubernetes for massive scale
+Continue with [Server Installation](/slipway/server-installation) or the [operations guide](/slipway/operations).

@@ -19,9 +19,24 @@ editLink: true
 
 Slipway includes built-in update detection and one-click updates from the dashboard.
 
-## Upgrading to v0.0.65
+## Release compatibility
 
-[See everything new in this release](/slipway/whats-new), including Wake, Bridge support views, private backup providers, external PostgreSQL and custom-service routing and updates.
+The latest verified public Slipway server release is [v0.0.86](https://github.com/sailscastshq/slipway/releases/tag/v0.0.86). Read the release notes before upgrading; documentation of current development source does not mean a feature is included in that release.
+
+| Capability                            | Availability                                                                                           |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Latest verified server release        | v0.0.86                                                                                                |
+| New Helm workspace documented here    | Development source after v0.0.86; see [Helm](/slipway/helm#javascript-and-command-modes)               |
+| CLI logs, guarded run, and operations | Unreleased next CLI and server; see [CLI Workflow](/slipway/cli)                                       |
+| Resident Quest controls               | Unreleased coordinated server and app-hook contract; see [Quest](/slipway/quest#release-compatibility) |
+
+Upgrade server, CLI, and relevant application hooks deliberately. They have separate version numbers. Updating the server does not update dependencies inside deployed apps. No released minimum versions have been assigned to the resident Quest contract; published Quest 0.0.5 and Slipway hook 0.0.11 are not sufficient.
+
+Back up the instance database consistently, retain its encryption keys, and preserve its existing database volume before updating. Keep production migration mode at `safe`. Verify startup, login, an existing app, and applicable operational tools after the update.
+
+## Historical upgrade: v0.0.65 {#upgrading-to-v0-0-65}
+
+[Read the v0.0.65 changelog on GitHub Releases](https://github.com/sailscastshq/slipway/releases/tag/v0.0.65) for that release's changes. All Slipway changelogs live in [GitHub Releases](https://github.com/sailscastshq/slipway/releases).
 
 **No manual SQL is required in Bosun before deploying this version.** Startup creates missing tables and adds missing columns for existing installations. Keep production migration mode at `safe`; do not set `SLIPWAY_MIGRATE=alter` or `drop` to perform this upgrade. These are Slipway's own schema changes, not migrations of your deployed apps' databases.
 
@@ -56,7 +71,7 @@ Slipway will:
 1. Pull the latest Docker image from `ghcr.io/sailscastshq/slipway`
 2. Inspect your current container's configuration (env vars, volumes, network, labels)
 3. Spawn the **bosun** — a temporary sidecar container (`slipway-bosun`) that swaps the old container for the new one
-4. The dashboard goes offline briefly (~5 seconds) while the container restarts
+4. The dashboard goes offline while the container restarts while the container restarts
 5. The page automatically reloads when the new version is ready
 
 ::: tip Data Persistence
@@ -101,13 +116,14 @@ module.exports.slipway = {
 
 ## Rollback
 
-If an update causes issues, you can roll back by running the install script with a specific version, or by pulling and running a previous image:
+If an update causes issues, review schema compatibility and restore planning before choosing an older image. Download the installer for the reviewed release and pass an explicit version:
 
 ```bash
-docker pull ghcr.io/sailscastshq/slipway:0.1.0
+curl -fsSL https://raw.githubusercontent.com/sailscastshq/slipway/v0.0.86/install.sh -o install-slipway.sh
+bash install-slipway.sh 0.0.86
 ```
 
-Then re-run the install script — it will use the image already pulled locally.
+Use the release appropriate to your recovery plan. Pulling an old image alone does not make the installer choose it. An application image downgrade does not undo database schema changes; retain the pre-update backup and keys.
 
 Alternatively, check the container logs to diagnose the issue:
 
