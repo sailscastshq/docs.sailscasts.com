@@ -271,6 +271,20 @@ npm install -D sounding-plugin-stress
 That is the whole point of the plugin split: the API can feel first-party, while
 the dependency stays optional.
 
-## First plugin
+## Official plugins
 
-The first official plugin is [Stress testing](/sounding/stress-testing).
+- [Stress testing](/sounding/stress-testing) adds the load-testing lane.
+- [Testing Sails hooks](/sounding/testing-hooks) adds fresh real-Sails fixtures
+  through `sounding-plugin-hook`, requiring Sounding 0.3.0 or later.
+
+## Preparing a trial app
+
+A plugin can declare `trialOptions: ['hook']` and implement
+`prepareApp({ options, projectPath })` before core resolves the runtime. Return
+`{ runtime, context, cleanup }`: runtime is a factory or an object with boot/lower,
+context is an object or getter, and cleanup is required when providing a runtime.
+Only one plugin may own the runtime; replacing an explicit runtime rejects.
+Core closes prepared resources on ownership conflicts and reports cleanup failures.
+
+The hook plugin uses this contract to apply config and fixture files before Sails
+boots. Claimed trial options stay out of Node's test options.

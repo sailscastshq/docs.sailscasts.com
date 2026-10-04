@@ -3,7 +3,7 @@ layout: home
 hero:
   name: Sounding
   text: Testing for Sails.js
-  tagline: Test helpers, endpoints, JSON APIs, Inertia pages, mail, and browser flows in one Sails-native runtime.
+  tagline: Test hooks, helpers, endpoints, JSON APIs, Inertia pages, mail, and browser flows in one Sails-native runtime.
   image:
     src: /sounding-logo.png
     alt: Sounding

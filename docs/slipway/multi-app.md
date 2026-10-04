@@ -86,8 +86,8 @@ The default app is used when no `--app` flag is provided:
 
 ```bash
 slipway slide           # deploys the default app
-slipway logs            # shows default app logs
-slipway terminal        # opens shell in default app container
+slipway deployments     # inspect deployment history
+slipway terminal        # prints a server-side Docker instruction
 ```
 
 For single-app environments, the default app is used automatically.
@@ -231,22 +231,20 @@ The default app omits the suffix for backward compatibility with single-app depl
 
 ## CLI Commands
 
-All container-targeting commands support `--app`:
+Pass the app explicitly when deploying:
 
 ```bash
-# Logs
-slipway logs --app=worker
-slipway logs --app=api --follow
-
-# Terminal access
-slipway terminal --app=worker
-
-# Run a command
-slipway run --app=worker node scripts/migrate.js
-
-# Rollback
-slipway rollback myapp --app=api
+slipway slide --env staging --app worker
 ```
+
+The unreleased next CLI/server support logs and remote commands for an explicit app:
+
+```bash
+slipway logs --env staging --app worker --tail 200
+slipway run --env staging --app worker 'node --version'
+```
+
+Read [CLI compatibility and production guards](/slipway/cli) first. `terminal` prints instructions and does not open a remote shell. Rollback is a [dashboard operation](/slipway/rollbacks), not a CLI command.
 
 ## Deleting an App
 

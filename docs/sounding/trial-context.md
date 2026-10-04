@@ -74,6 +74,12 @@ test('helper trial', async ({ sails, expect }) => {
 })
 ```
 
+### `hook` and `hookApp`
+
+With [the hook fixture plugin](/sounding/testing-hooks), `hook` is the actual
+mounted Sails hook and `hookApp` describes its generated fixture and package.
+These fields belong to hook fixtures; they are not added to ordinary app trials.
+
 ### `expect`
 
 Sounding's default assertion API.

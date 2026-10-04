@@ -97,7 +97,7 @@ HTTPS connection after saving.
 
 ```bash
 slipway deployments --env production
-slipway logs --env production --follow
+slipway logs --deployment DEPLOYMENT_ID
 ```
 
 See [CLI Commands](/slipway/cli-commands) for supported commands.

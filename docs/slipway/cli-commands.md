@@ -7,8 +7,8 @@ title: Commands Reference
 titleTemplate: Slipway
 description: Complete reference for all Slipway CLI commands.
 prev:
-  text: Authentication
-  link: /slipway/cli-authentication
+  text: CLI Workflow
+  link: /slipway/cli
 next:
   text: Creating Projects
   link: /slipway/creating-projects
@@ -17,32 +17,29 @@ editLink: true
 
 # Commands Reference
 
-Complete reference for all Slipway CLI commands.
+Use this reference after the [CLI workflow](/slipway/cli). Use `slipway --help` to list commands on your installed CLI. In the unreleased next CLI, `slipway <command> --help` shows command-specific flags without authentication or prompts, including for aliases. Earlier clients show global help instead. Unknown commands and options in the next CLI exit 1, with structured stderr when a machine-output flag is requested.
 
-## Command Pattern
+Most commands require saved credentials and a linked `.slipway.json` project. `--env` selects an environment; it does not select a server. `--project` is supported by the next operational commands listed below, including `logs` and `run`; older commands still use a linked project. `--server` belongs to `login` only.
 
-Most commands operate on the project linked in the current directory (via `.slipway.json` created by `slipway init` or `slipway link`).
+::: info Release compatibility
+This reference describes the inspected CLI source. The npm CLI version and server version are independent. Live app logs, remote command execution, app inspection/restart, doctor, cancellation, history, arming, private receipts, and their machine flags below require the **unreleased next CLI and server**, beyond server v0.0.86. Earlier app `logs`, `run`, and `terminal` print Docker instructions. See [Updates](/slipway/updates#release-compatibility).
+:::
 
-```bash
-slipway <command> [options]
-slipway <resource>:<action> [target] [options]
-```
+Use `slipway --help` (`-h`) and `slipway --version` (`-v`) for global help and version. Next-release command flags are parsed separately; `db:create --version` selects a database version. Flags listed below are command-specific.
 
 ## Authentication
 
 ### login
 
-Authenticate with a Slipway server. Opens your browser for login, then polls for confirmation.
+Authenticate with your Slipway server.
 
 ```bash
-slipway login [--server <url>]
+slipway login [--server <server>]
 ```
-
-The server URL can also be set via the `SLIPWAY_SERVER` environment variable. Credentials are stored in `~/.slipway/config.json`.
 
 ### logout
 
-Remove saved credentials.
+Clear stored credentials.
 
 ```bash
 slipway logout
@@ -50,33 +47,15 @@ slipway logout
 
 ### whoami
 
-Show current authentication status — email, name, team, role, and server.
+Show current authenticated user.
 
 ```bash
 slipway whoami
 ```
 
+Displays saved identity; it does not check the credential against the server.
+
 ## Projects
-
-### init
-
-Initialize a new Slipway project in the current directory. Creates the project on the server and saves a `.slipway.json` config file locally.
-
-```bash
-slipway init [--name <name>]
-```
-
-Checks for a Dockerfile and warns if missing. Auto-detects the project name from `package.json` or the directory name.
-
-### link
-
-Link the current directory to an existing Slipway project.
-
-```bash
-slipway link <project-slug>
-```
-
-Use this when the project already exists (e.g., created via the dashboard) and you want to deploy from a different machine.
 
 ### projects
 
@@ -86,14 +65,28 @@ List all projects.
 slipway projects
 ```
 
-Shows name, slug, environment count, and last updated date.
-
 ### project:update
 
-Update a project's details.
+Update a project.
 
 ```bash
-slipway project:update <slug> [--name <name>] [--description <desc>] [--repo <url>]
+slipway project:update <slug> [--name <name>] [--description <description>] [--repo <repo>]
+```
+
+### init
+
+Initialize a new Slipway project.
+
+```bash
+slipway init [--name <name>]
+```
+
+### link
+
+Link current directory to an existing project.
+
+```bash
+slipway link <project>
 ```
 
 ## Environments
@@ -106,21 +99,17 @@ List environments for the current project.
 slipway environments
 ```
 
-Shows name, slug, type (production/staging), domain, app status, and created date.
-
 ### environment:create
 
 Create a new environment.
 
 ```bash
-slipway environment:create <name> [--production] [--domain <domain>] [--from <environment>]
+slipway environment:create <name> [--production] [--domain <domain>] [--from <from>]
 ```
-
-`--from` copies configuration through each variable's preview policy: inherit, omit, or generate a new value. Secrets default to omit.
 
 ### environment:update
 
-Update an environment's settings.
+Update an environment.
 
 ```bash
 slipway environment:update <slug> [--name <name>] [--domain <domain>] [--production]
@@ -128,166 +117,137 @@ slipway environment:update <slug> [--name <name>] [--domain <domain>] [--product
 
 ## Deployments
 
-### slide
-
-Deploy your application. This is the **primary deploy command**.
-
-```bash
-slipway slide [--env <environment>] [--app <slug>] [--message <message>]
-```
-
-Aliases: `deploy`, `launch`
-
-Packages your source code (via `git archive` if in a git repo), pushes it to the server, and triggers a deployment. Watches the deployment via Server-Sent Events with live status updates.
-
-**Options:**
-
-| Option      | Description                                                                                                |
-| ----------- | ---------------------------------------------------------------------------------------------------------- |
-| `--env`     | Environment to deploy to (default: production)                                                             |
-| `--app`     | Target a specific app by slug (default: the default app). See [Multi-App Environments](/slipway/multi-app) |
-| `--message` | Deployment message/note                                                                                    |
-
-**Examples:**
-
-```bash
-# Deploy to production
-slipway slide
-
-# Deploy to staging
-slipway slide --env staging
-
-# Deploy with a message
-slipway slide --message "Fix login bug"
-
-# Deploy a specific app in a multi-app environment
-slipway slide --app api
-```
-
 ### push
 
-Push source code to the server **without** deploying.
+Push source code without deploying.
 
 ```bash
-slipway push [--env <environment>]
+slipway push
 ```
 
-Useful when you want to upload code separately from triggering a deployment.
+Uploads source only; there is no `--env` option. In a Git repository, packages committed HEAD.
+
+### slide
+
+Push and deploy the current project.
+
+```bash
+slipway slide [--env <env>] [--app <app>] [--message <message>]
+```
+
+Aliases: `deploy`, `launch`. Watches the deployment; verify the final state and app health.
+
+`--env` defaults to `production`.
 
 ### readiness
 
-Inspect the current server-side source and effective app/environment configuration with the same report shown in the dashboard.
+Inspect server-owned deployment readiness for the current source.
 
 ```bash
-slipway readiness [--env production] [--app web] [--json]
+slipway readiness [--env <env>] [--app <app>] [--json]
 ```
 
-Push source first with `slipway push`. Required checks produce a nonzero exit code; recommendations and optional capabilities do not block deployment. The report includes its source fingerprint, health path, evidence, and fixes. See [Your First Deploy](/slipway/first-deploy#check-deployment-readiness).
+Required readiness failures produce a nonzero exit. Recommendations do not block deployment.
+
+`--env` defaults to `production`.
 
 ### deployments
 
 List recent deployments.
 
 ```bash
-slipway deployments [--env <environment>] [--limit <n>]
+slipway deployments [--env <env>] [--limit <limit>]
 ```
 
-Shows deployment ID, status, environment, branch, commit hash, and date. Default limit is 10.
+`--limit` defaults to `10`.
 
-### logs
-
-View deployment or application logs.
-
-```bash
-slipway logs [--env <environment>] [--app <slug>] [--follow] [--tail <n>] [--deployment <id>]
-```
-
-**Options:**
-
-| Option         | Description                                                                                                |
-| -------------- | ---------------------------------------------------------------------------------------------------------- |
-| `--env`        | Environment (default: production)                                                                          |
-| `--app`        | Target a specific app by slug (default: the default app). See [Multi-App Environments](/slipway/multi-app) |
-| `--follow`     | Stream logs in real-time                                                                                   |
-| `--tail`       | Number of lines to show (default: 100)                                                                     |
-| `--deployment` | View logs for a specific deployment                                                                        |
-
-## Environment Variables
+## Variables
 
 ### env
 
-List environment variables for the current project.
+List environment variables.
 
 ```bash
-slipway env [--env <environment>]
+slipway env [--env <env>]
 ```
 
-Sensitive values (containing PASSWORD, SECRET, KEY, TOKEN, etc.) are automatically masked.
+Masks values using name-based heuristics. Review output before sharing it.
+
+`--env` defaults to `production`.
 
 ### env:set
 
-Set one or more environment variables.
+Set environment variables (KEY=value).
 
 ```bash
-slipway env:set KEY=value [KEY2=value2...] [--env <environment>]
+slipway env:set <pairs...> [--env <env>]
 ```
 
-**Examples:**
-
-```bash
-slipway env:set DATABASE_URL=postgres://...
-slipway env:set STRIPE_KEY=sk_live_... SESSION_SECRET=abc123 --env staging
-```
-
-::: tip Redeploy Required
-Changes take effect on the next deployment. Run `slipway slide` after setting variables.
-:::
+`--env` defaults to `production`.
 
 ### env:unset
 
-Remove one or more environment variables.
+Remove environment variables.
 
 ```bash
-slipway env:unset KEY1 [KEY2...] [--env <environment>]
+slipway env:unset <keys...> [--env <env>]
 ```
 
-## Database Services
+`--env` defaults to `production`.
+
+## Services
+
+### services
+
+List all services.
+
+```bash
+slipway services [--env <env>]
+```
 
 ### db:create
 
 Create a new database service.
 
 ```bash
-slipway db:create <name> [--type <type>] [--version <version>] [--env <environment>]
+slipway db:create <name> [--type <type>] [--version <version>] [--env <env>]
 ```
 
-**Options:**
-
-| Option      | Description                                                         |
-| ----------- | ------------------------------------------------------------------- |
-| `--type`    | Database type: `postgresql`, `mysql`, `redis` (default: postgresql) |
-| `--version` | Database version (default: latest)                                  |
-| `--env`     | Environment (default: production)                                   |
-
-The connection URL (e.g., `DATABASE_URL`) is automatically injected into your environment.
+`--type` defaults to `postgresql`. `--env` defaults to `production`. The next CLI correctly parses `--version` as a database option. Earlier clients intercept it as the CLI version flag; use dashboard service creation on those clients.
 
 ### db:url
 
-Get the connection URL for a database service.
+Get database connection URL.
 
 ```bash
-slipway db:url <name> [--env <environment>]
+slipway db:url <name> [--env <env>]
 ```
 
-### services
+Prints a credential-bearing connection URL; keep output private.
 
-List all services for the current project.
+`--env` defaults to `production`.
+
+### service:review
+
+Review a private custom image before creation.
 
 ```bash
-slipway services [--env <environment>]
+slipway service:review <image> [--env <env>] [--name <name>] [--port <port>] [--app <app>] [--definition <definition>] [--json]
 ```
 
-Shows name, type, version, environment, and status.
+Returns a redacted review. Protect local definition files containing credentials.
+
+`--env` defaults to `production`.
+
+### service:create
+
+Create exactly the previously reviewed custom service.
+
+```bash
+slipway service:create <review-id>
+```
+
+Creates the previously reviewed service; review again after a definition change.
 
 ## Backups
 
@@ -296,48 +256,32 @@ Shows name, type, version, environment, and status.
 Create a manual database backup.
 
 ```bash
-slipway backup:create <service-name> [--env <environment>]
+slipway backup:create <service-name> [--env <env>]
 ```
+
+`--env` defaults to `production`.
 
 ### backup:list
 
-List backups for a service.
+List backups for a database service.
 
 ```bash
-slipway backup:list <service-name> [--env <environment>]
+slipway backup:list <service-name> [--env <env>]
 ```
 
-Shows backup ID, status, type, size, duration, and date.
+`--env` defaults to `production`.
 
 ### backup:restore
 
-Restore a database from a backup.
+Restore a database backup.
 
 ```bash
-slipway backup:restore <backup-id>
+slipway backup:restore <backup-id> [--writes-paused]
 ```
 
-## Container Access
+Requires `--writes-paused`. Polls the restore operation; keep writers paused until the database is verified.
 
-### terminal
-
-Open a terminal session in the running container.
-
-```bash
-slipway terminal [--env <environment>] [--app <slug>]
-```
-
-Shows the container name and `docker exec` command to run on your server. Use `--app` to target a specific app in [multi-app environments](/slipway/multi-app).
-
-### run
-
-Run a command in the running container.
-
-```bash
-slipway run <command...> [--env <environment>] [--app <slug>]
-```
-
-Shows the container name and `docker exec` command. Use `--app` to target a specific app in [multi-app environments](/slipway/multi-app).
+`--writes-paused` defaults to `False`.
 
 ## Administration
 
@@ -346,17 +290,101 @@ Shows the container name and `docker exec` command. Use `--app` to target a spec
 View audit log entries.
 
 ```bash
-slipway audit-log [--page <n>] [--limit <n>]
+slipway audit-log [--page <page>] [--limit <limit>]
 ```
 
-Shows date, action, resource type, user, and IP address. Default limit is 20.
+`--page` defaults to `1`. `--limit` defaults to `20`.
 
-## Global Options
+## Logs and command execution (unreleased)
 
-These options work with all commands:
+### logs
 
-| Option           | Description        |
-| ---------------- | ------------------ |
-| `--server <url>` | Slipway server URL |
-| `--help`         | Show help          |
-| `--version`      | Show version       |
+```bash
+slipway logs [--project <slug>] [--env <slug>] [--app <slug>] [--tail <n>] [--follow] [--deployment <id>] [--json] [--ndjson]
+```
+
+Environment defaults to `production`; tail defaults to 100 and accepts 0–10000. Short forms: `-p`, `-e`, `-a`, `-n`, `-f`, `-d`. Use one of JSON or NDJSON; following requires human output or NDJSON. `--deployment` reads stored build and deploy logs for an actual deployment ID.
+
+### run
+
+```bash
+slipway run [<command...>] [--project <slug>] [--env <slug>] [--app <slug>] [--stdin] [--file <path>] [--write-arm-file <path>] [--receipt-file <path>] [--json] [--ndjson]
+```
+
+Alias: `exec` (next CLI). Environment defaults to `production`. Short targeting forms: `-p`, `-e`, `-a`. Provide one command source: positionals, stdin, or a file. The command source is bounded to 64 KiB. Every production command requires a valid exact-command/deployment arm; review and request it explicitly with `run:arm`. `--receipt-file` exclusively creates a private local metadata snapshot before submission, without command source, output, or arm tokens.
+
+Read the [workflow](/slipway/cli#wait-for-an-outcome) for completion receipts, structured errors, exit codes, and unconfirmed interruptions. There is no automatic replay, idempotency option, durable execution lookup, or resume command. `run:cancel` requests confirmed cancellation of an owned active execution; `run:history` returns retained metadata, not execution lookup.
+
+## App and command operations (unreleased)
+
+The following commands accept mutually exclusive `--json` and `--ndjson`, each producing one JSON result on stdout and structured errors on stderr. Their environment defaults to `production`; target short forms are `-p`, `-e`, and `-a`. `app:inspect`, `app:restart`, `run:history`, and `run:arm` require an explicit app. Unknown apps fail rather than falling back.
+
+### doctor
+
+```bash
+slipway doctor [--project <slug>] [--env <slug>] [--app <slug>] [--json] [--ndjson]
+```
+
+Checks server health and saved CLI authentication. With a selected project, also checks deployment readiness; readiness succeeds only when `canDeploy` is true. Any failed check exits 1. This does not prove app availability.
+
+### apps
+
+```bash
+slipway apps [--project <slug>] [--env <slug>] [--app <slug>] [--json] [--ndjson]
+```
+
+Lists app metadata and resource limits without environment variables or credentials. `--app` filters one exact app.
+
+### app:inspect
+
+```bash
+slipway app:inspect [--project <slug>] [--env <slug>] --app <slug> [--json] [--ndjson]
+```
+
+Inspects one explicit app, omitting environment variables and credentials.
+
+### app:restart
+
+```bash
+slipway app:restart [--project <slug>] [--env <slug>] --app <slug> --approve-target <project/env/app> [--json] [--ndjson]
+```
+
+Requires exact target approval and calls the synchronous restart endpoint. A lost response produces `RESTART_UNCONFIRMED`; inspect before retrying.
+
+### run:arm
+
+```bash
+slipway run:arm [<command>] [--project <slug>] [--env <slug>] --app <slug> --approve-target <project/env/app> --output <private-file> [--stdin] [--file <path>] [--json] [--ndjson]
+```
+
+Requests an owner/admin-approved, exact-command/deployment write arm. Command input is bounded to 64 KiB and uses one of positionals, stdin, or file. Exclusively creates a mode-0600 file; refuses existing files and symlinks. Tokens are never printed. The configured expiry is 60 seconds; the token is single-use. A failed request can leave an empty private file. See the [production workflow](/slipway/cli#make-a-reviewed-change).
+
+### run:cancel
+
+```bash
+slipway run:cancel <execution-uuid> [--json] [--ndjson]
+```
+
+Exits 0 only for server-confirmed termination (`cancelled: true`). A false result exits 1 and does not distinguish unknown, completed, unavailable, unowned, or unconfirmed executions. Server live lookup is process-local.
+
+### run:history
+
+```bash
+slipway run:history [--project <slug>] [--env <slug>] --app <slug> [--json] [--ndjson]
+```
+
+Lists retained per-user app command metadata with `executionLookup: false`. Row IDs are not execution UUIDs. Source, output, and results are omitted; history does not provide a durable ledger or replay.
+
+## Manual container connection
+
+### terminal
+
+```bash
+slipway terminal [--env <slug>] [--app <slug>]
+```
+
+This command **does not open an interactive session**. It looks up the container and prints a Docker instruction to use on the server. Do not treat it as a working remote terminal.
+
+## Operations outside the CLI
+
+Use the dashboard for lifecycle controls beyond the next CLI restart command, rollback, team management, and tool-specific Dock and Quest operations. A command name is available only when it appears in your installed CLI help. Deployment `--dry-run`, `--no-cache`, `--canary`, global `--server`, and profiles are not supported by this contract.

@@ -24,7 +24,7 @@ Deploying and operating a Sails.js app often requires separate tools for deploym
 - **Coolify/Dokploy** for deployment (generic, not Sails-aware)
 - **AdminJS/Forest Admin** for admin panels (separate setup, not integrated)
 - **A REPL workaround** for production debugging (no dedicated Sails REPL equivalent)
-- **Separate job queue monitoring** (no Horizon equivalent)
+- **Separate background job monitoring** (no Horizon equivalent)
 - **Multiple dashboards** for different concerns
 
 ## What Laravel Developers Have
@@ -34,7 +34,7 @@ Deploying and operating a Sails.js app often requires separate tools for deploym
 | Laravel Forge   | Server provisioning & deployment |
 | Laravel Nova    | Admin panel                      |
 | Laravel Tinker  | Production REPL                  |
-| Laravel Horizon | Queue monitoring                 |
+| Laravel Horizon | Job operations                   |
 | Laravel Pulse   | Application monitoring           |
 
 Slipway combines similar concerns in one platform for Sails applications.
@@ -47,7 +47,7 @@ Slipway provides one platform that:
 - Manages databases (PostgreSQL, MySQL, Redis)
 - Provides a Sails-aware admin panel (like Nova)
 - Offers a production REPL (like Tinkerwell)
-- Monitors queues (Sails Quest integration)
+- Inspects background jobs (see [Quest compatibility](/slipway/quest))
 - Provides a web dashboard for the same operational tasks
 
 ## Learning from the Best

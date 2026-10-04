@@ -10,187 +10,57 @@ prev:
   text: CLI Installation
   link: /slipway/cli-installation
 next:
-  text: Commands Reference
-  link: /slipway/cli-commands
+  text: CLI Workflow
+  link: /slipway/cli
 editLink: true
 ---
 
 # CLI Authentication
 
-Before you can deploy applications, you need to authenticate the CLI with your Slipway server.
-
-## Login
-
-Run the login command:
+Authenticate on your own machine with your Slipway instance:
 
 ```bash
-slipway login
-```
-
-### Server URL
-
-You'll be prompted for your Slipway server URL:
-
-```
-$ slipway login
-
-  Slipway CLI
-
-  Server URL: https://slipway.example.com
-```
-
-The CLI looks for the server URL in this order:
-
-1. `--server` flag (e.g., `slipway login --server http://...`)
-2. `SLIPWAY_SERVER` environment variable
-3. Previously saved server URL
-4. Prompt the user
-
-### Browser Authentication
-
-After entering the server URL, your browser will open to complete authentication:
-
-```
-  Opening browser for authentication...
-
-  If the browser doesn't open, visit:
-  https://slipway.example.com/cli/authorize?code=abc123
-
-  Waiting for authorization...
-```
-
-In your browser:
-
-1. Log in to Slipway (if not already logged in)
-2. Review the CLI authorization request
-3. Click **Authorize**
-
-The CLI will detect the successful authorization:
-
-```
-  ✓ Authenticated as you@example.com
-  ✓ Team: Acme Inc
-  ✓ Credentials saved to ~/.slipway/credentials.json
-```
-
-## Environment Variable
-
-For CI/CD or automation, set the server URL as an environment variable:
-
-```bash
-export SLIPWAY_SERVER=https://slipway.example.com
-slipway login
-```
-
-This skips the server URL prompt.
-
-## Credentials Storage
-
-The CLI stores credentials in `~/.slipway/credentials.json`:
-
-```json
-{
-  "server": "https://slipway.example.com",
-  "token": "your-api-token",
-  "email": "you@example.com",
-  "team": "Acme Inc"
-}
-```
-
-::: warning Security
-Keep this file secure. It contains your authentication token which grants access to your Slipway server.
-:::
-
-## Check Current Session
-
-Verify your authentication status:
-
-```bash
+slipway login --server https://slipway.example.com
 slipway whoami
 ```
 
-Output:
+Press Enter when prompted to open the authorization page. Sign in, compare the confirmation code, and authorize that request. If the browser does not open, visit the URL printed by the CLI yourself. Requests expire after five minutes; start login again if the request expires.
 
-```
-  Logged in as you@example.com
-  Team: Acme Inc
-  Server: https://slipway.example.com
-```
+## Server selection
 
-## Logout
+Login chooses the server in this order:
 
-To remove saved credentials:
+1. `login --server <url>`.
+2. `SLIPWAY_SERVER`.
+3. The previously saved server.
+4. An interactive prompt.
 
-```bash
-slipway logout
-```
+`--server` is a **login option**, not a global override for deployments. Other commands use saved credentials. To switch servers, run login for the new server and check `whoami` before changing anything. Named profiles are not available.
 
-This removes the credentials file and logs you out.
+`whoami` displays saved account, team, and server information. It helps check local configuration; a successful API request is still needed to confirm that the credential remains valid. The unreleased next CLI provides `slipway doctor --json` to check server health and validate the saved CLI token; cached `whoami` output is not that validation.
 
-## Multiple Servers
+## Credential storage
 
-If you work with multiple Slipway servers (e.g., staging and production), you can specify the server for each command:
+The CLI stores credentials in `~/.slipway/config.json`. Keep this file outside Git, shared folders, build artifacts, and screenshots. On POSIX systems current source protects the directory with mode `0700` and the file with `0600`; Windows uses the profile's access controls.
 
-```bash
-# Deploy to staging
-slipway slide --server https://slipway-staging.example.com
+Do not paste credentials, device secrets, or token files into chat or support reports. Share the command, target names, error code, and redacted diagnostics instead. Never publish raw command output without checking it for secrets and private records.
 
-# Deploy to production
-slipway slide --server https://slipway.example.com
-```
-
-Or use environment variables:
-
-```bash
-# In your staging environment
-export SLIPWAY_SERVER=https://slipway-staging.example.com
-
-# In your production environment
-export SLIPWAY_SERVER=https://slipway.example.com
-```
-
-## CI/CD Authentication
-
-For automated deployments, use API tokens instead of browser authentication:
-
-```bash
-# Generate a token in the dashboard
-# Settings → API Tokens → Generate
-
-# Use in CI/CD
-export SLIPWAY_TOKEN=your-api-token
-export SLIPWAY_SERVER=https://slipway.example.com
-slipway slide
-```
-
-::: info Coming Soon
-API token authentication is coming in a future release.
-:::
-
-## Troubleshooting
-
-### Browser Doesn't Open
-
-If the browser doesn't open automatically, copy the authorization URL and open it manually:
-
-```
-If the browser doesn't open, visit:
-https://slipway.example.com/cli/authorize?code=abc123
-```
-
-### Authorization Timeout
-
-If authorization times out, run `slipway login` again. The authorization code expires after a few minutes.
-
-### Invalid Credentials
-
-If you see "Invalid credentials" errors, try logging out and in again:
+## Log out and revoke access
 
 ```bash
 slipway logout
-slipway login
 ```
 
-## What's Next?
+Logout clears the saved local credential. To invalidate a server credential, revoke it in **Settings → API Keys**. If a login response is lost after approval, start a fresh login and revoke any unused key.
 
-Now that you're authenticated, explore the [CLI Commands Reference](/slipway/cli-commands) to learn what you can do.
+## Automation
+
+Browser login is interactive. These CLI builds read saved credentials; `SLIPWAY_TOKEN` is not an implemented alternative for CLI authentication. Do not put a token in a shell command and assume it will be used.
+
+For automatic deployment, use [Git Integration](/slipway/git-integration). See [Deploy Tokens](/slipway/deploy-tokens) for the current token-management and authentication boundary; do not assume a token authenticates the CLI or deployment API.
+
+## Compatibility errors
+
+Current source uses device authorization protocol 2. Upgrade the server and CLI together when login reports an incompatible authorization protocol. An old client cannot complete the secure flow by reusing the visible confirmation code.
+
+Continue with the [CLI workflow](/slipway/cli).
