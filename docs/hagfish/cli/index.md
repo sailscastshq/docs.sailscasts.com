@@ -8,17 +8,16 @@ description: Create, review, export, and deliberately deliver invoices from the 
 
 Create a draft, review its exact totals, and export the invoice without leaving your terminal. A send requires an explicit recipient, schedule, revision, credit ceiling, and approval.
 
-::: info Developer preview
-The package is not published yet. These commands describe the upcoming CLI. Use the reviewed local package until the release is announced.
+::: info Connected login
+The CLI is published and connected login is available. Its registered application currently permits read-only clients, invoices and usage. Use a scoped API key for creation, editing, PDF generation or delivery.
 :::
 
-## Install the preview
+## Install
 
-Requires Node.js 22.12 or newer. From a Hagfish checkout:
+Requires Node.js 22.12 or newer:
 
 ```sh
-npm pack ./packages/cli
-npm install -g ./sailscastshq-hagfish-cli-0.1.0.tgz
+npm install -g hagfish-cli@0.0.1
 hagfish --version
 ```
 
@@ -35,7 +34,7 @@ The JSON files use the same fields as the [API quickstart](/hagfish/api/getting-
 
 ## Connect your account
 
-Browser and device login are implemented in the private candidate. Public activation is pending. On a configured Hagfish issuer:
+Browser and device login are available at `https://hagfish.app`:
 
 ```sh
 hagfish auth login
@@ -43,13 +42,13 @@ hagfish auth status --json
 hagfish auth logout
 ```
 
-The browser shows your signed-in account, application, requested permissions and expiry. Default permissions are `clients:read`, `invoices:read` and `usage:read`. Additional permissions require an explicit `--scopes` request and fresh consent. Log out before switching accounts or permissions.
+The browser shows your signed-in account, application, requested permissions and expiry. Default permissions are `clients:read`, `invoices:read` and `usage:read`. The current public CLI registration permits these read scopes only. Adding write scopes with `--scopes` does not expand the registered application permissions. Use a separately scoped API key for writes. Log out before switching accounts.
 
 Use `hagfish auth login --device` when you cannot open a browser on the terminal machine. Open the displayed verification URL yourself and compare the code before approving. The CLI waits for your approval and reports failure if you decline or the code expires.
 
 Connected login stores credentials in macOS Keychain or Linux Secret Service. Windows connected login is not yet verified; use a scoped `HAGFISH_API_KEY` on Windows. A locked or unavailable vault fails closed; the CLI never saves refresh credentials in plaintext. Logout revokes the server connection before clearing the vault. API keys remain available for automation and take precedence when `HAGFISH_API_KEY` is set.
 
-Access tokens expire after 10 minutes. A connection can renew access for up to 7 days. Revoke it at any time in Connected applications. Sending still requires the explicit revision, recipients, schedule, credit ceiling and command approval described below.
+Access tokens expire after 10 minutes. A connection can renew access for up to 7 days. Revoke it at any time in Connected applications. Sending with a scoped API key still requires the explicit revision, recipients, schedule, credit ceiling and command approval described below.
 
 ## Export and retrieve
 

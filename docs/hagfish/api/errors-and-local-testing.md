@@ -68,7 +68,7 @@ Queue a test event, watch the verified payload, then inspect it through
 ## Recovery and troubleshooting
 
 - `401`: check the active key and its revocation state. Keep tokens out of screenshots and support messages.
-- `403`: add only the scope the operation requires, such as `invoices:pdf` or `usage:read`.
+- `403`: check the operation scope. The public CLI login is read-only; requesting extra write scopes does not expand its registered permissions. Use an API key carrying only the required scopes for writes.
 - `402`: inspect `/creator` and the invoice preview. No reservation was committed.
 - `409 invoice_revision_conflict`: fetch and review the latest revision.
 - `409 credit_ceiling_exceeded`: review the current estimate before increasing your explicit ceiling.

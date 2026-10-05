@@ -2,19 +2,19 @@
 
 Connect your agent to your Hagfish account to review clients and invoices, prepare a draft, export a PDF, and request delivery. You choose the permissions and approve each write in your browser. Your account remains the owner of the invoice and its billing.
 
-The package is currently private and unpublished. Hosted connections require an approved, registered application and an activated Hagfish issuer. Do not install a similarly named package or paste credentials into a chat.
+The local stdio package is published as `hagfish-mcp@0.0.1`. Hosted connections require their own approved application registration. Public ChatGPT registration remains pending; the CLI registration does not register ChatGPT. Do not install a similarly named package or paste credentials into a chat.
 
 ## Local read tools
 
-If you have access to the repository, launch the local stdio server:
+Requires Node.js 22.12 or newer. Install and launch the local stdio server:
 
 ```sh
-npm ci --prefix packages/mcp
+npm install -g hagfish-mcp@0.0.1
 # Supply HAGFISH_API_KEY through your secret environment.
-node packages/mcp/bin/hagfish-mcp.js
+hagfish-mcp
 ```
 
-Configure your MCP host to run this command from the repository root. Grant the read scopes needed by your workflow: `clients:read`, `invoices:read` and `usage:read`. Keep the key in the host's secret environment.
+Configure your MCP host to run the `hagfish-mcp` command. Grant the read scopes needed by your workflow: `clients:read`, `invoices:read` and `usage:read`. Keep the key in the host's secret environment.
 
 Nine local tools read your account, payer clients, invoices, previews, delivery status and usage: `hagfish_account`, `hagfish_clients`, `hagfish_invoices`, `hagfish_invoice`, `hagfish_preview`, `hagfish_delivery` `hagfish_usage`, `hagfish_invoice_templates` and `hagfish_invoice_template`. Lists accept `limit` (1–100) and `after`; invoice and delivery reads accept a public `id`. Local stdio cannot create invoices, unlock a PDF or send email.
 
