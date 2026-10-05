@@ -33,7 +33,7 @@ Hagfish takes effect immediately.
 
 ## Connected applications
 
-Connected login is implemented in the private candidate and awaits public activation. On a configured issuer, a registered public application uses browser consent and S256 PKCE. Native CLI callbacks bind only to literal loopback; approved web applications use their registered exact HTTPS callback. There is no public dynamic application registration.
+Connected login is available for the registered Hagfish CLI application. It uses browser consent and S256 PKCE, with read-only clients, invoices and usage plus refresh access. Each user grants access to their own account; the application registration is shared across CLI installations. Use a scoped API key for write operations. Other applications require their own approved registration. Native CLI callbacks bind only to literal loopback; approved web applications use their registered exact HTTPS callback. There is no public dynamic application registration.
 
 A Creator-approved OAuth access token can be sent in the same bearer header. It must target the API resource, such as `https://hagfish.app/api/v1`, and carry the existing scopes required by the operation. A token approved only for `/mcp` cannot access the API. The authenticated Creator remains the account boundary.
 
