@@ -233,8 +233,8 @@ export default function About() {
 ```svelte [Svelte]
 <svelte:head>
   <title>About Us</title>
-  <meta name="description" content="Learn more about our company">
-  <meta property="og:title" content="About Us">
+  <meta name="description" content="Learn more about our company" />
+  <meta property="og:title" content="About Us" />
 </svelte:head>
 
 <!-- Page content -->
@@ -285,10 +285,10 @@ export default function Home() {
 </section>
 
 <style>
-.hero {
-  background: linear-gradient(to right, #667eea, #764ba2);
-  padding: 4rem 2rem;
-}
+  .hero {
+    background: linear-gradient(to right, #667eea, #764ba2);
+    padding: 4rem 2rem;
+  }
 </style>
 ```
 

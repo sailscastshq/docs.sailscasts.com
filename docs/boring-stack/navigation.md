@@ -52,7 +52,7 @@ function Nav() {
 ```
 
 ```svelte [Svelte]
-import { inertia, Link } from '@inertiajs/svelte'
+import {(inertia, Link)} from '@inertiajs/svelte'
 
 <a href="/" use:inertia>Home</a>
 

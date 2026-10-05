@@ -1,15 +1,14 @@
-import { Link } from "@inertiajs/react";
-import { Fragment, forwardRef } from "react";
-import { twMerge } from "tailwind-merge";
+import { Link } from '@inertiajs/react'
+import { Fragment, forwardRef } from 'react'
+import { twMerge } from 'tailwind-merge'
 
 const LINK_CLASSES =
-  "inline-flex min-h-11 min-w-0 max-w-48 cursor-pointer items-center rounded-sm px-1 text-gray-500 no-underline transition-colors hover:text-gray-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950 dark:text-gray-400 dark:hover:text-white dark:focus-visible:outline-white";
+  'inline-flex min-h-11 min-w-0 max-w-48 cursor-pointer items-center rounded-sm px-1 text-gray-500 no-underline transition-colors hover:text-gray-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950 dark:text-gray-400 dark:hover:text-white dark:focus-visible:outline-white'
 const LABEL_CLASSES =
-  "inline-flex min-h-11 min-w-0 max-w-48 items-center px-1 text-gray-500 dark:text-gray-400";
+  'inline-flex min-h-11 min-w-0 max-w-48 items-center px-1 text-gray-500 dark:text-gray-400'
 const CURRENT_CLASSES =
-  "inline-flex min-h-11 min-w-0 max-w-64 items-center px-1 font-medium text-gray-950 dark:text-white";
-const SEPARATOR_CLASSES =
-  "size-3.5 shrink-0 text-gray-400 dark:text-gray-600";
+  'inline-flex min-h-11 min-w-0 max-w-64 items-center px-1 font-medium text-gray-950 dark:text-white'
+const SEPARATOR_CLASSES = 'size-3.5 shrink-0 text-gray-400 dark:text-gray-600'
 
 function Separator() {
   return (
@@ -28,32 +27,32 @@ function Separator() {
         strokeLinejoin="round"
       />
     </svg>
-  );
+  )
 }
 
 const Breadcrumb = forwardRef(function Breadcrumb(
   {
     items = [],
     className,
-    "aria-label": ariaLabel = "Breadcrumb",
-    "data-slot": _dataSlot,
+    'aria-label': ariaLabel = 'Breadcrumb',
+    'data-slot': _dataSlot,
     ...navProps
   },
-  forwardedRef,
+  forwardedRef
 ) {
-  if (!items.length) return null;
+  if (!items.length) return null
 
-  const lastIndex = items.length - 1;
-  const collapses = items.length > 3;
+  const lastIndex = items.length - 1
+  const collapses = items.length > 3
 
   function itemClass(index) {
     return twMerge(
-      "flex min-w-0 shrink-0 items-center gap-1.5",
+      'flex min-w-0 shrink-0 items-center gap-1.5',
       collapses && index > 0 && index < lastIndex - 1
-        ? "hidden @lg:flex"
+        ? 'hidden @lg:flex'
         : undefined,
-      index === lastIndex ? "shrink" : undefined,
-    );
+      index === lastIndex ? 'shrink' : undefined
+    )
   }
 
   return (
@@ -62,7 +61,7 @@ const Breadcrumb = forwardRef(function Breadcrumb(
       ref={forwardedRef}
       data-slot="breadcrumb"
       aria-label={ariaLabel}
-      className={twMerge("@container min-w-0", className)}
+      className={twMerge('@container min-w-0', className)}
     >
       <ol
         data-slot="list"
@@ -86,7 +85,7 @@ const Breadcrumb = forwardRef(function Breadcrumb(
             <li
               data-slot="item"
               data-index={index}
-              data-state={index === lastIndex ? "current" : undefined}
+              data-state={index === lastIndex ? 'current' : undefined}
               className={itemClass(index)}
             >
               {index > 0 ? <Separator /> : null}
@@ -123,7 +122,7 @@ const Breadcrumb = forwardRef(function Breadcrumb(
         ))}
       </ol>
     </nav>
-  );
-});
+  )
+})
 
-export default Breadcrumb;
+export default Breadcrumb

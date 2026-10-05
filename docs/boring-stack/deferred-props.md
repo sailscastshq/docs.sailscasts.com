@@ -175,19 +175,19 @@ export default () => (
 
 ```svelte [Svelte]
 <script>
-    import { Deferred } from '@inertiajs/svelte'
+  import { Deferred } from '@inertiajs/svelte'
 
-    let { permissions } = $props()
+  let { permissions } = $props()
 </script>
 
 <Deferred data="permissions">
-    {#snippet fallback()}
-        <div>Loading...</div>
-    {/snippet}
+  {#snippet fallback()}
+    <div>Loading...</div>
+  {/snippet}
 
-    {#each permissions as permission}
-        <!-- ... -->
-    {/each}
+  {#each permissions as permission}
+    <!-- ... -->
+  {/each}
 </Deferred>
 ```
 
@@ -229,17 +229,17 @@ export default () => (
 
 ```svelte [Svelte]
 <script>
-    import { Deferred } from '@inertiajs/svelte'
+  import { Deferred } from '@inertiajs/svelte'
 
-    let { teams, users } = $props()
+  let { teams, users } = $props()
 </script>
 
 <Deferred data={['teams', 'users']}>
-    {#snippet fallback()}
-        <div>Loading...</div>
-    {/snippet}
+  {#snippet fallback()}
+    <div>Loading...</div>
+  {/snippet}
 
-    <!-- Props are now loaded -->
+  <!-- Props are now loaded -->
 </Deferred>
 ```
 
