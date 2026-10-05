@@ -18,6 +18,14 @@ Set the token in your server environment:
 export HAGFISH_API_KEY=hf_live_REPLACE_ME
 ```
 
+## Accounts, clients and applications
+
+Your Hagfish account owns its invoices, billing entitlements and API keys. The API calls this account a `creator`; it is the tenant boundary for every request.
+
+A `client` is the person or business paying an invoice. Creating a Client record does not create a Hagfish account or grant access. A third-party application is software connecting to the API on your account’s behalf; it is separate from a payer Client. Its API key can access only the resources and scopes you approve.
+
+The current CLI uses `HAGFISH_API_KEY` and `auth status`. Browser login and device authorization are being prepared; they are not available in this release candidate.
+
 ## Confirm the identity and entitlement
 
 ```sh

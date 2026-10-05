@@ -33,7 +33,7 @@ A rendering or storage failure rolls back the charge and operation result. Retry
 
 ## Durable deliveries
 
-`POST /invoices/{id}/deliveries` accepts `recipient_emails` and an optional `send_at` with an explicit timezone. Omitted recipients use the saved client email. Omitted schedule means send now. Review the returned normalized recipients and actual `scheduled_at`.
+`POST /invoices/{id}/deliveries` accepts `recipient_emails` and an optional `send_at` with an explicit timezone. Omitted recipients use the invoice’s saved recipient list first, then the saved client email. An explicitly empty recipient list fails validation. Omitted schedule means send now. Review the returned normalized recipients and actual `scheduled_at`.
 
 The `202` response includes the delivery ID, invoice revision, reservation, and status. It preserves the invoice content approved for that operation. `GET /deliveries/{id}` returns its current state.
 
