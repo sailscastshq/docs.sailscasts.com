@@ -8,17 +8,16 @@ description: Create, review, export, and deliberately deliver invoices from the 
 
 Create a draft, review its exact totals, and export the invoice without leaving your terminal. A send requires an explicit recipient, schedule, revision, credit ceiling, and approval.
 
-::: info Developer preview
-The package is not published yet. These commands describe the upcoming CLI. Use the reviewed local package until the release is announced.
+::: info Connected login
+The CLI is published. Browser and device login require an activated Hagfish issuer; public activation is pending. Use a scoped API key for automation.
 :::
 
-## Install the preview
+## Install
 
-Requires Node.js 22.12 or newer. From a Hagfish checkout:
+Requires Node.js 22.12 or newer:
 
 ```sh
-npm pack ./packages/cli
-npm install -g ./sailscastshq-hagfish-cli-0.1.0.tgz
+npm install -g hagfish-cli@0.0.1
 hagfish --version
 ```
 
@@ -35,7 +34,7 @@ The JSON files use the same fields as the [API quickstart](/hagfish/api/getting-
 
 ## Connect your account
 
-Browser and device login are implemented in the private candidate. Public activation is pending. On a configured Hagfish issuer:
+Browser and device login are available in the CLI. Public activation is pending. On a configured Hagfish issuer:
 
 ```sh
 hagfish auth login
