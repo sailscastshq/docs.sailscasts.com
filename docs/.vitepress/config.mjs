@@ -89,6 +89,7 @@ function hagfishApiGuide() {
       items: [
         { text: 'Overview', link: '/hagfish/api/' },
         { text: 'CLI', link: '/hagfish/cli/' },
+        { text: 'MCP preview', link: '/hagfish/mcp' },
         { text: 'Getting started', link: '/hagfish/api/getting-started' },
         {
           text: 'Authentication and idempotency',
