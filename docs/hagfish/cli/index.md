@@ -63,6 +63,8 @@ hagfish pdf download ARTIFACT_ID --output invoice.pdf --json
 
 Generation returns the artifact ID; download retrieves its existing bytes. Downloads refuse to overwrite a file. `--dry-run` never writes, generates, reserves credits, or sends.
 
+To open the saved PDF in your default viewer, add `--open` to the download command. If the viewer fails, the PDF remains saved and the command reports `opened:false` with exit code 1. A dry run never opens the viewer.
+
 ## Send deliberately
 
 ```sh
@@ -71,6 +73,8 @@ hagfish invoices send INVOICE_ID --to billing@example.test --send-at now \
 ```
 
 After reviewing the recipient, schedule, and cost, remove `--dry-run`. An interactive terminal asks for confirmation. Automation must pass `--yes`; without it a noninteractive send fails before committing.
+
+Review stays in the terminal. Run `hagfish invoices preview INVOICE_ID` without `--json` for a readable invoice summary. Before an interactive PDF or send, the CLI shows the client, ordered items, server totals, dates, requested recipients and schedule, revision, quoted credits and maximum approved credits. Type `yes` only after checking those details. The browser is used for connected login; the separate [MCP workflow](/hagfish/mcp) uses browser approvals for agent requests. `--json` keeps structured output for scripts.
 
 Use an ISO timestamp with an explicit timezone instead of `now` to schedule. A successful command returns the accepted delivery ID and current status. It does not claim the email arrived.
 

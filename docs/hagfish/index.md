@@ -10,11 +10,11 @@ hero:
   tagline: Create professional invoices, collaborate with clients, and keep the paper trail in one calm workspace.
   actions:
     - theme: brand
-      text: Use Hagfish
-      link: https://hagfish.app
+      text: View docs
+      link: /hagfish/api/getting-started
     - theme: alt
-      text: Build with the API
-      link: /hagfish/api/
+      text: Visit product
+      link: https://hagfish.app
 features:
   - icon: ✦
     title: Invoice beautifully

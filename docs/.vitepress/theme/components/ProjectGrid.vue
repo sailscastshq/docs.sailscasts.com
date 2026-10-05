@@ -86,18 +86,28 @@ const filteredProjects = computed(() => {
       </div>
     </div>
     <div class="project-grid">
-      <a
+      <component
+        :is="type === 'commercial' ? 'article' : 'a'"
         v-for="project in filteredProjects"
         :key="project.name"
-        :href="project.link"
-        :target="project.external ? '_blank' : '_self'"
-        :rel="project.external ? 'noopener noreferrer' : ''"
+        :href="type === 'commercial' ? undefined : project.link"
+        :target="
+          type !== 'commercial' && project.external ? '_blank' : undefined
+        "
+        :rel="
+          type !== 'commercial' && project.external
+            ? 'noopener noreferrer'
+            : undefined
+        "
         class="project-card"
       >
         <div class="project-header">
           <h3 class="project-name">
             {{ project.name }}
-            <span v-if="project.external" class="external-icon">
+            <span
+              v-if="project.external && type !== 'commercial'"
+              class="external-icon"
+            >
               <svg
                 width="12"
                 height="12"
@@ -124,7 +134,24 @@ const filteredProjects = computed(() => {
           </div>
         </div>
         <p class="project-description">{{ project.description }}</p>
-      </a>
+        <div v-if="type === 'commercial'" class="product-actions">
+          <a
+            v-if="project.docsLink"
+            :href="project.docsLink"
+            class="product-docs"
+            >View docs<span class="sr-only"> for {{ project.name }}</span></a
+          >
+          <a
+            :href="project.productLink || project.link"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="product-visit"
+            >Visit product<span class="sr-only"
+              >: {{ project.name }} (opens in a new tab)</span
+            ><span aria-hidden="true"> ↗</span></a
+          >
+        </div>
+      </component>
     </div>
     <div
       v-if="searchable && search && filteredProjects.length === 0"
@@ -305,6 +332,50 @@ const filteredProjects = computed(() => {
   color: var(--vp-c-text-3);
   transition: color 0.2s ease;
   flex-shrink: 0;
+}
+
+.product-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.625rem;
+  margin-top: 1.25rem;
+}
+
+.product-actions a {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.5;
+  border: 1px solid var(--vp-c-border);
+  border-radius: 6px;
+  padding: 0.4375rem 0.6875rem;
+}
+
+.product-docs {
+  color: var(--vp-c-text-1);
+  background: var(--vp-c-bg);
+}
+
+.product-visit {
+  color: var(--vp-c-text-2);
+}
+.product-actions a:hover {
+  border-color: #02b7ed;
+}
+.product-actions a:focus-visible {
+  outline: 2px solid #02b7ed;
+  outline-offset: 3px;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .project-card:hover .project-github {

@@ -174,19 +174,23 @@ export default {
           description:
             'Practical, high-quality video tutorials and workshops for pragmatic full-stack JavaScript web developers.',
           link: 'https://sailscasts.com',
+          productLink: 'https://sailscasts.com',
           external: true
         },
         {
           name: 'Hagfish',
           description:
             'Professional invoicing for creators, with an API and signed webhooks for products, automations, and agents.',
-          link: '/hagfish/'
+          link: '/hagfish/',
+          docsLink: '/hagfish/',
+          productLink: 'https://hagfish.app'
         },
         {
           name: 'The African Engineer',
           description:
             "Deep dives into Big Tech & startups. Hard-won lessons. No hype—just real engineering insights you can't find anywhere else.",
           link: 'https://africanengineer.com',
+          productLink: 'https://africanengineer.com',
           external: true
         }
       ]
