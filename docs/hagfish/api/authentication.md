@@ -37,7 +37,7 @@ Connected login is implemented in the private candidate and awaits public activa
 
 A Creator-approved OAuth access token can be sent in the same bearer header. It must target the API resource, such as `https://hagfish.app/api/v1`, and carry the existing scopes required by the operation. A token approved only for `/mcp` cannot access the API. The authenticated Creator remains the account boundary.
 
-Access expires after 10 minutes; a connection can renew access for up to 7 days. Refresh tokens rotate and reuse revokes the token family. Revoke access in Connected applications or through CLI logout. API keys remain available independently. See [CLI account login](/hagfish/cli/#connect-your-account) and the [MCP preview](/hagfish/mcp).
+Access expires after 10 minutes; a connection can renew access for up to 7 days. Refresh tokens rotate and reuse revokes the token family. Revoke access in Connected applications or through CLI logout. API keys remain available independently. See [CLI account login](/hagfish/cli/#connect-your-account) and the [MCP guide](/hagfish/mcp).
 
 ## Idempotency
 
