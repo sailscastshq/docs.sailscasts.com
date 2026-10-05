@@ -56,3 +56,5 @@ Invoice responses include `revision`. PATCH requires `expected_revision` from th
 `GET /invoices/{id}/preview` returns the invoice, missing fields, and current PDF and delivery billing estimates. It is read-only and does not reserve an entitlement. The commit-time check remains authoritative.
 
 All API resource IDs are opaque public IDs. Client and invoice list filters are documented in the [OpenAPI reference](https://hagfish.app/api/openapi.json). Malformed limits or empty cursors return `400 invalid_pagination`. A well-formed cursor that does not identify a resource in your account returns `400 invalid_cursor`.
+
+See [reusable invoice templates](../templates) to save ordered content and create fresh drafts through the API, CLI or an owner-approved MCP request.

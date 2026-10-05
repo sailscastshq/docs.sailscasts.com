@@ -16,7 +16,7 @@ node packages/mcp/bin/hagfish-mcp.js
 
 Configure your MCP host to run this command from the repository root. Grant the read scopes needed by your workflow: `clients:read`, `invoices:read` and `usage:read`. Keep the key in the host's secret environment.
 
-Seven local tools read your account, payer clients, invoices, previews, delivery status and usage: `hagfish_account`, `hagfish_clients`, `hagfish_invoices`, `hagfish_invoice`, `hagfish_preview`, `hagfish_delivery` and `hagfish_usage`. Lists accept `limit` (1–100) and `after`; invoice and delivery reads accept a public `id`. Local stdio cannot create invoices, unlock a PDF or send email.
+Nine local tools read your account, payer clients, invoices, previews, delivery status and usage: `hagfish_account`, `hagfish_clients`, `hagfish_invoices`, `hagfish_invoice`, `hagfish_preview`, `hagfish_delivery` `hagfish_usage`, `hagfish_invoice_templates` and `hagfish_invoice_template`. Lists accept `limit` (1–100) and `after`; invoice and delivery reads accept a public `id`. Local stdio cannot create invoices, unlock a PDF or send email.
 
 ## Connect through your browser
 
@@ -32,7 +32,7 @@ The hosted connection adds these tools:
 | `hagfish_send_invoice` | `invoices:send`     | Invoice revision, explicit recipients, schedule and maximum credits. |
 | `hagfish_approval`     | `invoices:read`     | Read approval status and the completed result.                       |
 
-These are in addition to the seven read tools. Request only the permissions you need. `invoices:read` lets the agent review invoices and retrieve approval results.
+These are in addition to the nine read tools. Request only the permissions you need. `invoices:read` lets the agent review invoices and retrieve approval results.
 
 ## Review a requested operation
 
@@ -66,3 +66,9 @@ Reviews expire after ten minutes. Changes to the invoice revision, ordered items
 Retry a timed-out request with the same `request_key` and unchanged payload. It returns the same review. Retrying browser approval replays the original completed operation without another charge or email. Changing a request requires a new key and a new review. An expired or unresolved result never executes again automatically; inspect its resource before starting another operation.
 
 A missing scope returns an authorization error. An ID outside your account returns not found. For connection failures, check the intended issuer, resource audience, permissions and expiry. Never share bearer credentials in a prompt or a configuration file. See [API authentication](./api/authentication) and [CLI account login](./cli/#connect-your-account).
+
+## Reusable invoice templates
+
+Read templates with `hagfish_invoice_templates` and `hagfish_invoice_template`. Hosted tools `hagfish_create_invoice_template`, `hagfish_update_invoice_template`, `hagfish_delete_invoice_template` and `hagfish_instantiate_invoice_template` request browser review and require both `invoices:read` and `invoices:write`.
+
+Each request has a stable `request_key` and the strict [template API payload](./templates). Update, delete and instantiate also require the template `id`. Capture binds the source invoice revision and ordered content. Update and delete bind the template revision. Instantiation reviews the copied content, fresh dates and explicitly selected client before creating a separate draft. Changes to those details invalidate the review. Template operations do not consume credits, export a PDF or send email.
