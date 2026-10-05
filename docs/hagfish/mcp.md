@@ -72,3 +72,7 @@ A missing scope returns an authorization error. An ID outside your account retur
 Read templates with `hagfish_invoice_templates` and `hagfish_invoice_template`. Hosted tools `hagfish_create_invoice_template`, `hagfish_update_invoice_template`, `hagfish_delete_invoice_template` and `hagfish_instantiate_invoice_template` request browser review and require both `invoices:read` and `invoices:write`.
 
 Each request has a stable `request_key` and the strict [template API payload](./templates). Update, delete and instantiate also require the template `id`. Capture binds the source invoice revision and ordered content. Update and delete bind the template revision. Instantiation reviews the copied content, fresh dates and explicitly selected client before creating a separate draft. Changes to those details invalidate the review. Template operations do not consume credits, export a PDF or send email.
+
+## Authentication configuration for deployment owners
+
+Use `HAGFISH_CONNECTED_AUTH` for the complete connected-auth JSON object in your trusted secret store. Hagfish explicitly validates this variable; invalid JSON or unsupported fields fail without echoing secret values. Keep activation disabled until migrations, managed keys and exact public client registrations are ready. Preserve `SAILS_DATA_ENCRYPTION_KEY`. Existing deployments can retain the legacy mixed-case variable, but must not set both.
