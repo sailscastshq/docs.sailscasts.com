@@ -31,6 +31,14 @@ Available scopes are:
 Use `GET /creator` to inspect the active key and its scopes. Revoking a key in
 Hagfish takes effect immediately.
 
+## Connected applications
+
+Connected login is implemented in the private candidate and awaits public activation. On a configured issuer, a registered public application uses browser consent and S256 PKCE. Native CLI callbacks bind only to literal loopback; approved web applications use their registered exact HTTPS callback. There is no public dynamic application registration.
+
+A Creator-approved OAuth access token can be sent in the same bearer header. It must target the API resource, such as `https://hagfish.app/api/v1`, and carry the existing scopes required by the operation. A token approved only for `/mcp` cannot access the API. The authenticated Creator remains the account boundary.
+
+Access expires after 10 minutes; a connection can renew access for up to 7 days. Refresh tokens rotate and reuse revokes the token family. Revoke access in Connected applications or through CLI logout. API keys remain available independently. See [CLI account login](/hagfish/cli/#connect-your-account) and the [MCP preview](/hagfish/mcp).
+
 ## Idempotency
 
 Every POST and PATCH request requires an `Idempotency-Key` header. Generate the

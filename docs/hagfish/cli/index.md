@@ -33,6 +33,24 @@ hagfish invoices preview INVOICE_ID --json
 
 The JSON files use the same fields as the [API quickstart](/hagfish/api/getting-started). For piped JSON, use `--input -`. The invoice response provides its `id` and `revision`.
 
+## Connect your account
+
+Browser and device login are implemented in the private candidate. Public activation is pending. On a configured Hagfish issuer:
+
+```sh
+hagfish auth login
+hagfish auth status --json
+hagfish auth logout
+```
+
+The browser shows your signed-in account, application, requested permissions and expiry. Default permissions are `clients:read`, `invoices:read` and `usage:read`. Additional permissions require an explicit `--scopes` request and fresh consent. Log out before switching accounts or permissions.
+
+Use `hagfish auth login --device` when you cannot open a browser on the terminal machine. Open the displayed verification URL yourself and compare the code before approving. The CLI waits for your approval and reports failure if you decline or the code expires.
+
+Credentials stay in macOS Keychain, Windows Credential Manager or Linux Secret Service. A locked or unavailable vault fails closed; the CLI never saves refresh credentials in plaintext. Logout revokes the server connection before clearing the vault. API keys remain available for automation and take precedence when `HAGFISH_API_KEY` is set.
+
+Access tokens expire after 10 minutes. A connection can renew access for up to 7 days. Revoke it at any time in Connected applications. Sending still requires the explicit revision, recipients, schedule, credit ceiling and command approval described below.
+
 ## Export and retrieve
 
 Review the preview, then explicitly approve generation:
