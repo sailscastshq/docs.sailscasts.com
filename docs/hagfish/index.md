@@ -36,5 +36,5 @@ Create the client, draft the invoice, and review the total and applicable credit
 [Explore the API →](/hagfish/api/) · [Use the CLI →](/hagfish/cli/)
 
 ::: info Available releases
-The web app and REST API are available at [hagfish.app](https://hagfish.app). The published packages are `hagfish-cli@0.0.1` and the local read-only `hagfish-mcp@0.0.1`. Hosted assistant connections require an approved application registration. The client onboarding API and package expansion remain a separate release candidate.
+The web app and REST API are available at [hagfish.app](https://hagfish.app). The published packages are `hagfish-cli@0.0.2` and the local read-only `hagfish-mcp@0.0.2`. Hosted assistant connections require an approved application registration. Client onboarding links and durable delivery are available through the [API, CLI and hosted review workflow](./client-onboarding).
 :::

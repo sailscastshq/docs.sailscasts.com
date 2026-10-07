@@ -91,6 +91,7 @@ function hagfishApiGuide() {
         { text: 'CLI', link: '/hagfish/cli/' },
         { text: 'MCP', link: '/hagfish/mcp' },
         { text: 'Reusable templates', link: '/hagfish/templates' },
+        { text: 'Client onboarding', link: '/hagfish/client-onboarding' },
         { text: 'Getting started', link: '/hagfish/api/getting-started' },
         {
           text: 'Authentication and idempotency',

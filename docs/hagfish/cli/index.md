@@ -17,7 +17,7 @@ The CLI is published and connected login is available. Its registered applicatio
 Requires Node.js 22.12 or newer:
 
 ```sh
-npm install -g hagfish-cli@0.0.1
+npm install -g hagfish-cli@0.0.2
 hagfish --version
 ```
 
@@ -101,3 +101,7 @@ The client retries transient network errors, rate limits, and gateway failures w
 | 6         | Revision, operation, or credit-ceiling conflict |
 
 JSON output goes to stdout. Diagnostics go to stderr and redact API keys and webhook secrets. Keep credential environment values out of terminal recordings.
+
+## Client onboarding
+
+CLI 0.0.2 adds onboarding link creation, send previews, explicit recipient/renewal approval and durable delivery inspection. Creating a link sends no email. See [clients and onboarding links](../client-onboarding) for commands and recovery guidance.

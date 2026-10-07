@@ -14,7 +14,7 @@ Create a client, create an invoice, and ask Hagfish to deliver it without
 reimplementing invoice math, billing entitlement, PDF generation, or email.
 
 ::: info Available API
-The client, invoice, template, delivery, usage and webhook API is available at the production base URL below. Use disposable accounts when testing. The client onboarding API expansion remains a separate release candidate.
+The client, onboarding, invoice, template, delivery, usage and webhook API is available at the production base URL below. Use disposable accounts when testing. See [client onboarding](../client-onboarding) to create links, review sends and inspect durable delivery outcomes.
 :::
 
 ## Base URL
