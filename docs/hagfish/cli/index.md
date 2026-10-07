@@ -17,7 +17,7 @@ The CLI is published and connected login is available. Its registered applicatio
 Requires Node.js 22.12 or newer:
 
 ```sh
-npm install -g hagfish-cli@0.0.1
+npm install -g hagfish-cli@0.0.2
 hagfish --version
 ```
 
@@ -48,7 +48,7 @@ Use `hagfish auth login --device` when you cannot open a browser on the terminal
 
 Connected login stores credentials in macOS Keychain or Linux Secret Service. Windows connected login is not yet verified; use a scoped `HAGFISH_API_KEY` on Windows. A locked or unavailable vault fails closed; the CLI never saves refresh credentials in plaintext. Logout revokes the server connection before clearing the vault. API keys remain available for automation and take precedence when `HAGFISH_API_KEY` is set.
 
-Access tokens expire after 10 minutes. A connection can renew access for up to 7 days. Revoke it at any time in Connected applications. Sending with a scoped API key still requires the explicit revision, recipients, schedule, credit ceiling and command approval described below.
+Access tokens expire after 10 minutes. A connection can renew access for up to 7 days. Revoke it at any time under **Settings → Connections**. Sending with a scoped API key still requires the explicit revision, recipients, schedule, credit ceiling and command approval described below.
 
 ## Export and retrieve
 
@@ -101,3 +101,7 @@ The client retries transient network errors, rate limits, and gateway failures w
 | 6         | Revision, operation, or credit-ceiling conflict |
 
 JSON output goes to stdout. Diagnostics go to stderr and redact API keys and webhook secrets. Keep credential environment values out of terminal recordings.
+
+## Client onboarding
+
+CLI 0.0.2 adds onboarding link creation, send previews, explicit recipient/renewal approval and durable delivery inspection. Creating a link sends no email. See [clients and onboarding links](../client-onboarding) for commands and recovery guidance.

@@ -13,8 +13,8 @@ Hagfish brings professional invoicing into your products and automations.
 Create a client, create an invoice, and ask Hagfish to deliver it without
 reimplementing invoice math, billing entitlement, PDF generation, or email.
 
-::: info Developer preview
-These endpoints describe the upcoming API release. Confirm availability before using the production base URL. Use disposable accounts when testing.
+::: info Available API
+The client, onboarding, invoice, template, delivery, usage and webhook API is available at the production base URL below. Use disposable accounts when testing. See [client onboarding](../client-onboarding) to create links, review sends and inspect durable delivery outcomes.
 :::
 
 ## Base URL
@@ -28,8 +28,8 @@ machine-readable reference for clients and tools.
 
 ## Core workflow
 
-1. Create a scoped API key in Hagfish under **Developers**.
-2. `POST /clients` to save the payer.
+1. Create a scoped API key in Hagfish under **Settings → Developers**.
+2. `POST /clients` to save the client.
 3. `POST /invoices` to create a draft with Hagfish-calculated totals.
 4. `GET /invoices/{id}/preview` to review the revision, totals, and applicable credits.
 5. Generate a PDF or explicitly request a delivery with the reviewed revision and credit ceiling.

@@ -2,25 +2,25 @@
 
 Connect your agent to your Hagfish account to review clients and invoices, prepare a draft, export a PDF, and request delivery. You choose the permissions and approve each write in your browser. Your account remains the owner of the invoice and its billing.
 
-The local stdio package is published as `hagfish-mcp@0.0.1`. Hosted connections require their own approved application registration. Public ChatGPT registration remains pending; the CLI registration does not register ChatGPT. Do not install a similarly named package or paste credentials into a chat.
+The local stdio package is published as `hagfish-mcp@0.0.2`. Hosted connections require their own approved application registration. Before connecting ChatGPT, the deployment owner must confirm its approved registration and the actual hosted connection. The CLI registration does not register ChatGPT. Do not install a similarly named package or paste credentials into a chat.
 
 ## Local read tools
 
 Requires Node.js 22.12 or newer. Install and launch the local stdio server:
 
 ```sh
-npm install -g hagfish-mcp@0.0.1
+npm install -g hagfish-mcp@0.0.2
 # Supply HAGFISH_API_KEY through your secret environment.
 hagfish-mcp
 ```
 
 Configure your MCP host to run the `hagfish-mcp` command. Grant the read scopes needed by your workflow: `clients:read`, `invoices:read` and `usage:read`. Keep the key in the host's secret environment.
 
-Nine local tools read your account, payer clients, invoices, previews, delivery status and usage: `hagfish_account`, `hagfish_clients`, `hagfish_invoices`, `hagfish_invoice`, `hagfish_preview`, `hagfish_delivery` `hagfish_usage`, `hagfish_invoice_templates` and `hagfish_invoice_template`. Lists accept `limit` (1–100) and `after`; invoice and delivery reads accept a public `id`. Local stdio cannot create invoices, unlock a PDF or send email.
+Thirteen local tools read your account, clients, invoices, previews, delivery status and usage: `hagfish_account`, `hagfish_clients`, `hagfish_invoices`, `hagfish_invoice`, `hagfish_preview`, `hagfish_delivery`, `hagfish_usage`, `hagfish_invoice_templates` `hagfish_invoice_template`, `hagfish_client`, `hagfish_client_onboardings`, `hagfish_client_onboarding` and `hagfish_onboarding_delivery`. Lists accept `limit` (1–100) and `after`; invoice and delivery reads accept a public `id`. Local stdio cannot create invoices, unlock a PDF or send email.
 
 ## Connect through your browser
 
-A registered assistant application connects to `https://hagfish.app/mcp` using browser consent and PKCE. Review the account, application and permissions before allowing access. Hosted MCP requires a token approved for the MCP resource; API keys and API-only access tokens cannot access it. Revoke a connection in Connected applications whenever you need.
+A registered assistant application connects to `https://hagfish.app/mcp` using browser consent and PKCE. Review the account, application and permissions before allowing access. Hosted MCP requires a token approved for the MCP resource; API keys and API-only access tokens cannot access it. Revoke a connection under **Settings → Connections** whenever you need.
 
 The hosted connection adds these tools:
 
@@ -32,7 +32,7 @@ The hosted connection adds these tools:
 | `hagfish_send_invoice` | `invoices:send`     | Invoice revision, explicit recipients, schedule and maximum credits. |
 | `hagfish_approval`     | `invoices:read`     | Read approval status and the completed result.                       |
 
-These are in addition to the nine read tools. Request only the permissions you need. `invoices:read` lets the agent review invoices and retrieve approval results.
+Together with the four template review tools below, these and the client/onboarding tools below complete the deployed server’s 26-tool catalog. A hosted application still needs an approved registration and the required granted scopes; the local 0.0.2 stdio package exposes thirteen read tools. Request only the permissions you need. `invoices:read` lets the agent review invoices and retrieve approval results.
 
 ## Review a requested operation
 
@@ -69,9 +69,13 @@ A missing scope returns an authorization error. An ID outside your account retur
 
 ## Reusable invoice templates
 
-Read templates with `hagfish_invoice_templates` and `hagfish_invoice_template`. Hosted tools `hagfish_create_invoice_template`, `hagfish_update_invoice_template`, `hagfish_delete_invoice_template` and `hagfish_instantiate_invoice_template` request browser review and require both `invoices:read` and `invoices:write`.
+Read templates with `hagfish_invoice_templates` `hagfish_invoice_template`, `hagfish_client`, `hagfish_client_onboardings`, `hagfish_client_onboarding` and `hagfish_onboarding_delivery`. Hosted tools `hagfish_create_invoice_template`, `hagfish_update_invoice_template`, `hagfish_delete_invoice_template` and `hagfish_instantiate_invoice_template` request browser review and require both `invoices:read` and `invoices:write`.
 
 Each request has a stable `request_key` and the strict [template API payload](./templates). Update, delete and instantiate also require the template `id`. Capture binds the source invoice revision and ordered content. Update and delete bind the template revision. Instantiation reviews the copied content, fresh dates and explicitly selected client before creating a separate draft. Changes to those details invalidate the review. Template operations do not consume credits, export a PDF or send email.
+
+## Clients and onboarding
+
+Hosted `hagfish_create_client`, `hagfish_update_client`, `hagfish_create_client_onboarding` and `hagfish_send_client_onboarding` require `clients:write` and owner review in Hagfish. The four client/onboarding readers require `clients:read` and are also available in local stdio 0.0.2. Link creation sends no email; sending requires a separate recipient/message review. These operations do not spend invoice credits. See [clients and onboarding links](./client-onboarding).
 
 ## Authentication configuration for deployment owners
 
