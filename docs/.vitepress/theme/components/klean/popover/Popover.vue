@@ -132,6 +132,11 @@ function resolveAnchor() {
       document.getElementById(props.anchor)
 
     if (element?.isConnected) return element
+  } else if (
+    typeof props.anchor?.getBoundingClientRect === 'function' &&
+    !(props.anchor instanceof Element)
+  ) {
+    return props.anchor
   } else if (props.anchor?.isConnected) {
     return props.anchor
   }
@@ -379,7 +384,7 @@ defineExpose({ content, close, open })
     ref="content"
     v-bind="contentAttrs"
     :id="contentId"
-    popover="auto"
+    :popover="attrs.popover ?? 'auto'"
     :hidden="!nativePopover && !isOpen"
     :data-slot="dataSlot"
     :data-state="isOpen ? 'open' : 'closed'"

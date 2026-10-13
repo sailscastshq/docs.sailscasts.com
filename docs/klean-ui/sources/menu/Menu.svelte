@@ -17,6 +17,7 @@
     children,
     onkeydown,
     onclickcapture,
+    ontoggle,
     ...contentProps
   } = $props();
 
@@ -30,6 +31,10 @@
   let tabExitTarget;
   let typeahead = "";
   let typeaheadTimer;
+
+  export function getContent() {
+    return popoverElement?.getContent?.();
+  }
 
   function contentElement() {
     return popoverElement?.getContent?.();
@@ -174,6 +179,20 @@
     else contentElement()?.focus({ preventScroll: true });
   }
 
+  function focusPending() {
+    if (pendingFocus == null) return;
+    const content = contentElement();
+    if (
+      content == null ||
+      content.hidden ||
+      (typeof content.showPopover === "function" &&
+        !content.matches(":popover-open"))
+    )
+      return;
+    focusEdge(pendingFocus);
+    pendingFocus = undefined;
+  }
+
   function clearTypeahead() {
     typeahead = "";
     clearTimeout(typeaheadTimer);
@@ -225,18 +244,21 @@
   }
 
   function requestOpen(nextOpen) {
+    if (nextOpen) pendingFocus ??= "first";
     if (open === undefined) internalOpen = nextOpen;
     else open = nextOpen;
     onOpenChange?.(nextOpen);
   }
 
-  function openMenu(edge = "first") {
+  export function show(edge = "first", source) {
+    if (source?.isConnected) activeInvoker = source;
     pendingFocus = edge;
     if (isOpen) focusEdge(edge);
+    else if (source?.isConnected) popoverElement?.show(source);
     else requestOpen(true);
   }
 
-  function closeMenu({ restoreFocus = false } = {}) {
+  export function closeMenu({ restoreFocus = false } = {}) {
     restoreOnClose ||= restoreFocus;
     if (isOpen) requestOpen(false);
     else if (restoreOnClose) {
@@ -317,8 +339,7 @@
       syncInvokerSemantics();
 
       if (nextOpen) {
-        focusEdge(pendingFocus);
-        pendingFocus = "first";
+        focusPending();
         return;
       }
 
@@ -346,7 +367,7 @@
 
       if (event.key === "ArrowDown" || event.key === "ArrowUp") {
         event.preventDefault();
-        openMenu(event.key === "ArrowUp" ? "last" : "first");
+        show(event.key === "ArrowUp" ? "last" : "first");
       }
     }
 
@@ -384,6 +405,10 @@
   class={twMerge("min-w-40 p-1", className)}
   onclickcapture={handleClick}
   onkeydown={handleKeydown}
+  ontoggle={(event) => {
+    if (event.newState === "open" && isOpen) focusPending();
+    ontoggle?.(event);
+  }}
 >
   {@render children?.({ open: isOpen, close: closeMenu })}
 </Popover>

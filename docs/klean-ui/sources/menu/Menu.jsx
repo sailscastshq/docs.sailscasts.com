@@ -48,6 +48,7 @@ const Menu = forwardRef(function Menu(
     children,
     onKeyDown,
     onClickCapture,
+    onToggle,
     ...contentProps
   },
   forwardedRef
@@ -192,7 +193,8 @@ const Menu = forwardRef(function Menu(
   )
 
   const focusEdge = useCallback(
-    (edge = 'first') => {
+    (edge = 'first', source) => {
+      if (source?.isConnected) activeInvoker.current = source
       const items = enabledItems()
       const item = edge === 'last' ? items.at(-1) : items[0]
       if (item) focusItem(item)
@@ -200,6 +202,20 @@ const Menu = forwardRef(function Menu(
     },
     [contentElement, enabledItems, focusItem]
   )
+
+  const focusPending = useCallback(() => {
+    if (pendingFocus.current == null) return
+    const content = contentElement()
+    if (
+      content == null ||
+      content.hidden ||
+      (typeof content.showPopover === 'function' &&
+        !content.matches(':popover-open'))
+    )
+      return
+    focusEdge(pendingFocus.current)
+    pendingFocus.current = undefined
+  }, [contentElement, focusEdge])
 
   const clearTypeahead = useCallback(() => {
     typeahead.current = ''
@@ -209,6 +225,7 @@ const Menu = forwardRef(function Menu(
 
   const requestOpen = useCallback(
     (nextOpen) => {
+      if (nextOpen) pendingFocus.current ??= 'first'
       if (!isControlled) setInternalOpen(nextOpen)
       onOpenChange?.(nextOpen)
     },
@@ -216,9 +233,11 @@ const Menu = forwardRef(function Menu(
   )
 
   const openMenu = useCallback(
-    (edge = 'first') => {
+    (edge = 'first', source) => {
+      if (source?.isConnected) activeInvoker.current = source
       pendingFocus.current = edge
       if (latestOpen.current) focusEdge(edge)
+      else if (source?.isConnected) popoverRef.current?.open(source)
       else requestOpen(true)
     },
     [focusEdge, requestOpen]
@@ -238,7 +257,12 @@ const Menu = forwardRef(function Menu(
 
   useImperativeHandle(
     forwardedRef,
-    () => ({ content: contentElement(), open: openMenu, close: closeMenu }),
+    () => ({
+      content: contentElement(),
+      getContent: contentElement,
+      open: openMenu,
+      close: closeMenu
+    }),
     [closeMenu, contentElement, openMenu]
   )
 
@@ -246,8 +270,7 @@ const Menu = forwardRef(function Menu(
     syncInvokerSemantics()
 
     if (isOpen) {
-      focusEdge(pendingFocus.current)
-      pendingFocus.current = 'first'
+      focusPending()
       return
     }
 
@@ -259,7 +282,7 @@ const Menu = forwardRef(function Menu(
   }, [
     clearTypeahead,
     completeTabExit,
-    focusEdge,
+    focusPending,
     isOpen,
     menuItems,
     restoreInvokerFocus,
@@ -437,6 +460,14 @@ const Menu = forwardRef(function Menu(
       className={twMerge('min-w-40 p-1', className)}
       onClickCapture={handleClick}
       onKeyDown={handleKeydown}
+      onToggle={(event) => {
+        if (
+          (event.nativeEvent?.newState ?? event.newState) === 'open' &&
+          latestOpen.current
+        )
+          focusPending()
+        onToggle?.(event)
+      }}
     >
       {typeof children === 'function'
         ? children({ open: isOpen, close: closeMenu })
