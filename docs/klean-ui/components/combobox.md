@@ -17,6 +17,12 @@ import popoverSource from '../../.vitepress/theme/components/klean/popover/Popov
 import remoteUsage from '../snippets/combobox/remote.vue?raw'
 
 const customer = ref('cus_kelvin')
+const vehicle = ref()
+const matchedVehicles = [
+  { value: 'archived', label: 'Archived vehicle', disabled: true },
+  { value: 42, label: 'Automobile' },
+  { value: 7, label: 'Motor vehicle' }
+]
 const customers = [
   {
     value: 'cus_kelvin',
@@ -167,6 +173,9 @@ const repositories = [
 
 `label`, `description`, and `keywords` participate in local matching.
 `keywords` provides invisible aliases without changing what people see.
+Local matching is enabled by default. Set `filter` to `false` when the application
+already supplies matched results; descriptions and keywords then remain content
+rather than an additional matching rule.
 `disabled` leaves an option understandable but removes it from pointer and
 keyboard selection. `group` creates one labelled group without adding another
 component API.
@@ -183,9 +192,25 @@ first page before anyone types.
 
 The application owns its URL, credentials, pagination, response shape, and
 request cancellation. Abort replaced work and pass `options`, `loading`, and
-`error` back to Combobox:
+`error` back to Combobox. Set `filter` to `false` so synonyms, fuzzy matches, and
+application-ranked results stay visible in their supplied order:
 
 <CopyCode :code="remoteUsage" label="RepositoryPicker.vue" />
+
+Vue uses `:filter="false"`; React and Svelte use `filter={false}`. Query events,
+debouncing, disabled choices, selection, and committed values keep the same
+contract.
+
+<KleanPreview id="combobox-application-matches" :source="comboboxSource" filename="Combobox.vue">
+  <template #preview>
+    <div class="grid w-full max-w-sm gap-2">
+      <label for="docs-matched-vehicle" class="text-sm font-medium">Vehicle</label>
+      <KleanCombobox id="docs-matched-vehicle" v-model="vehicle" name="vehicle" :options="matchedVehicles" :filter="false" />
+      <output class="text-sm">{{ vehicle ?? 'No vehicle selected' }}</output>
+    </div>
+  </template>
+  <template #caption>Type car, then choose Automobile. Application-provided results retain their order, and disabled choices remain unavailable.</template>
+</KleanPreview>
 
 Existing results remain usable while loading. Combobox replaces its pending
 debounce timer; the application cancels its pending request because only the
@@ -193,18 +218,19 @@ application knows the transport policy.
 
 ## API
 
-| Purpose       | Vue                                    | React                    | Svelte                |
-| ------------- | -------------------------------------- | ------------------------ | --------------------- |
-| Current value | `v-model`                              | `value`, `onValueChange` | `bind:value`          |
-| Initial value | `default-value`                        | `defaultValue`           | `defaultValue`        |
-| Choices       | `options`                              | `options`                | `options`             |
-| Query         | `v-model:query`                        | `query`, `onQueryChange` | `bind:query`          |
-| Search        | `@search`                              | `onSearch`               | `onsearch`            |
-| Request state | `loading`, `error`                     | `loading`, `error`       | `loading`, `error`    |
-| Form          | `name`, `required`, `disabled`, `form` | same native names        | same native names     |
-| Open state    | `v-model:open`                         | `open`, `onOpenChange`   | `bind:open`           |
-| Geometry      | `placement`, `offset`                  | `placement`, `offset`    | `placement`, `offset` |
-| Styling       | `class`                                | `className`              | `class`               |
+| Purpose        | Vue                                    | React                    | Svelte                |
+| -------------- | -------------------------------------- | ------------------------ | --------------------- |
+| Current value  | `v-model`                              | `value`, `onValueChange` | `bind:value`          |
+| Initial value  | `default-value`                        | `defaultValue`           | `defaultValue`        |
+| Choices        | `options`                              | `options`                | `options`             |
+| Local matching | `filter` (default `true`)              | `filter`                 | `filter`              |
+| Query          | `v-model:query`                        | `query`, `onQueryChange` | `bind:query`          |
+| Search         | `@search`                              | `onSearch`               | `onsearch`            |
+| Request state  | `loading`, `error`                     | `loading`, `error`       | `loading`, `error`    |
+| Form           | `name`, `required`, `disabled`, `form` | same native names        | same native names     |
+| Open state     | `v-model:open`                         | `open`, `onOpenChange`   | `bind:open`           |
+| Geometry       | `placement`, `offset`                  | `placement`, `offset`    | `placement`, `offset` |
+| Styling        | `class`                                | `className`              | `class`               |
 
 `searchDelay` defaults to 300 milliseconds. The default placement is
 `bottom-start` with a four-pixel offset. Geometry may flip or shift to remain

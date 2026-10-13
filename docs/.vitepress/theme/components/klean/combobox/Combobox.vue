@@ -21,6 +21,8 @@ const props = defineProps({
   defaultValue: { default: undefined },
   /** Choices in the form `{ value, label, description?, disabled?, group?, keywords? }`. */
   options: { type: Array, default: () => [] },
+  /** Apply local text matching. Disable when the application supplies matched results. */
+  filter: { type: Boolean, default: true },
   /** Framework-native controlled search text. Usually left uncontrolled. */
   query: { type: String, default: undefined },
   /** Initial search text when `query` is not controlled. */
@@ -145,7 +147,12 @@ const filteredEntries = computed(() => {
 
   return props.options
     .map((option, index) => ({ option, index }))
-    .filter(({ option }) => !needle || searchableText(option).includes(needle))
+    .filter(
+      ({ option }) =>
+        props.filter === false ||
+        !needle ||
+        searchableText(option).includes(needle)
+    )
 })
 const groupedEntries = computed(() => {
   const groups = new Map()
@@ -372,8 +379,6 @@ defineExpose({
         :disabled="disabled"
         :value="visibleValue"
         :placeholder="placeholder"
-        :popovertarget="contentId"
-        popovertargetaction="show"
         :aria-expanded="String(isOpen)"
         :aria-controls="listboxId"
         aria-haspopup="listbox"
@@ -384,7 +389,6 @@ defineExpose({
         :data-state="isOpen ? 'open' : 'closed'"
         :class="inputClasses"
         :style="attrs.style"
-        @focus="openCombobox('selected')"
         @click="openCombobox('selected')"
         @input="handleInput"
         @keydown="handleKeydown"

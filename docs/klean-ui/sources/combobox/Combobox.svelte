@@ -7,6 +7,7 @@
     value = $bindable(),
     defaultValue,
     options = [],
+    filter = true,
     query = $bindable(),
     defaultQuery = "",
     placeholder = "Search and choose",
@@ -68,7 +69,10 @@
     return options
       .map((option, index) => ({ option, index }))
       .filter(
-        ({ option }) => !needle || searchableText(option).includes(needle),
+        ({ option }) =>
+          filter === false ||
+          !needle ||
+          searchableText(option).includes(needle),
       );
   });
   let groups = $derived.by(() => {
@@ -301,8 +305,6 @@
       {disabled}
       value={visibleValue}
       {placeholder}
-      popovertarget={contentId}
-      popovertargetaction="show"
       aria-expanded={String(isOpen)}
       aria-controls={listboxId}
       aria-haspopup="listbox"
@@ -320,10 +322,7 @@
         className,
       )}
       {style}
-      onfocus={(event) => {
-        onfocus?.(event);
-        if (!event.defaultPrevented) show("selected");
-      }}
+      {onfocus}
       onclick={(event) => {
         onclick?.(event);
         if (!event.defaultPrevented) show("selected");
