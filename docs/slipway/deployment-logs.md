@@ -35,7 +35,7 @@ Stored output is separate from the running app's container logs. Read it even wh
 Open the app's logs in the selected environment to inspect runtime output. Include the app when several apps share one environment.
 
 ::: info CLI compatibility
-In v0.0.86 source, application `logs` prints a `docker logs` instruction. Fetching and following application logs through the CLI requires the unreleased next CLI and server. The examples below are for that compatible build.
+In v0.0.86 source, application `logs` prints a `docker logs` instruction. Fetching and following application logs through the CLI requires the CLI 0.0.4 and server 0.0.120 release pair. The examples below are for that compatible build.
 :::
 
 ```bash

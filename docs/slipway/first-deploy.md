@@ -209,7 +209,7 @@ Use the actual deployment ID to inspect build and startup output:
 slipway logs --deployment DEPLOYMENT_ID
 ```
 
-Open the app's logs in the dashboard for runtime output. Live CLI app logs require the [unreleased compatible build](/slipway/deployment-logs#application-logs).
+Open the app's logs in the dashboard for runtime output. Live CLI app logs require the [matching CLI/server release pair](/slipway/deployment-logs#application-logs).
 
 For bounded model inspection, open **Helm** from the app's tools menu and start with a read-only expression:
 

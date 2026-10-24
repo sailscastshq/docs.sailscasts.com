@@ -74,10 +74,8 @@ Your app must be running for Helm to work — it executes code inside the runnin
 
 ## JavaScript and Command modes
 
-::: info Unreleased command workspace
-The command workspace described here is merged into Slipway `main` after
-v0.0.86 and has not yet shipped in a public release. Use a reviewed build of
-that revision to try it; a v0.0.86 installation may show the earlier interface.
+::: info Version compatibility
+This guide describes the command workspace present in server 0.0.120. Earlier interfaces can differ. Check [release compatibility](/slipway/updates#release-compatibility); server and CLI releases are independent.
 :::
 
 **JavaScript** is the default mode. Use its editor and named scratchpads for

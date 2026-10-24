@@ -53,7 +53,7 @@ On the same **Settings > Git** page, click **Connect GitHub**. This authorizes S
 Slipway automatically:
 
 - **Generates an SSH deploy key** and adds it to the GitHub repository (for cloning private repos)
-- **Creates a webhook** on the repository so GitHub notifies Slipway on every push, pull request, and branch delete
+- **Creates a webhook** on the repository. Pushes can trigger deployments; the current handler ignores pull-request and branch-deletion events.
 - **Enables auto-deploy** by default — pushes to your configured branch trigger deployments immediately
 
 ::: tip Zero manual setup
@@ -258,7 +258,7 @@ jobs:
 
 ## What's Next?
 
-- Set up [Auto-Deploy](/slipway/auto-deploy) with branch mappings and preview environments
+- Set up [Auto-Deploy](/slipway/auto-deploy) with branch mappings. Automatic pull-request previews and branch-deletion cleanup are not implemented
 - Learn [How Deployments Work](/slipway/how-deployments-work)
 - Configure [Rollbacks](/slipway/rollbacks) for quick recovery
 

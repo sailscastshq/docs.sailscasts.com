@@ -11,10 +11,10 @@ Wake is optional, app-scoped product analytics for TBJS applications. It stays s
 
 ## Install and enable
 
-Use Slipway **v0.0.65 or later** and install the supported hook in your application:
+Use Slipway **v0.0.65 or later**. Wake requires app hook 0.0.10 or newer; the current published hook used here is **0.0.13**, which requires Node 22+ and Sails ^1.5.0:
 
 ```sh
-npm install sails-hook-slipway@0.0.10
+npm install sails-hook-slipway@0.0.13
 ```
 
 Open the app's **More → Wake → Settings**, choose collection settings, save, and redeploy once. Normal deployment and rollback both receive app-scoped Wake credentials. The dashboard shows waiting for redeploy, update-required, disabled, or unavailable states instead of implying that an old hook collects data. Protocol 3 adds goals/revenue helpers and delivery diagnostics; protocol 2 collection remains compatible but requires an update for the full feature.

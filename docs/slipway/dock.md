@@ -343,3 +343,7 @@ partial state is unsafe.
   models and helpers.
 - Use [Lookout](/slipway/lookout) to correlate database work with application
   latency and errors.
+
+## Test backups before you need them
+
+In **Backups**, use **Test restore** or **Back up and test restore** for an eligible managed PostgreSQL backup. The test uses a temporary database and leaves the live database unchanged. See [Test a backup restore](/slipway/restore-tests) for eligibility, reports, cancellation and cleanup.

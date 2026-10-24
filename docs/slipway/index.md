@@ -22,6 +22,10 @@ hero:
       text: Star on GitHub ⭐️
       link: https://github.com/sailscastshq/slipway
 features:
+  - icon: ⛵
+    title: Slipway CI
+    details: Run reviewed checks on a trusted local device, then independently verify the deployment candidate on your server.
+    link: /slipway/ci
   - icon: 🚀
     title: One-Command Deploys
     details: Deploy your Sails app with a single command. Bring your Dockerfile and let Slipway handle the rest.

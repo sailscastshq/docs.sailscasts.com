@@ -1139,7 +1139,8 @@ function slipwayGuide() {
         { text: 'Deployment Logs', link: '/slipway/deployment-logs' },
         { text: 'Release Flags', link: '/slipway/release-flags' },
         { text: 'Rollbacks', link: '/slipway/rollbacks' },
-        { text: 'Auto-Deploy', link: '/slipway/auto-deploy' }
+        { text: 'Auto-Deploy', link: '/slipway/auto-deploy' },
+        { text: 'Slipway CI', link: '/slipway/ci' }
       ]
     },
     {
@@ -1178,8 +1179,11 @@ function slipwayGuide() {
         { text: 'Content', link: '/slipway/content' },
         { text: 'Quest', link: '/slipway/quest' },
         { text: 'Dock', link: '/slipway/dock' },
+        { text: 'Test a backup restore', link: '/slipway/restore-tests' },
         { text: 'Lookout', link: '/slipway/lookout' },
-        { text: 'Bosun', link: '/slipway/bosun' }
+        { text: 'Decoys', link: '/slipway/decoys' },
+        { text: 'Bosun', link: '/slipway/bosun' },
+        { text: 'Instance maintenance', link: '/slipway/instance-maintenance' }
       ]
     },
     {

@@ -46,34 +46,42 @@ Review the job locally and deploy the application. Choose **Quest** from that ap
 
 ## Release compatibility
 
-::: info Resident controls are unreleased
-The next Quest workspace requires compatible **resident runtime contract v1** support in `sails-hook-quest`, the matching `sails-hook-slipway` bridge, and the next Slipway server. Published Quest **0.0.5** and Slipway hook **0.0.11** do not supply this combined contract. No minimum published versions have been assigned to the new controls. Installing those published packages does not enable them.
+::: info Published app-hook requirements
+For the full resident workspace documented here, use **sails-hook-quest 0.0.8** and **sails-hook-slipway 0.0.13**, Node 22+ and Sails ^1.5.0, with a compatible server such as 0.0.120. These hooks are published separately. Updating Slipway alone does not update a deployed app or enable its controls.
 :::
 
-The earlier Slipway implementation loads a temporary Sails process for introspection and manual execution. Its pause/resume result does not prove the scheduler in the already running application changed. Do not rely on that interface to stop production scheduling. Scheduled telemetry and detected scripts remain useful evidence, but are not authoritative resident state.
+Older hooks can retain bounded legacy history without authoritative resident controls. The earlier temporary-process interface cannot pause the scheduler in an already running application. Live state remains **Unavailable** when the dashboard cannot identify one compatible resident process. Worker apps use the same bridge and do not need an HTTP listener.
 
-On the next workspace, incompatible apps retain bounded legacy history and diagnostics. Live state is **Unavailable**, and Run, Pause, and Resume remain disabled rather than pretending a temporary process owns the scheduler.
+## Upgrade and enable
 
-## Upgrade when compatible releases exist
+1. Review job source, schemas, schedules and effective inputs, then install the compatible package pair:
 
-1. Review the coordinated Slipway, scheduler, and application-hook release notes.
-2. Upgrade both hooks in the application and review job source, schemas, schedules, and effective inputs.
-3. Explicitly enable the bridge in app-owned configuration:
-
-   ```javascript
-   // config/slipway.js
-   module.exports.slipway = { quest: { enabled: true } }
+   ```sh
+   npm install sails-hook-quest@0.0.8 sails-hook-slipway@0.0.13
    ```
 
-4. Deploy the normal application image; updating Slipway alone does not update app dependencies.
-5. Verify the workspace identifies exactly one compatible resident process for the intended app and deployment before using controls.
-6. Try a bounded diagnostic job in staging and verify its receipt and actual outcome before production use.
+2. Commit the lockfile. Merge these opt-ins into the app's existing configuration; retain its existing telemetry endpoint, token and deployment identity:
 
-The setting defaults to false and requires compatible source. It is not a switch that makes released hooks compatible. Worker apps use the same resident bridge; they do not need an HTTP listener. See [Updates](/slipway/updates#release-compatibility).
+   ```javascript
+   // config/quest.js
+   module.exports.quest = { runtimeControls: true }
 
-## Operate the next workspace
+   // config/slipway.js
+   module.exports.slipway = {
+     quest: {
+       enabled: true,
+       delivery: { directory: '/app/data/quest-receipts-APP-DEPLOYMENT' }
+     }
+   }
+   ```
 
-The following behavior is available only in the compatible unreleased builds described above.
+3. Replace the directory placeholder with a private persistent directory unique to this app/deployment, owned by the app UID with mode `0700`. Use exactly one resident writer per directory; replicas need separate directories. Ephemeral container storage does not preserve receipts across removal.
+4. Rebuild and deploy through the normal application workflow. Verify the workspace identifies exactly one compatible resident process for the intended app and deployment.
+5. Exercise a bounded diagnostic job in staging and inspect its actual result before production use.
+
+Controls remain opt-in and capability-gated. Cancellation requires Linux with observable `/proc` ownership evidence; opaque process ownership remains unconfirmed. A version string or dashboard switch alone cannot grant unavailable capabilities. See [Updates](/slipway/updates#release-compatibility).
+
+## Operate the workspace
 
 ### Review a manual run
 
@@ -85,13 +93,23 @@ Secret inputs are not reusable rerun defaults. Keep source, inputs, results, and
 
 Distinguish request admission, process completion, and the job's returned result. A successful process exit does not prove a named Sails exit or business operation succeeded. The workspace keeps structured returned values separate from stdout and stderr; JSON-looking log text is still a log.
 
-An unavailable, unsupported, truncated, or unconfirmed result stays explicitly labelled. Do not infer a missing value from an empty output panel. Logs are loaded when opened; the next workspace does not provide live log replay.
+An unavailable, unsupported, truncated, or unconfirmed result stays explicitly labelled. Do not infer a missing value from an empty output panel. Open Logs to view retained output. With the compatible pair and opt-ins, live logs provide bounded cumulative tails. Truncation and replay gaps explicitly mean earlier output is unavailable. Reconnecting reattaches the viewer; it never restarts or cancels execution.
 
 ### Pause and resume
 
 Pause controls future admission in the verified resident process. It does not cancel active work and does not survive deployment or restart. To disable a job durably, change its source configuration and deploy that change.
 
-There is no supported Stop/cancel control, distributed overlap guarantee, missed-run replay, or automatic retry of business work. A disconnect or missing receipt does not establish process termination. Verify external side effects before retrying.
+### Cancel a running invocation
+
+When the resident advertises cancellation, review the explicit cancellation request for that exact run. **Cancelling** means the request was admitted; **Cancelled** requires verified owned-process termination. A naturally completed job remains Completed. Changed ownership, unreadable process evidence or a confirmation timeout remain **Unconfirmed**, because work may still be running.
+
+Cancellation cannot undo external side effects. There is no distributed overlap guarantee, missed-run replay or automatic retry of business work. Reconcile side effects before using **Run again**, which is a deliberate new invocation with fresh input review.
+
+## Receipt delivery and retention
+
+The configured private directory retains sanitized terminal evidence for bounded retry to Slipway. It holds at most 256 receipts / 4 MiB, with a 32 KiB event limit and seven-day retention. Missing acknowledgement retries evidence only; it never executes the job again. Credentials are not written into this spool.
+
+Live replay is memory-backed: at most 32 runs and 16 snapshots / 128 KiB per run. Resident restart loses replay memory; terminal receipt delivery is separate. Full or expired storage, disk errors and removed deployment volumes can lose evidence. This is not a distributed queue or an exactly-once execution guarantee.
 
 ## History and diagnosis
 

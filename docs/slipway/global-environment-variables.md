@@ -28,7 +28,7 @@ Global environment variables are the lowest, instance-wide layer of configuratio
 New values default to **Secret** and are omitted when an environment is copied. Open **•••** beside a variable to set:
 
 - **Value type** — Secret or Plain config.
-- **Preview environments** — Omit, Inherit, or Generate a new value.
+- **Preview environments** — stored copy policy: Omit, Inherit, or Generate a new value. This setting does not enable automatic pull-request previews; see [Auto-Deploy](/slipway/auto-deploy#preview-environments).
 - **Description** — an optional note explaining what consumes the value.
 
 The row also shows who last changed the value and when. Use the bulk editor for `KEY=value` input; metadata remains attached to keys that already exist.
