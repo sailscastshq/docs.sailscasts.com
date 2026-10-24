@@ -21,7 +21,7 @@ Slipway includes built-in update detection and one-click updates from the dashbo
 
 ## Release compatibility
 
-These guides target server **0.0.120** and **slipway-cli 0.0.4**, which have separate release pipelines. At this documentation review, the verified published server was [v0.0.119](https://github.com/sailscastshq/slipway/releases/tag/v0.0.119) and the published CLI was 0.0.3. Check [server releases](https://github.com/sailscastshq/slipway/releases) and [npm CLI versions](https://www.npmjs.com/package/slipway-cli?activeTab=versions) before updating; a prepared release is not an available image or npm package.
+These guides target server **0.0.120** and the published **slipway-cli 0.0.4**. The CLI tarball's CI commands and executor were verified against the reviewed release source. Server and CLI have separate release pipelines: check [server releases](https://github.com/sailscastshq/slipway/releases) and the linked image-build result before pulling an update, and check [npm CLI versions](https://www.npmjs.com/package/slipway-cli?activeTab=versions) for the client. A GitHub release tag alone does not mean its container image has finished publishing.
 
 | Capability                             | Compatibility                                                                                                                          |
 | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |

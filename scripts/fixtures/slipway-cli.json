@@ -3,7 +3,7 @@
   "releasedRef": "v0.0.120",
   "nextRef": "d4dbefda3be46863eae8f6b2f2a9fb94185a978a",
   "cliVersion": "0.0.4",
-  "publication": "server release build pending; npm publication separate",
+  "publication": "CLI 0.0.4 tarball verified; server image publication is a separate release gate",
   "commands": {
     "ci": {
       "description": "Run the reviewed CI policy locally and submit source-check evidence",
