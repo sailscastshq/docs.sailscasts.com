@@ -26,7 +26,7 @@ slipway deployments --env staging --limit 5
 [Install](/slipway/cli-installation) and [authenticate](/slipway/cli-authentication) first. `link` writes `.slipway.json` in the current directory; it does not deploy. Most commands use that linked project. Environment-aware mutation commands generally default to production: pass `--env staging` explicitly when practicing.
 
 ::: info Release compatibility
-The new operational commands below require the CLI 0.0.4 release candidate and a compatible server 0.0.120. The previously verified public server release is v0.0.119. Check your installed CLI's help before following release-pair examples; updating the server alone does not update the CLI.
+The operational commands below target published CLI 0.0.4 and compatible server 0.0.120. Check the server image publication status in [Updates](/slipway/updates#release-compatibility). Check your installed CLI's help before following release-pair examples; updating the server alone does not update the CLI.
 :::
 
 ## Inspect before changing anything
