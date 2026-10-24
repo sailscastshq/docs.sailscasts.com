@@ -57,13 +57,18 @@ for (const name of readdirSync(root).filter((name) => name.endsWith('.md'))) {
 for (const command of Object.keys(fixture.commands)) {
   if (!seen.has(command)) failures.push(`Reference omits ${command}`)
 }
-for (const name of ['cli.md', 'cli-commands.md', 'quest.md', 'updates.md']) {
+for (const name of ['cli.md', 'cli-commands.md', 'updates.md', 'ci.md']) {
   assert.match(
     readFileSync(join(root, name), 'utf8'),
-    /unreleased/i,
-    `${name} must identify unreleased capabilities`
+    /0\.0\.4/,
+    `${name} must identify the CLI release pair`
   )
 }
+assert.match(
+  readFileSync(join(root, 'quest.md'), 'utf8'),
+  /0\.0\.8[\s\S]*0\.0\.13/,
+  'Quest must identify the published scheduler and app-hook pair'
+)
 assert.deepEqual(failures, [], failures.join('\n'))
 console.log(
   `Slipway docs: ${seen.size} registered commands covered; examples, flags, links, and availability checks passed.`

@@ -5,7 +5,7 @@ head:
       content: https://docs.sailscasts.com/slipway-social.png
 title: Auto-Deploy
 titleTemplate: Slipway
-description: Automatic deployments on every push to GitHub and preview environments for pull requests.
+description: Automatic deployments from configured GitHub branches.
 prev:
   text: Dock
   link: /slipway/dock
@@ -87,24 +87,9 @@ Branch matching is exact — `main` matches `main`, not `main-v2` or `release/ma
 
 ## Preview Environments
 
-Slipway can automatically create preview environments for pull requests. When enabled, every PR gets its own isolated environment so you can test changes before merging.
+Automatic pull-request preview creation, redeployment and teardown are not implemented in the current webhook handler. Pull-request and branch-deletion events do not create or remove environments. Do not rely on the stored previews setting as an operational guarantee.
 
-### How It Works
-
-| PR Event                         | What Happens                                                    |
-| -------------------------------- | --------------------------------------------------------------- |
-| **Opened**                       | Slipway creates a preview environment and deploys the PR branch |
-| **Updated** (new commits pushed) | Slipway redeploys the preview environment with the latest code  |
-| **Reopened**                     | Same as opened — creates/updates the preview environment        |
-| **Closed** (merged or not)       | Slipway destroys the preview environment and its resources      |
-
-### Toggling Preview Environments
-
-Preview environments are enabled by default when you connect a repository. You can control this via the **Auto-deploy previews** setting on the repository.
-
-### Branch Cleanup
-
-When a branch is deleted on GitHub (e.g., after merging a PR), Slipway automatically cleans up any associated preview environments.
+For a staging deployment, create an environment explicitly and configure its branch mapping. Clean it up deliberately when it is no longer needed.
 
 ## Multi-App Auto-Deploy
 
@@ -133,11 +118,7 @@ The webhook secret is encrypted at rest in Slipway's database and never exposed 
 
 ### Supported Events
 
-Slipway's webhook listens for three GitHub events:
-
-- **push** — triggers deployments
-- **pull_request** — manages preview environments
-- **delete** — cleans up preview environments when branches are deleted
+**push** events can trigger deployments for configured branches. The current handler ignores **pull_request** and **delete** events; receiving a webhook does not mean its action is supported.
 
 ## Viewing Auto-Deploy History
 
@@ -207,9 +188,9 @@ Map two branches to two environments:
 - `develop` → staging (test first)
 - `main` → production (after staging is verified)
 
-### 3. Use Preview Environments
+### 3. Verify the exact commit
 
-Enable auto-deploy previews so every PR gets its own environment. This lets reviewers test changes in isolation before merging.
+Use [Slipway CI](/slipway/ci) for reviewed source checks and server candidate verification. Keep existing checks while validating a new CI policy.
 
 ### 4. Set Up Notifications
 

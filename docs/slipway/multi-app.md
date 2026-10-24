@@ -237,7 +237,7 @@ Pass the app explicitly when deploying:
 slipway slide --env staging --app worker
 ```
 
-The unreleased next CLI/server support logs and remote commands for an explicit app:
+The CLI 0.0.4/server 0.0.120 release pair support logs and remote commands for an explicit app:
 
 ```bash
 slipway logs --env staging --app worker --tail 200

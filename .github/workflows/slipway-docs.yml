@@ -1,0 +1,47 @@
+name: Slipway documentation parity
+
+on:
+  pull_request:
+    paths:
+      - 'docs/slipway/**'
+      - 'docs/public/slipway/**'
+      - 'docs/.vitepress/**'
+      - 'scripts/check-slipway-*.mjs'
+      - 'scripts/fixtures/slipway-cli.json'
+      - '.github/workflows/slipway-docs.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/slipway/**'
+      - 'docs/public/slipway/**'
+      - 'docs/.vitepress/**'
+      - 'scripts/check-slipway-*.mjs'
+      - 'scripts/fixtures/slipway-cli.json'
+      - '.github/workflows/slipway-docs.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Read the reviewed CLI source
+        run: |
+          git init "$RUNNER_TEMP/slipway-reference"
+          git -C "$RUNNER_TEMP/slipway-reference" remote add origin https://github.com/sailscastshq/slipway.git
+          reviewed_commit=$(node -p 'require("./scripts/fixtures/slipway-cli.json").nextRef')
+          [[ "$reviewed_commit" =~ ^[a-f0-9]{40}$ ]]
+          git -C "$RUNNER_TEMP/slipway-reference" fetch --depth=1 origin "$reviewed_commit"
+          git -C "$RUNNER_TEMP/slipway-reference" checkout --detach FETCH_HEAD
+      - name: Verify commands against reviewed source
+        run: SLIPWAY_CLI_SOURCE="$RUNNER_TEMP/slipway-reference/packages/cli" npm run check:slipway-docs
+      - run: npm run build
+      - run: npm run check:slipway-build

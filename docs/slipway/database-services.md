@@ -29,7 +29,7 @@ slipway db:create cache --type redis --env staging
 slipway services --env staging
 ```
 
-Use `--type` and `--env` to choose the service and environment. The unreleased next CLI parses `db:create --version` as the database version. Earlier clients intercept it as the global CLI version flag; use the dashboard's service creation controls on those clients. Do not assume a major version is available because an arbitrary image tag exists.
+Use `--type` and `--env` to choose the service and environment. The CLI 0.0.4 parses `db:create --version` as the database version. Earlier clients intercept it as the global CLI version flag; use the dashboard's service creation controls on those clients. Do not assume a major version is available because an arbitrary image tag exists.
 
 For connection details:
 
@@ -73,3 +73,15 @@ If you already run PostgreSQL elsewhere, use [External PostgreSQL](/slipway/exte
 ## Troubleshooting
 
 Check the selected environment, service status, network reachability, credential configuration, and app logs. Redeploy after variables change so the app receives its effective configuration. Do not open database ports publicly as a substitute for diagnosing the private connection.
+
+## Retry interrupted provisioning
+
+For an eligible managed PostgreSQL, MySQL, MongoDB or Redis service stuck in **Creating** or **Failed**, use the service menu's **Retry provisioning** action. Slipway first checks that the previous operation no longer owns the work. An active or uncertain owner blocks retry.
+
+Recovery preserves the service identity, credentials, container name and durable volume. It can adopt a matching existing container, start a stopped one or continue provisioning owned resources. Readiness and an authenticated read-only probe must pass before connection variables are published.
+
+Mismatched artifacts or conflicting variables stop recovery for inspection. Do not delete the service, clear database status fields or recreate volumes to force a retry.
+
+## Test a backup restore
+
+For eligible managed PostgreSQL backups, **Dock → Backups** provides **Test restore** and **Back up and test restore**. See [the restore-test flow](/slipway/restore-tests).

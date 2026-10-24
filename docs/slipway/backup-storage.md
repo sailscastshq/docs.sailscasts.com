@@ -33,3 +33,7 @@ New uploads use unique keys and conditional writes, and reject an observed anony
 Transfers have size/time bounds. Cancellation and failed uploads attempt cleanup; a failed cleanup retains the object reference for the scheduler to retry. Retention keeps the database record when object deletion fails. Project/service cleanup seals the original storage connection before deleting records, so retries do not accidentally use a different provider. Keep the instance encryption keys with your recovery material.
 
 Deletion addresses the current object. Provider-managed historical versions, snapshots and soft-delete retention may remain according to the bucket/account policy. Configure lifecycle expiry for historical versions; do not assume Slipway's retained-backup count is the provider's physical byte-retention limit.
+
+## Verify recovery
+
+A successful connection test or backup upload is not a restore test. For managed PostgreSQL, open **Dock → Backups** and [test a restore](/slipway/restore-tests) in a temporary database.

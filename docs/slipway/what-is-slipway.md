@@ -56,6 +56,6 @@ You operate the host, its capacity, database recovery, encryption keys, DNS, and
 
 ## Check release availability
 
-Documentation may describe development capabilities beyond the latest public release. Use [Updates](/slipway/updates#release-compatibility) to distinguish released deployment features from the next CLI, Helm command workspace, and resident Quest controls. The tools do not have complete dashboard/CLI parity.
+Documentation may describe development capabilities beyond the latest public release. Use [Updates](/slipway/updates#release-compatibility) to distinguish released deployment features from the CLI/server release pair and the separately coordinated resident Quest controls. The tools do not have complete dashboard/CLI parity.
 
 Continue with [Server Installation](/slipway/server-installation) or the [operations guide](/slipway/operations).

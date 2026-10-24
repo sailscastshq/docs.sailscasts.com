@@ -21,16 +21,16 @@ Slipway includes built-in update detection and one-click updates from the dashbo
 
 ## Release compatibility
 
-The latest verified public Slipway server release is [v0.0.86](https://github.com/sailscastshq/slipway/releases/tag/v0.0.86). Read the release notes before upgrading; documentation of current development source does not mean a feature is included in that release.
+These guides target server **0.0.120** and **slipway-cli 0.0.4**, which have separate release pipelines. At this documentation review, the verified published server was [v0.0.119](https://github.com/sailscastshq/slipway/releases/tag/v0.0.119) and the published CLI was 0.0.3. Check [server releases](https://github.com/sailscastshq/slipway/releases) and [npm CLI versions](https://www.npmjs.com/package/slipway-cli?activeTab=versions) before updating; a prepared release is not an available image or npm package.
 
-| Capability                            | Availability                                                                                           |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| Latest verified server release        | v0.0.86                                                                                                |
-| New Helm workspace documented here    | Development source after v0.0.86; see [Helm](/slipway/helm#javascript-and-command-modes)               |
-| CLI logs, guarded run, and operations | Unreleased next CLI and server; see [CLI Workflow](/slipway/cli)                                       |
-| Resident Quest controls               | Unreleased coordinated server and app-hook contract; see [Quest](/slipway/quest#release-compatibility) |
+| Capability                             | Compatibility                                                                                                                          |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Local-first CI                         | Server 0.0.120 and CLI 0.0.4; no app hook required                                                                                     |
+| CLI operational commands in this guide | Target CLI 0.0.4 and server 0.0.120; older clients may print Docker instructions                                                       |
+| Wake                                   | Separate server/app-hook capability; see [Wake setup](/slipway/wake)                                                                   |
+| Resident Quest controls                | Published Quest 0.0.8 + Slipway hook 0.0.13, explicit opt-ins and compatible server; see [Quest](/slipway/quest#release-compatibility) |
 
-Upgrade server, CLI, and relevant application hooks deliberately. They have separate version numbers. Updating the server does not update dependencies inside deployed apps. No released minimum versions have been assigned to the resident Quest contract; published Quest 0.0.5 and Slipway hook 0.0.11 are not sufficient.
+Upgrade server, CLI, and relevant application hooks deliberately. They have separate version numbers. Updating the server does not update dependencies inside deployed apps. For the full resident Quest controls, use the published Quest 0.0.8 / Slipway hook 0.0.13 pair and the documented app-owned opt-ins. Quest 0.0.5 and Slipway hook 0.0.11 are not sufficient.
 
 Back up the instance database consistently, retain its encryption keys, and preserve its existing database volume before updating. Keep production migration mode at `safe`. Verify startup, login, an existing app, and applicable operational tools after the update.
 
@@ -119,8 +119,8 @@ module.exports.slipway = {
 If an update causes issues, review schema compatibility and restore planning before choosing an older image. Download the installer for the reviewed release and pass an explicit version:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/sailscastshq/slipway/v0.0.86/install.sh -o install-slipway.sh
-bash install-slipway.sh 0.0.86
+curl -fsSL "https://raw.githubusercontent.com/sailscastshq/slipway/<reviewed-tag>/install.sh" -o install-slipway.sh
+bash install-slipway.sh "<reviewed-version>"
 ```
 
 Use the release appropriate to your recovery plan. Pulling an old image alone does not make the installer choose it. An application image downgrade does not undo database schema changes; retain the pre-update backup and keys.

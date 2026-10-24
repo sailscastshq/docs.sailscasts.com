@@ -107,6 +107,8 @@ Select the database before running a statement:
 | `observability` | `db/observability.db` | request spans, exceptions, application metrics, container metrics, collector health |
 | `cache`         | `db/stash.db`         | persisted `sails-stash` cache entries                                               |
 
+Wake also stores product analytics in `analytics.db`. It is not currently exposed by Bosun's SQL selector or overview inventory. Include it in a consistent instance backup; see [instance recovery](/slipway/instance-maintenance#protect-the-instance-database).
+
 Run one SQLite statement at a time with **Run** or <kbd>Cmd/Ctrl Enter</kbd>.
 Reader statements return columns and rows. A write returns its changed-row
 count and last inserted row ID. The browser receives at most 1,000 rows and
@@ -287,3 +289,7 @@ the value to the server's actual environment and restart Slipway.
 - Use [Lookout](/slipway/lookout) for application and container observability.
 - Use [Helm](/slipway/helm) for a deployed application's Sails runtime.
 - Use [Dock](/slipway/dock) for attached database and cache services.
+
+## Maintenance and recovery
+
+**Bosun → Quest** inspects instance maintenance schedules and retained results. See [Instance maintenance and recovery](/slipway/instance-maintenance) for image and build-cache retention, startup settings and protecting all four SQLite datastores.

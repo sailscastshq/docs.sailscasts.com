@@ -26,12 +26,12 @@ slipway deployments --env staging --limit 5
 [Install](/slipway/cli-installation) and [authenticate](/slipway/cli-authentication) first. `link` writes `.slipway.json` in the current directory; it does not deploy. Most commands use that linked project. Environment-aware mutation commands generally default to production: pass `--env staging` explicitly when practicing.
 
 ::: info Release compatibility
-The new operational commands below require the unreleased next CLI and a compatible server. The latest verified public server release is v0.0.86. Check your installed CLI's help before following next-release examples; updating the server alone does not update the CLI.
+The new operational commands below require the CLI 0.0.4 release candidate and a compatible server 0.0.120. The previously verified public server release is v0.0.119. Check your installed CLI's help before following release-pair examples; updating the server alone does not update the CLI.
 :::
 
 ## Inspect before changing anything
 
-With the next CLI, check connectivity, saved authentication, and deployment prerequisites, then inspect the exact app:
+With the CLI 0.0.4, check connectivity, saved authentication, and deployment prerequisites, then inspect the exact app:
 
 ```bash
 slipway doctor --project harbor --env staging --app worker --json
@@ -56,11 +56,11 @@ Variable masking is a convenience, not a guarantee that arbitrary values are saf
 
 ## Diagnose with logs
 
-::: info Unreleased capability
-Live application logs and remote `run` below require the next CLI **and** next Slipway server. The latest verified server release is v0.0.86. Earlier application `logs` and `run` implementations print Docker instructions instead of performing these operations. Stored deployment logs remain available through `logs --deployment ID`.
+::: info Release compatibility
+Live application logs and remote `run` below require the CLI 0.0.4 **and** Slipway server 0.0.120. Check the current publication status in [Updates](/slipway/updates#release-compatibility). Earlier application `logs` and `run` implementations print Docker instructions instead of performing these operations. Stored deployment logs remain available through `logs --deployment ID`.
 :::
 
-With a compatible unreleased build:
+With a matching release pair:
 
 ```bash
 slipway logs --project harbor --env staging --app worker --tail 200 --json
@@ -85,7 +85,7 @@ For source changes, run your application checks locally, commit the intended rev
 slipway slide --env staging --app worker --message "Fix worker startup"
 ```
 
-For a diagnostic command on a compatible unreleased build:
+For a diagnostic command on a matching release pair:
 
 ```bash
 printf '%s' 'node --version' | slipway run --project harbor --env staging --app worker --stdin --receipt-file diagnostic.json --ndjson

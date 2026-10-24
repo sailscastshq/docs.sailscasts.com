@@ -1,8 +1,172 @@
 {
   "source": "sailscastshq/slipway",
-  "releasedRef": "v0.0.86",
-  "nextRef": "0fb573776551106a91a4d0f67f6a2be3712d5513",
+  "releasedRef": "v0.0.120",
+  "nextRef": "d4dbefda3be46863eae8f6b2f2a9fb94185a978a",
+  "cliVersion": "0.0.4",
+  "publication": "server release build pending; npm publication separate",
   "commands": {
+    "ci": {
+      "description": "Run the reviewed CI policy locally and submit source-check evidence",
+      "options": {
+        "project": {
+          "type": "string",
+          "short": "p"
+        },
+        "env": {
+          "type": "string",
+          "short": "e",
+          "default": "production"
+        },
+        "app": {
+          "type": "string",
+          "short": "a"
+        },
+        "repo": {
+          "type": "string"
+        },
+        "commit": {
+          "type": "string"
+        },
+        "out": {
+          "type": "string"
+        },
+        "local": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ci:setup": {
+      "description": "Review and enable an app-scoped local-first CI policy",
+      "options": {
+        "project": {
+          "type": "string",
+          "short": "p"
+        },
+        "env": {
+          "type": "string",
+          "short": "e",
+          "default": "production"
+        },
+        "app": {
+          "type": "string",
+          "short": "a"
+        },
+        "commit": {
+          "type": "string"
+        },
+        "branch": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "approve-policy": {
+          "type": "boolean"
+        },
+        "approve-target": {
+          "type": "string"
+        },
+        "disable": {
+          "type": "boolean"
+        },
+        "policy-revision": {
+          "type": "string"
+        }
+      }
+    },
+    "ci:register": {
+      "description": "Explicitly trust this device for the reviewed app CI policy",
+      "options": {
+        "project": {
+          "type": "string",
+          "short": "p"
+        },
+        "env": {
+          "type": "string",
+          "short": "e",
+          "default": "production"
+        },
+        "app": {
+          "type": "string",
+          "short": "a"
+        },
+        "name": {
+          "type": "string"
+        },
+        "trust-device": {
+          "type": "boolean"
+        },
+        "approve-target": {
+          "type": "string"
+        }
+      }
+    },
+    "ci:submit": {
+      "description": "Submit an existing exact-commit local report without rerunning checks",
+      "options": {
+        "project": {
+          "type": "string",
+          "short": "p"
+        },
+        "env": {
+          "type": "string",
+          "short": "e",
+          "default": "production"
+        },
+        "app": {
+          "type": "string",
+          "short": "a"
+        },
+        "report": {
+          "type": "string"
+        }
+      }
+    },
+    "ci:status": {
+      "description": "Inspect retained source-check results for an explicit app",
+      "options": {
+        "project": {
+          "type": "string",
+          "short": "p"
+        },
+        "env": {
+          "type": "string",
+          "short": "e",
+          "default": "production"
+        },
+        "app": {
+          "type": "string",
+          "short": "a"
+        }
+      }
+    },
+    "ci:revoke": {
+      "description": "Revoke a trusted local runner for this app",
+      "options": {
+        "project": {
+          "type": "string",
+          "short": "p"
+        },
+        "env": {
+          "type": "string",
+          "short": "e",
+          "default": "production"
+        },
+        "app": {
+          "type": "string",
+          "short": "a"
+        },
+        "runner": {
+          "type": "string"
+        },
+        "approve-target": {
+          "type": "string"
+        }
+      }
+    },
     "doctor": {
       "description": "Check server health, saved CLI authentication, and optional target readiness",
       "options": {
@@ -565,359 +729,5 @@
     "deploy": "slide",
     "launch": "slide",
     "exec": "run"
-  },
-  "released": {
-    "service:review": {
-      "description": "Review a private custom image before creation",
-      "args": "<image>",
-      "options": {
-        "env": {
-          "type": "string",
-          "default": "production"
-        },
-        "name": {
-          "type": "string"
-        },
-        "port": {
-          "type": "string"
-        },
-        "app": {
-          "type": "string"
-        },
-        "definition": {
-          "type": "string"
-        },
-        "json": {
-          "type": "boolean"
-        }
-      }
-    },
-    "service:create": {
-      "description": "Create exactly the previously reviewed custom service",
-      "args": "<review-id>",
-      "options": {}
-    },
-    "login": {
-      "description": "Authenticate with your Slipway server",
-      "options": {
-        "server": {
-          "type": "string",
-          "short": "s"
-        }
-      }
-    },
-    "logout": {
-      "description": "Clear stored credentials",
-      "options": {}
-    },
-    "whoami": {
-      "description": "Show current authenticated user",
-      "options": {}
-    },
-    "projects": {
-      "description": "List all projects",
-      "options": {}
-    },
-    "project:update": {
-      "description": "Update a project",
-      "args": "<slug>",
-      "options": {
-        "name": {
-          "type": "string",
-          "short": "n"
-        },
-        "description": {
-          "type": "string",
-          "short": "d"
-        },
-        "repo": {
-          "type": "string",
-          "short": "r"
-        }
-      }
-    },
-    "init": {
-      "description": "Initialize a new Slipway project",
-      "options": {
-        "name": {
-          "type": "string",
-          "short": "n"
-        }
-      }
-    },
-    "link": {
-      "description": "Link current directory to an existing project",
-      "args": "<project>",
-      "options": {}
-    },
-    "environments": {
-      "description": "List environments for the current project",
-      "options": {}
-    },
-    "environment:create": {
-      "description": "Create a new environment",
-      "args": "<name>",
-      "options": {
-        "production": {
-          "type": "boolean",
-          "short": "p"
-        },
-        "domain": {
-          "type": "string",
-          "short": "d"
-        },
-        "from": {
-          "type": "string",
-          "short": "f"
-        }
-      }
-    },
-    "environment:update": {
-      "description": "Update an environment",
-      "args": "<slug>",
-      "options": {
-        "name": {
-          "type": "string",
-          "short": "n"
-        },
-        "domain": {
-          "type": "string",
-          "short": "d"
-        },
-        "production": {
-          "type": "boolean",
-          "short": "p"
-        }
-      }
-    },
-    "push": {
-      "description": "Push source code without deploying",
-      "options": {}
-    },
-    "slide": {
-      "description": "Push and deploy the current project",
-      "aliases": ["deploy", "launch"],
-      "options": {
-        "env": {
-          "type": "string",
-          "short": "e",
-          "default": "production"
-        },
-        "app": {
-          "type": "string",
-          "short": "a"
-        },
-        "message": {
-          "type": "string",
-          "short": "m"
-        }
-      }
-    },
-    "readiness": {
-      "description": "Inspect server-owned deployment readiness for the current source",
-      "options": {
-        "env": {
-          "type": "string",
-          "short": "e",
-          "default": "production"
-        },
-        "app": {
-          "type": "string",
-          "short": "a"
-        },
-        "json": {
-          "type": "boolean"
-        }
-      }
-    },
-    "deployments": {
-      "description": "List recent deployments",
-      "options": {
-        "env": {
-          "type": "string",
-          "short": "e"
-        },
-        "limit": {
-          "type": "string",
-          "short": "n",
-          "default": "10"
-        }
-      }
-    },
-    "logs": {
-      "description": "View application logs",
-      "options": {
-        "env": {
-          "type": "string",
-          "short": "e",
-          "default": "production"
-        },
-        "app": {
-          "type": "string",
-          "short": "a"
-        },
-        "follow": {
-          "type": "boolean",
-          "short": "f"
-        },
-        "tail": {
-          "type": "string",
-          "short": "n",
-          "default": "100"
-        },
-        "deployment": {
-          "type": "string",
-          "short": "d"
-        }
-      }
-    },
-    "db:create": {
-      "description": "Create a new database service",
-      "args": "<name>",
-      "options": {
-        "type": {
-          "type": "string",
-          "short": "t",
-          "default": "postgresql"
-        },
-        "version": {
-          "type": "string",
-          "short": "v"
-        },
-        "env": {
-          "type": "string",
-          "short": "e",
-          "default": "production"
-        }
-      }
-    },
-    "db:url": {
-      "description": "Get database connection URL",
-      "args": "<name>",
-      "options": {
-        "env": {
-          "type": "string",
-          "short": "e",
-          "default": "production"
-        }
-      }
-    },
-    "services": {
-      "description": "List all services",
-      "options": {
-        "env": {
-          "type": "string",
-          "short": "e"
-        }
-      }
-    },
-    "env": {
-      "description": "List environment variables",
-      "options": {
-        "env": {
-          "type": "string",
-          "short": "e",
-          "default": "production"
-        }
-      }
-    },
-    "env:set": {
-      "description": "Set environment variables (KEY=value)",
-      "args": "<pairs...>",
-      "options": {
-        "env": {
-          "type": "string",
-          "short": "e",
-          "default": "production"
-        }
-      }
-    },
-    "env:unset": {
-      "description": "Remove environment variables",
-      "args": "<keys...>",
-      "options": {
-        "env": {
-          "type": "string",
-          "short": "e",
-          "default": "production"
-        }
-      }
-    },
-    "backup:create": {
-      "description": "Create a manual database backup",
-      "args": "<service-name>",
-      "options": {
-        "env": {
-          "type": "string",
-          "short": "e",
-          "default": "production"
-        }
-      }
-    },
-    "backup:list": {
-      "description": "List backups for a database service",
-      "args": "<service-name>",
-      "options": {
-        "env": {
-          "type": "string",
-          "short": "e",
-          "default": "production"
-        }
-      }
-    },
-    "backup:restore": {
-      "description": "Restore a database backup",
-      "args": "<backup-id>",
-      "options": {
-        "writes-paused": {
-          "type": "boolean",
-          "default": false
-        }
-      }
-    },
-    "audit-log": {
-      "description": "View audit log entries",
-      "options": {
-        "page": {
-          "type": "string",
-          "short": "p",
-          "default": "1"
-        },
-        "limit": {
-          "type": "string",
-          "short": "n",
-          "default": "20"
-        }
-      }
-    },
-    "terminal": {
-      "description": "Open a terminal session in the running container",
-      "options": {
-        "env": {
-          "type": "string",
-          "short": "e",
-          "default": "production"
-        },
-        "app": {
-          "type": "string",
-          "short": "a"
-        }
-      }
-    },
-    "run": {
-      "description": "Run a command in the container",
-      "args": "<command...>",
-      "options": {
-        "env": {
-          "type": "string",
-          "short": "e",
-          "default": "production"
-        },
-        "app": {
-          "type": "string",
-          "short": "a"
-        }
-      }
-    }
   }
 }

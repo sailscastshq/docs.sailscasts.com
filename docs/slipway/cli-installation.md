@@ -37,9 +37,9 @@ npx slipway-cli --help
 
 ## Choose a compatible version
 
-The CLI, Slipway server, and application hooks have separate versions. A CLI version number is not the server release number. Check [release compatibility](/slipway/updates#release-compatibility) before using commands from an unreleased build.
+The CLI, Slipway server, and application hooks have separate versions. A CLI version number is not the server release number. Check [release compatibility](/slipway/updates#release-compatibility) before choosing the matching CLI/server pair.
 
-The live application logs and remote command examples in this guide require the **unreleased next CLI and server**. Installing the current npm package does not establish that those capabilities are available.
+The live application logs and remote command examples in this guide require the **CLI 0.0.4 and server 0.0.120 release pair**. Installing the current npm package does not establish that those capabilities are available.
 
 ## Update
 

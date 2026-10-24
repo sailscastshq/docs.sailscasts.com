@@ -9,16 +9,16 @@ editLink: true
 
 Use one target throughout an investigation: project, environment, app or service, and deployment. Recheck it before a mutation, especially in production.
 
-| Task                                | Surface                                  | CLI coverage                                                          |
-| ----------------------------------- | ---------------------------------------- | --------------------------------------------------------------------- |
-| Deploy source and inspect readiness | App deployment page or CLI               | `push`, `readiness`, `slide`, `deployments`                           |
-| Read deployment output              | Deployment detail or CLI                 | `logs --deployment ID`                                                |
-| Read running app logs               | App logs                                 | Next CLI/server: `logs`, `--follow`                                   |
-| Inspect Sails models and helpers    | [Helm](/slipway/helm)                    | Next CLI/server `run` executes commands, not model-console JavaScript |
-| Query or migrate a database         | [Dock](/slipway/dock)                    | No dedicated Dock command                                             |
-| Inspect and operate background jobs | [Quest](/slipway/quest)                  | No dedicated Quest command                                            |
-| Restore a database backup           | Service backups                          | `backup:restore ID --writes-paused`                                   |
-| Roll back an app                    | [Deployment history](/slipway/rollbacks) | No rollback command                                                   |
+| Task                                | Surface                                  | CLI coverage                                                                   |
+| ----------------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------ |
+| Deploy source and inspect readiness | App deployment page or CLI               | `push`, `readiness`, `slide`, `deployments`                                    |
+| Read deployment output              | Deployment detail or CLI                 | `logs --deployment ID`                                                         |
+| Read running app logs               | App logs                                 | CLI 0.0.4/server 0.0.120: `logs`, `--follow`                                   |
+| Inspect Sails models and helpers    | [Helm](/slipway/helm)                    | CLI 0.0.4/server 0.0.120 `run` executes commands, not model-console JavaScript |
+| Query or migrate a database         | [Dock](/slipway/dock)                    | No dedicated Dock command                                                      |
+| Inspect and operate background jobs | [Quest](/slipway/quest)                  | No dedicated Quest command                                                     |
+| Restore a database backup           | Service backups                          | `backup:restore ID --writes-paused`                                            |
+| Roll back an app                    | [Deployment history](/slipway/rollbacks) | No rollback command                                                            |
 
 ## Authorization and review
 
@@ -47,4 +47,11 @@ Use the tool-specific contract rather than guessing a URL from a CLI command:
 - [Deploy tokens](/slipway/deploy-tokens) for scoped pipeline deployment.
 - [CLI workflow](/slipway/cli) for structured logs/run output, exit codes, and unconfirmed outcomes.
 
-These transports have different capabilities. The next CLI adds `app:inspect`, exact-target-approved `app:restart`, private command receipts, `run:arm`, `run:cancel`, and metadata-only `run:history` through existing server APIs. See the [CLI workflow](/slipway/cli) for their unreleased boundary, completion evidence, and cancellation limits. It has no general operation lookup, automatic replay, or resume interface.
+These transports have different capabilities. The CLI 0.0.4 adds `app:inspect`, exact-target-approved `app:restart`, private command receipts, `run:arm`, `run:cancel`, and metadata-only `run:history` through existing server APIs. See the [CLI workflow](/slipway/cli) for their release compatibility boundary, completion evidence, and cancellation limits. It has no general operation lookup, automatic replay, or resume interface.
+
+## Checks, recovery and analytics
+
+- [Slipway CI](/slipway/ci): local source checks and server deployment verification.
+- [Restore tests](/slipway/restore-tests): test managed PostgreSQL backups in a temporary database.
+- [Wake](/slipway/wake): product analytics, consent, goals and revenue.
+- [Instance maintenance](/slipway/instance-maintenance): inspect maintenance jobs and recover control-plane storage.

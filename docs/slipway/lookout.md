@@ -284,3 +284,7 @@ does not fix a maintenance job that has stopped.
 - Use [Helm](/slipway/helm) for Sails-aware application diagnosis.
 - Use [Dock](/slipway/dock) for direct database and cache inspection.
 - Use [Quest](/slipway/quest) for job operations and run history.
+
+## Decoy signals
+
+[Decoys](/slipway/decoys) observe requests to explicitly unused paths at the edge. Enable them deliberately in app settings, then inspect **Lookout → Decoys**. Their signals are separate from normal request statistics.
