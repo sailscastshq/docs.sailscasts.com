@@ -21,7 +21,7 @@ The hook uses an **adapter pattern**: install the core hook, add an adapter for 
 ## Install the hook
 
 ```sh
-npm i sails-ai
+npm i sails-ai@0.0.3
 ```
 
 ## Install a provider adapter
@@ -96,3 +96,7 @@ console.log(reply.content) // "The capital of France is Paris..."
 ```
 
 That's it. Read on to learn about [configuration](/sails-ai/configuration), [chat](/sails-ai/chat), [streaming](/sails-ai/streaming), and [building adapters](/sails-ai/adapters).
+
+## Add asynchronous speech
+
+Sails AI 0.0.3 also supports capability-aware speech jobs. Install [YarnGPT 0.0.1](/sails-ai/yarngpt) for transcription and synthesis, and follow the [durable receipt lifecycle](/sails-ai/speech). Existing chat and streaming providers remain available.

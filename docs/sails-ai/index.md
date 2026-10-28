@@ -3,7 +3,7 @@ layout: home
 hero:
   name: Sails AI
   text: AI integration for Sails.js
-  tagline: Multi-provider AI hook with an adapter pattern for chat and streaming.
+  tagline: Multi-provider AI hook with an adapter pattern for chat, streaming and asynchronous speech.
   actions:
     - theme: brand
       text: Get Started
@@ -19,6 +19,6 @@ features:
     title: Streaming Built-in
     details: Stream responses with async generators.
   - icon: 🎯
-    title: Chat and stream API
-    details: "Use sails.ai.chat('Hello') or sails.ai.stream({ messages, system, model })."
+    title: Chat and speech API
+    details: 'Chat and stream with existing providers; submit durable speech jobs with YarnGPT.'
 ---

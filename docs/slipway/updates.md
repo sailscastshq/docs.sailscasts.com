@@ -21,7 +21,7 @@ Slipway includes built-in update detection and one-click updates from the dashbo
 
 ## Release compatibility
 
-These guides target server **0.0.120** and the published **slipway-cli 0.0.4**. The CLI tarball's CI commands and executor were verified against the reviewed release source. Server and CLI have separate release pipelines: check [server releases](https://github.com/sailscastshq/slipway/releases) and the linked image-build result before pulling an update, and check [npm CLI versions](https://www.npmjs.com/package/slipway-cli?activeTab=versions) for the client. A GitHub release tag alone does not mean its container image has finished publishing.
+These guides target server **0.0.127** and the published **slipway-cli 0.0.4**. The CLI tarball's CI commands and executor were verified against the reviewed release source. Server and CLI have separate release pipelines: check [server releases](https://github.com/sailscastshq/slipway/releases) and the linked image-build result before pulling an update, and check [npm CLI versions](https://www.npmjs.com/package/slipway-cli?activeTab=versions) for the client. A GitHub release tag alone does not mean its container image has finished publishing.
 
 | Capability                             | Compatibility                                                                                                                          |
 | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
@@ -33,6 +33,12 @@ These guides target server **0.0.120** and the published **slipway-cli 0.0.4**. 
 Upgrade server, CLI, and relevant application hooks deliberately. They have separate version numbers. Updating the server does not update dependencies inside deployed apps. For the full resident Quest controls, use the published Quest 0.0.8 / Slipway hook 0.0.13 pair and the documented app-owned opt-ins. Quest 0.0.5 and Slipway hook 0.0.11 are not sufficient.
 
 Back up the instance database consistently, retain its encryption keys, and preserve its existing database volume before updating. Keep production migration mode at `safe`. Verify startup, login, an existing app, and applicable operational tools after the update.
+
+## Shipped in 0.0.127
+
+[Release 0.0.127](https://github.com/sailscastshq/slipway/releases/tag/v0.0.127) improves [Bearing Appearance saves and popup controls](/slipway/bearing#appearance-and-save-feedback), the full Slipway attribution, and [safe Prune hold feedback](/slipway/instance-maintenance#safe-prune-and-held-cleanup). Safe build-cache pruning shipped in 0.0.126; its safety policy remains in force.
+
+No manual SQL is required for 0.0.127. Use the supported update flow, preserve the database volume and encryption keys, and keep production migration mode at `safe`.
 
 ## Historical upgrade: v0.0.65 {#upgrading-to-v0-0-65}
 

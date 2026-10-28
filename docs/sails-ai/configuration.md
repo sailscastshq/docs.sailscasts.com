@@ -67,7 +67,7 @@ Then in your code:
 await sails.ai.chat('Hello')
 
 // Uses a specific provider
-await sails.ai.use('together').chat('Hello')
+await (await sails.ai.use('together')).chat('Hello')
 ```
 
 ## Environment-based provider switching
@@ -125,3 +125,7 @@ module.exports.ai = {
 ```
 
 These custom keys are available at `sails.config.ai.models`, `sails.config.ai.systemPrompt`, etc. Sails AI doesn't use them directly — they're for your application code.
+
+## Speech providers
+
+Add a [YarnGPT provider](/sails-ai/yarngpt#install-and-configure) alongside your chat provider. `await sails.ai.use(name)` loads a provider and returns its API; inspect `api.capabilities` before selecting an operation. The default provider is loaded at startup; other providers load on first use. Save complete speech receipts and keep aliases/configuration stable for outstanding jobs. See [speech jobs](/sails-ai/speech).

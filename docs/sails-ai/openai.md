@@ -253,8 +253,12 @@ Switch providers in your code:
 await sails.ai.chat('Hello')
 
 // Target a specific provider
-await sails.ai.use('groq').chat('Hello')
-await sails.ai.use('together').stream('Tell me a story')
+const groq = await sails.ai.use('groq')
+await groq.chat('Hello')
+const together = await sails.ai.use('together')
+for await (const chunk of together.stream('Tell me a story')) {
+  if (chunk.text) process.stdout.write(chunk.text)
+}
 ```
 
 Or switch the default per environment:

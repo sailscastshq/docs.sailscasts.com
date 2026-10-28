@@ -1013,7 +1013,8 @@ function sailsAiGuide() {
       collapsed: false,
       items: [
         { text: 'Chat', link: '/sails-ai/chat' },
-        { text: 'Streaming', link: '/sails-ai/streaming' }
+        { text: 'Streaming', link: '/sails-ai/streaming' },
+        { text: 'Asynchronous Speech', link: '/sails-ai/speech' }
       ]
     },
     {
@@ -1022,6 +1023,7 @@ function sailsAiGuide() {
       items: [
         { text: 'Local', link: '/sails-ai/local' },
         { text: 'OpenAI', link: '/sails-ai/openai' },
+        { text: 'YarnGPT', link: '/sails-ai/yarngpt' },
         { text: 'Building Adapters', link: '/sails-ai/adapters' }
       ]
     }

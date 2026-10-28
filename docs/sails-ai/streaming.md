@@ -123,7 +123,7 @@ module.exports = {
 ## Using a specific provider
 
 ```js
-const stream = sails.ai.use('cloudflare').stream('Tell me a story')
+const stream = (await sails.ai.use('cloudflare')).stream('Tell me a story')
 
 for await (const chunk of stream) {
   // ...

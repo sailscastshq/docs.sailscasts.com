@@ -85,7 +85,7 @@ If you have multiple providers configured, use `sails.ai.use()` to target one:
 const reply = await sails.ai.chat('Hello')
 
 // Uses the cloudflare provider
-const reply = await sails.ai.use('cloudflare').chat('Hello')
+const reply = await (await sails.ai.use('cloudflare')).chat('Hello')
 ```
 
 ## Error handling
