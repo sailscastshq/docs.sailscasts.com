@@ -18,12 +18,10 @@ Sails AI uses an adapter pattern to support any AI provider. Each adapter is a s
 
 ## The Adapter interface
 
-Every adapter extends the base `Adapter` class from `sails-ai`:
+Adapters use duck typing; no inheritance or dummy chat implementation is required:
 
 ```js
-const { Adapter } = require('sails-ai')
-
-class MyAdapter extends Adapter {
+class MyAdapter {
   async initialize(config) {
     /* ... */
   }
@@ -41,12 +39,14 @@ class MyAdapter extends Adapter {
 module.exports = MyAdapter
 ```
 
-| Method                        | Required | Description                                                                  |
-| ----------------------------- | -------- | ---------------------------------------------------------------------------- |
-| `initialize(config)`          | Yes      | Called once during `sails.lift()`. Set up connections, validate credentials. |
-| `chat({ messages, model })`   | Yes      | Send a chat completion request. Return `{ role, content, model }`.           |
-| `stream({ messages, model })` | No       | Async generator that yields `{ text, done }` chunks.                         |
-| `teardown()`                  | No       | Clean up resources on `sails.lower()`.                                       |
+| Method                        | Required           | Description                                                                  |
+| ----------------------------- | ------------------ | ---------------------------------------------------------------------------- |
+| `initialize(config)`          | Yes                | Called once during `sails.lift()`. Set up connections, validate credentials. |
+| `chat({ messages, model })`   | For chat providers | Send a chat completion request. Return `{ role, content, model }`.           |
+| `stream({ messages, model })` | No                 | Async generator that yields `{ text, done }` chunks.                         |
+| `teardown()`                  | No                 | Clean up resources on `sails.lower()`.                                       |
+
+Speech adapters implement `initialize(config)`, at least one submission method (`transcribe` or `synthesize`), and `getJob(receipt, options)`. Providers expose boolean capabilities derived from implemented methods. See [asynchronous speech](/sails-ai/speech) for receipt and error semantics.
 
 ## Scaffold a new adapter
 
@@ -65,13 +65,13 @@ my-adapter/
   "version": "0.0.1",
   "main": "index.js",
   "peerDependencies": {
-    "sails-ai": ">=0.0.1"
+    "sails-ai": ">=0.0.3"
   }
 }
 ```
 
 ::: tip
-Use `peerDependencies` for `sails-ai` so the adapter uses the same `Adapter` class as the hook. This ensures `instanceof` checks work correctly.
+Declare a compatible `sails-ai` peer dependency for the hook contract. Core validates supported methods rather than class identity.
 :::
 
 ## Implement the adapter
@@ -79,9 +79,7 @@ Use `peerDependencies` for `sails-ai` so the adapter uses the same `Adapter` cla
 Here's a minimal adapter skeleton:
 
 ```js
-const { Adapter } = require('sails-ai')
-
-class MyAdapter extends Adapter {
+class MyAdapter {
   /**
    * Called once during sails.lift().
    * Use this to validate config, test connectivity, or cache credentials.
@@ -209,3 +207,5 @@ The config object is passed directly to your adapter's `initialize()` method, so
 | [OpenAI](/sails-ai/openai)                  | Together AI, Groq, Fireworks, OpenRouter, Mistral, OpenAI | `@sails-ai/openai` |
 
 Check the [GitHub repository](https://github.com/sailscastshq/sails-ai) for the latest list.
+
+The [YarnGPT adapter](/sails-ai/yarngpt) (`@sails-ai/yarngpt@0.0.1`) implements the asynchronous speech contract; it does not implement chat or streaming.

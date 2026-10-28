@@ -29,6 +29,12 @@ The build-cache job runs hourly at minute 17 UTC. Its defaults retain cache unus
 
 These are startup environment settings. With the installer, use its `/etc/slipway/.env` configuration and recreate the management container through the supported update procedure. Custom Compose installations must propagate the setting when recreating the container. Editing Bosun's general environment overrides or merely restarting an unchanged container does not apply new Docker environment variables.
 
+## Safe Prune and held cleanup
+
+Slipway **0.0.126** introduced safe, bounded build-cache pruning. The dashboard **Prune** action reviews and runs that policy; it does not authorize general image, volume or container deletion. Deployment/update activity, unverifiable disk-guard ownership, unavailable measurements or unsupported bounded Docker cleanup can hold a run.
+
+In **0.0.127**, a held result explains the specific safety reason, shows **Review cleanup**, and explicitly says **No retry is queued**. Open the review and inspect current conditions before deciding whether to request another run. A held result is not a background retry and does not prove that disk space was reclaimed. Never remove safety locks or substitute destructive Docker cleanup commands.
+
 ## Protect the instance database
 
 Slipway manages four SQLite datastores in `/app/db`:

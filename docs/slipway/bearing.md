@@ -104,6 +104,12 @@ Bearing is configured per app because each app owns its domain, route prefix, de
 
 The master switch and participation rules are enforced on the server. Hiding a control in the browser is never treated as authorization.
 
+## Appearance and save feedback
+
+In Slipway **0.0.127**, the app’s **Appearance** page uses the project/app breadcrumbs. **Save** remains disabled until the draft differs from the saved appearance, and success or error toasts report the result. Resetting the draft previews defaults; save to apply them.
+
+The widget footer uses the full Slippy/Slipway brand attribution, with a lighter **Powered by** prefix, linked to this Bearing guide.
+
 ## Feedback and roadmap
 
 New feedback enters the Bearing inbox as **Reviewing**. An app owner or administrator can move it through:
@@ -127,6 +133,8 @@ publish cannot leave the public update and its linked roadmap items disagreeing.
 ## In-app widget
 
 When enabled, `sails-hook-slipway` inserts the same-origin Bearing bootstrap into eligible HTML responses. The bootstrap checks the current Slipway setting before rendering, so disabling the widget takes effect without another deployment.
+
+Every open popup has the same floating close control, whether opened from the launcher, a `data-slipway-bearing-open` trigger, the browser event API, or an automatic update. There is no additional header × button. Escape and focus restoration remain supported.
 
 The widget:
 
