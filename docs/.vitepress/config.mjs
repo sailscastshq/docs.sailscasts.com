@@ -34,6 +34,7 @@ export default {
     nav: nav(),
     sidebar: {
       '/hagfish/': hagfishApiGuide(),
+      '/tembo-voice/': temboVoiceGuide(),
       '/slipway/': slipwayGuide(),
       '/captain-vane/': captainVaneGuide(),
       '/sounding/': soundingGuide(),
@@ -1205,6 +1206,21 @@ function slipwayGuide() {
         { text: 'Team Management', link: '/slipway/team-management' },
         { text: 'Audit Logs', link: '/slipway/audit-logs' },
         { text: 'Deploy Tokens', link: '/slipway/deploy-tokens' }
+      ]
+    }
+  ]
+}
+
+function temboVoiceGuide() {
+  return [
+    {
+      text: 'Tembo Voice API',
+      items: [
+        { text: 'Overview and Authentication', link: '/tembo-voice/' },
+        { text: 'Quickstart', link: '/tembo-voice/quickstart' },
+        { text: 'Endpoints and Errors', link: '/tembo-voice/reference' },
+        { text: 'Credits and Billing', link: '/tembo-voice/billing' },
+        { text: 'Audio, Permissions and Retention', link: '/tembo-voice/data' }
       ]
     }
   ]

@@ -170,6 +170,14 @@ export default {
       ],
       commercial: [
         {
+          name: 'Tembo Voice API',
+          description:
+            'Transcribe permissioned short recordings in English, Nigerian Pidgin, Yoruba, Igbo and Hausa.',
+          link: '/tembo-voice/',
+          docsLink: '/tembo-voice/',
+          productLink: 'https://temboai.com'
+        },
+        {
           name: 'Sailscasts',
           description:
             'Practical, high-quality video tutorials and workshops for pragmatic full-stack JavaScript web developers.',
