@@ -170,11 +170,11 @@ export default {
       ],
       commercial: [
         {
-          name: 'TemboAI Voice API',
+          name: 'TemboAI',
           description:
-            'Transcribe permissioned short recordings in English, Nigerian Pidgin, Yoruba, Igbo and Hausa.',
-          link: '/tembo-voice/',
-          docsLink: '/tembo-voice/',
+            'Language tools for your workflow. Explore the Console and integrate the Voice API.',
+          link: '/tembo/',
+          docsLink: '/tembo/',
           productLink: 'https://temboai.com'
         },
         {

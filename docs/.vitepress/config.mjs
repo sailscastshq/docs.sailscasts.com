@@ -34,7 +34,8 @@ export default {
     nav: nav(),
     sidebar: {
       '/hagfish/': hagfishApiGuide(),
-      '/tembo-voice/': temboVoiceGuide(),
+      '/tembo/': temboGuide(),
+      '/tembo-voice/': temboGuide(),
       '/slipway/': slipwayGuide(),
       '/captain-vane/': captainVaneGuide(),
       '/sounding/': soundingGuide(),
@@ -1211,16 +1212,26 @@ function slipwayGuide() {
   ]
 }
 
-function temboVoiceGuide() {
+function temboGuide() {
   return [
     {
-      text: 'TemboAI Voice API',
+      text: 'TemboAI',
       items: [
-        { text: 'Overview and Authentication', link: '/tembo-voice/' },
-        { text: 'Quickstart', link: '/tembo-voice/quickstart' },
-        { text: 'Endpoints and Errors', link: '/tembo-voice/reference' },
-        { text: 'Credits and Billing', link: '/tembo-voice/billing' },
-        { text: 'Audio, Permissions and Retention', link: '/tembo-voice/data' }
+        { text: 'Product overview', link: '/tembo/' },
+        {
+          text: 'TemboAI Voice API',
+          collapsed: false,
+          items: [
+            { text: 'Overview and Authentication', link: '/tembo-voice/' },
+            { text: 'Quickstart', link: '/tembo-voice/quickstart' },
+            { text: 'Endpoints and Errors', link: '/tembo-voice/reference' },
+            { text: 'Credits and Billing', link: '/tembo-voice/billing' },
+            {
+              text: 'Audio, Permissions and Retention',
+              link: '/tembo-voice/data'
+            }
+          ]
+        }
       ]
     }
   ]
