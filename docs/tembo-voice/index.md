@@ -2,6 +2,9 @@
 title: TemboAI Voice API
 titleTemplate: TemboAI
 description: Transcribe short, permissioned recordings in English, Nigerian Pidgin, Yoruba, Igbo and Hausa.
+prev:
+  text: TemboAI
+  link: /tembo/
 editLink: true
 ---
 
