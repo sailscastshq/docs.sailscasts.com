@@ -1214,7 +1214,7 @@ function slipwayGuide() {
 function temboVoiceGuide() {
   return [
     {
-      text: 'Tembo Voice API',
+      text: 'TemboAI Voice API',
       items: [
         { text: 'Overview and Authentication', link: '/tembo-voice/' },
         { text: 'Quickstart', link: '/tembo-voice/quickstart' },

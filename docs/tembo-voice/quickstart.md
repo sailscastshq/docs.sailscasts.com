@@ -1,23 +1,25 @@
 ---
 title: Quickstart
-titleTemplate: Tembo Voice API
+titleTemplate: TemboAI Voice API
 description: Upload a source, submit transcription and reconcile one request using Node.js.
 editLink: true
 ---
 
 # Quickstart
 
-Use **Node.js 22 or newer**, a provisioned live project, an existing live API key with `voice:read` and `voice:write`, and audio you are permitted to process. A later withdrawal also needs `voice:delete`. These commands can spend your organisation's credits when you run them against an activated project.
+Use **Node.js 22 or newer**, a live project whose service agreement you have accepted, an existing live API key with `voice:read` and `voice:write`, and audio you are permitted to process. A later withdrawal also needs `voice:delete`. These commands can spend your organisation's credits when you run them against an activated project.
+
+The signed-in Console Playground can transcribe without an API key. This guide is for external server clients; creating or activating a project does not create a key or grant credits.
 
 ## Prepare permission evidence
 
-Obtain the project's approved service-notice **version** and **basis** from your project setup with Tembo. Create `permission.json` using your actual permission record:
+For a self-service project activated under the current agreement, use the notice version and basis below. For an existing administrator-provisioned project, use its own approved notice version and basis instead. Create `permission.json` using your actual permission record:
 
 ```json
 {
-  "noticeVersion": "YOUR_APPROVED_NOTICE_VERSION",
+  "noticeVersion": "voice-service-20261030-v1",
   "purpose": "voice-service",
-  "basis": "YOUR_APPROVED_BASIS",
+  "basis": "organisation service agreement; recording-level licence or speaker permission required",
   "reference": "YOUR_PERMISSION_RECORD_REFERENCE",
   "collectedAt": 0
 }
@@ -39,7 +41,7 @@ export TEMBO_STATE='./tembo-state.json'
 # Supply TEMBO_API_KEY through your server's secret environment.
 ```
 
-`TEMBO_LANGUAGE` must equal the language selected for this project: `en`, `pcm`, `yo`, `ig` or `ha`.
+`TEMBO_LANGUAGE` must be one of the languages selected for this project: `en`, `pcm`, `yo`, `ig` or `ha`.
 
 ```sh
 node quickstart.mjs upload
@@ -47,7 +49,7 @@ node quickstart.mjs submit
 node quickstart.mjs status
 ```
 
-The upload returns a retained source ID. Submit returns the Tembo request ID, status, output and any API-credit reservation. **HTTP 200 does not imply transcription succeeded**; inspect `status`, `errorCode` and `apiCredits`.
+The upload sends that language as a multipart field and returns a retained source ID. Submit returns the TemboAI request ID, status, output and any API-credit reservation. **HTTP 200 does not imply transcription succeeded**; inspect `status`, `errorCode` and `apiCredits`.
 
 When the saved request is `reconciliation-required`, run one explicit reconciliation:
 
@@ -55,9 +57,9 @@ When the saved request is `reconciliation-required`, run one explicit reconcilia
 node quickstart.mjs poll
 ```
 
-This command first reads the Tembo request. If reconciliation is needed it makes one POST to `/requests/:requestId/poll`, which checks the already accepted provider job. It does not create another transcription. Repeat only through a bounded application-owned schedule with backoff, a finite attempt budget and an overall deadline. `status` only reads stored state; it never polls the provider.
+This command first reads the TemboAI request. If reconciliation is needed it makes one POST to `/requests/:requestId/poll`, which checks the already accepted provider job. It does not create another transcription. Repeat only through a bounded application-owned schedule with backoff, a finite attempt budget and an overall deadline. `status` only reads stored state; it never polls the provider.
 
-When `status` is `succeeded`, the transcript is at `output.transcript`, with `output.originalTranscript` and provenance. Empty text can be valid for silence. On `failed` or `cancelled`, inspect `errorCode`. If reconciliation remains unresolved, keep the request identity and spend reservation and contact Tembo rather than creating new keys or requests.
+When `status` is `succeeded`, the transcript is at `output.transcript`, with `output.originalTranscript` and provenance. Empty text can be valid for silence. On `failed` or `cancelled`, inspect `errorCode`. If reconciliation remains unresolved, keep the request identity and spend reservation and contact TemboAI rather than creating new keys or requests.
 
 ## Persistence and retry behavior
 

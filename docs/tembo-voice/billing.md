@@ -1,13 +1,13 @@
 ---
 title: Credits and billing
-titleTemplate: Tembo Voice API
-description: Prepaid Tembo credits, per-started-second transcription rates and held reservations.
+titleTemplate: TemboAI Voice API
+description: Prepaid TemboAI credits, per-started-second transcription rates and held reservations.
 editLink: true
 ---
 
 # Credits and billing
 
-Tembo API credits belong to an organisation and are separate from provider credits and your application's own prices. The configured face value is **20 kobo per credit**: **10,000 purchased credits cost ₦2,000**. They are not transferable or cashable out. A new organisation's promotional credit grant is a separate ledger bucket, not a purchased balance.
+TemboAI API credits belong to an organisation and are separate from provider credits and your application's own prices. The configured face value is **20 kobo per credit**: **10,000 purchased credits cost ₦2,000**. They are not transferable or cashable out. A new organisation's promotional credit grant is a separate ledger bucket, not a purchased balance.
 
 The current STT rate card covers `en`, `pcm`, `yo`, `ig` and `ha` at **5 credits per started audio second**. The measured recording duration is rounded up, independently for each recording:
 
@@ -41,10 +41,10 @@ Durations above 30 seconds are rejected. Uploaded media is structurally validate
 
 This example represents a six-started-second reservation. Credits are reserved before a hosted submission; promotional credits are used first, then purchased credits. A successful request settles its original quote once. Safely known uncharged failures can release the reservation. Unknown or potentially charged provider outcomes remain held for reconciliation. A failed or cancelled request alone does not prove a release or refund: inspect `apiCredits.status` (`reserved`, `settled` or `released`).
 
-Do not calculate customer charges from upstream `creditsReserved` or `creditsCharged`. Those are provider metering units, not the Tembo tariff. Reservations, organisation balance, project allowance, concurrency and storage limits are separate controls.
+Do not calculate customer charges from upstream `creditsReserved` or `creditsCharged`. Those are provider metering units, not the TemboAI tariff. Reservations, organisation balance, project allowance, concurrency and storage limits are separate controls.
 
 ## Funding and availability
 
 Use Console's credit-purchase flow and review its quote before confirming. External payments fulfill credits only after a verified payment webhook; a browser redirect is not a credit receipt. Cowrie purchases require funded eligible Cowries; do not treat unrelated contribution earnings as spendable API credit. Saved auto-topup settings are preferences only: automatic payments are unavailable and saving them creates no payment mandate.
 
-The repository's default configuration leaves API funding and usage charging disabled until both are explicitly enabled for the deployment. A rate card in source does not prove that every live project can submit or fund credits. Check Console readiness and project activation. Metadata language support and published pricing do not establish measured recognition quality for every language.
+Hosted processing and billing are enabled on the released service. Self-service activation creates no key, payment or credit grant. Its **10,000-operation allowance ceiling is separate from prepaid credits**: it is not a balance of 10,000 credits and does not pay for transcription. The project also has one concurrent request and a 64 MiB total retained-audio ceiling. Check Console readiness and project activation. Metadata language support and published pricing do not establish measured recognition quality for every language.

@@ -90,6 +90,7 @@ export async function run(command, settings, fetchImpl = fetch) {
       const form = new FormData()
       form.append('idempotencyKey', state.uploadKey)
       form.append('permission', JSON.stringify(state.permission))
+      form.append('language', state.language)
       form.append('audio', new Blob([audio]), 'note.audio')
       state.source = await request('/sources', { method: 'POST', body: form })
       await save(state)

@@ -170,7 +170,7 @@ export default {
       ],
       commercial: [
         {
-          name: 'Tembo Voice API',
+          name: 'TemboAI Voice API',
           description:
             'Transcribe permissioned short recordings in English, Nigerian Pidgin, Yoruba, Igbo and Hausa.',
           link: '/tembo-voice/',
