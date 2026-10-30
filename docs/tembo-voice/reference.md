@@ -2,10 +2,20 @@
 title: Endpoints and errors
 titleTemplate: TemboAI Voice API
 description: Exact project-scoped source, request, poll and recovery contracts.
+head:
+  - - link
+    - rel: canonical
+      href: https://docs.sailscasts.com/tembo-ai/voice
 editLink: true
 ---
 
 # Endpoints and errors
+
+::: info Compatibility URL
+The canonical Endpoints and errors documentation is now at [Endpoints and errors](/tembo-ai/voice#endpoints-and-errors). Existing links and anchors on this page remain available.
+:::
+
+<!-- #region voice-reference -->
 
 Base URL: `https://temboai.com/api/v1/voice/projects/:projectId`. Use an existing project-scoped bearer key. Sources and requests from another project cannot be used through your project's routes.
 
@@ -21,7 +31,7 @@ Base URL: `https://temboai.com/api/v1/voice/projects/:projectId`. Use an existin
 
 An uploaded source returns `id`, `language`, `eligibility`, `status`, `durationSeconds`, `byteSize`, `mimeType`, `sha256`, `retentionUntil` and `createdAt`. Submit only a source with `status: 'retained'`. Without optional training evidence its eligibility is `service-only`. Never use client-supplied recording URLs in place of source upload.
 
-`permission` has `noticeVersion`, `purpose: 'voice-service'`, `basis`, `reference` and `collectedAt`. It must match the approved project notice. See [permission rules](/tembo-voice/data).
+`permission` has `noticeVersion`, `purpose: 'voice-service'`, `basis`, `reference` and `collectedAt`. It must match the approved project notice. See [permission rules](/tembo-ai/voice#audio-permissions-and-retention).
 
 ## Requests
 
@@ -85,3 +95,5 @@ Do not blindly retry a chargeable submission after a transport error or 5xx. Pre
 `POST /console/projects` creates a project through an authenticated owner/admin session with selected `languages` and explicit `serviceAgreement: { accepted: true, version: 'voice-service-20261030-v1' }`. `POST /console/projects/:projectId/activate` applies the same accepted agreement only to an eligible empty project. These are Console actions with browser security checks, not bearer-key machine endpoints. Use the UI to review and accept the agreement; the quickstart never activates a project, creates a key, buys credits or accepts terms.
 
 Missing or stale acceptance returns `service_agreement_required` (403); a nonempty or already-reviewed nonlive project returns `existing_project_review_required` (409). Acceptance replays do not rewrite an already recorded live-project policy.
+
+<!-- #endregion voice-reference -->

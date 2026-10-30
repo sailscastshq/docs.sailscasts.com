@@ -34,6 +34,7 @@ export default {
     nav: nav(),
     sidebar: {
       '/hagfish/': hagfishApiGuide(),
+      '/tembo-ai/': temboGuide(),
       '/tembo/': temboGuide(),
       '/tembo-voice/': temboGuide(),
       '/slipway/': slipwayGuide(),
@@ -1217,18 +1218,24 @@ function temboGuide() {
     {
       text: 'TemboAI',
       items: [
-        { text: 'Product overview', link: '/tembo/' },
+        { text: 'Product overview', link: '/tembo-ai/' },
         {
           text: 'TemboAI Voice API',
           collapsed: false,
           items: [
-            { text: 'Overview and Authentication', link: '/tembo-voice/' },
-            { text: 'Quickstart', link: '/tembo-voice/quickstart' },
-            { text: 'Endpoints and Errors', link: '/tembo-voice/reference' },
-            { text: 'Credits and Billing', link: '/tembo-voice/billing' },
+            { text: 'Overview and Authentication', link: '/tembo-ai/voice' },
+            { text: 'Quick Start', link: '/tembo-ai/voice#quick-start' },
+            {
+              text: 'Endpoints and Errors',
+              link: '/tembo-ai/voice#endpoints-and-errors'
+            },
+            {
+              text: 'Credits and Billing',
+              link: '/tembo-ai/voice#credits-and-billing'
+            },
             {
               text: 'Audio, Permissions and Retention',
-              link: '/tembo-voice/data'
+              link: '/tembo-ai/voice#audio-permissions-and-retention'
             }
           ]
         }

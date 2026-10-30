@@ -173,8 +173,8 @@ export default {
           name: 'TemboAI',
           description:
             'Language tools for your workflow. Explore the Console and integrate the Voice API.',
-          link: '/tembo/',
-          docsLink: '/tembo/',
+          link: '/tembo-ai/',
+          docsLink: '/tembo-ai/',
           productLink: 'https://temboai.com'
         },
         {
