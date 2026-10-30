@@ -75,7 +75,7 @@ Voice application errors use `{"error":{"code":"..."}}` and an HTTP status. Sail
 | 404    | `project_not_found`, `request_not_found`, `source_not_found`, `source_unavailable`, `media_link_invalid`                                                                                                                  |
 | 409    | `idempotency_conflict`, `project_paused`, `source_language_mismatch`, `request_not_reconcilable`, `partner_agent_operation_required`                                                                                      |
 | 429    | `concurrency_limit`, `trial_limit_reached`, `storage_limit_reached`                                                                                                                                                       |
-| 503    | `live_access_not_configured`, `provider_not_approved`, `provider_not_configured`, `api_credit_rate_not_approved`, `private_storage_not_configured`                                                                        |
+| 503    | `live_access_not_configured`, `provider_not_configured`, `api_credit_rate_not_approved`, `private_storage_not_configured`                                                                                                 |
 | 500    | `voice_internal_error` or a framework/upload failure                                                                                                                                                                      |
 
 Do not blindly retry a chargeable submission after a transport error or 5xx. Preserve input and identity, read stored state first, and retry only the identical operation when explicitly appropriate. Back off on capacity errors and keep a deadline. This contract does not guarantee a `Retry-After` header.

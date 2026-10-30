@@ -38,6 +38,28 @@ assert.throws(
   (error) => error.code === 'service_agreement_required'
 )
 const routes = require('./config/routes').routes
+const reference = await fs.readFile(
+  new URL('../docs/tembo-voice/reference.md', import.meta.url),
+  'utf8'
+)
+const sourceErrors = (
+  await Promise.all(
+    ['lib/voice/contract.js', 'lib/voice/api-credit-usage.js'].map((file) =>
+      fs.readFile(path.join(process.env.TEMBO_VOICE_SOURCE, file), 'utf8')
+    )
+  )
+).join('\n')
+assert.ok(!sourceErrors.includes("fail('provider_not_approved'"))
+assert.ok(!reference.includes('`provider_not_approved`'))
+for (const code of [
+  'provider_processing_not_approved',
+  'live_access_not_configured',
+  'provider_not_configured',
+  'api_credit_rate_not_approved'
+]) {
+  assert.ok(sourceErrors.includes("'" + code + "'"), code)
+  assert.ok(reference.includes('`' + code + '`'), code)
+}
 for (const route of [
   'POST /api/v1/voice/projects/:projectId/sources',
   'POST /api/v1/voice/projects/:projectId/requests',
@@ -52,8 +74,6 @@ assert.deepEqual(
 )
 assert.equal(credits.price(10000).amountKobo, 200000)
 const config = structuredClone(require('./config/api-credits').apiCredits)
-config.enabled = true
-config.usage.enabled = true
 globalThis.sails = { config: { environment: 'test', apiCredits: config } }
 const temporary = await fs.mkdtemp(
   path.join(os.tmpdir(), 'tembo-doc-examples-')
