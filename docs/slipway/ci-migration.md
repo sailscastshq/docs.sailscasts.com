@@ -35,6 +35,18 @@ Installation lifecycle scripts execute during `npm ci`, while installation netwo
 
 The non-root, read-only sandbox is not a system-wide package installer. Do not solve missing dependencies by adding privileges, mounting the host, copying production settings or downloading during the isolated check stages. Downloaded browser/system-library dependencies also need version and provenance review; a pinned Node image and npm lockfile alone do not make external system-package resolution hermetic.
 
+### App-owned Chromium provisioning pattern
+
+For a reviewed Debian 12 AMD64 Node image, an application can prepare browser dependencies during its Linux CI test installation:
+
+1. Keep APT lists and downloaded archives inside the bounded workspace. Use authenticated package indexes and download-only resolution, then extract the required library and font packages into workspace directories. Do not install system packages or run package maintainer scripts.
+2. Use the locked Playwright package to download its Chromium headless shell into a workspace browser directory. Release temporary package archives before extracting the browser to reduce peak workspace use.
+3. Select those files in the test wrapper with `PLAYWRIGHT_BROWSERS_PATH`, `LD_LIBRARY_PATH` and a workspace `FONTCONFIG_FILE` and font cache. Fail clearly if preparation is missing; do not download during tests.
+4. Gate preparation to the reviewed Linux CI test environment. Keep ordinary development and production installs unaffected, and keep scripts inert when imported by application discovery.
+5. Build the browser fixture's real assets in the configuration expected by the tests. Retain the separate production asset build and all existing browser assertions.
+
+This is application-owned setup, not a built-in Playwright executor profile. Browser launch with these workspace dependencies has been verified both before and after network disconnection without changing the sandbox. A launch probe and a passing native suite do not establish that the complete official isolated run passes; verify that run on the exact final commit before claiming compatibility or completing a cutover.
+
 ## Current cutover limits
 
 Automatic server checks run as part of deployment admission for the configured branch. Feature branches and pull requests without deployment triggers do not acquire standalone server runs in this profile. There is no general checks-only server-run operation in its CI API. Do not start a production deployment simply to test CI.
