@@ -53,6 +53,12 @@ Runs retain step outcomes, timings, cleanup status, cache outcomes and numeric r
 
 Inspect the reported mount capacity and inode availability when installation reports `ENOSPC`. A cold cache, browser download or native dependency build can exhaust the workspace or temporary mount even when the host has free disk. Keep credentials and private raw logs out of public reports.
 
+## Receipt admission and retention
+
+An app can have at most ten unexpired, unfinished local submission challenges and ten non-revoked local runners. Source-run admission is limited to 200 submissions per app per hour. Reuse an existing matching report rather than creating a burst of new submissions.
+
+During local challenge admission, old expired source records are pruned in bounded batches, preserving the latest 200 and records linked to deployment verification. The runs view shows a bounded recent list; it is not a promise to expose every retained record. Receipt freshness, challenge expiry, retained evidence and container cleanup are separate lifecycles.
+
 ## What this profile does not provide
 
 It does not provide unlimited caches, a reusable application workspace, a general service matrix, arbitrary custom runtime images or a quota-enforced disk volume. Replacing tmpfs with an unbounded Docker volume would remove an existing storage safeguard.

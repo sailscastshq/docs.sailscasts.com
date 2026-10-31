@@ -1,52 +1,82 @@
 ---
 title: Slipway CI
 titleTemplate: Slipway
-description: Run reviewed checks automatically before deployment, reuse trusted local results, and verify the application image on your server.
+description: Set up reviewed source checks, understand local and server execution, and verify deployment evidence without losing existing coverage.
 editLink: true
 ---
 
 # Slipway CI
 
-Push to your connected deployment branch and let Slipway run reviewed lint, tests and the asset build before deployment. Automatic mode reuses a qualifying trusted local result when available; otherwise it runs isolated checks on the server. Slipway then builds and independently verifies the deployment candidate.
+Slipway CI runs reviewed lint, tests and the asset build before deployment. It can reuse a qualifying result from a trusted local device or execute checks in an isolated server container. Deployment then builds and verifies its own candidate before traffic moves.
 
-Open **CI** from the app actions menu, including when the app is stopped. You can also open the launcher with **⌘/Ctrl+K → Go to CI** and choose the app and environment. **CI → Runs** shows source checks separately from server deployment verification. A source-check pass alone never approves an application image.
+Open **CI** from an app's actions menu, even when the app is stopped, or use **⌘/Ctrl+K → Go to CI**. **Runs** separates source checks from deployment verification; **Configuration** holds the reviewed policy and trusted devices.
 
-![Slipway CI showing the Sailsconf local source-check pilot](/slipway/ci-runs-0.0.120.png)
+## Start here
+
+| Your goal                                          | Read next                                                                             |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Set up the first app                               | [Quick start](#quick-start)                                                           |
+| Understand the trust and deployment flow           | [How it works](#how-it-works) and [Deployment verification](#deployment-verification) |
+| Prepare browser tests or move an existing workflow | [Browser tests](#browser-tests) and [Migration guide](/slipway/ci-migration)          |
+| Diagnose capacity, memory or cache behavior        | [Troubleshooting](#troubleshooting) and [Resource budgets](/slipway/ci-resources)     |
+
+## How it works
+
+1. **Review the source contract.** An app-scoped policy binds the connected repository, branch, package/lockfile bytes, required commands, immutable runtime, architecture and executor revision.
+2. **Verify source checks.** Slipway verifies a fresh trusted local receipt, or automatic mode runs `npm ci`, lint, tests and asset build in a disposable server job. Execution stops on failure.
+3. **Verify the deployment candidate.** Slipway separately builds the image and verifies its identity, architecture, Node runtime, configuration and existing readiness/health requirements before promotion.
+
+| Execution path   | Who runs checks                                  | What makes the result eligible                                                                     |
+| ---------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| Trusted local    | An explicitly approved device using local Docker | Exact reviewed source, signed one-use challenge, complete results, freshness and confirmed cleanup |
+| Automatic server | The deployment worker's isolated Docker executor | Exact reviewed source, current policy, bounded capacity and deployment ownership                   |
+
+A source receipt is not an image attestation. Tests are not rerun against the final production image, and the profile does not promise reproducible builds or hardware-backed execution attestation.
 
 ## Availability
 
-This guide targets Slipway server **0.0.131** and **slipway-cli 0.0.5**. Server and CLI are released separately; check their release status before installing. No application hook is required for CI. See [release compatibility](/slipway/updates#release-compatibility).
+These instructions target Slipway server **0.0.131**, **slipway-cli 0.0.5** and profile `sails-sqlite-no-egress-v4`. Server and CLI release separately. No application hook is needed for CI.
 
-The first execution profile supports a Sails app using npm, a committed lockfile and disposable SQLite. It uses an immutable official Node 22 image (22.12 or newer). Local runs require Docker Desktop through a local Unix socket and at least 5 GiB of Docker VM memory. Server fallback uses the instance’s Linux Docker daemon and requires at least 5 GiB of available host memory before starting. PostgreSQL/Redis test services, injected CI secrets and remote runners are outside this profile. Profile `sails-sqlite-no-egress-v4` provides bounded, app-scoped npm download reuse; see [resource budgets and cache behavior](/slipway/ci-resources).
+The supported profile uses Linux, an immutable official Node 22 image (22.12 or newer), npm, a committed lockfile and disposable SQLite. Local runs require Docker Desktop through a local Unix socket and at least 5 GiB of Docker VM memory. Server admission requires at least 5 GiB available host memory. PostgreSQL/Redis service profiles, injected CI secrets and remote runners are outside this profile. See [supported budgets](/slipway/ci-resources#supported-budget).
 
-## Review the policy
+## Quick start
 
-Connect the application's GitHub repository in Slipway first. Commit and push your source, including `package.json`, `package-lock.json` and the `lint`, `test` and `build` scripts. Review these scripts and npm installation lifecycle scripts: they execute application code.
+Install the matching CLI and [authenticate it](/slipway/cli-authentication):
 
-Select a platform-specific official Node image digest matching your deployment architecture. Pin the Dockerfile base to that digest, or a multi-platform index containing the same image. The server verifies the candidate's Node version and runtime base.
+```sh
+npm install --global slipway-cli@0.0.5
+```
 
-Replace the example target, commit and image digest with your own:
+Connect the application's GitHub repository in Slipway. Commit and push `package.json`, `package-lock.json`, and reviewed `lint`, `test` and `build` scripts. Review installation lifecycle scripts too: they execute application code.
+
+### Review the policy
+
+Select a platform-specific official Node image digest matching the deployment architecture. Pin the app Dockerfile to that digest, or a multi-platform index containing the same image. The server checks the candidate's runtime base and Node version.
+
+Set `PUSHED_COMMIT` to your exact pushed full SHA and `NODE_IMAGE` to the reviewed `node@sha256:...` image. Replace the example app target and platform with your own:
 
 ```sh
 slipway ci:setup --project my-app --env production --app web \
-  --commit <pushed-full-sha> --branch main \
-  --image node@sha256:<platform-specific-digest> --platform linux/amd64 \
+  --commit "$PUSHED_COMMIT" --branch main \
+  --image "$NODE_IMAGE" --platform linux/amd64 \
   --approve-policy --approve-target my-app/production/web
 ```
 
-The policy binds the repository, app, branch, required commands, executor, runtime and platform. Team owners and admins manage this initial version. Select the app explicitly with `--app`; a project alone is not a CI target.
+Team owners and admins manage the policy and device trust. Select the app explicitly with `--app`; a project alone is not a CI target.
 
-## Enable automatic checks
+### Enable automatic checks
 
-After reviewing the policy, open **CI → Configuration → Automatic checks** and enable automatic execution. Existing policies stay local-only until an owner or admin enables this option. Changing the mode creates a new policy revision; approve local devices again if they should supply results for it.
+Open **CI → Configuration → Automatic checks** and explicitly enable server execution. Existing policies remain local-only until enabled. Changing the mode creates a new policy revision; approve devices again if they should supply results for it.
 
-With auto-deploy enabled, pushing to the configured deployment branch triggers the checks. Manual deployments use the same gate. A matching, fresh local result avoids another source-check run; otherwise Slipway dispatches the server job automatically. No local runner registration or per-push CLI command is required for server fallback. This version does not dispatch standalone CI for other branches or run an always-on local agent.
+With auto-deploy enabled, a push to the configured deployment branch triggers this gate. Manual deployments use the same gate. A qualifying local result avoids another source-check run; otherwise automatic mode runs the server job. It needs neither a per-push CLI command nor local device registration.
 
-The deployment shows **Waiting for CI**, then **Running CI** with the active installation, lint, test or asset-build step. **Building** begins when image construction starts. CI runs refresh while the page is visible. Failed checks stop promotion and the current release keeps serving traffic.
+The deployment shows **Waiting for CI**, then **Running CI** and its active step. **Building** begins when image construction starts. Runs refresh while the page is visible. A failed check blocks promotion while the current release keeps serving traffic.
 
-Only one server CI job runs across the instance at a time. Each job has two CPUs, 4 GiB memory, bounded processes/logs and a twenty-minute execution deadline. Waiting for capacity is also bounded. Policy changes, cancellation or lost deployment ownership stop execution. Uncertain cleanup holds capacity for inspection rather than deleting unrelated containers.
+![Slipway CI showing separate local source checks and deployment verification](/slipway/ci-runs-0.0.120.png)
 
-## Optionally trust your device
+_The historical local-pilot screenshot illustrates the separation between source checks and deployment verification._
+
+### Optionally trust your device
 
 ```sh
 slipway ci:register --project my-app --env production --app web \
@@ -54,15 +84,11 @@ slipway ci:register --project my-app --env production --app web \
   --approve-target my-app/production/web
 ```
 
-This is an explicit trust decision. The signature identifies an approved device; it does not prove that its administrator cannot forge a result. Only approve devices and administrators you trust.
-
-The CLI keeps credentials and the signing key outside the repository. Application checks do not receive either. **CI → Configuration** shows the reviewed policy and approved devices.
-
-![The reviewed policy in Slipway CI Configuration](/slipway/ci-configuration-0.0.120.png)
+Trust the device's administrator as well as the device. Its signature identifies an approved signer; it does not independently prove that an administrator executed the checks honestly. The CLI keeps credentials, signing keys and retained evidence outside the repository. Job code receives neither CLI credentials nor the signing key.
 
 ## Optional local runs
 
-Commit first. The runner uses a Git archive of that exact commit; uncommitted changes are excluded.
+Commit first: the runner uses a Git archive of that commit and excludes uncommitted changes. A local run still needs the enabled, reviewed app policy and approved device.
 
 ```sh
 slipway ci --project my-app --env production --app web --local
@@ -72,35 +98,62 @@ slipway ci:submit --project my-app --env production --app web \
 slipway ci:status --project my-app --env production --app web
 ```
 
-Without `--local`, `slipway ci` also attempts submission immediately. If the commit has not been pushed, retain the report and submit it after pushing. A merge commit with a different SHA needs a new run, even if its files look the same.
-
-Each run uses a disposable non-root Docker container with a read-only root filesystem, two CPUs, 4 GiB memory and a twenty-minute deadline. Installation has network access; required checks run after disconnection. The container receives neither production environment variables nor the host project or Docker socket. Cleanup and bounded local logs are part of the result.
+Without `--local`, `slipway ci` also attempts submission immediately. If the commit has not been pushed, retain the report and submit after pushing. A merge with a different SHA needs a new run. `ci:status` only reads retained results; it does not start checks.
 
 ## Deployment verification
 
-Slipway verifies repository metadata directly with GitHub. The current policy, exact branch head, source tree, package and lockfile bytes, approved device, one-use challenge and signed result must match. Successful evidence must be no more than an hour old.
+Slipway independently checks GitHub's current branch head, source tree, package/lockfile bytes, current policy and runner trust. A local receipt must contain a signed one-use challenge, ordered successful checks and cleanup, and be no more than an hour old. Client-supplied source hashes alone are not authority.
 
-Local-only mode can wait up to twenty minutes for qualifying evidence. Automatic mode instead uses isolated server fallback when evidence is missing. After successful source checks, Slipway builds on the server and checks the immutable image, architecture, Node runtime, current configuration and existing readiness checks. Trust and policy are checked again before traffic moves. Changed policy, revoked devices or mismatched commits block promotion.
+Local-only mode can wait up to twenty minutes for qualifying evidence. Automatic mode instead uses isolated server fallback. Policy, trust and candidate verification are checked again before traffic moves; changed policy, revoked devices, stale ownership or a mismatched image block promotion. Existing schema, health, routing and rollback safeguards remain in force.
 
-Source checks and candidate verification are separate records. Tests are not rerun against the final production image. The initial profile does not promise reproducible builds or hardware-backed execution attestation. Existing rollback checks remain in force.
+Keep source-check evidence, candidate verification and merge/deployment decisions distinct. Source-check asset output is discarded; it is not silently promoted as the tested production image.
+
+## Browser tests
+
+A stock Node image does not bundle Playwright's browser and all required Linux libraries. Review app-owned provisioning during installation, finish downloads before network disconnection, and point the test runner at the resulting workspace files. Validate the complete suite within the existing budgets; do not skip browser cases or widen privileges to make a run pass.
+
+Browser fixtures also need their actual application assets. A page responding successfully does not establish that its JavaScript, styles or event handlers loaded. Keep test-asset preparation distinct from the required production build and inspect missing assets before weakening selectors or tests.
+
+See [dependency provisioning and coverage mapping](/slipway/ci-migration#provision-dependencies-before-network-isolation) for the migration checklist. A browser launch probe is compatibility evidence, not proof that the full application suite passed.
+
+## Troubleshooting
+
+| Symptom                                                | Inspect first                                                                                                                                                            |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| No standalone run for a feature branch or PR           | This release dispatches server CI through deployment admission. Keep the existing PR-check workflow; do not deploy merely to test CI.                                    |
+| Chromium executable or shared library missing          | The reviewed install lifecycle and app-selected browser/library paths. Downloads must finish before isolated checks.                                                     |
+| Browser selectors time out on an otherwise loaded page | Built test assets, JavaScript/style responses and browser errors; preserve the original coverage.                                                                        |
+| `ENOSPC` or resource failure                           | Workspace and temporary-mount bytes/inodes, cgroup memory and private logs, not only free host disk. See [diagnostics](/slipway/ci-resources#inspect-resource-evidence). |
+| Waiting for capacity or cleanup                        | Only one server CI job is admitted across the instance. Confirm memory headroom and owned-job cleanup; uncertain cleanup holds capacity for inspection.                  |
+| A local result is not accepted                         | Exact pushed SHA, policy revision, approved device, complete results, one-use challenge and the one-hour freshness limit.                                                |
+| Source checks pass but deployment is blocked           | The candidate's image/runtime/configuration and current policy/trust. A source receipt cannot bypass deployment verification.                                            |
+| A green Slipway run is absent from GitHub PR checks    | Automatic GitHub status mirroring is not implemented in this release. A retained run is not a published PR check.                                                        |
+
+## Security boundaries
+
+Jobs run non-root with a read-only root, bounded executable workspace, dropped capabilities and no production environment, host checkout or Docker socket. Installation has network access; subsequent checks run with external networking disconnected. Preserve those boundaries when adding dependencies or fixtures.
+
+Policy changes, cancellation and lost deployment ownership stop server work. Uncertain cleanup holds capacity rather than pruning unrelated containers. Private raw logs and credentials do not belong in public evidence; retained server diagnostics are bounded and redacted.
 
 ## Change or revoke access
 
-Review a new policy after changing commands, runtime, platform or executor. Approve devices for that policy again; old results cannot satisfy a new revision.
+Review a new policy after changing required commands, runtime, platform or executor. Approve devices for that revision again; old results cannot satisfy it.
 
 ```sh
 slipway ci:revoke --project my-app --env production --app web \
   --runner <runner-uuid> --approve-target my-app/production/web
 ```
 
-Use **CI → Configuration** to revoke a device or disable the policy. Disabling a policy while an admitted deployment is in flight invalidates that candidate's promotion; review and start a new deployment.
+Use **CI → Configuration** to revoke devices or disable the policy. Disabling it while an admitted deployment is in flight invalidates that candidate's promotion; review the change and start a new deployment.
 
 ## Resource budgets and migration
 
-Review [CI resource limits and download reuse](/slipway/ci-resources) before moving a larger app. For coverage mapping, browser dependencies and cutover criteria, follow [Migrating existing checks](/slipway/ci-migration).
+The earlier execution profile used CLI 0.0.4. Profile v4 changes the executor/configuration digests and requires matching server/CLI support, a reviewed policy and newly approved devices. Software updates do not silently migrate an existing policy.
+
+[Resource budgets and bounded download reuse](/slipway/ci-resources) explains the limits and measurement semantics. [Migrating existing checks](/slipway/ci-migration) covers coverage mapping, compatibility and cutover criteria.
 
 ## Adopt it gradually
 
-Keep existing GitHub checks and branch protection while validating the first app. Slipway CI currently covers the reviewed npm workflow and deployment gate; it does not mirror GitHub statuses or replace arbitrary GitHub Actions workflows. Compare identical commits and cold/warm conditions before claiming a speed improvement.
+Keep existing GitHub checks and branch protection while validating the app. This release does not provide standalone non-deploying PR execution or automatic GitHub status reporting, and it does not replace arbitrary GitHub Actions workflows. Preserve unrelated release/security workflows. A staged compatibility trial is not a completed CI cutover.
 
-The earlier execution profile used CLI 0.0.4. Profile v4 changes the executor and configuration digests and requires matching server/CLI support. For server 0.0.131, use CLI 0.0.5, review a new policy and approve devices for that revision again. Old receipts cannot satisfy the changed profile. Updating the software does not silently migrate an existing policy.
+Compare identical commits and cold/warm conditions before claiming a performance improvement. Public guidance should describe implemented behavior, not an unfinished application trial or a proposed runner architecture.
