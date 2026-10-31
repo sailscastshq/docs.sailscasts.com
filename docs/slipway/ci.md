@@ -15,9 +15,9 @@ Open **CI** from the app actions menu, including when the app is stopped. You ca
 
 ## Availability
 
-This guide targets Slipway server **0.0.121** and **slipway-cli 0.0.4**. Server and CLI are released separately; check their release status before installing. No application hook is required for CI. See [release compatibility](/slipway/updates#release-compatibility).
+This guide targets Slipway server **0.0.131** and **slipway-cli 0.0.5**. Server and CLI are released separately; check their release status before installing. No application hook is required for CI. See [release compatibility](/slipway/updates#release-compatibility).
 
-The first execution profile supports a Sails app using npm, a committed lockfile and disposable SQLite. It uses an immutable official Node 22 image (22.12 or newer). Local runs require Docker Desktop through a local Unix socket and at least 5 GiB of Docker VM memory. Server fallback uses the instance’s Linux Docker daemon and requires at least 5 GiB of available host memory before starting. PostgreSQL/Redis test services, injected CI secrets, remote runners and shared caches are outside this profile.
+The first execution profile supports a Sails app using npm, a committed lockfile and disposable SQLite. It uses an immutable official Node 22 image (22.12 or newer). Local runs require Docker Desktop through a local Unix socket and at least 5 GiB of Docker VM memory. Server fallback uses the instance’s Linux Docker daemon and requires at least 5 GiB of available host memory before starting. PostgreSQL/Redis test services, injected CI secrets and remote runners are outside this profile. Profile `sails-sqlite-no-egress-v4` provides bounded, app-scoped npm download reuse; see [resource budgets and cache behavior](/slipway/ci-resources).
 
 ## Review the policy
 
@@ -95,8 +95,12 @@ slipway ci:revoke --project my-app --env production --app web \
 
 Use **CI → Configuration** to revoke a device or disable the policy. Disabling a policy while an admitted deployment is in flight invalidates that candidate's promotion; review and start a new deployment.
 
+## Resource budgets and migration
+
+Review [CI resource limits and download reuse](/slipway/ci-resources) before moving a larger app. For coverage mapping, browser dependencies and cutover criteria, follow [Migrating existing checks](/slipway/ci-migration).
+
 ## Adopt it gradually
 
 Keep existing GitHub checks and branch protection while validating the first app. Slipway CI currently covers the reviewed npm workflow and deployment gate; it does not mirror GitHub statuses or replace arbitrary GitHub Actions workflows. Compare identical commits and cold/warm conditions before claiming a speed improvement.
 
-Upgrading from 0.0.120 does not require another CLI publication: CLI 0.0.4 remains compatible. Install server 0.0.121, review the app policy, then enable automatic checks where server fallback is wanted.
+The earlier execution profile used CLI 0.0.4. Profile v4 changes the executor and configuration digests and requires matching server/CLI support. For server 0.0.131, use CLI 0.0.5, review a new policy and approve devices for that revision again. Old receipts cannot satisfy the changed profile. Updating the software does not silently migrate an existing policy.
