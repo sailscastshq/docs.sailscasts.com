@@ -2,10 +2,20 @@
 title: Quickstart
 titleTemplate: TemboAI Voice API
 description: Upload a source, submit transcription and reconcile one request using Node.js.
+head:
+  - - link
+    - rel: canonical
+      href: https://docs.sailscasts.com/tembo-ai/voice
 editLink: true
 ---
 
 # Quickstart
+
+::: info Compatibility URL
+The canonical Quick Start documentation is now at [Quick Start](/tembo-ai/voice#quick-start). Existing links and anchors on this page remain available.
+:::
+
+<!-- #region voice-quick-start -->
 
 Use **Node.js 22 or newer**, a live project whose service agreement you have accepted, an existing live API key with `voice:read` and `voice:write`, and audio you are permitted to process. A later withdrawal also needs `voice:delete`. These commands can spend your organisation's credits when you run them against an activated project.
 
@@ -73,10 +83,12 @@ To withdraw the uploaded recording with a `voice:delete` key:
 node quickstart.mjs withdraw
 ```
 
-Withdrawal immediately excludes the source from processing and removes transcript access, while physical deletion may remain pending. See [retention and withdrawal](/tembo-voice/data#retention-and-withdrawal).
+Withdrawal immediately excludes the source from processing and removes transcript access, while physical deletion may remain pending. See [retention and withdrawal](/tembo-ai/voice#retention-and-withdrawal).
 
 ## Complete client
 
 The downloaded file is the exact source below. It uses native Node.js APIs and makes only the operation you request. The original audio is identified from its contents by the server; changing a filename or MIME header cannot make an unsupported recording valid.
 
 <<< ../public/tembo-voice/quickstart.mjs{js}
+
+<!-- #endregion voice-quick-start -->

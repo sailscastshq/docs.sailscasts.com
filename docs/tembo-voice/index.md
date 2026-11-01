@@ -4,11 +4,21 @@ titleTemplate: TemboAI
 description: Transcribe short, permissioned recordings in English, Nigerian Pidgin, Yoruba, Igbo and Hausa.
 prev:
   text: TemboAI
-  link: /tembo/
+  link: /tembo-ai/
+head:
+  - - link
+    - rel: canonical
+      href: https://docs.sailscasts.com/tembo-ai/voice
 editLink: true
 ---
 
 # TemboAI Voice API
+
+::: info Compatibility URL
+The canonical Voice API overview documentation is now at [Voice API overview](/tembo-ai/voice). Existing links and anchors on this page remain available.
+:::
+
+<!-- #region voice-overview -->
 
 TemboAI Voice turns short recordings into text through a project-scoped HTTP API. Upload a permissioned source, submit a transcription request, then read or explicitly reconcile that request. The Console at [temboai.com/console](https://temboai.com/console) manages organisations, projects, API keys, usage and budgets.
 
@@ -24,7 +34,7 @@ TemboAI Voice turns short recordings into text through a project-scoped HTTP API
 
 A project can select one or more of these languages. Specify one selected language for each uploaded recording and use that same language for its transcription request. A single-language project may default the upload language; a multi-language project requires it. The hosted recognizer detects speech automatically: this code is metadata and validation, not a source-language hint sent to the provider. Supported metadata does not establish measured recognition quality. Review names, numbers, units, negation and time references before using transcripts.
 
-Recordings must be **1–30 seconds**, **mono**, and at most **4 MiB**. Accepted formats are signed 16-bit PCM WAV at 16, 24 or 48 kHz, or validated single-stream Ogg/Opus. MP3, AAC, MP4 and WebM are not accepted uploads. See [audio and permissions](/tembo-voice/data).
+Recordings must be **1–30 seconds**, **mono**, and at most **4 MiB**. Accepted formats are signed 16-bit PCM WAV at 16, 24 or 48 kHz, or validated single-stream Ogg/Opus. MP3, AAC, MP4 and WebM are not accepted uploads. See [audio and permissions](/tembo-ai/voice#audio-permissions-and-retention).
 
 ## Create or activate a live project
 
@@ -45,13 +55,13 @@ Self-service projects have these ceilings:
 | Concurrent requests              | One                                          |
 | Operation allowance ceiling      | 10,000 operations; grants no prepaid credits |
 
-[YarnGPT retains audio for 30 days and transcripts afterward](/tembo-voice/data#retention-and-withdrawal). TemboAI's deletion does not remove those copies. The agreement grants no optional training permission.
+[YarnGPT retains audio for 30 days and transcripts afterward](/tembo-ai/voice#retention-and-withdrawal). TemboAI's deletion does not remove those copies. The agreement grants no optional training permission.
 
 Hosted processing and billing are enabled on the released service. Acceptance and activation create neither API keys nor credits automatically; an insufficient prepaid organisation balance blocks processing. Existing administrator-provisioned projects retain their own reviewed policy rather than silently inheriting the self-service limits.
 
 ## Playground or external client
 
-The signed-in **Console Playground needs no API key**: it uses your authenticated Console session. Select a permitted recording language, review the recording-level permission basis, and submit only when you choose to process that recording. For an external application, explicitly create a scoped API key and follow the [quickstart](/tembo-voice/quickstart).
+The signed-in **Console Playground needs no API key**: it uses your authenticated Console session. Select a permitted recording language, review the recording-level permission basis, and submit only when you choose to process that recording. For an external application, explicitly create a scoped API key and follow the [quickstart](/tembo-ai/voice#quick-start).
 
 A current organisation owner or administrator can issue an explicitly confirmed live key in Console. The secret is displayed once. Keep it on your server and send it as `Authorization: Bearer <your existing live key>`. Keys are project-bound and scoped:
 
@@ -65,10 +75,12 @@ Only owners/admins can issue keys. Membership changes, revoked keys and cross-pr
 
 Local developer fixtures remain separate from hosted processing: development/test fixture mode supports the synthetic Hausa sample, not real recordings or five-language quality claims. Fixture identities and permission references must never be used as live evidence.
 
-Start with the [quickstart](/tembo-voice/quickstart), then consult [endpoints and errors](/tembo-voice/reference), [billing](/tembo-voice/billing), and [permissions and retention](/tembo-voice/data).
+Start with the [quickstart](/tembo-ai/voice#quick-start), then consult [endpoints and errors](/tembo-ai/voice#endpoints-and-errors), [billing](/tembo-ai/voice#credits-and-billing), and [permissions and retention](/tembo-ai/voice#audio-permissions-and-retention).
 
 ## Current capability
 
 Hosted requests support `operation: 'transcribe'`. The fixture-only `interpret` and `render` operations are not hosted translation or speech synthesis products. There is no public streaming ASR/TTS, arbitrary URL ingestion or WhatsApp webhook endpoint in this contract. A WhatsApp integration must securely obtain the media, validate/convert it to a supported format, obtain the required permission evidence, and use the same upload/request flow.
 
 This API wraps [Sails AI speech jobs](/sails-ai/speech); applications call TemboAI's endpoints rather than the provider's jobs API. TemboAI persists provider receipts and accounts for tenant permissions and reservations.
+
+<!-- #endregion voice-overview -->

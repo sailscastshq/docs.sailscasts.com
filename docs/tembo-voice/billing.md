@@ -2,10 +2,20 @@
 title: Credits and billing
 titleTemplate: TemboAI Voice API
 description: Prepaid TemboAI credits, per-started-second transcription rates and held reservations.
+head:
+  - - link
+    - rel: canonical
+      href: https://docs.sailscasts.com/tembo-ai/voice
 editLink: true
 ---
 
 # Credits and billing
+
+::: info Compatibility URL
+The canonical Credits and billing documentation is now at [Credits and billing](/tembo-ai/voice#credits-and-billing). Existing links and anchors on this page remain available.
+:::
+
+<!-- #region voice-billing -->
 
 TemboAI API credits belong to an organisation and are separate from provider credits and your application's own prices. The configured face value is **20 kobo per credit**: **10,000 purchased credits cost ₦2,000**. They are not transferable or cashable out. A new organisation's promotional credit grant is a separate ledger bucket, not a purchased balance.
 
@@ -45,6 +55,8 @@ Do not calculate customer charges from upstream `creditsReserved` or `creditsCha
 
 ## Funding and availability
 
-Use Console's credit-purchase flow and review its quote before confirming. External payments fulfill credits only after a verified payment webhook; a browser redirect is not a credit receipt. Cowrie purchases require funded eligible Cowries; do not treat unrelated contribution earnings as spendable API credit. Saved auto-topup settings are preferences only: automatic payments are unavailable and saving them creates no payment mandate.
+In Console, open **Usage → Buy credits** as an organisation owner or admin. Choose **Bank transfer · Bachs** or your available **Cowries balance**, then review the server-issued quote before confirming. Purchases are in NGN; one Cowrie buys five API credits. USD checkout and automatic top-ups are not currently available. External payments fulfill credits only after a verified payment webhook; a browser redirect is not a credit receipt. Use **Refresh status** to check a pending payment. An interrupted checkout can recover the same purchase; do not start another payment when its outcome is unresolved. Cowrie purchases require funded eligible Cowries; do not treat unrelated contribution earnings as spendable API credit. Saved auto-topup settings are preferences only: automatic payments are unavailable and saving them creates no payment mandate.
 
 Hosted processing and billing are enabled on the released service. Self-service activation creates no key, payment or credit grant. Its **10,000-operation allowance ceiling is separate from prepaid credits**: it is not a balance of 10,000 credits and does not pay for transcription. The project also has one concurrent request and a 64 MiB total retained-audio ceiling. Check Console readiness and project activation. Metadata language support and published pricing do not establish measured recognition quality for every language.
+
+<!-- #endregion voice-billing -->

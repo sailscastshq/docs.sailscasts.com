@@ -2,10 +2,20 @@
 title: Audio, permissions and retention
 titleTemplate: TemboAI Voice API
 description: Supported media, service permission evidence, training boundaries and withdrawal.
+head:
+  - - link
+    - rel: canonical
+      href: https://docs.sailscasts.com/tembo-ai/voice
 editLink: true
 ---
 
 # Audio, permissions and retention
+
+::: info Compatibility URL
+The canonical Audio, permissions and retention documentation is now at [Audio, permissions and retention](/tembo-ai/voice#audio-permissions-and-retention). Existing links and anchors on this page remain available.
+:::
+
+<!-- #region voice-data -->
 
 ## Supported recordings
 
@@ -57,3 +67,5 @@ Previously administrator-provisioned projects retain their reviewed retention se
 Withdraw with `DELETE /sources/:sourceId` and a `voice:delete` key. The source is immediately excluded, its transcript labels cleared and associated public request output redacted. Object removal may still be `deletion-pending` if storage fails; repeated deletion remains safe. Physical deletion becomes `deleted` only after confirmed removal. This does not assert deletion of accounting/provenance records or data already processed by an external provider.
 
 Authenticated callers with `voice:read` can request `/sources/:sourceId/media-link`. It returns a **relative** signed URL and `expires` timestamp valid for 60 seconds. Resolve it against the TemboAI origin, treat the URL as private bearer access, and never log or publish it. Expiry or withdrawal invalidates access even if you still hold an earlier URL.
+
+<!-- #endregion voice-data -->
