@@ -1145,7 +1145,9 @@ function slipwayGuide() {
         { text: 'Release Flags', link: '/slipway/release-flags' },
         { text: 'Rollbacks', link: '/slipway/rollbacks' },
         { text: 'Auto-Deploy', link: '/slipway/auto-deploy' },
-        { text: 'Slipway CI', link: '/slipway/ci' }
+        { text: 'Slipway CI', link: '/slipway/ci' },
+        { text: 'CI Resource Budgets', link: '/slipway/ci-resources' },
+        { text: 'Migrating Existing CI', link: '/slipway/ci-migration' }
       ]
     },
     {
